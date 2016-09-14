@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS348 - Process Authorize.net Credit Card Transaction</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS348</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Process Authorize.net Credit Card Transaction</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS348">Last Revised: 08/25/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to process a credit card transaction using authorize.net.&#160;</p>
+        <p>CDS348 requires java to be installed on the server and to be executable without including a complete path.&#160; It has been tested using java 1.6.0_23 and higher.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS348", Y$, S348$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="5" nowrap="nowrap">CDS348 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed<br />
+To/From</th>
+                <th nowrap="nowrap">Variable</th>
+                <th style="text-align: center;">Length</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap">all</td>
+                <td align="center">N/A</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S348$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.GWLOGIN$</code>
+                </td>
+                <td align="center">10+</td>
+                <td>Gateway Login ID to authorize.net</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.GWPASSWORD$</code>
+                </td>
+                <td align="center">10+</td>
+                <td>Gateway Password to authorize.net</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TEST$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Pass as 'Y' when testing without actually processing the credit card transaction.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ORIGIN$</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table border="1" style="border-collapse: collapse;">
+                        <tr>
+                            <td>R</td>
+                            <td>Retail (Card Present)</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>Mail Order/Phone Order</td>
+                        </tr>
+                        <tr>
+                            <td>E</td>
+                            <td>E-commerce</td>
+                        </tr>
+                        <tr>
+                            <td>T</td>
+                            <td>Connect to test site</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.SONO$</code>
+                </td>
+                <td align="center">20+</td>
+                <td>Pass sales order# or invoice# to populate the Invoice# field on authorize.net</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.MODE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table border="1" id="table2">
+                        <tr>
+                            <td>C</td>
+                            <td>Charge (or credit) Card</td>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>Authorize Card for Charge later</td>
+                        </tr>
+                        <tr>
+                            <td>V</td>
+                            <td>Void Prior Transaction</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.AMT</code>
+                </td>
+                <td align="center">8+</td>
+                <td>Amount to charge.&#160; Negative for amount to credit.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TRACKDATA$</code>
+                </td>
+                <td align="center">75+</td>
+                <td>Data returned by card swipe device</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCNO$</code>
+                </td>
+                <td align="center">16+</td>
+                <td>Pass the credit card#.&#160; Can be formatted with spaces or hyphens as all non-numeric characters are ignored.&#160; Not required when <code>TRACKDATA$</code> is passed.&#160; Only last four digits of card number are required to charge or void a transaction previously authorized when the original transaction <code>ORDERID$</code> is provided.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EXPDATE$</code>
+                </td>
+                <td align="center">4</td>
+                <td>Card expiration date in MMYY or MYY format.&#160; Can also contain XXXX for processed transactions to obfuscate data.&#160; Not required when <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCNAME$</code>
+                </td>
+                <td align="center">35+</td>
+                <td>Pass the card holders name.&#160; Not required with <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCADDR$</code>
+                </td>
+                <td align="center">35+</td>
+                <td>Pass the card holders billing address.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCCITY$</code>
+                </td>
+                <td align="center">28+</td>
+                <td>Pass the card holders billing city.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCSTATE$</code>
+                </td>
+                <td align="center">2+</td>
+                <td>Pass the card holders billing 2 character state code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCZIP$</code>
+                </td>
+                <td align="center">10+</td>
+                <td>Pass the card holders billing zip code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCCOUNTRY$</code>
+                </td>
+                <td align="center">2</td>
+                <td>Pass the card holders billing country when not in U.S.&#160; Refer to authorize.net documentation for values.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CVD$</code>
+                </td>
+                <td align="center">3-4</td>
+                <td>Card Security Code.&#160; 4 numeric digits for American Express Cards, 3 numeric digits for all other cards.&#160; May also contain X's as all non-numeric digits are ignored.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.IPADDR$</code>
+                </td>
+                <td align="center">15+</td>
+                <td>Optional IP Address of workstation or customer processing the transaction.&#160; Passed to authorize.net for fraud investigation activities.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EMAIL$</code>
+                </td>
+                <td align="center">50+</td>
+                <td>Optional Email Address of buyer which can be used by authorize.net for customer email notifications.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.AUTHNO$</code>
+                </td>
+                <td align="center">8+</td>
+                <td>Pass to CDS348 when a telephone authorization took place prior to the charge transaction.&#160; Returned from authorize.net although not typically needed since the <code>ORDERID$</code> field is used to identify the transaction.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.ORDERID$</code>
+                </td>
+                <td align="center">50+</td>
+                <td>Unique transaction number generated by authorize.net.&#160; It should be stored in your application instead of the credit card#, expiration date, and security code.&#160; It appears on authorize.net web reports.&#160; Pass to CDS348 when voiding a prior authorization or charge transaction, or when charging a prior authorization transaction.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.RESPONSE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Transaction Result
+<table border="1" id="table5"><tr><td>1</td><td>Transaction was approved</td></tr><tr><td>2</td><td>Transaction was declined</td></tr><tr><td>3</td><td>Transaction failed, typically because a required field was missing or invalid</td></tr><tr><td>4</td><td>Transaction held for review.&#160; The configuration parameters at authorize.net permit you to authorize the card, but not charge it pending your review.&#160; It is typically used when the card holders billing address does not match the bank's record.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.RESPONSESUBCODE$</code>
+                </td>
+                <td align="center">1+</td>
+                <td>Further describes the <code>RESPONSE$</code> code.&#160; Refer to authorize.net documentation.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.RESPONSEREASON$</code>
+                </td>
+                <td align="center">3+</td>
+                <td>Additional detail related to the <code>RESPONSE$</code> code.&#160; Refer to authorize.net documentation.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.CVDRESPONSE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Code describing the accuracy of the card security code
+<table border="1" style="border-collapse: collapse;"><tr><td>M</td><td>Match</td></tr><tr><td>N</td><td>No Match</td></tr><tr><td>P</td><td>Not Processed</td></tr><tr><td>S</td><td>Should have been present</td></tr><tr><td>U</td><td>Issuer unable to process request</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.CVDRESPONSETEXT$</code>
+                </td>
+                <td align="center">40+</td>
+                <td>Description of security code response from table above</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.AVSRESPONSE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Codes that indicate if the Address and Zip Code provided match the bank's records for the cardholder.&#160; Refer to authorize.net documentation.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.AVSRESPONSETEXT$</code>
+                </td>
+                <td align="center">40+</td>
+                <td>Description of <code>AVSREPSONSE$</code> code</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.MSG$</code>
+                </td>
+                <td align="center">50+</td>
+                <td>Verbose message text provided by authorize.net describing transaction, such as "This transaction was approved", "This transaction was declined", etc. typically presented to user by application.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.SENT$</code>
+                </td>
+                <td align="center">80+</td>
+                <td>List of field names and values sent to authorize.net used for debugging purposes.&#160; The field names are separated from the value using "=" with a line feed character between each row as shown below.<br />
+version=3.1<br />
+method=CC<br />
+type=AUTH_ONLY<br />
+first_name=John<br />
+last_name=Doe<br />
+invoice_num=818776<br />
+amount=71.50<br />
+card_num=xxxxxxxxxxxx8602<br />
+exp_date=0615<br />
+address=1815 Main St<br />
+city=Anytown<br />
+state=GA<br />
+zip=31088<br />
+card_code=xxxx</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS348",S348$,"YY"<br />
+&#160;</code>
+                    <p><code>REM "Populate S348 fields from your data and transaction type desired</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>CALL "CDS348",Y$,S348$</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>REM "Check S348.RESPONSE$ for approval</code>
+                    </p>
+                    <p><code>REM "Display result</code>
+                    </p>
+                    <p><code>CALL "CDS069",0,0,0,0,S348.MSG$+"-"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

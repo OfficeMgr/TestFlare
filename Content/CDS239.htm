@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="2975" MadCap:lastWidth="1012">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS239 - Hash Map</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS239</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Hash Map</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS239">Last Revised: 11/10/14</a>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p class="SectionDesc">This routine simulates a simple hash map in memory. A hash map provides a way to store and retrieve data given associated with a key.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS239", ACTION, VAL$, MAP$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS239 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if an error occurs.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ACTION</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>VAL$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From/To</td>
+                <td>Indicates the repeat size of the <code>TYPE, KEY</code> and <code>VAL</code> fields below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">MAP$</td>
+                <td align="center" nowrap="nowrap">&#160;</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td>S</td>
+                                <td>String</td>
+                            </tr>
+                            <tr>
+                                <td>N</td>
+                                <td>Numeric</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>Boolean (true/false)</td>
+                            </tr>
+                            <tr>
+                                <td>E</td>
+                                <td>Empty (null)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S238.KEY$[]</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>The field name such as <code>quantity</code>. Nested fields will contain period as separator, i.e., <code>lineitem.quantity</code>. Repeating fields will include index inside square brackets, i.e., <code>price[1]</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">S238.VAL$[]</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>The value of each field. JSON&#160;dates are presented as a bbx julian number. The time portion of any JSON&#160;date/time field is currently ignored. JSON dates <code>0001-01-01</code> and <code>0000-00-00</code> are treated as null.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">RESULT$</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <p>In the case where the JSON&#160;string contains a field named <code>"result"</code> that contains one or more repeating sections with each section containing the same fields, then <code>RESULT$</code> is returned as a flattened version of <code>S238$</code>. This is typical when the JSON string was built from multiple rows from a database table.</p>
+                    <p><code>RESULT.RPT</code> contains the repeat count. Each field in <code>RESULT$</code> will be a repeating field. See example.<br /></p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">MSG$</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Will contain any error message describing problem encountered while parsing the JSON string. This typically indicates that the JSON string is invalid. Refer to <a href="http://www.json.org/" target="_blank">www.json.org</a> for specification.<br /><table><col /><tbody><tr><td>Premature end of JSON string</td></tr><tr><td>Missing or Unmatched braces</td></tr><tr><td>Unexpected data following final closing brace</td></tr><tr><td>Unexpected character</td></tr><tr><td>Quoted field name expected</td></tr><tr><td>Un-terminated field name</td></tr><tr><td>Field name contains blank</td></tr><tr><td>Null field name</td></tr><tr><td>Expected ':'</td></tr><tr><td>Invalid value</td></tr></tbody></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">CSV</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Pass as non-zero to convert Boolean json fields from <code>"true"</code> and <code>"false"</code> to 1 and 0, and <code>"null"</code> to a null, zero length string.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Simple non-repeating Example</td>
+            </tr>
+            <tr>
+                <td><code>1470 DEF FNO$(TXT$)=JSON$+TXT$+$0D0A$<br />1480 LET JSON$="",JSON$=FNO$("{")<br />1490 LET JSON$=FNO$("  ""cardholder_name"": ""Excellware, Inc."", ")<br />1500 LET JSON$=FNO$("  ""cc_number"": ""5454545454545454"", ")<br />1510 LET JSON$=FNO$("  ""cc_expiry"": ""0915"",")<br />1520 LET JSON$=FNO$("  ""transaction_type"": ""00"",")<br />1530 LET JSON$=FNO$("  ""amount"": 168.67,")<br />1540 LET JSON$=FNO$("  ""address"" : {")<br />1550 LET JSON$=FNO$("    ""address1"": ""8050 Corporate Cir Ste 1"",")<br />1560 LET JSON$=FNO$("    ""city"": ""Cleveland"",")<br />1570 LET JSON$=FNO$("    ""zip"": ""44133"",")<br />1580 LET JSON$=FNO$("    ""phone_number"": ""4408666893"",")<br />1590 LET JSON$=FNO$("    ""phone_type"": ""W""")<br />1600 LET JSON$=FNO$(" } ")<br />1610 LET JSON$=FNO$("  ""date"":""2014-05-22""")<br />1620 LET JSON$=FNO$("  ""datetime"":""2013-12-31T20:11:15.000Z""")<br />1630 LET JSON$=FNO$("  ""shipdate"":""0001-01-01""")<br />1640 LET JSON$=FNO$("  ""price"" : [ 8.50 , 10.22,100]")<br />1650 LET JSON$=FNO$("  ""itemno"" : [ ""14HN"",""1800GSX"",""14Z2234"" ,
+    ""abc#5"" ] ")<br />1660 LET JSON$=FNO$("  ""desc"" : null ")<br />1670 LET JSON$=FNO$("  ""desc2"" : ""12\"" Pliers""")<br />1680 LET JSON$=FNO$("  ""symbols"" : ""+,-,*,/,\\,%""")<br />1690 LET JSON$=FNO$("}")<br />1700 CALL "CDS238",JSON$,S238$<br />1710 FOR I=1 TO S238.KEYS; PRINT S238.KEY$[I],"=",S238.VAL$[I]; NEXT I<br /></code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>cardholder_name=Excellware, Inc.<br />cc_number=5454545454545454<br />cc_expiry=0915<br />transaction_type=00<br />amount=168.67<br />address.address1=8050 Corporate Cir Ste 1<br />address.city=Cleveland<br />address.zip=44133<br />address.phone_number=4408666893<br />address.phone_type=W<br />date=2456800<br />datetime=2456658<br />shipdate=<br />price[1]=8.50<br />price[2]=10.22<br />price[3]=100<br />itemno[1]=14HN<br />itemno[2]=1800GSX<br />itemno[3]=14Z2234<br />itemno[4]=abc#5<br />desc=<br />desc2=12" Pliers<br />symbols=+,-,*,/,\,%</code>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Repeating Example</td>
+                </tr>
+                <tr>
+                    <td><code>JSON String:<br />{ "jsonrpc":2.0,<br style="mc-tag-and-class: code;" />"result":[{"name":"Fred","amount":1.11},{"name":"Bill","amount":2.22},{"name":"Jim","amount":3.33}],"id":"xxx-xxx-xxx-xxx"}</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>S238$</code>
+                        <p>
+                            <img src="Resources/Images/cds238-1.png" />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>RESULT$</code>
+                        <br />
+                        <img src="Resources/Images/cds238-2.png" />
+                        <br />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS090 - Add / Delete File to Menu</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS090" />CDS090</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Add / Delete File to Menu</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS090">Last Revised: 02/22/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">&#160;This program is not normally called by application programs. It is used to add or delete a file name to a 
+ menu for use in the "F" for files option.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS090", S0$, S9$, F9$, S$, U</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS090</th>
+            </tr>
+            <tr>
+                <td>S0$</td>
+                <td>menu code</td>
+            </tr>
+            <tr>
+                <td>S9$</td>
+                <td>list of all menu codes</td>
+            </tr>
+            <tr>
+                <td>F9$</td>
+                <td>four character file name to be added/deleted</td>
+            </tr>
+            <tr>
+                <td>S$</td>
+                <td>
+        function code:<br />
+        &#160;
+
+        <table class="lev2"><tr><td>A</td><td>Add to list</td></tr><tr><td>D</td><td>Delete from list</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>&#160;U</td>
+                <td>Device number of XXSI50 menu file opened by calling program</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS261 - Return Window/Notepad Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS261" />CDS261</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return Window/Notepad Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS261">Last Revised: 
+		05/16/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to return information about window based text created with the W type 
+	option of the input routine <a href="CDS069.htm">CDS069</a><MadCap:keyword term="Window Text" />.&#160; It is 
+	typically used when you need to display the first part of the window text, 
+	or to determine how many lines the text will require when printed to a 
+	printer.&#160; This routine is also used to convert window text to html 
+	format for emailing or displaying on a web page, or to convert to the format 
+ used for entry on a web page within &lt;textarea&gt; tags.&#160; Window text is often called a Notepad by application 
+	software.</p>
+        <p>Related programs:</p>
+        <p><a href="CDS069.htm">CDS069</a> - used to display or maintain window 
+	text.</p>
+        <p><a href="CDS257.htm"><MadCap:keyword term="CDS257" />CDS257</a> - used to print window text to a printer, or 
+	to write back modified text to the text file.</p>
+        <p><a href="CDS554.htm">CDS554</a> - used to print window text within a 
+	grid.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS261", Y$, <a href="#FILCHAN$_">FILCHAN$</a>, 
+	<a href="#TEXTID$_">TEXTID$</a>, <a href="#TEXT$">TEXT$</a>, {
+	<a href="#LINES_">LINES</a>, <a href="#FULL$_">FULL$</a>, HTML$, HTMLFONT, 
+ TEXTAREA$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS261</th>
+            </tr>
+            <tr>
+                <td><code><a name="FILCHAN$_"></a>FILCHAN$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Can be a channel number of the text file already opened, or the file name 
+		where the text is stored.&#160; When the file name is passed, CDS261 will open the file using the U option of <a href="CDS095.htm">CDS095</a>, and not close it.</td>
+            </tr>
+            <tr>
+                <td><code><a name="TEXTID$_"></a>TEXTID$</code>
+                </td>
+                <td align="center">In</td>
+                <td>The Text ID such as the customer#, vendor#, item#, or other 
+		identification of the window text.</td>
+            </tr>
+            <tr>
+                <td><code><a name="TEXT$"></a>TEXT$</code>
+                </td>
+                <td align="center">
+        Out</td>
+                <td>
+        String up to 80 characters long containing the first part of the window text.&#160;
+		<code>TEXT$</code> will not contain any attributes such as underlined, bold, etc. White space within the text are stripped out of 
+		<code>TEXT$</code> with the intent to return the maximum amount of information in 
+		<code>TEXT$</code>.&#160; No error is returned if there is no text on file.&#160; 
+		<code>TEXT$</code> will be null in that case.&#160; 
+		<code>TEXT$</code> is typically displayed to the right of some field# or description 
+		letting the operator know that there is some text on file.</td>
+            </tr>
+            <tr>
+                <td><code><a name="LINES_"></a>LINES</code>
+                </td>
+                <td align="center">Out</td>
+                <td>The number of display lines of text in the entire message.&#160; 
+		Returned as zero if there is no notepad text on file.</td>
+            </tr>
+            <tr>
+                <td><code><a name="FULL$_"></a>FULL$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Contains the entire text, including imbedded line feeds and attribute 
+		mnemonics.&#160; Since it can be quite large, you suppress this logic by excluding 
+		<code>FULL$</code> on the CALL.&#160; <code>FULL$</code> may be needed when an application program needs to append some text onto the end of the stored text.&#160; The application program could also manipulate the contents of 
+		<code>FULL$</code> prior to writing the text back.&#160; Use 
+		<a href="CDS257.htm">CDS257</a> with the 
+		<code>STS$="W"</code> to write window text back to the disc, after modification by the application program.&#160; 
+		Use <a href="CDS257.htm">CDS257</a> with <code>STS$="T"</code> to return 
+		text without line feeds and mnemonics.</td>
+            </tr>
+            <tr>
+                <td><code>HTML$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Contains the entire text formatted in html.&#160; The notepad text is 
+		rendered in a fixed point font of Lucida Console, Arial Monospaced, 
+		Courier New, or Courier if <code>HTMLFONT</code> parameter is not 
+		included on <code>CALL</code> or passed with a value of zero.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3" class="lev2"><tr><th>Attribute</th><th>Note</th></tr><tr><td>bold</td><td>rendered as bold</td></tr><tr><td>underline</td><td>rendered as underlined text</td></tr><tr><td>reverse</td><td>rendered using an italics font</td></tr><tr><td>blink</td><td>rendered as blinking text, but not all browsers and email 
+			clients can blink text.</td></tr><tr><td>graphics</td><td>rendered as box drawing characters</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>HTMLFONT</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optionally pass as 1 to exclude paragraph tags in <code>HTML$</code> 
+		that specify a fixed width font.</td>
+            </tr>
+            <tr>
+                <td><code>TEXTAREA$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Contains the entire text in a format suitable for Dynaweb entry within
+      <code>&lt;textarea&gt;</code> tags.&#160; Note that textarea does not support 
+ any attributes such as bold, underlined, reverse video, etc., but it can 
+ be used for plain text including line breaks.</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>CDS261 is used in the example below to retrieve the first part of 
+		the message.&#160; It is displayed to the right of field#8 Message, and 
+		is stripped of all special attributes such as underlining, bold, blink, 
+		etc.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS261",Y$,STR(SM21),TEXTID$,TEXT$<br />
+		IF LEN(TEXT$)&gt;60 THEN LET TEXT$=TEXT$(1,60)+"..."</code>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <img border="0" src="images/CDS2611.jpg" />
+        </p>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Example for Dynaweb Application<br />
+      This example retrieves existing Notepad Text from a file named <code>
+      TEXTFILE$</code> with Notepad ID of <code>TEXTID$</code> and then sets the 
+ text as the default entry on the web page.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS261",Y$,TEXTFILE$,TEXTID$,"",0,"","",0,NOTEPAD$<br />
+      HTML$="&lt;textarea name='NOTE' cols='80' rows='15'&gt;"+NOTEPAD$+"&lt;/textarea&gt;"</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

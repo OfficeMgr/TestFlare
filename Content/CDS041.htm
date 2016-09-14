@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="2666" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS041 - Retrieve Template</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS041" />CDS041</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Retrieve Template" />Retrieve Template</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS041">Last Revised: 01/08/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Data Dictionary" />
+            <MadCap:keyword term="tpl" />This routine retrieves and validates templates from 
+ 	temporary global variables, template (.tpl) files, and the Dynamo Data Dictionary.&#160; It is not 
+	typically needed for accessing data files, since <a href="CDS095.htm">CDS095</a> calls CDS041, but is 
+	often used to retrieve templates associated with data structures passed to 
+	programs such as <a href="CDS038.htm">CDS038</a> and <a href="CDS084.htm">
+	CDS084</a>.</p>
+        <p><b>Template Files</b>
+        </p>
+        <p>A template file is a string file with a .tpl suffix that is defined and 
+	updated by <a href="CDS034.htm">CDS034</a> based on file definitions 
+	contained within the Dynamo Data Dictionary.</p>
+        <p>A template file can contain one template.&#160; A template can be used to describe 
+	the record format of a disc file, a string variable on a call/enter list, or any internal data structure.</p>
+        <p>Template files should be located in a tpl directory immediately below the 
+ data file.&#160; For example, the data file DS/DSCM01 would have a template 
+ file named DS/tpl/DSCM01.tpl.&#160; The same is true for files located across 
+ a data server.&#160; If the data server file name is /&lt;server&gt;/u/CDI/DS/DSCM01, 
+ the template file should be /&lt;server&gt;/u/CDI/DS/tpl/DSCM01.tpl.&#160; If 
+	you place data files in a DAT subdirectory such as PY/DAT/PYUD10, then the 
+	preferred template location would be PY/DAT/tpl/PYUD10.tpl.&#160; Placing 
+	the template file in a tpl directory immediately below the data file will 
+	result in the best performance, since that is where CDS041 looks first.</p>
+        <p>For data files, a template file is required, and will contain the current 
+ data structure of the file.&#160; To add fields or change field sizes, make 
+ the changes using the data dictionary, and not by editing the template file.&#160; 
+ Call <a href="CDS034.htm">CDS034</a> to convert the data file based on the changes made in the data 
+ dictionary which will also replace the template file.</p>
+        <p>For programs, a template file is optional, and in most cases, not 
+	recommended.&#160; Although a template file for a program works the same as 
+	for a data file, CDS041 will retrieve the template from the data dictionary 
+	when no template file is found.&#160; </p>
+        <p>For temporary work files, a template file is not used, but a global 
+	variable is assigned so that CDS041 can retrieve and return the template to 
+	the calling program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS041", <a name="NOTPL" href="#NOTPL"></a>ERR=NOTPL, <a href="#TPLNAME$">
+	FILENAME$</a>,
+  <a href="#DIMTPL$">DIMTPL$</a>, { <a href="#PAR$">PAR$</a></code><span style="color: #000080;"><code>,
+  <a href="#SOURCE$">SOURCE</a>$ }</code></span>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2"><code>CDS041</code>
+                </th>
+            </tr>
+            <tr>
+                <td><a name="TPLNAME$"></a><code>NOTPL</code>
+                </td>
+                <td>Branch to location if unable to locate the template, the template is 
+ invalid, or the user does not have permission to access the template or 
+ data dictionary files.</td>
+            </tr>
+            <tr>
+                <td><a name="TPLNAME$"></a><code>FILENAME$</code>
+                </td>
+                <td>the file or data structure name such as XXCM01, GL012, CDSM08, PY/DAT/PYUD10, 
+		DS/DSCM01, etc.</td>
+            </tr>
+            <tr>
+                <td><a name="DIMTPL$"></a><code>DIMTPL$</code>
+                </td>
+                <td>is set by CDS041 as a variable dimensioned to the template, i.e., 
+		<code>DIM DIMTPL$:TEMPLATE$</code>.&#160; 
+		The template string itself can be retrieved using <code>FATTR(DIMTPL$)</code>.&#160; 
+		You can re-initialize the templated string variable using <code>DIM DIMTPL$:FATTR(DIMTPL$)</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="PAR$"></a><code>PAR$</code>
+                </td>
+                <td>
+        Can be passed as null, blanks, or not passed at all for default values.<table class="lev2"><tr><td><code>PAR$(1,1)</code></td><td>display operator error message<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber1" class="lev3"><tr><td>Y</td><td>display message if unable to locate template, or if template file is empty 
+				or does not 
+ contain a valid template, or if the operator does not have read 
+ permission on the template file</td></tr><tr><td>N</td><td>do not display any operator messages (default)</td></tr></table></td></tr><tr><td><code>PAR$(2,1)</code></td><td>template search locations<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber2"><col style="width: 107px;" /><col /><tr><td align="center">N</td><td>search global variable, tpl file</td></tr><tr><td align="center">Y</td><td>search global variable, tpl file, Data Dictionary. Always use this option when calling CDS041 to obtain a template for a non-data file.</td></tr><tr><td colspan="2" style="text-align: left;">Avoid passing <code>PAR$(2,1)</code> as blank, or not passing <code>PAR$</code> at all, as it requires a file <code>OPEN</code> to determine if <code>FILENAME$</code> is a data file.</td></tr><tr><td align="center">blank or not passed</td><td>treat as Y if <code>FILENAME$</code> is a program, N if not. &#160;Requires additional <code>OPEN</code>.</td></tr><tr><td colspan="2" style="text-align: left;">The following options should not be used by most application programs, as it takes much longer to build the template from the Data Dictionary, each time CDS041 is called, as opposed to the very quick access to a global variable.</td></tr><tr><td align="center">D</td><td>search Data Dictionary only. </td></tr><tr><td align="center">T</td><td>search tpl file only</td></tr><tr><td align="center">F</td><td>search tpl file and Data Dictionary, but not global variable</td></tr></table></td></tr><tr><td><code>PAR$(3,1)</code></td><td><MadCap:keyword term="Select" />pass as Y to convert fixed length U, I, and N field types to C in order to optimize using SELECT.&#160; Assumed N.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="SOURCE$"></a><code>SOURCE$</code>
+                </td>
+                <td>
+        optional parameter which will return the source of the template 
+ information.&#160; The source will return as either the global 
+        <code>TPL_XXXXXX</code>, the template file name used tpl/GL012.tpl, or the data 
+ dictionary file used DY/DYDD11.&#160; To improve performance, and bypass 
+		the logic that looks up the <code>SOURCE$</code>, exclude <code>SOURCE$</code> 
+		when calling CDS041.</td>
+            </tr>
+        </table>
+        <p>Searches to the Data Dictionary include all company codes in the current 
+	prefix.</p>
+        <p>In order to improve performance, CDS041 saves all retrieved templates in a global variable named 
+	<code>"TPL_"+FILENAME$</code>.&#160; 
+ Subsequent calls to CDS041 will retrieve the template from the global memory 
+ space, eliminating the disc activity.&#160; This means that if you manually change the template file after CDS041 has been called, CDS041 will return the original and not the revised template.&#160; Log off or clear the global variable to insure retrieving the revised template.&#160; 
+ You can call <a href="CDS277.htm">CDS277</a> to display and clear global 
+ variables.</p>
+        <p><b>Examples</b>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example using CDS041 to pass arguments to another Dynamo Tool</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041",ERR=ERROR,"CDS084",S084$<br />		S084.NAME$="P12"<br />		S084.MODE$="f"<br />		CALL "CDS084",ERR=F4,Y$,Y5$,U0,S084$,Y6,Y6$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table3" class="example">
+            <tr>
+                <td>Example using CDS041 to pass arguments to an application routine</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041",ERR=ERROR,"GL012",GL012$,"YY"<br />			GL012.GLCODE$="SLS"<br />			GL012.GLDATA$="105"<br />			CALL "GL012",Y$,G012$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table1" class="example">
+            <tr>
+                <td>Example using the SOURCE$ option</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041",ERR=ERROR,"XXAP12",AP12$,"YY",SOURCE$<br />			?SOURCE$<br />			EX/tpl/EXAP12.tpl<br />			CALL "CDS041",ERR=ERROR,"XXAP12",AP12$,"YY",SOURCE$<br />			?SOURCE$<br />			TPL_EX/EXAP12</code>
+                    <p>Notice how SOURCE$ used the template file for 
+			the first access, and the global variable for subsequent accesses.</p>
+                </td>
+            </tr>
+        </table>
+        <p><b>Search Heirarchy</b>
+        </p>
+        <ol>
+            <li>Global memory, file name as passed: If <code>PAR$(2,1)="Y"</code> or 
+		<code>"N"</code>, then 
+		the global memory is searched first.&#160; The global for a regular 
+		template is TPL_&lt;Relative Path to File&gt;.&#160; For example, the file 
+		DS/DSCM01 would have its template stored in TPL_DS/DSCM01, and PY/DAT/PYUD10 
+		would have its template stored in TPL_PY/DAT/PYUD10.&#160; This is the 
+		first and fastest way to retrieve a template.&#160; If <code>PAR$(3,1)</code> is Y, 
+		then the global is named with a lower case "tpl_".</li>
+            <li>Global memory using relative path name:&#160; If <code>PAR$(2,1)="Y"</code> or 
+		<code>"N"</code> and there is no slash included in <code>FILENAME$</code>, then CDS041 will open 
+		the file, and use the relative pathname to the file.&#160; For example, 
+		if you have added to your prefix list a job prefix entered at the menu 
+		as JMB/MMM/ and the program MSI263 is contained within your project 
+		directory, CDS041 will check for a global variable named TPL_JMB/MMM/MSI263 
+		even though MSI263 was passed to CDS041.</li>
+            <li>Global memory: If <code>PAR$(2,1)="Y"</code> or <code>"N"</code> and 
+		<code>PAR$(3,1)="Y"</code>, meaning 
+		that you are looking for the special modified template used for <code>SELECT</code> 
+		optimizations, and the lower case tpl_ template was not found in steps 1 
+		or 2 above, then a global variable with the upper case TPL_ and relative 
+		path name will be used.&#160; Then any fixed length U and N type fields 
+		are converted to C type, and the revised template stored with a lower 
+		case tpl_ for use with subsequent calls to CDS041.</li>
+            <li>Template file in tpl directory below file: Using the relative path 
+		to the file. This is the preferred location for template files.&#160; If 
+		the relative path to the file is DS/DSCM01, then the template file 
+		searched first is named DS/tpl/DSCM01.tpl.&#160; If the relative file 
+		name is PY/DAT/PYUD10, then the template file searched first is named PY/DAY/tpl/PYUD10.tpl.</li>
+            <li>Template file based on first two characters of path name:&#160; If 
+		the relative file name is DS/J1234/IC030 and the template was not found 
+		in an earlier step, then DS/tpl/IC030.tpl is searched at this step.&#160; 
+		Another example would be JMB/MMM/MSI423 would look next for JM/tpl/MSI423.tpl.</li>
+            <li>Template file based on first two characters of file name:&#160; 
+		Relative file name of DS/J1234/IC030 would look for template file IC/tpl/IC030.tpl 
+		and JMB/MMM/MSI423 would look in MS/tpl/MSI423.tpl.</li>
+            <li>Template file based on current prefix using only base file name: 
+		DS/J1234/IC030 would look for template file tpl/IC030.tpl in each 
+		directory specified in the PFX.&#160; If your PREFIX is JMB/MMM/ PY/ PY/DAT/ 
+		and the base file name is MSI423, then template files named JMB/MMM/tpl/MSI423.tpl, 
+		PY/tpl/MSI423.tpl, and PY/DAT/tpl/MSI423.tpl will be checked.</li>
+            <li>Template file based on package code specified in Company Information 
+		Maintenance (SMC): If the package code is specified, and this package 
+		code was not in the prefix, then CDS041 will look in the package code 
+		directory: PK/tpl/MSI423.tpl.&#160; This option is rarely required, 
+		since the package code is typically included in the prefix used in step 
+		7.</li>
+            <li>Data Dictionary: Parent Company: If <code>PAR$(2,1)="Y"</code> or 
+		<code>"D"</code> (or blank 
+		and <code>FILENAME$</code> is a program) then the data dictionary in the company code 
+		before base name will be checked.&#160; CD/CDS084 will look in data 
+		dictionary file CDDD11, DY/IC030 
+		will look in DYDD11, MM/DY/IC030 will also look in DYDD11 first, since that is 
+		the company code closest to the base file name of IC030.</li>
+            <li>Data Dictionary: first two characters of relative path name.&#160; 
+		MM/DY/IC030 will look in MMDD11.&#160; DS/J1234/IC030 will look in DSDD11.&#160; JMB/MMM/MSI423 will look for a data dictionary named 
+		JMDD11.</li>
+            <li>Data Dictionary: first two characters of base file name.&#160; LEK/CDS187 
+		will look in CDDD11.&#160; JRG/BC/PYD310 will look in PYDD11.&#160; This 
+		option is useful when using programmer specific development directories.</li>
+            <li>Data Dictionary: First two characters after data server prefix.&#160; 
+		/&lt;server&gt;/SP/SPAR12 and /&lt;server&gt;SP/SPAR12 would look in data dictionary 
+		SPDD11.</li>
+            <li>Data Dictionary: Current Company <code>Y.COMPCODE$</code>.</li>
+            <li>If no template is found, and the base file name contains a period, 
+		as in EXAP00.030215, then the template search process is repeated 
+		excluding the suffix.&#160; This enables archived file names or names 
+		with other suffixes to share the template associated with the original 
+		file.</li>
+        </ol>
+        <p>If the data dictionary file can be opened, then the first two characters 
+	of the base file name are excluded when the same as the company code.&#160; 
+	For example, if the base file name is CDS084 and the relative file name is 
+	CD/CDS084, then the data dictionary CDDD11 will be accessed using data 
+	dictionary name S084.&#160; In other cases, the complete base name is used.&#160; 
+	With a relative file name of DY/IC030, the DYDD11 data dictionary file will 
+	be checked for data dictionary name IC030.</p>
+        <p>When a template is found using a template file or by data dictionary, a 
+	global variable is assigned to improve performance and will be used for 
+	subsequent template searches.&#160; In some cases, the application program 
+	can place a template in a global variable, so that other Dynamo Tools 
+	including <a href="CDS037.htm">CDS037</a>, <a href="CDS038.htm">CDS038</a>, 
+	and <a href="CDW038.htm">CDW038</a> can locate the template.</p>
+        <p><b>Debug Mode</b>
+        </p>
+        <p>It is sometimes difficult to determine why CDS041 does not locate the template 
+	desired, so there is a debug mode where CDS041 will pause and display the 
+	<code>FILENAME$</code> and <code>PAR$</code> passed to it, as well as the template files and data 
+	dictionaries checked.&#160; You enable this debug mode by assigning the 
+	global variable <code>"SMS_CDS041_DEBUG"</code> to any value.&#160; Clear the gobal or 
+	log off to return to normal mode.</p>
+        <p><code>TMP$=STBL("SMS_CDS041_DEBUG","")</code>
+            <br />	This statement will enable debug mode.</p>
+        <p><code>TMP$=STBL("!CLEAR","SMS_CDS041_DEBUG")<br /></code>This statement will disable debug mode.</p>
+    </body>
+</html>

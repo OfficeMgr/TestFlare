@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <title>CDS094 - New Page Logic</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS094" />CDS094</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="New Page / Close Printer" />New Page / Close Printer</p>
+                </td>
+                <td align="right">
+                    <a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS094">Last Revised: 03/16/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Email" />
+            <MadCap:keyword term="Page Logic" />This routine should be used by all print jobs both at the start of a new page, and 
+	when necessary to close the printer channel before returning to the menu, or 
+	by applications that do not return to the Dynamo Tools menu program CDS001.&#160; It handles all new page logic, printing reports to the display, and special end-of-job logic.&#160; 
+	It also works with all supported printer devices including dot matrix 
+	printers, laser/inkjet printers, printing to the display (both 80 and 132 
+	column display types), faxing, printing to a file, printing to a PDF file, emailing 
+	text, emailing PDF files as attachments, 
+	as well as printing in portrait or landscape mode.&#160; If you use CDS094, 
+	then no additional logic is required within the application program to 
+	handle printing to the display, or other special output device.</p>
+        <h5>New Page Logic</h5>
+        <p>In the NEWPAGE routine of any program that prints, call CDS094 before printing anything to the page.&#160; 
+	There should be no <code>'FF'</code> mnemonics anywhere in the application program.&#160; 
+	CDS094 will print the <code>'FF'</code> when applicable.&#160; </p>
+        <p>&#160;&#160;&#160; <code>CALL "CDS094",Y6$</code></p>
+        <p>
+            <MadCap:keyword term="Form Feed" />In most circumstances, you want to send a form feed to the printer when starting a new page, except on the very first page.&#160; CDS094 will handle this for you, and take into account any fax cover page that may have been printed.&#160; This prevents a blank page at the beginning of each report.</p>
+        <p>
+            <MadCap:keyword term="ArrowRt" />
+            <MadCap:keyword term="ArrowLf" />When printing to the display, CDS094 will prompt the operator to continue, so the display can be cleared to display the next page.&#160; The operator is also given an F2 choice to continue without prompting for each page, and an F4 option to abort the job and return to the menu processor.&#160; CDS094 also changes the display to 132 column mode when the report requires more than 80 columns and the display device supports 132 column mode.&#160; If the display device does not support 132 column mode, then the new page prompt will allow the user to slide the view window to view either the leftmost 80 or rightmost 80 columns of the report using the ArrowLf &amp; ArrowRt keys.</p>
+        <p>When printing to a file, CDS094 will not send the form feed to the file.</p>
+        <p>CDS094 increments the page counter <code>Y6.P</code> and sets the line counter 
+	<code>Y6.L</code> to the maximum lines on the page <code>Y6.MAXL</code> so that the operator does not need to do so in the application.&#160; Application programs should use 
+	<code>Y6.P</code> as the page numbers, and <code>Y6.L</code> as the lines left on the page.&#160; 
+	If the application program still uses the simple variable <code>L</code> and not 
+	<code>Y6.L</code>, 
+	then just set <code>L=Y6.MAXL</code> after calling CDS094.&#160; This will insure the 
+	maximum lines per page is correct for printing in portrait, landscape, 
+	terminals, files, etc.</p>
+        <p>Using CDS094 enables a program to work independent of the device being printed to.</p>
+        <h5>
+            <MadCap:keyword term="Close Printer Logic" />Close Printer Logic</h5>
+        <p>When an application is finished and returns the Dynamo Tools menu program 
+	CDS001, CDS094 will be called when to close the printer channel if the 
+	printer status variable <code>Y6$</code><MadCap:keyword term="CDS084" /> (created by the printer selection routine 
+	CDS084) is still in memory.</p>
+        <p>When an application must close the printer channel prior to returning to 
+	the Dynamo Tools menu, or if the application does not <code>RUN "CDS001"</code> at the 
+	end of the job, then the application needs to call CDS094 one more time to complete the 
+	printing process.</p>
+        <p>&#160;&#160;&#160; <code>CALL "CDS094",Y6$,"E"</code></p>
+        <p>The <code>"E"</code> informs CDS094 that you are done using the printer/device.</p>
+        <p>When printing to a printer, a form-feed will be sent to the printer causing the last page to be ejected on a laser type printer, or advance to the tear bar on a dot-matrix printer.</p>
+        <p>When printing to a display, the operator is prompted so that the last page can be displayed before returning to the menu or other logic within the application.</p>
+        <p>When emailing, the <code>FINISH</code> flag of the email log is set to Y, to provide verification that the application sending the email did in fact finish, and so the email is complete.</p>
+        <p>When emailing a PDF attachment, CDS094 will call CDS184 to attach the PDF 
+	file to the email.</p>
+        <p>Note that the printer channel opened to <code>Y6.CH</code> is closed, and 
+	<code>Y6$</code> is cleared when CDS094 is called to close the printer.</p>
+        <p>When running on a linux, Unix, or AIX server from a PC running facetwin, 
+	the user will be asked to display the report file at job completion if the 
+	report was printed to a text file or to an Adobe PDF file.&#160; This option 
+	requires a Server Share named PRT for the PRT folder on the server where 
+	these files are created.</p>
+        <h5>Calling Format:</h5>
+        <p>
+            <code>CALL "CDS094", Y6$, { EOJ$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS094</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>Y6$</code>
+                </td>
+                <td>To</td>
+                <td>Printer Type Information provided by the call to CDS084 when the printer was selected</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>EOJ$</code>
+                </td>
+                <td>To</td>
+                <td>
+                    <table border="1" width="100%" id="table3" class="lev2">
+                        <tr>
+                            <td align="center">"E"</td>
+                            <td>End of print job.&#160; If creating a PDF file or text file, 
+				and using a workstation using an emulator such as FacetWin or 
+				PowerTerm, then launch an appropriate viewer for the file.&#160; 
+				If not using the recommended terminal emulator, the operator 
+				will be prompter with the URL to use to view the result.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">"e"</td>
+                            <td>Same as "E" but does not launch a viewer or advise 
+				the user with the URL.</td>
+                        </tr>
+                        <tr>
+                            <td nowrap="" align="center">null, not passed, or other value</td>
+                            <td>Start new page of output.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <p>CDS094 will directly run the external menu, or the Dynamo Tools menu processor <a href="CDS001.htm">CDS001</a> 
+	when printing a report to the display and the operator uses F4 to abort.&#160; 
+	This means that any updates that take place at the end of a printed report 
+	will not be executed when the user prints the report to the display, and 
+	uses the F4 option to abort prior to the report completing.</p>
+        <p>The <code>CALL</code> to CDS094 does not require an <code>ERR=</code> option.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example using CDS094 with a program that returns to menu program 
+			CDS001 at the end of job</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>1000 NEWPAGE:<br />
+			1010 CALL "CDS094",Y6$<br />
+			1020 PRINT (Y6.CH)..."Page",Y6.P<br />
+			.</code>
+                    <p>
+                        <code>.<br />
+			.<br />
+			1090 RETURN</code>
+                    </p>
+                    <p>
+                        <code>Before each PRINT:</code>
+                    </p>
+                    <p>
+                        <code>IF Y6.L&lt;1 THEN GOSUB NEWPAGE<br />
+			PRINT (Y6.CH)...<br />
+			Y6.L=Y6.L-1<br /><br />
+			9000 EOJ:<br />
+			9010 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS355 - WHERE$ &amp; SORTBY$ Pre-processor</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS355" />CDS355</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="WHERE" />WHERE$ and SORTBY$ Pre-processor</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS355">Last Revised: 
+		10/17/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="CDS037" />
+            <MadCap:keyword term="CDS038" />
+            <MadCap:keyword term="CDW038" />This routine is called by CDS037, CDS038, and CDW038 to analyze 
+	<code>WHERE$</code> and <code>SORTBY$</code> clauses and is not normally called by an application program.</p>
+        <p>This routine performs the following steps:</p>
+        <ol>
+            <li>
+                <MadCap:keyword term="Templated" />Replaces (or inserts) the templated data structure name in <code>WHERE$</code> or <code>SORTBY$</code> with 
+	<code>REC.</code>&#160; For example <code>CM01.NAME$, XXCM01.NAME$, 
+	DSCM01.NAME$,</code> and <code>NAME$</code> will all be replaced with
+	<code>REC.NAME$</code><MadCap:keyword term="Program Editor" />.&#160; This allows the developer to use the program editor to paste field names when building these clauses, without needing to replace the actual record template string with "REC".&#160; <a href="#Examples">See examples</a>.</li>
+            <li>Converts U() and I() and fixed length N() template fields used in a 
+	<code>WHERE$</code> clause to C() type template fields to cause bbx to use 
+	<code>KNUM</code> for 
+	processing instead of reading through the entire file as is done on all 
+	numeric type fields.</li>
+            <li>Creates work file when sortby clause includes fields that are not contained within the primary record.&#160; See <a href="#WRKFIL$"><code>WRKFIL$</code></a>.</li>
+        </ol>
+        <p><code>CALL "CDS355", <a href="#Y$">Y$</a>, <a href="#FILENAME$">FILENAME$</a>, 
+	<a href="#REC$">REC$</a>, <a href="#DISP$"><MadCap:keyword term="DISP$" />DISP$</a>, <a href="#WHERE$">WHERE$</a>, <a href="#SORTBY$">SORTBY$</a>, 
+	<a href="#MODE$">MODE$</a>, <a href="#WRKFIL$">WRKFIL$</a>, 
+	<a href="#RELFILE$">PRIFILE$</a>, <a href="#PRIREC$">PRIREC$</a>, <a href="#OPT$">OPT$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th nowrap="" colspan="2">CDS355</th>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Standard Task Control Variable" />Standard Task Control Variable</td>
+            </tr>
+            <tr>
+                <td><a name="FILENAME$"></a><code>FILENAME$</code>
+                </td>
+                <td>Primary data file name from parent routine</td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td>The templated record for <code>FILENAME$</code>.&#160; <code>REC$</code> 
+		is changed by CDS355 and returned to the calling program for use on
+		<code>SELECT</code> statements.</td>
+            </tr>
+            <tr>
+                <td><a name="DISP$"></a><code>DISP$</code>
+                </td>
+                <td>List of fields to display/print from parent routine.&#160; See CDS037, 
+		CDS038 and CDW038.</td>
+            </tr>
+            <tr>
+                <td><a name="WHERE$"></a><code>WHERE$</code>
+                </td>
+                <td>Where clause from parent routine</td>
+            </tr>
+            <tr>
+                <td><a name="SORTBY$"></a><code>SORTBY$</code>
+                </td>
+                <td>Sortby clause from parent routine</td>
+            </tr>
+            <tr>
+                <td><code><a name="MODE$"></a>MODE$</code>
+                </td>
+                <td><code>MODE$</code> from parent routine</td>
+            </tr>
+            <tr>
+                <td><a name="WRKFIL$"></a><code>WRKFIL$</code>
+                </td>
+                <td>When the <code>SORTBY$</code> clause includes fields that are not contained within the primary data file, CDS355 will create a work file that will contain all fields referenced within
+		<code>DISP$</code> 
+		as well as any fields contained within the original <code>SORTBY$</code> but not 
+		included in <code>DISP$</code>.&#160; This enables applications to call one of the parent routines (CDS037, CDS038, or CDW038) and refer to fields in the
+		<code>SORTBY$</code> clause that are not contained within the primary data file.&#160; The name of the work file is passed back to the calling routine in
+		<code>WRKFIL$</code>.&#160; The calling routine will use the work file as its primary data file.</td>
+            </tr>
+            <tr>
+                <td><a name="RELFILE$"></a><code>PRIFILE$</code>
+                </td>
+                <td>This parameter is passed the primary file name when there is a 
+		subsidiary <code>SELECT</code> used within <code>DISP$</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="PRIREC$"></a>PRIREC$</code>
+                </td>
+                <td>When <code>PRIFILE$</code> is used, this parameter contains the templated 
+		record for the primary file.</td>
+            </tr>
+            <tr>
+                <td><a name="OPT$"></a><code>OPT$</code>
+                </td>
+                <td>Passed as "CDW038" when called by CDW038 when using special template where U() fields are changed to C() fields to enable select optimization to enable reading only a section of the file instead of the entire file.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Examples"></a>Examples</th>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS091",Y$<br />
+        &gt;SORTBY$="CM01.ALPHASORT$+CM01.CUSTNO$"</code>
+                    <p><code>&gt;CALL "CDS355",Y$,"XXCM01","","",SORTBY$<br />
+        ?SORTBY$<br />
+        REC.ALPHASORT$+REC.CUSTNO$</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <h5>Technical Notes</h5>
+        <p>"FILE" can be either complete file name as in DISM01 or exclude company code as in CM03.<br />
+  "RELFILE" is a related file specified in <code>DISP$</code> when specified with a 
+	<code>WHERE$</code> or <code>SORTBY$</code> clause.<br />
+  "OTHER" is any other external file.</p>
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th>SORTBY$<br />
+      main record</th>
+                <th>SORTBY$<br />
+      related file</th>
+                <th>WHERE$<br />
+      main record</th>
+                <th>WHERE$<br />
+      related file<br />
+      no external sort fields</th>
+                <th>WHERE$<br />
+      related file<br />
+      external sort fields</th>
+                <th>CDS355<br />
+      line#</th>
+            </tr>
+            <tr>
+                <th>MODE</th>
+                <td align="center">0</td>
+                <td align="center">1</td>
+                <td align="center">2</td>
+                <td align="center">3</td>
+                <td align="center">4</td>
+                <td align="center">&#160;</td>
+            </tr>
+            <tr>
+                <th>REC.NAME</th>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>convert to literal</td>
+                <td align="center">1260</td>
+            </tr>
+            <tr>
+                <th>FILE.NAME</th>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>convert to literal</td>
+                <td align="center">1280</td>
+            </tr>
+            <tr>
+                <th>NAME</th>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>REC.NAME</td>
+                <td>EXT.NAME</td>
+                <td>REC.NAME</td>
+                <td align="center">1250</td>
+            </tr>
+            <tr>
+                <th>EXT.NAME</th>
+                <td>not supported</td>
+                <td>EXT.NAME</td>
+                <td>not supported</td>
+                <td>EXT.NAME</td>
+                <td>REC.NAME</td>
+                <td align="center">1270</td>
+            </tr>
+            <tr>
+                <th>RELFILE.NAME</th>
+                <td>not supported</td>
+                <td>not supported</td>
+                <td>not supported</td>
+                <td>EXT.NAME</td>
+                <td>REC.NAME</td>
+                <td align="center">1290</td>
+            </tr>
+            <tr>
+                <th>OTHER.NAME</th>
+                <td>REC.OTHER__NAME</td>
+                <td>EXT.OTHER__NAME</td>
+                <td>not supported</td>
+                <td>EXT.OTHER__NAME</td>
+                <td>REC.OTHER__NAME</td>
+                <td align="center">1370</td>
+            </tr>
+        </table>
+    </body>
+</html>

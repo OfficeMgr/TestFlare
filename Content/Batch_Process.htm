@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="4" MadCap:lastHeight="439" MadCap:lastWidth="941">
+    <head><title>Batch Process</title>
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Batch Process" />inter-system communication</p>
+        <p class="SectionTitle">Batch Process</p>
+        <p class="SectionDesc">If the application software uses <MadCap:keyword term="CDS036" />CDS036 to record all file writes and removes, then the files and processes below are used to transfer data between a headquarters and branch system, or between a production and a failover or Disaster Recovery site.</p>
+        <table>
+            <colgroup>
+                <col />
+                <col />
+                <col />
+            </colgroup>
+            <tr>
+                <th>File Name</th>
+                <th>Type</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">XXIS00</td>
+                <td>
+                    <MadCap:keyword term="MKY" />MKY</td>
+                <td>
+                    <MadCap:keyword term="Define" />ISC Files to log. Defined and maintained using Files to Log Maintenance (ISC).&#160; Read by CDS036 to determine if file activity needs to be logged on each system.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">XXIS01</td>
+                <td>MKY</td>
+                <td>
+                    <MadCap:keyword term="ISC Logged" />ISC Logged records - CDS036 records file name, primary key, and a write/remove indicator in this file.&#160; Records are removed from this file by CDC950 as the records are transferred to the ISC/XXIS10.zzz file.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">XXIS02</td>
+                <td>MKY</td>
+                <td>
+                    <MadCap:keyword term="System Information Maintenance" />
+                    <MadCap:keyword term="ISC System Information" />ISC System Information - Defined and maintained using System Information Maintenance (ISC).&#160; Contains system information including selection code for each location.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">XXIS01_X</td>
+                <td>MKY</td>
+                <td>The last 9 XXIS01 files are retained with a _1 through _9 suffix with _1 being the most recent.&#160; The rolling and purging of the oldest file takes place by CDC950 in preparation for transmission.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ISC/XXIS10.zzz</td>
+                <td>SER</td>
+                <td>This file contains the file names, records to be written, and keys to be removed from files on the target system with system number zzz.&#160; These are the files that are transmitted to a remote system. Note that these files are located in the ISC directory.&#160; The CDC950 program defines, and writes to these files.&#160; The ISC script initializes these files after successful transmission.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ISC/XXIS20.zzz</td>
+                <td>SER</td>
+                <td>
+                    <MadCap:keyword term="ISC Queue" />This file contains the data received from system zzz.&#160; The file is created or appended to by the ISC Queue.&#160; Records in the file are processed by the CDC960 program.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ISC/XXIS20_X.zzz</td>
+                <td>SER</td>
+                <td>The last 9 ISC/XXIS20.zzz files are retained and renamed with an _X suffix, with _1 being the most recently received file.</td>
+            </tr>
+        </table>
+    </body>
+</html>

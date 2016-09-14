@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW100 - Generate Dynaweb Menu</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDW100</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Generate Dynaweb Menu</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW100">Last Revised: 04/25/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be run from a web browser running Dynaweb to display a menu of options.&#160; 
+ It can also be called programmatically and return the menu in a string 
+ variable.&#160; These menu's are maintained using Dynaweb Menu Maintenance on WMS menu.&#160; Each menu is presented in an HTML table and may include a) heading rows, b) other Dynaweb programs, c) a hyperlink, and d) a link to a Dynaweb sub-menu.&#160; 
+ The menu optionally includes buttons at the bottom to for Home, Back, Close, 
+ and Logout.</p>
+        <p>The url to display a Dynaweb menu is <code>[DSN]?p=CDW100&amp;m=XXX</code>.</p>
+        <table>
+            <tr>
+                <th colspan="2">Arguments</th>
+            </tr>
+            <tr>
+                <td><code>[DSN]</code>
+                </td>
+                <td>global variable for the Dynaweb Script Name</td>
+            </tr>
+            <tr>
+                <td><code>xxx</code>
+                </td>
+                <td>Three letter menu code as defined in Dynaweb Menu Maintenance (WMS)</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDW100", Y$, MENU$, HTML$ {,DD31L$)</code>
+        </p>
+        <table border="1" style="border-collapse: collapse;" width="100%">
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Dynamo Tools Session Control Variable.&#160; The company name <code>
+      Y.COMPNAME$</code> will be displayed in the top row of the menu.&#160; Set 
+ to null to omit this row.</td>
+            </tr>
+            <tr>
+                <td><code>MENU$</code>
+                </td>
+                <td>Three letter menu code as defined in Dynaweb Menu Maintenance (WMS)</td>
+            </tr>
+            <tr>
+                <td><code>HTML$</code>
+                </td>
+                <td>String representing the menu in html format, set by CDW100</td>
+            </tr>
+            <tr>
+                <td><code>DD31L$</code>
+                </td>
+                <td>Optional stack list of <code>DD31$</code> entries that will be 
+ appended to the bottom of the menu.&#160; This option is useful when there 
+ are some menu selections that you want to present conditionally.&#160; You 
+ can build <code>DD31L$</code> by starting with an empty <code>DD31$</code> 
+      record, populate the fields as needed, then concatenate onto <code>DD31L$</code>.&#160;
+      <code>DD31L$</code> can contain one or more <code>DD31$</code> menu 
+ selections.</td>
+            </tr>
+        </table>
+        <p>The menu is styled using a style sheet.&#160; The name of the style sheet 
+ is typically specified using Dynaweb Control Maintenance, and is used for all 
+ Dynaweb applications.</p>
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <th>Menu Section</th>
+                <th>Style Sheet Entry</th>
+            </tr>
+            <tr>
+                <td>top row of menu</td>
+                <td><code>table.menu tr.top td</code>
+                </td>
+            </tr>
+            <tr>
+                <td>next row of menu - menu title</td>
+                <td><code>table.menu tr.title td</code>
+                </td>
+            </tr>
+            <tr>
+                <td>menu detail (selections)</td>
+                <td><code>table.menu td</code>
+                </td>
+            </tr>
+            <tr>
+                <td>optional footer row with action buttons</td>
+                <td><code>table.menu tr.foot td</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW1001.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW1002.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

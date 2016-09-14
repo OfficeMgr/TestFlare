@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="3190" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS095 - Open File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS095" />CDS095</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Open File" />Open File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS095">Last Revised: 12/27/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="FIN" />This routine should be used to open a data file.&#160; It provides for more complete error checking than normally found within an application, including error 0 (file locked by another task), error 12 (file not defined), and error 18 (insufficient privilege).&#160; 
+ It also can be used in an environment using both pro5 and bbj by forcing the 
+ bbj application to use the pro5 data server. It also supports opening encrypted files.</p>
+        <p>In addition, CDS095 is able to open a file that is not in the current directory, nor found using the prefix list since it tries to locate the file in the company subdirectory based on the first two characters of the file name.&#160; CDS095 also retrieves templates and tracks what files are currently open so that called routines that need to open a file that has already been opened, does not require a disk access, nor open the file more than once.</p>
+        <p>CDS095 is also used to define and open temporary work files that are described in the 
+	Dynamo Data Dictionary.</p>
+        <p><code>CALL "CDS095",<a href="#ERR">ERR=XXXX</a>, <a href="#CHAN">CHAN</a>, <a href="#FILNAM$">FILNAM$</a>, <a href="#PAR$">PAR$</a>, <a href="#DIMTPL$">DIMTPL$</a>, <a href="#KGEN$"><MadCap:keyword term="KGEN" />KGEN$</a></code>
+        </p>
+        <p>Only the <code>CHAN</code> and <code>FILNAM$</code> are required to be passed to CDS095.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS095</th>
+            </tr>
+            <tr>
+                <td><a name="ERR"></a><code>ERR</code>
+                </td>
+                <td>Branch to line XXXX if unable to open the file, lock the file, or retrieve the template if so requested by the <code>PAR$</code> options.</td>
+            </tr>
+            <tr>
+                <td><a name="CHAN"></a><code>CHAN</code>
+                </td>
+                <td>
+        Channel# to be used.&#160; If passed with a value of zero, then CDS095 will call <a href="CDS088.htm">CDS088</a> to obtain an available channel and return that channel number to the calling program.&#160; 
+		It is Excellware's convention to use a channel variable of the file name (less the company code).&#160; For example, a data file named <code>DSCM01</code> would use a channel number variable of <code>CM01</code>.&#160; If not passed as zero, then the file will be opened to the channel number passed.&#160; If there is already a file open to the channel passed, this file will be closed.</td>
+            </tr>
+            <tr>
+                <td><a name="FILNAM$"></a><code>FILNAM$</code>
+                </td>
+                <td>
+                    <p>Name of file to be opened.&#160; Will be returned including company directory prefix if file was not found in current directory or using prefix.&#160;&#160; If the 
+		first two characters of the file name are <code>XX</code>, CDS095 will replace the <code>XX</code> 
+		with the current company code.</p>
+                    <p>To open an encrypted data file, append two colons and the file encryption password to the file name, i.e., <code>MyFile::Password</code>.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="PAR$"></a><code>PAR$</code>
+                </td>
+                <td>
+        Options which may be passed with values, blanks or as a null string.<table class="lev2"><tr><td class="nowrapcode">PAR$(1,1)</td><td>Error messages<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3" class="lev3"><tr><td align="center" class="nowrapcode">N</td><td>display no error messages (default)</td></tr><tr><td align="center" class="nowrapcode">Y</td><td>display all error messages</td></tr><tr><td align="center" class="nowrapcode">D</td><td>display all error messages, except if the file is not defined then no error message is displayed</td></tr></table></td></tr><tr><td class="nowrapcode">PAR$(2,1)</td><td>Locking option<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table4"><col /><col /><tr><td class="nowrapcode">Y</td><td>lock file</td></tr><tr><td class="nowrapcode">N</td><td>do not lock file (default)</td></tr><tr><td class="nowrapcode">U</td><td>do not lock file, and pass channel number back to calling program if file has already been opened on a prior call.&#160; Note that use of this option requires the calling program to leave the file open and never close it. The 
+					menu processor will close the file and clear the <code>SMS_FILES</code> global variable until opened again.</td></tr><tr><td class="nowrapcode">P</td><td>Private file option.&#160; Do not lock file, and disable 
+					subsequent calls to CDS095 with <code>PAR$(2,1)</code> set to <code>"U"</code> to use this channel#.</td></tr></table></td></tr><tr><td class="nowrapcode">PAR$(3,1)</td><td>Template option<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table5" class="lev3"><tr><td class="nowrapcode">Y</td><td>template is required. Exit with error 99 if template is missing or invalid. Application software that uses the template should set this parameter to <code>"Y"</code> when calling CDS095 so that error 47's are not encountered later in the application when a template variable is first referenced.</td></tr><tr><td class="nowrapcode">N</td><td>template will be returned if available for data files, no error if not available 
+					(default)</td></tr><tr><td class="nowrapcode">P</td><td>template will be returned if available for data files and programs, no error if not available</td></tr><tr><td class="nowrapcode">X</td><td>bypass all template lookup logic. This can be used to improve performance by bypassing template file searching when the application does not use a template with this file.</td></tr></table></td></tr><tr><td class="nowrapcode">PAR$(4,1)</td><td>Temporary work file option<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table6" class="lev3"><tr><td class="nowrapcode">W</td><td>Define temporary work file, prior to opening. This option requires an entry in the data dictionary with a period at the end of the file name. However, you do not include the period in the <code>FILNAM$</code> when calling CDS095. CDS095 will create a file in the <code>tmp/</code> directory with a suffix of <code>.x</code> where x is a number to make the file name unique. See examples. Note that files defined in the <code>tmp/</code> directory are erased by the menu processor when the application returns to the menu, and do not have to be erased by the application. CDS095 will return the specific file name created in <code>FILNAM$</code> should the application need to close and reopen this file, or pass the file name to another routine such as <a href="CDS037.htm">CDS037</a> or <a href="CDS038.htm">CDS038</a>.</td></tr></table></td></tr><tr><td class="nowrapcode">PAR$(5,1)</td><td>Template search locations, passed to <a href="CDS041.htm">CDS041</a> 
+			to limit ways to search for template.&#160; This option is rarely 
+			required by an application program, since normally you want to 
+			retrieve the template using the default methods.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="table2" class="lev3"><tr><td align="center">blank or not passed</td><td>treat as <code>Y</code> if <code>FILNAM$</code> is a program, <code>N</code> if not (default)</td></tr><tr><td align="center" class="nowrapcode">N</td><td>search global variable, tpl file</td></tr><tr><td align="center" class="nowrapcode">Y</td><td>search global variable, tpl file, Data Dictionary</td></tr><tr><td align="center" class="nowrapcode">D</td><td>search Data Dictionary only</td></tr><tr><td align="center" class="nowrapcode">T</td><td>search tpl file only</td></tr><tr><td align="center" class="nowrapcode">F</td><td>search tpl file and Data Dictionary, but not global variable</td></tr></table></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="DIMTPL$"></a><code>DIMTPL$</code>
+                </td>
+                <td>
+        Dimensioned template returned by CDS095 to calling program as set by
+		<a href="CDS041.htm">CDS041</a>.&#160; For data files and programs with six 
+		character program names, the convention is to use the file name, less the company code, as the dimensioned template variable.&#160; For example, the data file <code>XXCM01</code> would use <code>CM01$</code>.&#160; 
+		For 5 character programs, the company name is not a part of the program 
+		name, so the convention is to use the entire 5 character program name.&#160; 
+		For example, the program <code>GL018</code> would use <code>GL018$</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="KGEN$"></a><code>KGEN$</code>
+                </td>
+                <td>
+        is used in the <code>KGEN()</code> function as the adjusted <code>FIN()</code> data. The <code>KNUM</code> alone, and not +256 option is sufficient since <code>KGEN$</code> excludes all key segment modification flags such as descending segments, or business math.&#160; It is Excellware's convention to use the file name, less the company code followed by a K as the <code>KGEN$</code> variable. For example, the data file <code>XXCM01</code> would use <code>CM01K$</code>. The key derived from the data would be <code>KGEN(DIMTPL$,KGEN$,KNUM).</code></td>
+            </tr>
+        </table>
+        <p>Note that files opened by the menu processor use the Excellware convention and assign the channel number, dimensioned template and key generation variables. For example if file <code>XXCM01</code> is opened by the menu processor, then the application will have the variables <code>CM01</code>, <code>CM01$</code>, and <code>CM01K$</code> already assigned proper values.</p>
+        <p>Note that CDS095 may be used to open tty devices but not printers.&#160; See <a href="CDS084.htm">CDS084</a> for opening printers.</p>
+        <h5>BBj</h5>
+        <p>Pro5 and bbj use different file locking techniques, so they both cannot 
+ open the same data file at the same time. In a mixed environment where 
+ both pro5 and bbj processes need to access data files simultaneously, you can 
+ set a global variable named <code>SMS_PRE</code> to the dataserver prefix that bbj should 
+ use such as <code>/&lt;localhost,port=1100&gt;</code>.&#160; When this global is set, CDS095 will 
+ only open data files using a dataserver, either a dataserver contained within 
+ the prefix list, or the dataserver prefix specified by the global variable.&#160; 
+ This global can also be specified using the <code href="background.htm">background</code> script or by the cgi script to enable Dynaweb applications to use 
+ bbj.</p>
+        <h5>Examples</h5>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table7" class="example">
+            <tr>
+                <td>Opening a non-templated data file using default options.&#160; The 
+		application will use the numeric variable <code>SK00</code> to access the file.&#160; 
+		If the numeric variable <code>SK00</code> is zero, then CDS095 will set <code>SK00</code> to an 
+		unused channel number.&#160; If <code>SK00</code> has a non-zero value when passed to 
+		CDS095, then CDS095 will use the value passed, and close the file 
+		currently opened to this channel.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",ERR=XXXX,SK00,"XXSK00"</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table8" class="example">
+            <tr>
+                <td>Opening a templated data file using default options.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",ERR=XXXX,CM01,"XXCM01","",CM01$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Typical data file <code>READ</code> statement:</td>
+            </tr>
+            <tr>
+                <td><code>READRECORD (CM01,KNUM=0,KEY=CUSTNO$,DOM=XXXX)CM01$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Typical data file <code>WRITE</code> statement:</td>
+            </tr>
+            <tr>
+                <td><code>WRITERECORD (CM01)CM01$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table9" class="example">
+            <tr>
+                <td>Opening a templated data file using default options with <code>KGEN</code> 
+			field.&#160; </td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",ERR=XXXX,,"XXVM60","",VM60$,VM60K$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Typical data file <code>REMOVE</code> statement.&#160; The advantage of using 
+			the <code>KGEN</code> function on the <code>REMOVE</code>, is that the program becomes 
+			independent of the file's key structure.&#160; If the key structure 
+			is changed, then the program does not need to be changed.</td>
+            </tr>
+            <tr>
+                <td><code>REMOVE (VM60,KEY=KGEN(VM60$,VM60K$,0))</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table10" class="example">
+            <tr>
+                <td>Opening a data file within a called routine which may be called 
+			more than once.&#160; The <code>"U"</code> parameter will return <code>CM01</code> with the 
+			channel number if the file is already opened, eliminating any disc 
+			access on subsequent calls.&#160; If the <code>XXCM01</code> file is not already 
+			opened, then CDS095 will open it and assign the channel variable 
+			<code>CM01</code>.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",ERR=XXXX,CM01,"XXCM01","YUY",CM01$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table11" class="example">
+            <tr>
+                <td>Opening and locking a templated data file.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",ERR=XXXX,CM01,"XXCM01","YYY",CM01$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table12" class="example">
+            <tr>
+                <td>Defining a temporary work file based on file definition stored 
+			in the data dictionary.&#160; The data dictionary file name must 
+			include a trailing period (<code>VM040.</code>), but it is not included in the <code>
+			FILENAME$</code> passed to CDS095.&#160; In this example, the data 
+			dictionary company DY was used since the VM040 program was located 
+			in the DY/ directory.</td>
+            </tr>
+            <tr>
+                <td><code>READY<br />&gt;FILENAME$="VM040"<br />&gt;CALL "CDS095",VM040,FILENAME$,"YYYW",VM040$,VM040K$<br />&gt;?FILENAME$<br />./tmp/VM040.9754<br />&gt;?VM040<br />10<br />&gt;?FATTR(VM040$)<br />SEQNO:U(2),VENDNO:C(6),MATCH:C(34),VM03SEQ:U(1)</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table13" class="example">
+            <tr>
+                <td>Defining a temporary work file where the company code is 
+			included in <code>FILENAME$</code>.&#160; The EX data dictionary is used in this 
+			example with a file name of <code>"T220."</code>.</td>
+            </tr>
+            <tr>
+                <td><code>READY<br />&gt;FILENAME$="EXT220"<br />&gt;CALL "CDS095",T220,FILENAME$,"YYYW",T220$<br />&gt;?T220<br />10<br />&gt;?FILENAME$<br />./tmp/EXT220.9754<br />&gt;?FATTR(T220$)<br />EMPNO:C(3),JOBNO:C(8),DATE:U(3),CUSTNO:C(6),ALPHASORT:C(8),HOURS:B:omask=##.0:,MILEAGE:U(2):omask=###:,EXPENSE:B:omask=####.00:</code>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Example opening an encrypted file</td>
+                </tr>
+                <tr>
+                    <td><code>CALL "CDS095",PR01,"XXPR01::MyPassword","YNY",PR01$</code>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

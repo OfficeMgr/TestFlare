@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS276 - Display Entry Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS276" />CDS276</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Display/Return Background Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS276">Last Revised: 
+		10/08/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to build and display the background text often used for operator entries and file maintenance.</p>
+        <p><code>CALL "CDS276", <a href="#TXTIN$">TXTIN$</a>, { <a href="#COL">COL</a>, <a href="#S276$">S276$</a>, <a href="#OUT$">OUT$</a> }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS276</th>
+            </tr>
+            <tr>
+                <td><a name="TXTIN$"></a><code>TXTIN$</code>
+                </td>
+                <td>String of pipe (|) separated fields to be displayed. The pipe symbol at the end of 
+		<code>TXTIN$</code> is optional.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1" class="lev2"><tr><th colspan="2">Special Cases</th></tr><tr><td>null</td><td>Colon only at end of line</td></tr><tr><td>single blank</td><td>Blank line</td></tr><tr><td>Text begins with single blank</td><td>Suppress Sequence#</td></tr><tr><td>Text begins with two blanks</td><td>Heading Line</td></tr><tr><td>Text includes escape sequence</td><td>Text that follows <code>$1B$</code> will be displayed, but is considered 
+			outside of regular text</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="COL"></a><code>COL</code>
+                </td>
+                <td>Set by CDS276 and returned to the calling program as the column where data entries should take place.&#160; It is based on the maximum size of the fields in 
+		<code>TXTIN$</code> and <code>S276.MAXL</code> if used.</td>
+            </tr>
+            <tr>
+                <td><a name="S276$"></a><code>S276$</code>
+                </td>
+                <td>
+        is optional, and if present contains:<table class="lev2"><tr><td><code>ROW</code></td><td>starting row# where first text field will display (defaults to 2 
+			if <code>S276$</code> is not passed to CDS276)</td></tr><tr><td><code>COL</code></td><td>column# (defaults to 0)</td></tr><tr><td><code>MAXL</code></td><td>maximum text length (defaults to 1 more than the longest entry in 
+			<code>TXTIN$</code>.)<br />
+            This is useful if you want to eliminate the period that follows the longest text element, or increase the number of periods above the default value.&#160; 
+ Note that <code>MAXL</code> is also set by CDS276. </td></tr><tr><td><code>NO</code></td><td>used to add field numbers to each text element.&#160; If passed as 0, then no field numbers will be added, otherwise fields will be numbered, except those numbered below 
+			<code>S276.NO</code>.&#160; This option can be used to number fields that can be maintained, but exclude a field number for key segments that cannot be changed.</td></tr><tr><td><code><MadCap:keyword term="DISP$" />DISP$</code></td><td>Pass as <code>"N"</code> to disable display of text.&#160; Useful when you 
+ need to store the formatted text.</td></tr><tr><td><code>STARTNO</code></td><td>Starting field sequence number (defaults to 1)</td></tr><tr><td><code>MAXROW</code></td><td>Set by CDS276 as the highest <code>ROW</code> number used.&#160; 
+			Useful when checking to see if everything fits on the current window 
+			size.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="OUT$"></a><code>OUT$</code>
+                </td>
+                <td>Contains the formatted string to be displayed.&#160; Used when <code>S276.DISP$="N"</code> to print by calling program.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Simple Example</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS276","Item|Customer||||Sequence|Option",COL</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>Item.....:<br />
+      Customer.:<br />
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; :<br />
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; :<br />
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; :<br />
+      Sequence.:<br />
+      Option...:</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>?col<br />
+      11</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table2">
+            <tr>
+                <th>Example with a blank row</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS276","Item| |Customer",COL</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>Item.....:<br /><br />
+      Customer.:</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table3">
+            <tr>
+                <th>Example with heading rows</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS276","Item Sequence|Range| |&#160; Company Wide 
+		Reports|Receipt Detail| |Item Detail|&#160; Warehouse 
+		Reports|Warehouses|Item Detail",COL</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>Item 
+		Sequence..........:<br />
+		Range..................:<br /><br /><u>Company Wide Reports&#160;&#160;&#160;&#160; <br /></u>Receipt Detail.........:<br />
+		Item Detail............:<br /><br /><u>Warehouse Reports&#160;&#160;&#160;&#160;&#160;&#160;&#160; <br /></u>Warehouses.............:<br />
+		Item Detail............:</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Example with line numbers</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS276",S276$<br />
+      LET S276.ROW=2,S276.NO=2<br />
+      CALL "CDS276","Item#|Description 1|Description 2|Product Class",COL,S276$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&#160;&#160; Item#.........:<br />
+        &#160;1 Description 1.:<br />
+        &#160;2 Description 2.:</code>
+                    <p><code>&#160;3 Product Class.:</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table4">
+            <tr>
+                <th>Example with line numbers &amp; heading rows</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS276",S276$<br />
+      LET S276.NO=1<br />
+      CALL "CDS276","Item Sequence|Range| |&#160; Company Wide 
+		Reports|Receipt Detail| |Item Detail|&#160; Warehouse 
+		Reports|Warehouses|Item Detail",COL,S276$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><pre> 1 Item Sequence..........:
+ 2 Range..................:
+
+   <u>Company Wide Reports     
+</u> 3 Receipt Detail.........:
+ 4 Item Detail............:
+
+   <u>Warehouse Reports        
+</u> 5 Warehouses.............:
+ 6 Item Detail............:</pre>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table5">
+            <tr>
+                <th>Example with suppressed line numbers</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS276",S276$<br />
+      LET S276.ROW=2,S276.NO=2<br />
+      CALL "CDS276","Customer#|Name|Address|City| State| Zip|Salesman|Tax Code",COL,S276$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>   Customer#.:
+ 1 Name......:
+ 2 Address...:
+ 3 City......:
+   State.....:
+   Zip.......:
+ 4 Salesman..:
+ 5 Tax Code..:</pre>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table6">
+            <tr>
+                <th>Example with additional text</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS276",S276$<br />
+      LET S276.ROW=2,S276.NO=3,S276.COL=7<br />
+		CALL "CDS276","Formula Code|Customer|Description|Cost 
+		Discount(s)|Standard Cost MU|Quantity Breaks"+'BU'+'EU'+"&#160;&#160;&#160; 
+		"+'BU'+"Quantity"+'EU'+"&#160;&#160; "+'BU'+"GM %"+'EU'+" "+'BU'+PAD("Rounding 
+		Rule",32)+'EU'+"| | | | | | |Cost|Date",COL,S276$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><pre>      Formula Code.....:
+      Customer.........:
+    1 Description......:
+    2 Cost Discount(s).:
+    3 Standard Cost MU.:
+    4 Quantity Breaks..:   <u>Quantity</u> <u>GM %</u> <u>Rounding Rule             
+</u>
+
+
+
+
+
+    5 Cost.............:
+    6 Date.............:</pre>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

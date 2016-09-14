@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS096 - Setup Terminal and Soft Load Keys</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS096" />CDS096</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Soft Load Keys" />Setup Terminal and Soft Load Keys</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS096">Last Revised: 05/22/04</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is called to set the terminal characteristics and function and editing key assignments.</p>
+        <p>
+            <MadCap:keyword term="Operator Preference Maintenance" />The terminal characteristics are determined based on the terminal type and the operator preference items specified in Operator Preference Maintenance. If no Operator Preference record exists for the operator currently logged in, certain default conditions are assumed.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS096", Y$, U0, U0$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS096</th>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the terminal control variable</td>
+            </tr>
+            <tr>
+                <td>U0</td>
+                <td>the channel number of file SYSD02 if opened by calling program. If SYSD02 is not open by the calling program, pass a 0 to CDS096 instead of the variable U0.</td>
+            </tr>
+            <tr>
+                <td>U0$(1,4)</td>
+                <td>the function key group code to be used. If blank, then the default function key group code contained in the operator preference record is used.</td>
+            </tr>
+            <tr>
+                <td>U0$(5,1)</td>
+                <td>if blank, then the terminal setup options such as cursor style, status line, reverse screen options, etc. are sent to the terminal as well as the function and editing key values. If 'F' then only the function key values are sent, no terminal setup information is sent.</td>
+            </tr>
+        </table>
+        <p>Note: If U0$ is null, then it is equivalent to all blanks.</p>
+        <h5>Example</h5>
+        <p><code>CALL "CDS096", Y$, 0, ""</code>
+        </p>
+        <p>This example sets up the terminal and sets all function and editing keys on the terminal. CDS096 must open SYSD02 locally.</p>
+        <p><code>CALL "CDS096", Y$, 10, "W3.2F"</code>
+        </p>
+        <p>This example will not setup the terminal, but only set function and editing keys associated with the W3.2 function key group code. CDS096 will use channel 10 for all accesses to SYSD02 which was previously opened by the calling routine.</p>
+        <p>&#160;</p>
+    </body>
+</html>

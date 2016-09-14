@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="920" MadCap:lastWidth="899">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS172 - Return GUI Mode</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS172</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return GUI&#160;Mode</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS172">Last Revised: 06/27/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to return the GUI&#160;mode, typically used to determine if running in BBj GUI or BUI&#160;mode. It can also be used to determine if running pro5, Vpro5, or BBj.</p>
+        <p>Be careful when embedding bbj code in a bbx program, that any bbj code that cannot be executed when running BBx, is not executed unless running BBj.</p>
+        <p>&#160;</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS172", GUIMODE</code>
+        </p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>CDS172</th>
+                    <th style="text-align: center;">Direction</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td class="nowrapcode">GUIMODE</td>
+                    <td style="text-align: center;">From</td>
+                    <td>Indicates what GUI&#160;mode that applies to the active session<br /><table><col /><col /><tbody><tr><th style="text-align: center;">GUIMODE</th><th>Description</th></tr><tr><td style="text-align: center;">0</td><td>Pro5 Character Mode</td></tr><tr><td style="text-align: center;">1</td><td>VPro5 Character &amp;&#160;Graphical Mode</td></tr><tr><td style="text-align: center;">2</td><td>BBj Character Mode</td></tr><tr><td style="text-align: center;">3</td><td>BBj GUI</td></tr><tr><td style="text-align: center;">4</td><td><p>BBj BUI</p></td></tr></tbody></table></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="example">
+            <tr>
+                <td>
+                    <p>Example - Execute bbj code only when running BBj GUI&#160;or BUI</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>0120 CALL&#160;"CDS172",GUIMODE</code>
+                    </p>
+                    <p><code>0130 IF&#160;GUIMODE&gt;=3 THEN GOTO&#160;BBJ</code>
+                    </p>
+                    <p><code>0140 ...</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>5000 BBJ:</code>
+                    </p>
+                    <p><code>5010 use ::dtView.bbj::dtView</code>
+                    </p>
+                    <p><code>5020 dtView.init()</code>
+                    </p>
+                    <p><code>5030 exit</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example - Execute bbj code whenever running bbj</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>0120 CALL&#160;"CDS172",GUIMODE</code>
+                    </p>
+                    <p><code>0130 IF&#160;GUIMODE&gt;=2 THEN&#160;GOSUB&#160;BBJCODE</code>
+                    </p>
+                    <p><code>0140 ...</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>5000 BBJCODE:</code>
+                    </p>
+                    <p><code>5010 java.lang.System.err.println(MSG$)</code>
+                    </p>
+                    <p><code>5020 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <div>
+    &#160;</div>
+    </body>
+</html>

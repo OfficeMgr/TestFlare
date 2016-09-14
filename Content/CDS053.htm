@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS053 - Set Display Color</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS053" />CDS053</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Set Display Color</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS053">Last Revised: 
+			07/12/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS053 is called to print and/or return the display 
+	colors using the Dynamo Tools color number.&#160; You may specify the color 
+	number to use, or use the colors specified by user or company code.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS053", Y$, SYSD02, COL$, PAR$, COLPRN$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS053</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />terminal control variable, used to identify terminal type</td>
+            </tr>
+            <tr>
+                <td><code>SYSD02</code>
+                </td>
+                <td>Earlier version of CDS053 used data file SYSD02 to store operator 
+		color preferences.&#160; Although this file is no longer used, the 
+		placeholder remains on the <code>ENTER</code> list as to not require 
+		modifications to programs that call CDS053.&#160; You can pass it as 0, 
+		or any value, as it is no longer used by CDS053.</td>
+            </tr>
+            <tr>
+                <td><code>COL$</code>
+                </td>
+                <td>
+        Typically passed as null to use the colors specified for the user and 
+		company, or default colors for the company, if the user has no 
+		preference specified for the active company code.<p>&#160;</p><p>If <code>COL$</code> is passed to CDS053, then it should be 10 color 
+		numbers, each 3 digits long.&#160; The color number is a value from 1 to 
+		128 and describes both the background and text color for in both bold 
+		and dim intensities.&#160; You can see the color numbers in the screen 
+		shot below.</p><p>&#160;</p><p><MadCap:keyword term="BBx" />The first color number is an odd numbered color and is used for bold 
+		intensity text for the primary window.&#160; The dim intensity text is 
+		always the next higher color number.&#160; This is determined by bbx and 
+		cannot be changed.</p><p>&#160;</p><p><MadCap:keyword term="Hotkey" />The next 3 color numbers describe the colors used for the F1 Hotkey 
+		window.&#160; The first color is used for the window border, the second 
+		color is used for the window contents, and the third color is used as 
+		the highlight row.</p><p>&#160;</p><p>The next 3 color numbers describe the colors used for F2 List 
+		Selection windows.&#160; The colors describe the window border, window 
+		contents, and highlighted row.</p><p>&#160;</p><p>The final 3 color numbers describe the colors used for the F3 Help 
+		Window.&#160; The colors describe the window border, window contents, 
+		and highlighted row.</p></td>
+            </tr>
+            <tr>
+                <td><code>PAR$</code>
+                </td>
+                <td>
+        Can be passed as <code>R</code> to indicate that the color should be returned to the 
+		calling program, but not printed.&#160; Useful when you need the color 
+		string for an argument to the <code>'WINDOW'</code> mnemonic.</td>
+            </tr>
+            <tr>
+                <td><code>COLPRN$</code>
+                </td>
+                <td>
+        This variable is set by CDS053 and returned to the calling program as a 
+		mnemonic that can be used to set the default colors.&#160; You can set 
+		the default colors using <code>PRINT COLPRN$,</code></td>
+            </tr>
+        </table>
+        <p>
+            <img border="0" src="images/CDS0531.jpg" />
+        </p>
+    </body>
+</html>

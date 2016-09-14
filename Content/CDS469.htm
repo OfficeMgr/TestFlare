@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS469 - Telephone Number Formatting</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS469" />CDS469</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Format Telephone Number, Extension, and Type</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS469">Last Revised: 
+		09/16/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is a P type routine used with CDS037, 
+	CDS038, CDW038 to format telephone numbers.&#160; This routine uses input 
+	fields of a phone number, optional extension, and type of phone number, and 
+	returns a single field, suitable for display or printing.</p>
+        <p>CDS469 is typically used within DISP$ as in CDS469.PHONE1, CDS469.CONPHONE, 
+	CDS469.ALTPHONE, etc, however it could also be called by an application 
+	program:</p>
+        <p><code>CALL "CDS469", Y$, REC$, S469$</code>
+        </p>
+        <p><code>REC$</code> must contain one or more fields that include the word PHONE such as PHONE, 
+	ALTPHONE, CONPHONE, PHONE1.&#160; If the field is 13 characters long, then 
+	it is assumed that the phone number is contained in the first 12 characters, 
+	and the type of phone# is contained in the 13th character.&#160; If the 
+	phone number field is not 13 characters long, then the phone type will be 
+	derived from a separate field that has the corresponding field name such as TYPE, 
+	ALTTYPE, CONTYPE, PHONE1TYPE etc.</p>
+        <p>Repeating input fields are supported, i.e., PHONE[3].&#160; If the phone is a repeating field, the type must repeat with the same number of elements. If there is also a separate field in the input record for extension, then it should be named EXT, 
+	ALTEXT, CONEXT, PHONE1EXT, etc. If present, the extension does not have to have the same repeat as the phone number and type.</p>
+        <p>The phone number may be 12 to 21 characters long. The type must be 1 character long, but the output will have the type decoded. The extension may be any length, but is typically 5 characters.</p>
+        <p>Note that unlike most other external routines called by <a href="CDS037.htm">CDS037</a> and <a href="CDS038.htm">CDS038</a>, this program needs to generate the output template based on the phone numbers present in the input record.&#160; One call to CDS469 formats all phone numbers in the record so that it can be used in <a href="CDS037.htm">CDS037</a> and <a href="CDS038.htm">CDS038</a> applications.</p>
+        <p>The output template does not use a repeating field since the extension may not be present for each phone number.</p>
+        <p>See <a href="CDS468.htm">CDS468</a> for an entry routine for telephone 
+	numbers with type and extension as well as a list of supported phone type 
+	codes.</p>
+        <table border="1" id="table1" class="example">
+            <tr>
+                <td>Example with repeating fields</td>
+            </tr>
+            <tr>
+                <td>Input fields (REC$)<p><code>PHONE[3]:C(21),TYPE[3]:C(1),EXT:C(5)</code></p></td>
+            </tr>
+            <tr>
+                <td>Output fields (S469$)</td>
+            </tr>
+            <tr>
+                <td><code>PHONE1:C(33),PHONE2:C(26),PHONE3:C(26)</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table2" class="example">
+            <tr>
+                <td>Example including 13 character input where 13th character 
+			contains type of phone#</td>
+            </tr>
+            <tr>
+                <td>Input fields (REC$)<p><code>PHONE:C(12),ALTPHONE:C(13)</code></p></td>
+            </tr>
+            <tr>
+                <td>Output fields (S469$)</td>
+            </tr>
+            <tr>
+                <td><code>PHONE:C(12),ALTPHONE:C(17)</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

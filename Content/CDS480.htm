@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS480 - Time Entry HH:MM xM format (T Type)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS480</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Time Entry HH:MM AM format (T Type)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS480">Last Revised: 03/03/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This T type called routine can be used for time entries that are stored in a numeric variable in the bbx TIM format, i.e., hours and fractions of an hour.&#160; CDS480 is typically specified as the program name to call for time entries in the Data Dictionary.</p>
+        <p>The routine is flexible and allows many different entries such as:<br />
+  115<br />
+  115p<br />
+  115P<br />
+  01:15<br />
+  01:15 PM</p>
+        <p>The AM/PM designator will be added if not entered, based on a typical 8am to 5pm work day.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS480", S039$, REC$, X100$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS480</th>
+            </tr>
+            <tr>
+                <td><code>S039$</code>
+                </td>
+                <td>Templated parameters for entry</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>The data structure containing the numeric time field, i.e., <code>NFIELD(REC$,S039.FLDNAM$,S039.INDEX)</code></td>
+            </tr>
+            <tr>
+                <td><code>X100$</code>
+                </td>
+                <td>Standard T type routine parameters including <code>X100.ACTION$</code></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>1010 BEGIN<br />
+      1020 PRINT 'CS',<br />
+      1030 CALL "CDS276","Start Time",COL<br />
+      1040 DIM REC$:"START:B"<br />
+      1050 CALL "CDS041","CDS039",S039$,"YY"<br />
+      1060 LET S039.FLDNAM$="START",S039.INDEX=1,S039.COL=COL,S039.ROW=2<br />
+      1070 CALL "CDS041","CDX100",X100$,"YY"<br />
+      1080 CALL "CDS480",S039$,REC$,X100$<br />
+      1090 CALL "CDS279",REC$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS4801.jpg" alt="" width="648" height="374" />
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

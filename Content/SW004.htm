@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <style type="text/css">
+.none
+{
+	border: 1;
+}
+
+</style>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW004 - Return Record Count</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW004</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return Record Count</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW004">Last Revised: 05/09/08</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is can be used to return the number of record in a keyed file that match a given key prefix.</p>
+        <p><code>CALL "SW004", FILECHAN$, KNO, KEYPFX$, RECS&#160; {,LIMIT, KEYVAL$, S095$, 
+	REC$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">SW004</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">In/Out</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>FILECHAN$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Pass as either the file name or the <code>STR(FILECHAN)</code>.&#160; SW004 will open the data file using CDS095 when the file name is passed.&#160; It will also close the data file if opened and <code>S095$</code> is either not passed, passed as a single character, or if <code>S095$(2,1)&lt;&gt;"U"</code>.</td>
+            </tr>
+            <tr>
+                <td><code>KNO</code>
+                </td>
+                <td align="center">In</td>
+                <td>The knum to be used to access the file.&#160; Ignored on SKY and DIR file types.</td>
+            </tr>
+            <tr>
+                <td><code>KEYPFX$</code>
+                </td>
+                <td align="center">In</td>
+                <td>The starting characters of the keys to be counted.</td>
+            </tr>
+            <tr>
+                <td><code>RECS</code>
+                </td>
+                <td align="center">Out</td>
+                <td>The number of records in the file that match the <code>KEYPFX$</code> value passed.</td>
+            </tr>
+            <tr>
+                <td><code>LIMIT</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optional number of records passed to SW004 to limit the search process.&#160; SW004 will exit once the <code>LIMIT</code> number of records is encountered.&#160; Do not include on CALL list or pass as zero to count all records.&#160; Many applications only need to know if there are zero, 1, or more than one matching record.&#160; In this case, pass <code>LIMIT</code> as 2, which will return <code>RECS</code> as 2 even if more than 2 records exit.</td>
+            </tr>
+            <tr>
+                <td><code>KEYVAL$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>The key value of the last matching record encountered.&#160; Some applications will need to read the record when there is one matching record, and can use 
+		<code>KEYVAL$</code> to access this record without needing to perform a positional read first.</td>
+            </tr>
+            <tr>
+                <td><code>S095$</code>
+                </td>
+                <td align="center">In</td>
+                <td>
+        Optional parameter passed to CDS095 when opening the data file <code>FILECHAN$</code>.&#160; If not passed, then the default parameter values of CDS095 are used.
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table9" class="lev2"><tr><td><code>S095$(1,1)</code></td><td>Y - Display message if unable to open file<br />
+            D - Display message if unable to open file, but only if file exists<br />
+            N - Do not display message (default)</td></tr><tr><td><code>S095$(2,1)</code></td><td>Y - Lock data file<br />
+            N - Do not lock data file (default)<br />
+            U - Return channel of file already open<br />
+            P - Open a private copy of the file, which will not be available to subsequent calls to CDS095 using the U option.</td></tr><tr><td><code>S095$(3,1)</code></td><td>Y - template is required, exit with error if template not found<br />
+            N - template will be returned for data file, no error if template not found (default)<br />
+            P - template will be returned for data files and programs, no error if template not found<br />
+            X - bypass all template retrieval logic</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>
+        The record of the last matching record encountered.&#160; This is 
+		similar to <code>KEYVAL$</code> in that if only one record is found, the 
+		application program will have the record available and not need to do 
+		another disc access.</td>
+            </tr>
+        </table>
+        <p>If the application program passes a <code>KEYPFX$</code> value longer than the key size for the
+	<code>KNO</code> of the <code>FILECHAN$</code> specified, then SW004 will prompt the operator with the error message.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table6" class="example">
+            <tr>
+                <td>Example - This program passes channel CW04 to SW004 requesting the number of records in KNUM 0 that begin with P$.&#160; The 2 in the LIMIT position indicates that SW004 should stop counting once 2 records have been counted.</td>
+            </tr>
+            <tr>
+                <td><code>1110 CALL "SW004",STR(CW04),0,P$,RECS,2</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table7" class="example">
+            <tr>
+                <td>Example - This program passes file name XXPO42 to SW004 requesting the number of records in KNUM 0 that begin with PO40.PONO$.</td>
+            </tr>
+            <tr>
+                <td><code>1010 CALL "SW004","XXPO42",0,PO40.PONO$,RECS</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table8" class="example">
+            <tr>
+                <td>Example - This program passes file name XXPO52 to SW004 requesting the number of records in KNUM 1 that begin with PONO$.&#160; All records will be counted, and the KEY() of the last record encountered will be returned in KEYVAL$.</td>
+            </tr>
+            <tr>
+                <td><code>1030 CALL "SW004","XXPO52",1,PONO$,RECS,0,KEYVAL$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table10" class="example">
+            <tr>
+                <td>Example - This program passes file name CC$+"DD10" to SW004 requesting the number of records in KNUM 0 that begin with the value contained in FILNAM$.&#160; The maximum value of RECS will be 1.&#160; The data file is opened using parameters "NNX" passed to CDS095 when opening the file, which will not display an error message if the file does not exist, will not lock the file, and will bypass template logic.</td>
+            </tr>
+            <tr>
+                <td><code>0230 CALL "SW004",ERR=0250,CC$+"DD10",0,FILNAM$,RECS,1,"","NNX"</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

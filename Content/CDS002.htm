@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="581" MadCap:lastWidth="1479">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS002 - Initialize File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <meta name="Microsoft Border" content="none" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS002" />CDS002</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Initialize File" />Initialize File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS002">Last Revised: 06/07/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="BBx" />This program can be called or run to initialize a data file.&#160; 
+	This process will remove all records from the file, and if the file is 
+	dynamic, reduce the size of the file to the minimum size.&#160; Unlike the BBx 
+	<code>INITFILE</code> verb, this routine will retain the owner, group, and permissions when initializing files on Unix systems.</p>
+        <p>If run then <code>Z$</code> must be set to the channel number or numbers of the open files to be initialized.&#160;Note that only single digit channel numbers are supported.&#160; When multiple files are to be initialized they may be separated by a single non-numeric character which is ignored in the current version but was a file clearing indicator on older systems.&#160;</p>
+        <table>
+            <tr>
+                <th colspan="2">Examples</th>
+            </tr>
+            <tr>
+                <td><code>Z$="1" or Z$="1 " or Z$="1Y" or Z$="1N" followed by RUN "CDS002"</code>
+                </td>
+                <td>would initialize file opened to channel 1</td>
+            </tr>
+            <tr>
+                <td><code>Z$="12" or Z$="1 2 " or Z$="1Y2N" or Z$="1N2N"</code>
+                </td>
+                <td>would initialize files opened to channel 1 and channel 2.&#160; Note: This is not channel 12!</td>
+            </tr>
+        </table>
+        <p>After the files are initialized, CDS002 will run the menu program <a href="CDS001.htm">CDS001</a>.</p>
+        <p><code>CALL "CDS002",ERR=ERROR, CHAN$, CHAN</code>
+        </p>
+        <p>If called, then you may pass 1 or 2 parameters.&#160;</p>
+        <p>The first parameter is a string variable and operates the same as described above when CDS002 is run.</p>
+        <p>The second parameter is optional and is numeric. &#160;It represents any channel number to be initialized. &#160;Use this option when the channel number is more than a single digit.</p>
+        <p>When called, CDS002 will re-open the initialized file.&#160; It will also 
+	<code><MadCap:keyword term="LOCK" />LOCK</code> the file if the original file was locked.</p>
+        <table>
+            <tr>
+                <th colspan="2">Examples</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS002","12"</code>
+                </td>
+                <td>Initializes files opened to channels 1 and 2</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS002","",12</code>
+                </td>
+                <td>Initializes file opened to channel 12</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS002","1 2 ",12</code>
+                </td>
+                <td>Initializes files opened to channels 1, 2, and 12</td>
+            </tr>
+        </table>
+        <p>Whether run or called, CDS002 will display an error message if:</p>
+        <ul>
+            <li>unable to lock the file (unless it is already locked)</li>
+            <li>unable to erase the file</li>
+            <li>unable to define the file</li>
+        </ul>
+        <p>After an error message, the operator may resolve the situation that is 
+	preventing CDS002 from working and touch <u>Enter</u> to retry; or touch F4 to abort.</p>
+        <p>If the operator aborts, and multiple files were to be initialized, any files not yet initialized will not be initialized. If CDS002 was run, then the menu will display even though one or more file was not initialized.&#160;</p>
+        <p>If CDS002 was called, then CDS002 will <code>EXIT ERR</code> so that the calling program 
+	can take the <code>ERR=</code> branch.&#160; If the file was closed but not erased, then CDS002 will attempt to re-open the file.</p>
+    </body>
+</html>

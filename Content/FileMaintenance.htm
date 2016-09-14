@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="6416" MadCap:lastWidth="882">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>File Maintenance Tutorial</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">TUTORIALS</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">File Maintenance</p>
+                </td>
+                <td align="right">Last Revised: 02/25/14</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">One of the most popular applications is to provide File Maintenance or the ability to add, modify, and delete records from a data file.&#160; Dynamo Tools includes routines that can provide fully functional File Maintenance with little or no coding.&#160; The File Maintenance application is driven by the Data Dictionary, so it is easy to create and modify these applications.&#160; There are several places where File Maintenance applications can call your custom routine that might be needed to perform special processing.</p>
+        <p>Let's start with some screen shots and a video of several File Maintenance applications that are included with Dynamo Tools.</p>
+        <p>
+            <img border="0" src="images/FileMa1.jpg" />
+        </p>
+        <p>
+            <img border="0" src="images/FileMa2.jpg" />
+        </p>
+        <p>
+            <img border="0" src="images/FileMa3.gif" />
+        </p>
+        <p>
+            <img border="0" src="images/FileMa4.jpg" />
+        </p>
+        <p>
+            <img border="0" src="images/FileMa5.jpg" />
+        </p>
+        <p><b>File Types</b>
+        </p>
+        <p>Dynamo Tools File Maintenance application can use any of the keyed data file types.&#160; The preferred file type is MKY or MKX, MKJ, MKV when using bbj.&#160; Traditional Direct (DIR) and Single keyed files (SKY, SKX ,SKJ, SKV) where the key is not contained within the data is supported, but not recommended.&#160; Sort files (SRT) and other files with zero characters per record are not supported.</p>
+        <p><b>Field Types</b>
+        </p>
+        <p>Dynamo Tools File Maintenance supports all of the field types supported by the data entry routine <a href="CDS039.htm" target="_blank">CDS039</a> except for Notepad/Window text.&#160; However, Notepad Window Text can be maintained by providing a very small external program.&#160; See example.</p>
+        <table border="1" style="border-collapse: collapse;" width="100%">
+            <tr>
+                <th colspan="2">Field Types</th>
+            </tr>
+            <tr>
+                <td>String</td>
+                <td>Variable or Fixed length strings for names, etc.</td>
+            </tr>
+            <tr>
+                <td>Masked Numeric</td>
+                <td>A number typically displayed with a mask such as ###, ##0, 000, -#,###.00, etc.</td>
+            </tr>
+            <tr>
+                <td>Unmasked Numeric</td>
+                <td>A number that may or may not have a fractional part such as 123, 12.3, 123.45, 123.456, etc.</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td>File Maintenance dates are always displayed and entered using MM/DD/YY format, although they may be stored in any of the formats:
+<table border="1" style="border-collapse: collapse;"><tr><th>Format</th><th>Template option</th></tr><tr><td>BBx Julian (preferred)</td><td>N(7) or U(3)</td></tr><tr><td>MM/DD/YY</td><td>C(8)</td></tr><tr><td>YYMMDD</td><td>C(6) or N(6)</td></tr><tr><td>Microsoft Julian</td><td>C(5) or N(5)</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>Custom</td>
+                <td>When additional processing is required, you can use a Dynamo Tool external routine, or write one yourself.
+<table border="1" style="border-collapse: collapse;" width="100%"><tr><th>External Routine Type</th><th>Example</th><th>Description</th></tr><tr><td>T (preferred)</td><td><a href="CDX100.htm" target="_blank">CDX100</a></td><td>Provides complete record being maintained in a single string Template</td></tr><tr><td>X (obsolete, but still supported)</td><td><a href="CDX040.htm" target="_blank">CDX040</a></td><td>Provides a single string variable used by the external program to display and maintain on one or more display lines</td></tr><tr><td>C (obsolete, but still supported)</td><td><a href="CDX030.htm" target="_blank">CDX030</a></td><td>Provides a single string variable used by the external program for entry only on a single display line</td></tr></table></td>
+            </tr>
+        </table>
+        <p><b>Getting Started</b>
+        </p>
+        <p>Here is a very simple example where a three character salesperson number has a 30 character name.</p>
+        <ol>
+            <li><a href="#Step_1">Create the Data Dictionary</a>
+            </li>
+            <li><a href="#Step_2">Create a View</a>
+            </li>
+            <li><a href="#Step_3">Create a File Maintenance Configuration</a>
+            </li>
+            <li><a href="#Step_4">Define the Data File</a>
+            </li>
+            <li><a href="#Step_5">Add application to the Menu</a>
+            </li>
+            <li><a href="#Step_6">Test application</a>
+            </li>
+        </ol>
+        <p><b><a name="Step_1" id="Step_1"></a>Step 1: Create the Data Dictionary</b>
+        </p>
+        <p>Use Data Dictionary Maintenance (FMS) as shown in the screen shots below.</p>
+        <p>If you want to build this application for yourself, it is recommended that you do not use company code CD, as that is reserved for Dynamo Tools, and the CD Data Dictionary is replaced during a Dynamo Tools upgrade.&#160; I used company code DS in this example.&#160; You can create a new Dynamo Tools 'Company' using <a href="http://www.excellware.com/docs/dynamo/cd/cds240.htm" target="_blank">Company Maintenance</a> which is located on the SMU menu.</p>
+        <p>
+            <img src="Resources/Images/fmex1.png" />
+        </p>
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <th nowrap="nowrap">Field</th>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Data Dictionary Name</td>
+                <td>Although the Data Dictionary Name can be up to 10 characters, the best practice is to use a 4 character Data Dictionary Name.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">File Type</td>
+                <td>Any supported file type can be used, however MKY or any of the MKx bbj file types are recommended.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Path</td>
+                <td>The default data file name will be (SMSDIR)/DS/DSEX01. The current company code is DS.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Menu Code</td>
+                <td>Before creating this Data Dictionary add a menu code such as EXA to your company where the resultant File Maintenance application can be executed.&#160; Use <a href="http://www.excellware.com/docs/dynamo/cd/cds880.htm" target="_blank">Menu Maintenance</a> on SMU Menu to maintain the Dynamo Tools Menu.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Key Size</td>
+                <td>The Key Structure for MKx files is defined after defining the Fields.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Record Size</td>
+                <td>The Best Practice is to use no field separators between fields.&#160; If you do that, then you do not need to make an entry in the Record Size field.</td>
+            </tr>
+        </table>
+        <p>
+            <img src="Resources/Images/fmex2.png" />
+        </p>
+        <p>
+            <img src="Resources/Images/fmex3.png" />
+        </p>
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <th nowrap="nowrap">Field</th>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Description</td>
+                <td>This is the text that will display on the left side of the view during File Maintenance.&#160; If not specified the Column Title or Field Name will be used, so try to enter a Description that is understandable for the user running the File Maintenance Application.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Data Entry Type</td>
+                <td>Key segments should not be variable length.&#160; In this case we selected a right justified entry.&#160; This is useful when the entry might contain numbers with a variable number of digits such as 1, 10, and 100 so that the records sort in logical order.&#160; Use a left justified field for most non-numeric entries with a variable number of characters.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Minimum</td>
+                <td>This refers to the minimum number of characters required for the entry.&#160; Enter 1 to prevent an all blank entry.&#160; The 1 indicates that at least 1 non-blank character is required.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Maximum</td>
+                <td>The Best Practice is to leave this entry blank in which case the Maximum is derived from the Template field size (3 in this example).&#160;</td>
+            </tr>
+        </table>
+        <p>
+            <img src="Resources/Images/fmex4.png" />
+        </p>
+        <p><b><a name="Step_2" id="Step_2"></a>Step 2: Creating the View</b>
+        </p>
+        <p>The next step in the process, is to define what is called a Standard View.&#160; A Standard View is simply an ordered collection of fields contained within a record.&#160; File Maintenance Applications require at least one Standard View.&#160; The <a href="http://www.excellware.com/docs/dynamo/xx/xxdd20.htm" target="_blank">View Option</a>, now located within Data Dictionary Maintenance, is used to maintain all views.&#160; The View should only include the fields to be maintained, not the key segments used to identify the record.</p>
+        <p>
+            <img src="Resources/Images/fmex5.png" />
+        </p>
+        <p><b><a name="Step_3" id="Step_3"></a>Step 3: Creating File Maintenance</b>
+        </p>
+        <p>Use the <a href="http://www.excellware.com/docs/dynamo/xx/xxdd22.htm" target="_blank">File Maintenance</a> Option, now part of Data Dictionary Maintenance, to maintain a File Maintenance Application.&#160; Refer to the documentation for the field definitions, and create a File Maintenance as shown below.</p>
+        <p>
+            <img src="Resources/Images/fmex6.png" />
+        </p>
+        <p><b><a name="Step_4" id="Step_4"></a>Step 4: Define the Data File</b>
+        </p>
+        <p>You can use the 'Define/Convert Data File' option of Data Dictionary Maintenance, or the File Utility (SMU) to define the data file.</p>
+        <p>&#160;</p>
+        <p><b><a name="Step_5" id="Step_5"></a>Step 5: Add the Application to the Menu</b>
+        </p>
+        <p>Attach the new File Maintenance application to the menu using Menu Maintenance (SMU).</p>
+        <p>
+            <img border="0" src="images/FileMa13.gif" />
+        </p>
+        <p>
+            <img src="Resources/Images/fmex7.png" />
+        </p>
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <th>Field</th>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>This is the text that will appear on the menu.&#160; Make it something the end user can understand.</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td><code>F</code> inidcates this is a File Maintenance application.</td>
+            </tr>
+            <tr>
+                <td>Program/File</td>
+                <td>Enter the Data Dictionary company code and name, <code>XX</code> can be used to reference the current company.&#160; Note that this field is limited to 6 characters, but you can write a small program to <a href="http://www.excellware.com/docs/tools/CDS028.htm" target="_blank">CALL "CDS028"</a> for longer data dictionary names.</td>
+            </tr>
+            <tr>
+                <td>VDT Suffix</td>
+                <td>The VDT Suffix, typically <code>A</code>, that was specified using File Maintenance Configuration.</td>
+            </tr>
+        </table>
+        <p><b><a name="Step_6" id="Step_6"></a>Step 6: Test the Application</b>
+        </p>
+        <p>
+            <img src="Resources/Images/fmex8.png" />
+        </p>
+        <p>
+            <img src="Resources/Images/fmex9.png" />
+        </p>
+    </body>
+</html>

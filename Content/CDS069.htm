@@ -1,0 +1,2478 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="12" MadCap:lastHeight="35326" MadCap:lastWidth="940">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS069 - Input Routine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Date:CDS069" />
+            <MadCap:keyword term="CDS069" />CDS039 &amp; CDS069</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Input Routine" />Input Routine</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS069">Last Revised: 10/02/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Data Entry" />CDS039 and CDS069 are routines used for data entry that:</p>
+        <ol>
+            <li>Provide instructions to the operator for the entry to be made</li>
+            <li>Display a mask at the entry point indicating the number of characters and
+ type of characters to by entered</li>
+            <li>Process all keystrokes</li>
+            <li>Display a list of valid options when appropriate</li>
+            <li>
+                <MadCap:keyword term="Date" />Validate the completed entry</li>
+            <li>Format the entered data</li>
+            <li>Display a related field when applicable</li>
+            <li>Supports "Hotkey" capability where user can temporarily run another 
+	application and return back where they were</li>
+            <li>Record keystrokes and save them for automated playback</li>
+        </ol>
+        <p><i>Due to the length of this document, the Table of Contents is provided 
+below with links to pertinent sections.</i>
+        </p>
+        <h5>Table of Contents</h5>
+        <p><a href="#Program_to_Use_(CDS039_vs._CDS069)_">Program to Use (CDS039 vs. 
+CDS069)</a>
+            <br /><a href="#Calling_Formats:">Calling Format</a>
+        </p>
+        <p>Data Entry Types<br />&#160;&#160;&#160;
+
+	<a href="#Prompt_Only">Prompt Only</a><br />	&#160;&#160;&#160;
+	String<br />	&#160;&#160;&#160;
+	Masked Numeric<br />	&#160;&#160;&#160;
+	Un-masked Numeric<br />	&#160;&#160;&#160;
+	<a href="#Dates">Dates</a><br />&#160;&#160;&#160; Password<br />	&#160;&#160;&#160;
+	<a href="#Window_Notepad_Text">Window (Notepad)</a><br />Prompt Options<br />&#160;&#160;&#160; <a href="#Prompt_Window"><MadCap:keyword term="Prompt Window" />Prompt Window</a><br />&#160;&#160;&#160; <a href="#Help_Text">Help Text</a><br />&#160;&#160;&#160; Prompt Examples<br />Validation Types<br />&#160;&#160;&#160; <a href="#Simlple_List_Validation">Simple list validation</a><br />&#160;&#160;&#160; <a href="#List_Verification with Related Field">List 
+validation with related field</a><br />&#160;&#160;&#160; <a href="#File_Verification">File validation</a><br /><a href="#Special_Keys">Special Keys</a><br />&#160;&#160;&#160; <a href="#Extended_Exit_Option">Extended Exit Option</a><br />&#160;&#160;&#160; <a href="#Prompt_Key_Option">Prompt Key Option</a><br />&#160;&#160;&#160; <a href="#Interrupt_Option">Interrupt Option</a></p>
+        <p><a href="#Global_Variables">Global Variables</a>
+            <br />
+            <br /><a name="Program_to_Use_(CDS039_vs._CDS069)_"></a>Program to Use (CDS039 vs. 
+	CDS069)</p>
+        <p>CDS039 and CDS069 provide the same functionality.&#160; The choice of which 
+routine to use is dependent on what type of variable is used to store the 
+entered data.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber6">
+            <tr>
+                <th align="center">Program to use</th>
+                <th>Data stored in a:</th>
+                <th>Examples:</th>
+            </tr>
+            <tr>
+                <td align="center">CDS039</td>
+                <td>any template field</td>
+                <td><code>CM01.NAME$, IM21.QTYONHAND, SO60.SALES[12], S265.MTHL$[MONTH]
+</code>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">CDS069</td>
+                <td>simple numeric variable</td>
+                <td><code>QTY
+</code>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">CDS069</td>
+                <td>simple string variable </td>
+                <td><code>ITEMNO$
+</code>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">CDS069</td>
+                <td>element in numeric array</td>
+                <td><code>SALES[MONTH]
+</code>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">CDS069</td>
+                <td>numeric or string stored in a sub-string</td>
+                <td><code>H$(2,8)</code>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">either</td>
+                <td>Window (Notepad) text</td>
+                <td>Notepad text is stored in a disc file by these routines, and is not 
+	returned to the calling program</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="CDT069" />Although this text includes many examples, run program CDT069 to simulate 
+many additional examples.</p>
+        <p>User oriented help can be displayed at any entry, by touching the
+F3 key then selecting Data Entry Help.<br />&#160;</p>
+        <h5><a name="Calling_Formats:"></a>Calling Formats:</h5>
+        <p><code>CALL "CDS069"{, <a href="#ERR=XXXX">ERR=XXXX</a>, 
+<a href="#MINV">MINV</a>, <a href="#MAXV">MAXV</a>,
+<a href="#COL">COL</a>, <a href="#ROW">ROW</a>, <a href="#PROMPT$_">PROMPT$</a>,
+<a href="#TYPE$">TYPE$</a>, <a href="#NUMV">NUMV</a>, <a href="#STRV$">STRV</a>$, 
+<a href="#TIMEOUT"><MadCap:keyword term="Timeout" />TIMEOUT</a>, <a href="#VAL[ALL]">VAL[ALL]</a> }<br />CALL "CDS039", <a href="#ERR=XXXX">ERR=XXXX</a>, <a href="#MINV">MINV</a>, 
+<a href="#MAXV">MAXV</a>, <a href="#COL">COL</a>, <a href="#ROW">ROW</a>, 
+<a href="#PROMPT$_">PROMPT$</a>, <a href="#TYPE$">TYPE$</a>, <a href="#REC$">REC$</a>, 
+<a href="#FLDNAM$">FLDNAM$</a>{, <a href="#INDEX">INDEX</a>, <a href="#TIMEOUT">
+TIMEOUT</a> }<br />CALL "CDS039", <a href="#ERR=XXXX">ERR=XXXX</a>, S039$, <a href="#REC$">REC$</a></code>
+        </p>
+        <table id="table19">
+            <tr>
+                <th colspan="2">CDS039 &amp; CDS069</th>
+            </tr>
+            <tr>
+                <td><code><a name="ERR=XXXX"></a>ERR=XXXX</code>
+                </td>
+                <td>These routines will EXIT ERR when:<br />&#160;<p>TIMEOUT is passed as a non-zero number, and no entry is made within the 
+	computed number of seconds.&#160; See TIMEOUT below for additional details.</p><MadCap:keyword term="Ctrl+Break" /><MadCap:keyword term="Ctrl+C" />
+    TYPE$ includes the "E" or "e" character and the operator touches the interrupt key, 
+typically Ctrl+C on Linux/Unix/AIX servers, or Ctrl+Break when running Visual 
+	Pro5 on the local PC, or clicks the Close icon (red X on Windows, red circle 
+	with X on Mac, etc.) for BBj programs.</td>
+            </tr>
+            <tr>
+                <td><code><a name="MINV"></a>MINV</code>
+                </td>
+                <td>Minimum Value - usage varies with <code>TYPE$</code>.<br />&#160;<p><b>For numeric entries</b>, <code>MINV</code> is the lowest
+ numeric value permitted.</p><p><b>For string variables</b>, <code>MINV</code> is the minimum number of characters that
+ may be entered.</p><p><b>For date entries</b>, the minimum valid date in julian format can be
+ used. In order to be compatible with older applications, the minimum 2, 3,
+ or 4 digit year can also be passed which will allow dates of January 1 of
+ the year passed or later to be entered.</p><p><i>Note that passing a 2 digit year implies 19xx and not 20xx. When a 3
+ digit year is passed, then the 1900 is added to the year</i>. For example
+ 100 becomes 2000, 101 becomes 2001. This enables logic that adds a value to
+ a 2 digit year to work properly. Passing 0 allows any minimum date.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="MAXV"></a>MAXV</code>
+                </td>
+                <td>Maximum Value - usage varies with <code>TYPE$</code>.<br />&#160;<p><b>For numeric entries</b>, <code>MAXV</code> is the highest
+ numeric value permitted.</p><p><b>For string variables</b>, <code>MAXV</code> is the maximum number of characters that
+ may be entered.</p><p><b>For date entries</b><MadCap:keyword term="Julian date" />, the maximum valid julian date can be used. In
+ order to be compatible with older applications, a 2, 3, or 4 digit year can
+ also be passed which allows dates of up to December 31 of the year passed to
+ be entered.</p><p><i>Note that passing a 2 digit year implies 19xx and not 20xx.</i>
+    However, in order to prevent changes to application programs that pass 99 as
+ the maximum year, 99 is interpreted as no limit and not 1999. 3 and 4 digit
+ years work the same as the minimum value. If Z2 is passed as 0 then no upper
+ limit on the date is set.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="COL"></a>COL</code>
+                </td>
+                <td>Horizontal Window Position<br />&#160;<p>Horizontal cursor position
+ within current window where entry is to be made.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="ROW"></a>ROW</code>
+                </td>
+                <td>Vertical Window Position<br />&#160;<p>Vertical cursor position
+ within current window where entry is to be made. Note that if <code>COL</code> and 
+	<code>ROW</code> are
+ both passed as zero, the entry position will follow the prompt at the bottom
+ of the window.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="PROMPT$_"></a>PROMPT$</code>
+                </td>
+                <td>The message to the operator describing entry to
+ be made.<p><br />	The prompt is displayed in the bottom one or two lines of the
+ window/screen.&#160; If the active window is a full screen window, then CDS069
+ will use the bottom two lines, otherwise, CDS069 will use the last line of
+ the window unless the prompt is so long that it requires two lines.&#160; For this
+ reason application programs should not use the bottom lines for any other
+ purpose.&#160; If the bottom lines of the screen are used for other information,
+ then use the prompt window type prefix described below.&#160; When not using the
+ prompt window option, CDS069 assumes these line(s) are blank when called,
+ and clear them when exiting.</p><p>The complete format of PROMPT$ is "<code>!+prompt-+{HELPFILE,HELPID}</code>"</p><p>Certain shorthand options are available within <code>PROMPT$</code>.&#160; If the first
+ character of <code>PROMPT$</code> is an exclamation point (!), then the routine will ring the
+ bell and display the "Invalid Entry" error message before entry.&#160; This option
+ is useful when the calling program performs additional checks outside of the
+ scope of CDS039/69.</p><p>If the next character is a plus (+), then the word "Enter " or the word
+ "Touch " is added to the front of <code>PROMPT$</code>.&#160; Enter is used in most cases, since
+ the operator is required to use the Enter key at the end of the entry.</p><p>The user prompt will include <code>F3=Help</code> when there is a help 
+	text reference at the end of <code>PROMPT$</code> in the format <code>{HELPFILE,HELPID}</code>.&#160;
+	Refer to the <a href="#Help_Text">Help Text</a> section below for details.<br /><br />	If the trailing character of <code>PROMPT$</code> (before the help text 
+	reference, if any) is "+" then '<u><code>F4</code></u><code>=End</code><MadCap:keyword term="CTL" />' 
+	will be added to the prompt.&#160; Software originally written for MAI Basic 
+	Four terminals with a Motor Bar IV key, containing the phrase ' OR CTL IV' 
+	will be replaced with '<u><code>F4</code></u><code>=End</code>'.</p><p>If the next to the last character of <code>PROMPT$</code> is "-" then '<u>Enter</u>=Continue' 
+	will be added to the prompt.</p><p>For a single character entry that does not
+ require the operator to touch the Enter key, specify <code>MINV</code> and
+	<code>MAXV</code> as -1.</p><p>CDS039/69 will underline key names when followed by '=' including <u>
+	Enter</u>=, <u>BackSpace</u>=, <u>Fn</u>=, <u>Home</u>=, <u>End</u>=, <u><MadCap:keyword term="PageUp" />
+	PageUp</u>=, <u><MadCap:keyword term="PageDn" />PageDn</u>=, <u><MadCap:keyword term="ArrowUp" />ArrowUp</u>=, and <u><MadCap:keyword term="ArrowDn" />ArrowDn</u>=.</p><p><MadCap:keyword term="ArrowDn key" />CDS039/69 permits the operator to exit using the ArrowUp or ArrowDn keys, 
+	even when they are not included in the prompt.&#160; The system <code>CTL</code> 
+	variable will be set to 3 for ArrowUp, and 2 for ArrowDn.&#160; This enables 
+	the operator to move up and down a list of fields as would be done when 
+	maintaining fields in a Standard View.</p><p><u><code>F2</code></u><code>=Display</code> will be added to <code>
+	PROMPT$</code> automatically for list and file verified entries.&#160; For 
+	other entries, you may include another F2= clause in the prompt which will 
+	exit to the calling routine with the system <code>CTL</code> variable set to 
+	2, if the operator touches the F2 key.</p><p>The F1 function key is reserved for the HotKey and cannot be used by the 
+	application.</p><p>The F3 function key is reserved for Help, and cannot be used by the 
+	application, although special context sensitive help is enabled using braces 
+	at the end of the prompt.&#160; The format is <br />	When the prompt includes function keys F5= through F12=, then CDS039/69 will 
+	allow entry of the function key specified and set the CTL value to 100 plus 
+	the function key value, i.e., 105 thru 112. </p><p>The prompt can also contain a ring bell ('RB') and clear input ('CI') 
+	mnemonics.</p><p>See <a href="#Prompt_Field_Examples">Prompt Field Examples</a>.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="TYPE$"></a>TYPE$</code>
+                </td>
+                <td>A complex variable that controls the type of entry to be made.&#160; There are up to three parts of 
+	<code>TYPE$</code>: the main type, one or
+ more prefix codes, and suffix parameters.&#160; Each of the segments of the type
+ are presented in table form then described below in further detail.&#160;<p><br />	Click on the individual type or code in the following charts for the full
+ definitions.</p><p><b>Main Type</b></p><table class="lev2" id="table20"><tr><th style="text-align: center;"><b>Type</b></th><th align="center">Description</th><th style="text-align: center;">Prefix Codes</th><th style="text-align: center;">Additional parameters</th></tr><tr><td align="center"><a href="#A/a">A/a</a></td><td>Alpha-numeric</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center">H/h</td><td>Used automatically for "A" types that do not fit in window</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#L/l">L/l</a></td><td>Left justified</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#R/r">R/r</a></td><td>Right justified</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center">*</td><td>Password</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#numeric mask">Mask</a></td><td>Numeric masked, i.e., 000, -##,###.00, $###.00CR, etc.</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#Floating decimal">Nxx.y</a></td><td>Un-masked Numeric</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#Date entries">D/d</a></td><td>Date in MM/DD/YY format</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center">S/s</td><td>Date in YYMMDD format</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center">J/j</td><td><MadCap:keyword term="BBx" />Date in bbx julian format</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center">M/m</td><td>Date in Microsoft julian format</td><td align="center">yes</td><td align="center">optional</td></tr><tr><td align="center"><a href="#C/X">C/X</a></td><td>C or X type external called routine</td><td align="center">no</td><td align="center">required</td></tr><tr><td align="center"><a href="#Window_Notepad_Text">W</a></td><td>Window (Notepad) Entry</td><td align="center">no</td><td align="center">required</td></tr></table><p><b><br />	Optional Prefix Codes</b></p><table class="lev2" id="table21"><tr><th style="text-align: center;">Code</th><th>Description</th></tr><tr><td align="center"><a href="#E">E</a></td><td><MadCap:keyword term="Abort/Escape Option" />Abort/Escape Option.&#160; Adds <u><code>Ctrl+C</code></u><code>=Abort
+		</code>to prompt, and takes ERR= branch if operator touches Ctrl+C</td></tr><tr><td align="center">P/p</td><td><p>Prompt Window options</p><table style="width: 100%;"><col style="width: 65px;" /><col /><col /><tbody><tr><td rowspan="2">Full Size Window</td><td>No P/p used</td><td>Prompt uses bottom two display rows, and clears upon exit.</td></tr><tr><td>P or p</td><td>Prompt uses bottom two display rows, but uses a window for the prompt so that anything displayed there will re-appear when CDS069 exits.</td></tr><tr><td rowspan="3"><p rowspan="3">Smaller Window Active</p><p rowspan="3">&#160;</p><p rowspan="3"><a href="#Prompt_Window_Example">Example</a></p></td><td>No P/p used</td><td>If the prompt fits on a single row, the prompt uses bottom row of active window, otherwise it will use the bottom 2 rows. These rows are cleared when CDS069 exits.</td></tr><tr><td>P (upper case)</td><td>The prompt will appear at the bottom of the display in a separate window, using the main window display colors.</td></tr><tr><td>p (lower case)</td><td>The prompt will appear at the bottom of the display in a separate window, using the active window's display colors.</td></tr></tbody></table></td></tr><tr><td align="center">U</td><td><p><MadCap:keyword term="Upper Case" />Upper Case - entries made in lower case will be shifted to capital 
+		letters for display and the returned entry. Useful for Alpha Sort Name fields used to sort names.</p><p>Note:&#160;this option is not required for list verified entries such as for Y or N. When the user entry is not in the list, CDS069 will automatically check if the upper-case entry is in the list, and capitalize the entry and returned field. Type <code>AYN</code> can be used, and <code>UAYN</code> is not required.</p></td></tr><tr><td align="center"><a href="#F/f/g">F/f/g</a></td><td>File validation</td></tr><tr><td align="center">Q</td><td>Format and display data and any related fields only.&#160; No data 
+		entry.</td></tr><tr><td align="center">q</td><td>No display nor entry, formatted data and any related fields are 
+		returned in SMS_CDS069_DIS global for use with PRINT option of T Type 
+		External routines.&#160; Global includes positioning expressions.</td></tr></table><p><b><br />	Suffix Parameters</b></p><p>Simple string validation</p><p>Complex string validation</p><p>File validation</p><p>External call parameters</p><p>Extended exit parameters</p><p>Window parameters</p><p>The "Entry Type" field is constructed by combining: None, One, or more
+ Prefix Codes Main Type Leading parameters { Additional parameters } Trailing
+ parameters</p>
+    In most cases, one or more of the segments of the "Entry Type" will not
+ be used.</td>
+            </tr>
+            <tr>
+                <td><code><a name="NUMV"></a>NUMV</code>
+                </td>
+                <td>(CDS069 only).&#160; Value where numeric entry is returned.&#160; Also 
+	used as length of string entries, and index to element number in a numeric 
+	array.</td>
+            </tr>
+            <tr>
+                <td><code><a name="STRV$"></a>STRV$</code>
+                </td>
+                <td>(CDS069 only).&#160; Value where string entry is returned.</td>
+            </tr>
+            <tr>
+                <td><code><a name="TIMEOUT"></a>TIMEOUT</code>
+                </td>
+                <td>Used to indicate that CDS039/CDS069 should <code>EXIT</code> and take 
+	<code>ERR=</code> branch 
+	when no operator entry is made after a period of time controlled by <code>
+	TIMEOUT</code>.&#160; Note that if F4 is a valid entry, then <code>CTL</code> 
+	will equal 4 upon timeout.&#160; This may simplify programs that call 
+	CDS039/CDS069 so that the <code>IF CTL=4</code> logic can be used when the 
+	entry times out.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table22" class="lev2"><tr><td align="center">0</td><td>Timeout option not used</td></tr><tr><td align="center">1-4</td><td>Timeout in minutes</td></tr><tr><td align="center">5-32,767</td><td>Timeout in seconds</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="VAL[ALL]"></a>VAL[ALL]</code>
+                </td>
+                <td>(CDS069 only).&#160; Numeric array.&#160; Value entered will be stored 
+	in <code>VAL[NUMV]</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td>(CDS039 only).&#160; Templated data structure containing field named
+	<code>FLDNAM$</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="FLDNAM$"></a>FLDNAM$</code>
+                </td>
+                <td>(CDS039 only).&#160; The field name in <code>REC$</code> for entry.</td>
+            </tr>
+            <tr>
+                <td><code><a name="INDEX"></a>INDEX</code>
+                </td>
+                <td>(CDS039 only).&#160; Used when <code>FLDNAM$</code> is a repeating 
+	field, as in <code>REC.SALES[MONTH]</code>.&#160; Value will be stored in
+	<code>REC.FLDNAM$[INDEX]</code> or <code>REC.FLDNAM[INDEX]</code>.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <h5><a name="Prompt_Field_Examples"></a>Prompt Field Examples</h5>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table25" class="example">
+            <tr>
+                <td><code>CALL "CDS069",1,10,0,0,"+Data","A",0,Z$<br /></code>Enter Data __________</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,10,0,0,"+Data+","A",0,Z$<br /></code>Enter Data, <u>F4</u>=End __________</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,10,0,0,"Enter Data, 
+		F4=Abort","A",0,Z$<br /></code>Enter Data, <u>F4</u>=Abort __________</td>
+            </tr>
+            <tr>
+                <td>Example of context sensitive help option.<br /><code><MadCap:keyword term="XXSK57" />CALL "CDS069",1,3,0,0,"+Product 
+		Class{XXSK57,PRODCLASS}","R",0,PCL$<br /></code>Enter Product Class, F3=Help ___ </td>
+            </tr>
+            <tr>
+                <td>If <code>PROMPT$</code><MadCap:keyword term="Carriage Return" /> contains 'CR' such as in the phrase HIT 'CR' TO CONTINUE, then
+ CDS069 will replace the phrase with Enter=Continue. _____ This is because
+ most terminals label the Carriage Return key as Enter, or with the down and
+ left pointing arrow.&#160; Some keyboards are labeled 'Return'. It is recommended
+ that programs be written using a format such as "Enter=Continue" or
+ "'CR'=CONTINUE".<p>In addition it is recommended to use a phrase such as "'Enter'=Continue" as
+ opposed to HIT 'CR' TO CONTINUE to be consistent with other key=meaning
+ phrases.</p><p>The Enter key accepts the current or default entry. This presents a
+ conflict to CDS069 whenever there is a 'CR' or Enter= option that previously
+ returned a null string but now causes the current or default entry to be
+ accepted. When this situation occurs, CDS069 replaces the 'CR'= or Enter=
+ prompt with SpaceBar=.</p><p><i>Note that this situation only occurs when there is a default entry.</i></p><p><code>CALL "CDS069", 1, 6, 10, 5, "+Customer#, 'CR' to enter Alpha
+ Sort+", "R", 0, A$<br /></code><MadCap:keyword term="Alpha Sort" />will present a prompt: Enter Customer#, 'CR' to enter Alpha Sort,
+ F4=End when the A$ variable is passed to CDS069 as null or all blanks. But
+ will present a prompt:<br />    Enter Customer#, SpaceBar=enter Alpha Sort, F4=End if A$ has any non-blank
+ characters.</p><p>If the operator touches the SpaceBar as the first character, then A$ will
+ be returned as null and the calling program need not be changed. The
+ operator does not need to touch the Enter key in this case.</p><p>A phrase is added to the prompt when string or file validation options
+ are used. This prompt is "F2=Display" and signals the operator to touch F2
+ to display the list of valid entries. Note that the operator may enter some
+ data followed by F2 to begin display of file verified options at that point
+ in the file. The F2=Display phrase is omitted when using single character
+ string validation, such as for a Y/N entry, but the F2 key still causes
+ the valid options to be displayed.</p><p><MadCap:keyword term="DOS" />Another phrase is automatically added to the prompt when using the abort
+ option described below.&#160; On Unix systems, Ctrl+C=Abort is used, on DOS
+ systems Ctrl+Break is used.</p><p>If the amended prompt is too long to fit on one line of the window, then
+ CDS069 will split the line at an appropriate place so that the last two
+ lines of the window are used. The programmer need not be concerned with the
+ length of the prompt, other than fitting somehow on two lines. Older
+ versions of CDS069 permitted the programmer to specify the place to split
+ the prompt by using the backslash (\) key. This option is no longer
+ supported and the \ character will be treated as part of the prompt.
+ Backslash characters intended for this purpose should be removed from the
+ prompt.</p><p>If there is context sensitive help available for this entry, then you
+ inform CDS069 by specifying the help text file, and text ID within braces at
+ the end of the prompt. Note that the Help text braces must follow the
+ shorthand designations - and +". CDS069 will add the phrase F3=Help to the
+ prompt and display the help text if the operator touches the help key. F3
+ was selected as the help key since that is the key that WordPerfect uses for
+ help. It seems that most PC based software has been using F1 for help. This
+ help key may be changed using operator preferences in a future release of
+ CDS069.</p><p><code>CALL "CDS069", 1, 9, 0, 0, "+ControlCode+{DSSK54,CONTROL}", "0", X<br /></code><MadCap:keyword term="Enter Control Code" />will yield a prompt: Enter Control Code, F3=Help, F4=End</p><p><MadCap:keyword term="Help Text Maintenance" /><MadCap:keyword term="FMS menu" />Help Text Maintenance, stored in the default file of XXSK57 is available
+ on the FMS menu. CDS069 will substitute XX in the help text file name with
+ the current company code if necessary.</p><p><MadCap:keyword term="ArrowRt" /><MadCap:keyword term="ArrowLf" /><MadCap:keyword term="Insert" /><MadCap:keyword term="Delete" /><MadCap:keyword term="PgDn" /><MadCap:keyword term="PgUp" />CDS069 will display the function and editing keys underlined whenever the
+ key is followed by an equal sign. This signals the operator not to touch the
+ F key followed by the 4 key, but rather the F4 function key. The standard
+ editing key labels to use are ArrowUp, ArrowDn, ArrowLf, ArrowRt, PageUp,
+ PageDn, Insert, Delete, Home, End, and Tab. PgUp and PgDn are also valid.</p><p><code>CALL "CDS069", 0, 0, 0, 0, "+Control Code, ArrowUp=Previous,
+ ArrowDn=Next+"<br /></code>will yield the prompt: Enter Control Code, ArrowUp=Previous, ArrowDn=Next,
+ F4=End</p><p>If you do not want a word to follow the =, but still want the Editing Key
+ underlined, then follow the = with a comma. CDS069 will drop the = as shown
+ below.</p><p><code>CALL "CDS069", 0, 0, 0, 0, "+Control Code, ArrowUp=, ArrowDn=,+"<br /></code>will produce: Enter Control Code, ArrowUp, ArrowDn, F4=End</p><p>You may also imbed other attributes or color mnemonics within the prompt.
+ CDS069 analyzes the prompt so that it will exclude these mnemonics when
+ determining the number of characters to display per line of prompt, and the
+ entry position.</p><p><code>CALL "CDS069", 0, 0, 0, 0, "C=Change, "+'red'+"D=Delete"+'blue'+"+"<br /></code>will produce: C=Change, D=Delete, F4=End<br />    with the C=Change in the default color, D=Delete in red type, and F4=End in
+ blue type.</p><p><code>CALL "CDS069", 0, 0, 0, 0, "'bu'+"C"+'eu'+"=Change, "+'bu'+"D"+'eu'+
+ "Delete+"<br /></code>will produce:C=Change, D=Delete, F4=End</p>
+    	This is often done with a defined function to simplify the code: DEF
+    <code>FNU$(Z$)='BU'+Z$(1,1)+'EU'+"="+Z$+", " CALL "CDS069",0,0,0,0,FNU$("Change")+FNU$("Delete")+"+"</code>
+    produces the same result.</td>
+            </tr>
+        </table>
+        <h5>&#160;</h5>
+        <h5><a name="Prompt_Only"></a>Prompt Only</h5>
+        <p>CDS069 can be used to prompt the operator to touch the Enter key or F4, but 
+not capture any entered data.&#160; The fields that have special significance 
+for 'Prompt Only' entries are listed below.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2">
+            <tr>
+                <th colspan="2">Prompt Only Arguments</th>
+            </tr>
+            <tr>
+                <td><code><a name="PO_MINV"></a>MINV</code>
+                </td>
+                <td>
+		Pass as zero.</td>
+            </tr>
+            <tr>
+                <td><code><a name="PO_MAXV"></a>MAXV</code>
+                </td>
+                <td>
+		Pass as zero.</td>
+            </tr>
+            <tr>
+                <td><code>COL</code>
+                </td>
+                <td>
+		Pass as zero unless cursor should be positioned @(COL,ROW) during entry.</td>
+            </tr>
+            <tr>
+                <td><code>ROW</code>
+                </td>
+                <td>
+		Pass as zero unless cursor should be positioned @(COL,ROW) during entry.</td>
+            </tr>
+            <tr>
+                <td><code>PROMPT$</code>
+                </td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table7" class="lev2">
+                        <tr>
+                            <td>null or not passed</td>
+                            <td>same as "-"</td>
+                        </tr>
+                        <tr>
+                            <td>starts with minus ("-")</td>
+                            <td>Enter=Continue</td>
+                        </tr>
+                        <tr>
+                            <td>ends with plus ("+")</td>
+                            <td>F4=End</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>TYPE$</code>
+                </td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table6" class="lev2">
+                        <tr>
+                            <td>null or not passed</td>
+                            <td>same as "A"</td>
+                        </tr>
+                        <tr>
+                            <td>"A"</td>
+                            <td>Alpha entry, but since the MINV and MAXV are passed as zero 
+				for Prompt Only entries, no data is entered or returned to the 
+				calling program.&#160; If there is no active BBx 'window', then 
+				PROMPT$ will be displayed using the bottom two lines of the 
+				display.&#160; If there is an active BBx 'window', then PROMPT$ 
+				will be displayed using the bottom line of the active window.</td>
+                        </tr>
+                        <tr>
+                            <td>"PA"</td>
+                            <td>Alpha entry, using temporary BBx 'window' for PROMPT$.&#160; The Prompt Window 
+				flag indicates that CDS069 should create a temporary window at 
+				the bottom two lines of the display.&#160; This would be needed 
+				if there is something displayed on the bottom two lines that 
+				cannot be cleared during the entry, or when there is a BBx 
+				'window' active that does not occupy the entire display, and it 
+				is desired for the prompt to be at the bottom of the display, 
+				and not the bottom of the active window.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="PO_NUMV"></a>NUMV</code>
+                </td>
+                <td>
+		Length of entered string.&#160; Always zero for Prompt Only entries, so 
+		typically not passed, or passed as 0 when passing <code>TIMEOUT</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="PO_STRV$"></a>STRV$</code>
+                </td>
+                <td>
+		String variable for entered data.&#160; Always returned as null for 
+		Prompt Only entries, so typically not passed, or passed as "".</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table4" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069" </code>or<br /><code>CALL "CDS069",0,0,0,0,"-"</code></td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Continue</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table5" class="example">
+            <tr>
+                <td>Example allowing Enter or F4.&#160; If operator touches the F4 key, 
+		then CTL=4 otherwise CTL=0.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"-+"<br />		IF CTL=4 THEN GOTO EOJ</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Continue, <u>F4</u>=End</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table23" class="example">
+            <tr>
+                <td>Example with a prompt message.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"Job Completed-"</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>Job Completed, <u>Enter</u>=Continue</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table24" class="example">
+            <tr>
+                <td>Example with a custom prompt message.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"Enter=Accept Entry, 
+		F4=Abort"<br />		IF CTL=4 THEN BREAK</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Accept Entry, <u>F4</u>=Abort</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table8" class="example">
+            <tr>
+                <td>Example using a Prompt Window, needed when there are active window's 
+		on the screen, and the prompt is desired at the bottom of the screen 
+		instead of within the active window.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"","PA"</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Continue</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table10" class="example">
+            <tr>
+                <td>Example with a 2 minute timeout.&#160; If no entry is made in two 
+		minutes, CDS069 will EXIT and take ERR= branch.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",ERR=EOJ,0,0,0,0,"","",0,"",2</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Continue</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table74" class="example">
+            <tr>
+                <td>Example with a 10 minute (600 seconds) timeout.&#160; If no entry is 
+		made in ten 
+		minutes, CDS069 will EXIT and take ERR= branch.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",ERR=EOJ,0,0,0,0,"","",0,"",600</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><u>Enter</u>=Continue</code>
+                </td>
+            </tr>
+        </table>
+        <h5>
+            <br /><a name="String_Variables"></a>String Variables
+&#160;</h5>
+        <h5>&#160;</h5>
+        <h5><a name="String_Examples"></a>String Examples</h5>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table26" class="example">
+            <tr>
+                <td>Example where a single keystroke is used, i.e., the operator does 
+		not need to touch the Enter key.&#160; Note the list validation limits 
+		the entries to C or D.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",-1,-1,0,0,"+C=Change, D=Delete+","ACD",0,Z$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Touch C=Change, D=Delete, F4=End</td>
+            </tr>
+        </table>
+        <h5><a name="Masked_Numeric_Variables"></a>Masked Numeric Variables</h5>
+        <p>&#160;</p>
+        <h5><a name="Unmasked_Numeric_Variables"></a>UnMasked Numeric Variables</h5>
+        <h5><a name="Main Type Full"></a>Main Type</h5>
+        <p><a name="A/a"></a>A/a </p>
+        <p>The "A" and "a" types indicate a normal string variable type of entry. The 
+minimum and maximum number of <i>non-blank</i> characters permitted described by 
+the <code>MINV</code> and <code>MAXV</code>
+variables. If the result is to be stored in a simple string variable, then the
+length of the string will be the same as the number of characters entered by the
+operator.&#160; In this case the numeric variable <code>NUMV</code> will contain the number of
+characters entered.&#160; The lower case "a" type is similar to the upper case "A", except
+that a null entry is permitted, even if <code>MINV</code> is not
+zero.&#160; For example, if <code>MINV=4</code>, and <code>MAXV=6</code>, and
+<code>TYPE$="a"</code>, the entry must be 0, 4, 5 or 6 characters long.</p>
+        <p><a name="L/l"></a>L/l</p>
+        <p>The "L" and lower case "l" types are similar to the "A" type except that the data is 
+left justified, i.e., it is padded
+with spaces (to the right) up to the maximum number of characters (<code>MAXV</code>). This option
+is useful for item numbers or other codes that become keys to a file.&#160; The 
+lower case "l" permits a null entry, in addition to one that is <code>MINV</code> 
+to <code>MAXV</code> characters long.</p>
+        <p><a name="R/r"></a>R/r</p>
+        <p>The "R" and "r" types cause the data to be right justified by padding with spaces to
+the left.</p>
+        <p>The lower case type indicates that a zero length entry is also permitted.&#160; For
+example: <code>CALL "CDS069",2,3,0,0,"+code+","a",0,Z$</code> would require a two or three
+character entry, or a null entry.&#160; When using types "l" and "r", if the operator does
+not make an entry, the string variable returned is null and is not padded to the
+maximum length.</p>
+        <p><a name="numeric mask"></a>Numeric mask</p>
+        <p>If the main type is a valid bbx numeric mask such as <code>"0000"</code>,
+<code>"###,###.00CR",</code> <code>"-###"</code>, <code>"BB###0"</code>, or 
+<code>"$$$,$$$.00-"</code> then CDS069 will be used to enter a number between
+<code>MINV</code>
+and <code>MAXV</code> inclusive.&#160; CDS069 will automatically imply the decimal position if a
+decimal is not entered by the operator.&#160; This means that an entry with a mask of
+<code>###.00</code> will return an entry of 1.23 if the operator enters 123.&#160; To get 123.00
+the operator would have to enter "123." or "12300" or even 
+"123.00".&#160; Note that the mask may be
+followed by any of the Additional Parameters for file or string validation
+described below.</p>
+        <p>Also note that the operator may touch the negative indicator before or after
+the digits. This is a convenience to operators that are used to
+an adding machine where the negative indicator is touched after the digits are
+entered.&#160; The operator may also touch the "+" or "-" key to terminate the entry, as
+opposed to the Enter key.</p>
+        <p>CDS069 will insure that no more decimal positions are entered than are
+present in the mask.&#160; For example if the operator enters 1.234 to a mask of
+<code>"##.00-"</code> CDS069 will display an error message and not accept the entry.</p>
+        <p>If a decimal point is present in the mask, the operator will be signaled to
+the maximum number of decimal points allowed by positioning a decimal point
+within the entry mask.</p>
+        <table border="1" id="table72">
+            <tr>
+                <th>Mask</th>
+                <th>Entry Mask</th>
+            </tr>
+            <tr>
+                <td>###,###.00CR</td>
+                <td>_ _ _ _ _ _ _ . _ _</td>
+            </tr>
+            <tr>
+                <td>-###.0</td>
+                <td>_ _ _ _ . _</td>
+            </tr>
+            <tr>
+                <td>###,###.00</td>
+                <td>_ _ _ _ _ _ _ . _ _</td>
+            </tr>
+        </table>
+        <p>After the operator enters the number, the masked version of the number is
+displayed, i.e., CDS069 displays <code>STR(NUMV:MASK$)</code>.&#160; The masked 
+value is also returned in <code>STRV$</code>.</p>
+        <p>If the starting character of the mask is <code>"&lt;"</code>, then the data is displayed
+flush left. This is useful when headings appear to the left of the entry, and
+you do not want spaces between the heading and the displayed entry.</p>
+        <p>If you zero values to display as blanks instead of zero as in .00, then use a
+mask that ends in <code>.##</code> instead of <code>.00</code>.&#160; This requires setting the BBx Option 
+using Dynamo Configuration Maintenance (SMC)
+titled: "Fill trailing mask # symbols with zeros" to Y.&#160; This will cause numbers
+like .5 to display as .50 even with <code>.##</code> as the mask.</p>
+        <p><a name="Floating decimal"></a>Floating decimal</p>
+        <p>If the main type begins with the letter N then a numeric entry with a
+floating decimal point is assumed. This is useful for numbers that may have
+fractional positions, but don't normally. They require the operator to enter a
+decimal point if desired. No automatic shifting of the decimal is done for this
+type of entry unlike the masked numeric type described above. The N must be
+followed by two numbers separated by a decimal point, i.e., "N7.2". The first
+number indicates the maximum number of positions on the screen to be used for
+the entry. The second number indicates the maximum number of digits to the right
+of the decimal point to allow. No commas or other masking characters are
+inserted. The entry will be right justified in the output string with leading
+blanks.</p>
+        <p>For example: <code>CALL "CDS069",1,9999.999,60,L,"+quantity","N10.3",Z</code> will occupy
+10 positions and permit up to three decimal positions.</p>
+        <p>For masked numeric, floating decimal, and date type entries, CDS069 will
+substitute certain invalid characters with its probable replacement.</p>
+        <table border="1" id="table73">
+            <tr>
+                <th>Entry</th>
+                <th>Replaced with</th>
+            </tr>
+            <tr>
+                <td>Letter Oh "O"</td>
+                <td>Number 0</td>
+            </tr>
+            <tr>
+                <td>Letter Ell "l"</td>
+                <td>Number 1</td>
+            </tr>
+        </table>
+        <p><a name="Date entries"></a>Date entries</p>
+        <p>
+            <MadCap:keyword term="DAY" />Regardless of the variable type code (D/d/S/s/J/j) the operator will always
+enter the date in MM/DD/YY format. The leading 0 for the month is not required.
+The leading zero is not required for the day if the operator enters the /. The
+slashes need not be entered. The output of CDS069 for dates is treated as a
+string variable with the following format:</p>
+        <p>Type Format ____ ______ D MM/DD/YY S YYMMDD J JJJJJJJ (seven character julian
+format)</p>
+        <p>The lower case (d, s and j) formats indicate to CDS069 that no entry is
+required, i.e., the operator may touch the enter key and the output will be null
+or blank depending on the location where the output data is to be stored (see
+below).</p>
+        <p>If an entry is made, then CDS069 will validate that the month is 1 thru 12,
+and that the day exists for the month and year entered.</p>
+        <p>There are certain shortcut keys permitted when entering dates. The letter T
+will provide today's actual date (as taken from the DAY variable). When there is
+a default date, touching only the + and - keys will increment or decrement the
+date by one day.</p>
+        <p>Although the current version of CDS069 still supports "DO" and "O" as
+equivalent types to "d", these type codes will be eliminated in a future release
+of CDS069 and currently are supported for compatibility with older software.</p>
+        <p>For J/j type dates, the first two digits of the year is currently assumed by
+CDS069 as 19 for years of 50 thru 99, and 20 for years 00 thru 49. This permits
+CDS069 to use J type entries from 1950 thru 2049. Later versions of CDS069 will
+permit the operator to enter all four digits of the year.</p>
+        <p><a name="C/X"></a>C/X</p>
+        <p>
+            <MadCap:keyword term="File Maintenance" />
+            <MadCap:keyword term="Variable Data Dictionary" />
+            <MadCap:keyword term="Driver" />Sometimes CDS069 cannot perform all of the validation required. A telephone
+number is an example. A telphone number may be 7 digits, 8 digits (if the first
+digit is a 1), or 10 digits. It is normally displayed in a format xxx-xxx-xxxx.
+The C and X type can be used when CDS069 is to call another routine to perform
+the entry and validation. In most cases, this other routine will also call
+CDS069. If you were writing the code, you probably could call the other routine
+directly, and bypass the original call to CDS069 altogether. However, this
+option exists for the benefit of File Maintenance, Driver selection, and other
+routines that access the Variable Data Dictionary. These routines can always
+call CDS069 even for externally written routines.</p>
+        <p>
+            The C and X types are both use external routines. The X type is normally
+used, but the C type provides compatibility with routines written on MAI Basic
+Four computers or previous versions of Dynamo Tools.</p>
+        <p>The C type routine must have an ENTER list that is almost the same as CDS069.
+ENTER Z1,Z2,Z5,Z6,Z0$,Z,Z$,Y,Z8$ Note however, it lacks a type field, and has
+two additional paramters. Y is to be set by the external routine to the CTL
+variable. CDS069 cannot use the CTL variable itself, since that may have been
+changed by a disc read performed by the external routine. The variable Z8$ is
+passed to the external routine.</p>
+        <p>When called from file maintenance, Z8$ is either NEW or CG which indicates
+that a new record is being created, or an existing record is being maintained.
+When called by the Driver Z8$ is set to DRV. There are some circumstances when
+the external routine needs this data to function properly.</p>
+        <p>The C type routine is only used to enter string type data. File Maintenance
+will display the number of characters specified by the maximum value in the
+Variable Data Dictionary. See CDX030 for an example of a C type external called
+routine.</p>
+        <p>When special formatting is required to display the data, use the X type. The
+X type is similar to the C type except the the external routine is more complex.
+It is also called by File Maintenance to display the data, or to format the data
+when printing a terminal image. The X type entry may occupy more than one line
+on the screen.</p>
+        <p>The enter list is almost the same as for the C type variable ENTER
+Z1,Z2,Z5,Z6,Z0$,Z,Z$,Y,Z8$,FMT$[ALL]</p>
+        <p>Z8$ is passed to the external routine as DIS during the display of a record
+within file maintenance. The external routine should format then display the
+data, passed to the routine in Z$ at the cursor position @(Z5,Z6).</p>
+        <p>Z8$ is passed to the external routine as FMT during the print terminal image
+option within file maintenance. In this case, the called routine must format the
+data, and return the formatted data in the FMT$[ALL] array. FMT$[0] should
+contain the data normally displayed on the first line for the variable, FMT$[1]
+the 2nd line, etc. If there is only one display line for the variable, then use
+FMT$[0].</p>
+        <p>Like the C type external routine, Z8$ will also be passed as DRV, NEW, and CG
+as described above.</p>
+        <p>See CDX040 for an example of an X type external called routine.</p>
+        <h5><a name="Prefix Codes"></a>Prefix Codes</h5>
+        <p>Note that each prefix code described below is not applicable to every Main
+Type. Refer to the table above. Recall that the Prefix Codes precede the Main
+Type, so the Entry Type of EA indicates prefix code E with main type A.</p>
+        <p><a name="E"></a>E</p>
+        <p>This indicates that the prompt should be modified to include Ctrl+C=Abort or
+Ctrl+Break=Abort. If present CDS069 will exit with an error 99 if the operator
+aborts the entry. Note that you must specify ERR=line on the call to CDS069 when
+using the E option.&#160; See <a href="#Interrupt_Option">Interrupt Option</a>.</p>
+        <p><a name="P/p"></a>
+        </p>
+        <p><a name="U"></a>
+        </p>
+        <p><a name="F/f/g"></a>F/f/g</p>
+        <p>These prefix codes indicate file validation. The data entered will be
+validated against a data file, and a field from the data file may be displayed
+if desired. Even though an entry may be of the proper length and not contain any
+invalid characters, additional validation may be required.</p>
+        <p>F indicates normal file validation with an F2 option to display valid
+entries.</p>
+        <p>f indicates that ArrowUp and ArrowDn keys may be used (instead of using F2)
+to simply scroll forward or backward through the file. CDS069 will modify the
+prompt to indicate when these options are valid.</p>
+        <p>g works much like f except when there is a multi-segment key and the entry is
+not for the last segment of the key. With f, the ArrowDn and ArrowUp keys will
+return data from the very next and previous keys in the file, even if they are
+the same. With g, the arrow keys will skip forward or backward to yield
+different keys as you would see in the F2 display.</p>
+        <p>example</p>
+        <p>Consider the simple example of a two segment key with each segment being one
+character. The following keys are in the file: A1 A2 A3 B1 B2 B3 C1 C2 and C3.
+If the entry being made is for the first segment only, then the F2 option will
+display only A B and C. Assume the last record read was B2 and the next record
+to be read is B3.</p>
+        <p>The default value will be B (from the record last read). With the f option,
+the ArrowDn key will return B (the B of B3) and ArrowUp key will also return B
+(the B of B1). With the g option, the ArrowDn key will return C since it will
+not return the same value for Enter as it will for ArrowDn. Similarly, ArrowUp
+will return A.</p>
+        <p>
+&#160;</p>
+        <p>New parameters for string validation added 11/04/2000</p>
+        <p>{slot, (EA) Additional Parameters: {1,2,3,4,5,6,7,8,9,10,11}</p>
+        <p>1. Channel#(:knum) or filename</p>
+        <p>
+            <MadCap:keyword term="DISP$" />
+            <MadCap:keyword term="CDS037" />2. Field# or template expression (DISP$, see CDS037)</p>
+        <p>3. Position</p>
+        <p>4. Length</p>
+        <p>5. Column or (R for right, B for below)</p>
+        <p>6. Row (not required if R or B option used for Column)</p>
+        <p>7. Prefix</p>
+        <p>8. Options: Y=F2</p>
+        <p>9. Head column</p>
+        <p>10. Head Window</p>
+        <p>
+            <MadCap:keyword term="Hex Prefix" />11. Hex Prefix(?) for non-printables<br />&#160;</p>
+        <h5><a name="Dates"></a>Dates</h5>
+        <p>The fields that have special significance for date entries are described 
+below.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber1">
+            <tr>
+                <th colspan="2">Date Entries</th>
+            </tr>
+            <tr>
+                <td><code>MINVAL</code>
+                </td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber2" class="lev2">
+                        <tr>
+                            <th colspan="2">Minimum Date allowed</th>
+                        </tr>
+                        <tr>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td height="31">0</td>
+                            <td height="31">no minimum date restriction</td>
+                        </tr>
+                        <tr>
+                            <td>-1899 to -1</td>
+                            <td>days prior to today's date</td>
+                        </tr>
+                        <tr>
+                            <td>1 to 1899</td>
+                            <td>days after today's date</td>
+                        </tr>
+                        <tr>
+                            <td>1900 to 2999</td>
+                            <td>minimum date is Jan 1 in year specified in <code>MINVAL</code></td>
+                        </tr>
+                        <tr>
+                            <td>any valid julian date</td>
+                            <td>date specified</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>MAXVAL</code>
+                </td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber3" class="lev2">
+                        <tr>
+                            <th colspan="2">Maximum Date allowed</th>
+                        </tr>
+                        <tr>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>no maximum date restriction</td>
+                        </tr>
+                        <tr>
+                            <td>99</td>
+                            <td>no maximum date restriction (only if <code>TYPE$</code> is D, d, S, s, M, or m).&#160; 
+ Deprecated option that exists to support very old existing code that 
+ passed <code>MAXVAL</code> as 99 to indicate no maximum date</td>
+                        </tr>
+                        <tr>
+                            <td>-1899 to -1</td>
+                            <td>days prior to today's date</td>
+                        </tr>
+                        <tr>
+                            <td>1 to 1899</td>
+                            <td>days after today's date</td>
+                        </tr>
+                        <tr>
+                            <td>1900 to 2999</td>
+                            <td>maximum date is Dec 31 in year specified in <code>MINVAL</code></td>
+                        </tr>
+                        <tr>
+                            <td>any valid julian date</td>
+                            <td>date specified</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>TYPE$</code>
+                </td>
+                <td>Describes the format of <code>STRV$</code> that the date will be stored in.&#160; Note that the 
+ date is always displayed and entered in MM/DD/YY format.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber4" class="lev2"><tr><th style="text-align: center;">Value</th><th>Description</th></tr><tr><td align="center">J</td><td>Julian format (preferred format for storing dates) used with native 
+ BBx DATE() and JUL() functions.</td></tr><tr><td align="center">j</td><td>Same as J, but the date is not required and will be returned as 
+ null.</td></tr><tr><td align="center">D</td><td>MM/DD/YY format</td></tr><tr><td align="center">d</td><td>Same as D, but the date is not required and will be returned as 
+ null.</td></tr><tr><td align="center">S</td><td>YYMMDD format</td></tr><tr><td align="center">s</td><td>Same as S, but the date is not required and will be returned as 
+ null.</td></tr><tr><td align="center">M</td><td>Microsoft version of a Julian date where the epoch is 1/1/1900.&#160; 
+ This format returns a 6 character string and can be used in place of the 
+ S format in keys where you may want to keep the keysize the same when 
+ adding Y2K support.</td></tr><tr><td align="center">m</td><td>Same as M, but the date is not required and will be returned as 
+ null.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>NUMV</code>
+                </td>
+                <td>For all but sub-string entries, <code>NUMV</code> will be returned as the julian date, 
+ regardless of <code>TYPE$</code>.&#160; For substring entries, <code>NUMV</code> represents the position 
+ in <code>STRV$</code> where the date will be stored.&#160; Note that <code>
+	NUMV</code> is not used as the default date for input.</td>
+            </tr>
+            <tr>
+                <td><code>STRV$</code>
+                </td>
+                <td>Contains the default value of the date, and will contain the entered 
+ date in the format specified by <code>TYPE$</code>.</td>
+            </tr>
+            <tr>
+                <td><code>VAL[ALL]</code>
+                </td>
+                <td>Only used when numeric entries.&#160; Since a date is treated as a 
+ string field, even when using numeric types such as J and M, the <code>VAL[ALL]</code> 
+    array does not apply to dates.</td>
+            </tr>
+            <tr>
+                <td><code>FLDNAM$</code>
+                </td>
+                <td>The field name contained within <code>REC$</code> where the date is 
+	stored.&#160; Note, even though dates are treated as a string variable, when 
+	using CDS039, the <code>FLDNAM$</code> can refer to a numeric field such as U(3), I(3), or N(7) 
+ for J type, N(6) for S and M types, and C(8) for D types.</td>
+            </tr>
+        </table>
+        <h5>
+            <br /><a name="Prompt_Window"></a>Prompt Window</h5>
+        <p>These programs display instructions to the operator based on information 
+included in PROMPT$.&#160; If the active window is the full size of the display, 
+then the operator prompt will clear and use the last two lines of the display.&#160; 
+If the active window is less than the full size of the display, then the 
+operator prompt will clear and use the last line of the active window for the 
+operator prompt.&#160; The operator prompt is not optional.</p>
+        <p>The Prompt Window option can be used to override this behavior.&#160; The 
+Prompt Window option is enabled by including the letter P before the TYPE$ 
+field.&#160; It does not apply to Window Text entries.&#160; When this option is 
+used, a temporary two line window will be used at the bottom of the display for 
+the prompt.&#160; This might be desired when there is a small active window and 
+it would be more desirable for the prompt to appear at the bottom of the 
+display, instead of the bottom line of the active window.&#160; It might also be 
+needed when there is information displayed on the bottom two lines of the 
+display that should not be cleared.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table11" class="example">
+            <tr>
+                <td>Prompt Window Examples</td>
+            </tr>
+            <tr>
+                <td>Example of display with active window, prompt located on bottom line 
+		of active window.<code><br /><br /><img border="0" src="images/CDS06911.jpg" /></code></td>
+            </tr>
+            <tr>
+                <td>Example using the prompt window option.&#160; Prompt is located on 
+		bottom two lines of physical display.<code><br /><br /><img border="0" src="images/CDS06912.jpg" /></code></td>
+            </tr>
+        </table>
+        <h5><a name="Help_Text"></a>Help Text</h5>
+        <p>Help Text related to the current entry can be offered by using braces at the 
+end of <code>PROMPT$</code>.&#160; CDS069 will modify the prompt to include the 
+phrase <code><u>F3</u>=Help</code> to inform the operator that help text is 
+available.&#160; If the user touches F3 and selects the 'Item Specific Help' 
+option, then CDS069 will either display the traditional help text, or launch a 
+browser with the html help page (requires compatible terminal emulator such as 
+FacetWin or PowerTerm), or inform the operator to point their browser to the 
+specified help text page.</p>
+        <p>Help text is maintained using Documentation &amp; Help Text Maintenance (FMS).&#160;
+<code>PROMPT$</code> should contain the help text file name followed by a comma, 
+then the help text ID, i.e., <code>"+Customer#, Name, Phone#, Zip Code, #+InvoiceNo+{DYSK57,CUSTNO}"</code>.&#160; 
+The traditional Notepad style help text file is named <code>XXSK57</code> where <code>XX</code> 
+is the company code.&#160; The help text ID will be padded to 10 characters 
+long.&#160; The help text is stored in as Window/Notepad text with 78 characters 
+wide with an unlimited number of rows.&#160; The help text can contain any of 
+the attributes that can be saved with notepad text such as bold, underlined, 
+reverse video, blinking text, and line graphics.</p>
+        <p>HTML based help text can be maintained using your favorite word processor, 
+text or html editor.&#160; The Documentation &amp; Help Text Maintenance (FMS) 
+program can also be used to define the help text document based on a template, 
+and to launch an html editor to edit the document.&#160; A web server such as a apache is required to host 
+HTML based help text.&#160; The text between the braces is in the format <code>{SiteName,htmlpage}</code>.&#160; 
+The <code>SiteName</code> is optional.&#160; See examples below.</p>
+        <table border="1" id="table65">
+            <tr>
+                <th>Site Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>dt</td>
+                <td>Used for all Dynamo Tools help text</td>
+            </tr>
+            <tr>
+                <td>dy</td>
+                <td>Used for all Dynamo help text</td>
+            </tr>
+            <tr>
+                <td>xx</td>
+                <td>Used when user help text using Help Text URL in Dynamo Configuration 
+		Maintenance is used</td>
+            </tr>
+            <tr>
+                <td>other value</td>
+                <td>URL to help text site</td>
+            </tr>
+            <tr>
+                <td>not specified</td>
+                <td>The same as 'xx' if Help Text URL is specified in Dynamo 
+		Configuration Maintenance, or same as 'dy' if not.</td>
+            </tr>
+        </table>
+        <table border="1" id="table64" class="example">
+            <tr>
+                <td colspan="2">Help Text Examples (<code>PROMPT$</code> shown)</td>
+            </tr>
+            <tr>
+                <td><code>"+Customer#+"</code>
+                </td>
+                <td>No Help Text offered</td>
+            </tr>
+            <tr>
+                <td><code>"+Customer#+{DYSK57,CUSTNO}"</code>
+                </td>
+                <td>Traditional Notepad style help text found in file DYSK57, maintained 
+		using Help Text Maintenance (FMS)</td>
+            </tr>
+            <tr>
+                <td><code>"+Printer ID+{dt,PrinterIDEntry.htm}"</code>
+                </td>
+                <td>HTML Help at www.excellware.com/docs/tools/help/PrinterIDEntry.htm 
+		will be displayed</td>
+            </tr>
+            <tr>
+                <td><code>"+Customer#+{dy,CustNoEntry.htm}"</code>
+                </td>
+                <td>HTML Help at www.excellware.com/docs/dynamo/help/CustNoEntry.htm 
+		will be displayed</td>
+            </tr>
+            <tr>
+                <td><code>"+Trailer#{xx,TrailerEntry.htm}"</code>
+                </td>
+                <td>Assuming that the Help Text URL in Dynamo Configuration Maintenance 
+		is set to www.customerdomain.com/help, then HTML Help at 
+		www.customerdomain.com/help/TrailerEntry.htm will be displayed </td>
+            </tr>
+            <tr>
+                <td><code>"+Store#{www.myco.com/help,StoreEntry.html}"</code>
+                </td>
+                <td>Displays help page www.myco.com/help/StoreEntry.html</td>
+            </tr>
+            <tr>
+                <td><code>"+Trailer#{TrailerEntry.htm}"</code>
+                </td>
+                <td>Assuming that the Help Text URL in Dynamo Configuration Maintenance 
+		is set to www.customerdomain.com/help, then HTML Help at 
+		www.customerdomain.com/help/TrailerEntry.htm will be displayed </td>
+            </tr>
+            <tr>
+                <td><code>"+Customer#+{CustNoEntry.htm}"</code>
+                </td>
+                <td>HTML Help at www.excellware.com/docs/dynamo/help/CustNoEntry.htm 
+		will be displayed assuming that there is no Help Text URL in Dynamo 
+		Configuration Maintenance</td>
+            </tr>
+        </table>
+        <h5><a name="Simlple_List_Validation"></a>Simple List Validation</h5>
+        <p>Simple List Validation is used for string validation such as for a Y or N 
+entry.&#160; The list of valid options are listed in the preferred order of 
+display following the entry type.&#160; Each entry in the list must be the same 
+length.</p>
+        <table border="1" width="100%" id="table39" class="example">
+            <tr>
+                <td>Simple List Validation example, for a Y or N entry<br />		The operator can enter an upper case, or lower case Y or N.&#160; YN$ 
+		will be converted to upper case if necessary because the Validation List 
+		is upper case.&#160; YN$ will only contain Y or N.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,1,0,0,"Are all entries correct (Y/N)","AYN",0,YN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Simple List Validation example using a two character state code</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",2,2,0,0,"+State Code","APAOHINNY",0,STATE$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>The operator may enter one of the valid codes, or touch F2 to select 
+		from the list</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS06913.jpg" />
+                </td>
+            </tr>
+        </table>
+        <p>There are situations where a Simple List Validation is used, but the user is 
+permitted to make an entry not in the list.&#160; For example, the most popular 
+responses could be included in the list, but other entries are permitted.&#160; 
+CDS039/CDS069 also support this option.</p>
+        <table border="1" id="table66">
+            <tr>
+                <th colspan="2">Simple List Validation but allow entries not in list</th>
+            </tr>
+            <tr>
+                <td colspan="2"><code>xxxx{SlotLen,-}ValList</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>xxxx</code>
+                </td>
+                <td>Field <code>TYPE$</code> such as A, L, R, J, a numeric mask 
+		such as ###0, N5.4, etc.<p><br />		For best results use L or R for list verified character field types, and 
+		not the variable length field type of A which would require keys of 
+		variable length in the data file which is not recommended.&#160; You may 
+		use type A if the minimum and maximum length of the entered field are 
+		the same.<br /><br />		In some cases, a null entry should not require validation.&#160; 
+		Validation is bypassed when the field type is lower case (a, l, r, 
+		etc.), and a null (0 length) entry is made.&#160; Note that if the entry 
+		has a default value, the operator needs to clear out the default 
+		characters using the Delete Key or Ctrl+G in order to create a null 
+		entry.</p></td>
+            </tr>
+            <tr>
+                <td><code>SlotLen</code>
+                </td>
+                <td>This is the length of each entry in the Validation List (ValList).&#160; 
+		If you pass a numeric SlotLen, then each slot must be the same length.&#160; 
+		It is easier to let CDS069 determine the SlotLen by separating entries 
+		in the ValList with some character not contained withing the ValList 
+		such as the pipe symbol (|).&#160; See Examples.</td>
+            </tr>
+            <tr>
+                <td><code>-</code>
+                </td>
+                <td>The "-" indicates that entries not in the list are permitted</td>
+            </tr>
+            <tr>
+                <td><code>ValList</code>
+                </td>
+                <td>Validation List containing values permitted.&#160; Each entry in the 
+		list must be the padded to the maximum length.&#160; See examples.</td>
+            </tr>
+        </table>
+        <table border="1" id="table67" class="example">
+            <tr>
+                <th>Examples of Simple List Validation that allow entries not in the 
+		list</th>
+            </tr>
+            <tr>
+                <td>Status codes include D, M, L, and any other character</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,1,0,0,"+status code","A{1,-}DML",0,STATUS$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Status codes include A, BB, DX, and any other one or two character 
+		code.&#160; Note that the status codes listed must be padded to the 
+		maximum length of 2 characters.&#160; Note also that since the field 
+		type is A, STATUS$ will be one character long if the user selects status 
+		A from the F2 display list, or if they enter a single character.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,2,0,0,"+status code","A{2,-}A BBDX",0,STATUS$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Status codes include A, A1, A10, B, B1, B10, and any other status 
+		code.&#160; This example will pad out the status code to 3 characters.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,3,0,0,"+status code","L{3,-}A&#160; A1 A10B&#160; 
+		B1 B10",0,STATUS$</code>
+                </td>
+            </tr>
+        </table>
+        <h5><a name="List_Verification with Related Field"></a>List Validation with 
+Related Field</h5>
+        <p>List Validation with Related Field, allows the user to enter data contained 
+within a list, and display a related field.&#160; For example, if the user is 
+presented with a list of option numbers, the description of the option would be 
+the related field, or if presented with a list of payment method codes, the 
+description of the payment method would be the related field.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table32">
+            <tr>
+                <th colspan="2">List Validation with Related Field Parameters</th>
+            </tr>
+            <tr>
+                <td colspan="2"><code>
+		xxxx{SlotLen,RfPosn,RfLen,RfCol,RfRow,Options,ColHead,WTitle,WCol,WRow}ValList</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>xxxx</code>
+                </td>
+                <td>Field <code>TYPE$</code> such as A, L, R, J, a numeric mask 
+		such as ###0, N5.4, etc.<p><br />		For best results use L or R for list verified character field types, and 
+		not the variable length field type of A which would require keys of 
+		variable length in the data file which is not recommended.&#160; You may 
+		use type A if the minimum and maximum length of the entered field are 
+		the same.<br /><br />		In some cases, a null entry should not require validation.&#160; 
+		Validation is bypassed when the field type is lower case (a, l, r, 
+		etc.), and a null (0 length) entry is made.&#160; Note that if the entry 
+		has a default value, the operator needs to clear out the default 
+		characters using the Delete Key or Ctrl+G in order to create a null 
+		entry.</p></td>
+            </tr>
+            <tr>
+                <td><code>SlotLen</code>
+                </td>
+                <td>This is the length of each entry in the Validation List (<code>ValList</code>).&#160; 
+		If you pass a numeric <code>SlotLen</code>, then each slot must be the same length.&#160; 
+		It is easier to let CDS069 determine the <code>SlotLen</code> by separating entries 
+		in the <code>ValList</code> with some character not contained within the 
+		<code>ValList</code> 
+		such as the pipe symbol (|).&#160; See examples below.</td>
+            </tr>
+            <tr>
+                <td><code>RfPosn</code>
+                </td>
+                <td>This is the starting position of the Related Field in the Slot.&#160; 
+		The term Slot refers to one entry in the <code>ValList</code>.&#160; 
+		Each Slot consists of the value, the related field, and may include 
+		other text that is not part of the value nor the related field.&#160; Typically the Related Field begins immediately after the entry field.&#160; 
+		Include a <code>"-"</code> before <code>RfPosn</code> to allow an entry 
+		that is not in the list.&#160; Example <code>RfPosn: 2, -2, 3, -3, 10, 
+		-10.</code>&#160; See example below.</td>
+            </tr>
+            <tr>
+                <td><code>RfLen</code>
+                </td>
+                <td>The length of the Related Field.&#160; Typically set to the pipe (|) 
+		character to let CDS069 determine the length of the Related Field.</td>
+            </tr>
+            <tr>
+                <td><code>RfCol</code>
+                </td>
+                <td>If present, this signals the input routine to display the 
+		<span style="font-family: Verdana;">Related Field</span><table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table34" class="lev2"><tr><td align="center">R</td><td>Display Related Field to Right of entered data</td></tr><tr><td align="center">B</td><td>Display Related Field Below entered data</td></tr><tr><td align="center">n</td><td>Display Related Field at Column n where n is a bbx column number 
+				within the active window as in <code>@(RfCol,RfRow)</code>.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>RfRow</code>
+                </td>
+                <td>Used when <code>RfCol</code> is passed as a numeric to indicate the 
+		bbx row number.</td>
+            </tr>
+            <tr>
+                <td><code>Options</code>
+                </td>
+                <td>This parameter includes several options that are sub-strings.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table35" class="lev2"><tr><th align="center">sub-string</th><th>Usage</th></tr><tr><td align="center">(1,1)</td><td>Pass as Y to enable Forced Window Mode, which basically 
+				means that the list of valid entries are displayed immediately, 
+				without requiring the user to touch the F2 key.</td></tr><tr><td align="center">(2,3)</td><td>The following 3 segments are used to override the default 
+				colors used on the window that displays the list of records for 
+				the user.&#160; Note that all three color number segments must 
+				be passed to be used.&#160;
+				This segment represents the color number for Widow Border.&#160; 
+				The color numbers range from 001 to 128 and can best be viewed 
+				using Operator Preference Maintenance (SMS) and then Color 
+				Preferences.&#160; </td></tr><tr><td align="center">(5,3)</td><td>Color number for non-highlighted row</td></tr><tr><td align="center">(8,3)</td><td>Color number for highlighted row</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>ColHead</code>
+                </td>
+                <td>Used to set or override the column titles for the fields to be 
+		displayed.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table36" class="lev2"><tr><th>Program and Field type used</th><th>Column Titles</th></tr><tr><td>CDS039 using Field Name(s)</td><td>All column titles are derived from Data Dictionary/Template.&#160; 
+				If <code>ColHead</code> is used, then it will override all 
+				column titles.</td></tr><tr><td>CDS069 using Field Name(s)</td><td>The column title for the field being entered is taken from 
+				this <code>ColHead</code> parameter, and the column titles for 
+				the Field Names will be taken from the Template.</td></tr><tr><td>Field Number</td><td>All column titles are derived from the <code>ColHead</code> 
+				parameter.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>WTitle</code>
+                </td>
+                <td>Used to set a title for the window that appears in the window border</td>
+            </tr>
+            <tr>
+                <td><code>WCol</code>
+                </td>
+                <td>Pass this parameter when you want to override the default position 
+		of the window containing the list of options.<table border="1" id="table68"><tr><td colspan="2">Column of window containing list of options</td></tr><tr><td align="center">0 or not passed</td><td>Left Justified</td></tr><tr><td align="center">C</td><td>Centered</td></tr><tr><td align="center">R</td><td>Right Justified</td></tr><tr><td align="center">numeric</td><td>Window will be displayed at column <code>WCol</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>WRow</code>
+                </td>
+                <td>Pass this parameter when you want the window containing the list of 
+		options to stay low on the display so that information above the window 
+		remains visible.<table border="1" id="table69"><tr><td colspan="2">Minimum Row of window containing list of options</td></tr><tr><td align="center">null or not passed</td><td>Row will be 2 or higher</td></tr><tr><td align="center">numeric</td><td>Window will be displayed at specified <code>WRow</code> or 
+				higher</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>ValList</code>
+                </td>
+                <td>Validation List containing values permitted and the Related Fields.&#160;
+		<code>ValList</code> typically contains multiple 'slots' of entry and 
+		related fields separated by the pipe (|) character, depending on the 
+		values of <code>SlotLen</code>, <code>RfPosn</code>, and <code>RfLen</code>.&#160; </td>
+            </tr>
+        </table>
+        <p>The examples of List Validation with a Related Field are based on the 
+following Payment Method Codes and Descriptions.</p>
+        <table border="1">
+            <tr>
+                <th align="center">Payment Method Code</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center">C</td>
+                <td>Check</td>
+            </tr>
+            <tr>
+                <td align="center">T</td>
+                <td>Funds Transfer</td>
+            </tr>
+            <tr>
+                <td align="center">W</td>
+                <td>Automated Withdrawl</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table38" class="example">
+            <tr>
+                <td>List Validation with Related Field Examples</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,1,COL,ROW,"+Payment Method Code","A{|,2,|}CCheck|TFunds Transfer|WAutomated Withdrawl",0,PMTMETH$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>The operator will initially be presented with the prompt:<code><br />		Enter Payment Method Code, F2=Display _</code></td>
+            </tr>
+            <tr>
+                <td>If they touch F2, or enter an invalid Payment Method Code, they will 
+		presented with the list:<br />&#160;<p><img border="0" src="images/CDS06914.jpg" /></p></td>
+            </tr>
+            <tr>
+                <td>This example shows the data entry at column COL and row 2 and 
+		displays the Related Field to the right of the Payment Method Code.</td>
+            </tr>
+            <tr>
+                <td><code>0110 PRINT 'CS',<br />		0120 CALL "CDS276","Payment Method",COL<br />		0130 CALL "CDS069",1,1,COL,2,"+Payment Method Code","A{|,2,|,R}CCheck|TFunds 
+		T<br />		0130:ransfer|WAutomated Withdrawl",0,PMTMETH$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>Payment Method.: T Funds Transfer</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example using the ColHead &amp; WTitle parameters</td>
+            </tr>
+            <tr>
+                <td><code>0110 PRINT 'CS',<br />		0120 CALL "CDS276","Payment Method",COL<br />		0130 CALL "CDS069",1,1,COL,2,"+Payment Method Code","A{|,2,|,R,,,Code 
+		Description,<br />		Payment Method Selection}CCheck|TFunds Transfer|WAutomated Withdrawl",0,<br />		PMTMETH$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS06915.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Example using program specified colors for F2 Window</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "List - 10/09/07 Validation with Related Field 
+		Example<br />		0110 PRINT 'CS',<br />		0120 CALL "CDS276","Payment Method",COL<br />		0130 CALL "CDS069",1,1,COL,2,"+Payment Method Code","A{|,2,|,R,,N<span style="color: #000080;"><span style="background-color: #FFFF66;">007013077</span></span>,<br />		Code Description,Payment Method Selection}CCheck|TFunds<br />		Transfer|WAutomated Withdrawl",0,PMTMETH$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS06916.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Example of a status code that has valid entries for D, M, and L, but 
+		any other non-blank value may also be entered.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,1,0,0,"+status","A{|,<span style="color: #FFFF00;">-</span>2,|}<span style="color: #FFFF00;">D</span>Discontinued|<span style="color: #FFFF00;">M</span>Discontinued 
+		by Manufacturer|<span style="color: #FFFF00;">L</span>Labor Item",0,S$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Same as above example, but a null entry is also permitted.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",<span style="color: #FFFF00;">0</span>,1,0,0,"+status","A{|,-2,|}<span style="color: #FFFF00;">D</span>Discontinued|<span style="color: #FFFF00;">M</span>Discontinued 
+		by Manufacturer|<span style="color: #FFFF00;">L</span>Labor Item",0,S$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Same as above example, but a null entry will be returned as a blank 
+		character as opposed to a zero length (null) string.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,1,0,0,"+status","<span style="color: #FFFF00;">L</span>{|,-2,|}<span style="color: #FFFF00;">D</span>Discontinued|<span style="color: #FFFF00;">M</span>Discontinued 
+		by Manufacturer|<span style="color: #FFFF00;">L</span>Labor Item",0,S$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>This example requires either 2 non-blank characters, or two blanks, 
+		but not values with only one blank.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",<span style="color: #FFFF00;">2</span>,2,0,0,"+status","<span style="color: #FFFF00;">a</span>{|,-<span style="color: #FFFF00;">3</span>,|}<span style="color: #FFFF00;">DW</span>Discontinued 
+		by Wholesaler|<span style="color: #FFFF00;">DM</span>Discontinued by 
+		Manufacturer|<span style="color: #FFFF00;">DD</span>Discontinued by 
+		Distributor",0,S$</code>
+                </td>
+            </tr>
+        </table>
+        <h5>
+            <br /><a name="File_Verification"></a>File Validation</h5>
+        <p>File validation can be used to verify that data entered exists in a keyed 
+file on disc.&#160; File Validation is enabled using a TYPE$ modifier of F, f, 
+G, or g.&#160; Additional file validation parameters follow the TYPE$ and are 
+contained within braces {}.&#160; You do not need to specify the complete list of 
+parameters.&#160; Parameters are separated using commas.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table12">
+            <tr>
+                <th colspan="2">File Validation Parameters</th>
+            </tr>
+            <tr>
+                <td colspan="2"><code>
+		Fxxxx{FileChan,Field,StartPos,Length,Col,Row,Prefix,Options,Colhead,Wtitle,Prf}</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>F</code>
+                </td>
+                <td>Type modifier indicating file validation is to be used<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table17" class="lev2"><tr><th align="center">Modifier</th><th>Usage</th></tr><tr><td align="center">F</td><td>Normal File Validation</td></tr><tr><td align="center">f</td><td>Provides same features as Normal File Validation, but 
+				includes in the prompt ArrowDn and ArrowUp options to advance to 
+				the next/prior record in the file.&#160; Note that this option 
+				requires that FileChan be passed as the channel number of the 
+				opened file, and not the file name.</td></tr><tr><td align="center">g</td><td>Similar to f, but is used when the field being entered is 
+				not the final segment of the key, and pressing the ArrowDn/Up 
+				key should return the next value that differs from the previous 
+				record.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>xxxx</code>
+                </td>
+                <td>Field <code>TYPE$</code> such as A, L, R, J, a numeric mask 
+		such as ###0, N5.4, etc.<p><br />		For best results use L or R for file verified character field types, and 
+		not the variable length field type of A which would require keys of 
+		variable length in the data file which is not recommended.<br /><br />		In some cases, a null entry should not require validation.&#160; File 
+		validation is bypassed when the field type is lower case (a, l, r, 
+		etc.), and a null (0 length) entry is made.&#160; Note that if the entry 
+		has a default value, the operator needs to clear out the default 
+		characters using the Delete Key or Ctrl+G in order to create a null 
+		entry.</p></td>
+            </tr>
+            <tr>
+                <td><code>FileChan</code>
+                </td>
+                <td>Typically passed as a file name but can also be passed as a numeric 
+		channel of a data file already opened.&#160; When using a KNUM of other 
+		than zero for MKY files, specify the KNUM to use by following the <code>
+		FileChan</code> parameter with a colon and then KNUM, as in <code>
+		XXCM01:3</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Field</code>
+                </td>
+                <td>Typically passed as a pipe separated list of template field names 
+		which are displayed for the operator when selecting a record from the 
+		data file.&#160; The field name can also be preceded by a different file 
+		name or program name.&#160; Example: <code>FIELDNAME|FILENAME.FIELDNAME|PROGRAM.FIELDNAME|REPEATINGFIELD[2]</code>.&#160; 
+		Use
+<code>[n]</code> for repeating fields.&#160; <a href="#Example_FV1">See example</a>.<p><br />The best practice is to store column titles and numeric masks in the Data 
+Dictionary, which are stored as user defined fields in the template.&#160; 
+However, when necessary, you can override the template values by specifying the 
+column title and/or numeric mask following each field name separated with a 
+backslash as in <code>FIELDNAME1\ColTitle2\Mask1|FIELDNAME2\ColTitle2\Mask2</code>, 
+i.e., <br /><br />Older programs that do not use templates, can specify a field number, and 
+		the following two parameters (<code>StartPos</code> &amp; <code>Length</code>) to indicate what 
+information to display to assist the user in selecting the desired record.<br /><br />		In some cases, you may want the convenience of file validation, yet 
+		allow the user to enter data that is not on file.&#160; You can enable 
+		this option by placing a minus immediately before the Field parameter as 
+		in <code>-FIELDNAME</code> or <code>-2</code>.&#160; To use this option when 
+		no Field parameter is used, a minus without a field name or number can 
+		be used.</p></td>
+            </tr>
+            <tr>
+                <td><code>StartPos</code>
+                </td>
+                <td>When the Field parameter is passed as a numeric field number, then 
+		the StartPos is required to indicate that the related field to be 
+		displayed for the user begins with the StartPos character within the 
+		field, typically 1.</td>
+            </tr>
+            <tr>
+                <td><code>Length</code>
+                </td>
+                <td>When the Field parameter is passed as a numeric field number, then 
+		the Length is required to indicate the number of characters in field# 
+		Field, to be displayed.&#160; Note that this is a maximum number of 
+		characters to display.&#160; Fields shorter than the Length specified 
+		will not cause an error.</td>
+            </tr>
+            <tr>
+                <td><code>Col</code>
+                </td>
+                <td>If present, this signals the input routine to display the <code>
+		Field</code> described above<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table13" class="lev2"><tr><td align="center">R</td><td>Display Field to Right of entered data</td></tr><tr><td align="center">B</td><td>Display Field Below entered data</td></tr><tr><td align="center">n</td><td>Display Field at Column n where n is a bbx column number 
+				within the active window as in <code>@(Col,Row)</code>.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>Row</code>
+                </td>
+                <td>Used when <code>Col</code> is passed as a numeric to indicate the 
+		bbx row number.&#160; The Row is computed automatically when the <code>
+		Col</code> parameter is R or B.</td>
+            </tr>
+            <tr>
+                <td><code>Prefix</code>
+                </td>
+                <td>This parameter is used to specify the characters of the key that 
+		precedes the segment being entered.&#160; Note that the <code>Prefix</code> 
+		parameter cannot contain a comma or any binary data such as a U(3) date.&#160; If there is a chance that the 
+		Prefix parameter might include a comma or other binary data, then set 
+		the Prefix using hexadecimal format by including a leading <code>"$"</code> 
+		before and after the Prefix such as <code>"$"+HTA(KEYPREFIX$)+"$"</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Options</code>
+                </td>
+                <td>This parameter includes several options that are sub-strings.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table14" class="lev2"><tr><th align="center">sub-string</th><th>Usage</th></tr><tr><td align="center">(1,1)</td><td>Pass as Y to enable Forced Window Mode, which basically 
+				means that the list of valid entries are displayed immediately, 
+				without requiring the user to touch the F2 key.</td></tr><tr><td align="center">(2,3)</td><td>The following 3 segments are used to override the default 
+				colors used on the window that displays the list of records for 
+				the user.&#160; Note that all three color number segments must 
+				be passed to be used.&#160; To use the default colors, yet still 
+				pass the Skip Duplicates parameter described below, then pass 
+				these color numbers as all zero's.<br /><br />				This segment represents the color number for Widow Border.&#160; 
+				The color numbers range from 001 to 128 and can best be viewed 
+				using Operator Preference Maintenance (SMS) and then Color 
+				Preferences.&#160; </td></tr><tr><td align="center">(5,3)</td><td>Color number for non-highlighted row</td></tr><tr><td align="center">(8,3)</td><td>Color number for highlighted row</td></tr><tr><td align="center">(11,1)</td><td>Skip Duplicates - When the segment of the key being entered, 
+				is not the last segment of the key, there may be multiple 
+				records that have the same value for the data being entered.&#160; 
+				The default behavior is to display each record as the related 
+				data might vary.&#160; You can cause the input routine to 
+				display only one record in this case by passing the Skip 
+				Duplicates parameter to Y.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>ColHead</code>
+                </td>
+                <td>Used to set or override the column titles for the fields to be 
+		displayed.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table15" class="lev2"><tr><th>Program and Field type used</th><th>Column Titles</th></tr><tr><td>CDS039 using Field Name(s)</td><td>All column titles are derived from Data Dictionary/Template.&#160; 
+				If <code>ColHead</code> is used, then it will override all 
+				column titles.</td></tr><tr><td>CDS069 using Field Name(s)</td><td>The column title for the field being entered is taken from 
+				this <code>ColHead</code> parameter, and the column titles for 
+				the Field Names will be taken from the Template.</td></tr><tr><td>Field Number</td><td>All column titles are derived from the <code>ColHead</code> 
+				parameter.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>WTitle</code>
+                </td>
+                <td>Used to set a title for the window that appears in the window border</td>
+            </tr>
+            <tr>
+                <td><code>Prf</code>
+                </td>
+                <td>This field can be used as an alternative to the <span style="font-family: d;"><code>Prefix</code></span> 
+		parameter when the Prefix contained a comma.&#160; However, to support 
+		commas and any other binary data, you can now set either the Prefix or 
+		Prf parameter to hexadecimal format with a leading and trailing <code>
+		"$"</code> character, as in <code>"$"+HTA(KEYPREFIX)+"$"</code>.</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table16" class="example">
+            <tr>
+                <td>Example of a simple file validation with no related field</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,3,0,0,"+Product Class","FR{XXUM27}",0,PCL$<br /></code>Initially the prompt will simply read:<code><br />		Enter Product Class, F2=Display ___<br /></code>If the user touches the F2 key, then the Product Class for all 
+		records in the XXUM27 Product Class file will be displayed, allowing the 
+		user to select from the list.&#160; The cursor movement keys, ArrowUp, 
+		ArrowDn, ArrowLf, ArrowRt, PageUp, PageDn, Home, and End can be used to 
+		highlight the desired product class.<br /><br /><code><img border="0" src="images/CDS0696.jpg" width="568" height="366" /></code></td>
+            </tr>
+            <tr>
+                <td>Adding the related field of the Product Class Description with a 
+		template field name of DESC.<br /><br /><img border="0" src="images/CDS0697.jpg" /></td>
+            </tr>
+            <tr>
+                <td>Add a PCL column heading.<br /><br /><img border="0" src="images/CDS0698.jpg" /></td>
+            </tr>
+            <tr>
+                <td>Use field number, starting position, and length, instead of field 
+		name.&#160; Note that you lose all column titles when using a field# 
+		instead of the field name.<br /><br /><img border="0" src="images/CDS0699.jpg" /></td>
+            </tr>
+            <tr>
+                <td>But you can add column titles manually.<br /><br />&#160;<img border="0" src="images/CDS06910.jpg" /></td>
+            </tr>
+            <tr>
+                <td>But if you use CDS039, the column titles are determined 
+		automatically, and not required in the parameters.&#160; Note that the 
+		title for the entered field comes 
+		from the template of the variable passed to CDS039, not the template 
+		used for file validation.&#160; The field titles would typically be 
+		the same, especially if using the 'Link To' option in the Data Dictionary 
+		where PCL is only defined once, and all other references link to the 
+		original field definition.<br /><br /><img border="0" src="images/CDS0691.jpg" /></td>
+            </tr>
+            <tr>
+                <td>When using field names, you can display multiple fields from the 
+		related file.<br /><br /><img border="0" src="images/CDS0692.jpg" /></td>
+            </tr>
+            <tr>
+                <td>Once the file verified entry has been made, fields from the related 
+		file are typically displayed to the right of the entered field.&#160; 
+		The Col and Row parameters are used to indicate the screen position 
+		where to display this information.&#160; Specify R in the Col parameter 
+		(the Row parameter will be ignored) to display the related file fields 
+		to the right of the entered field.<br /><br /><img border="0" src="images/CDS0693.jpg" /></td>
+            </tr>
+            <tr>
+                <td><a name="Example_FV1"></a>Consider a group file named MEUM12, with a 
+		2 character GROUP_CODE and DESCRIPTION, and a customer file MECM01 with 
+		KNUM 6 of GROUP_CODE+CUSTNO.&#160; The application needs to prompt the 
+		user for a GROUP_CODE.&#160; One option is to include all groups on the 
+		Group File.&#160; If the operator touches F2, then all GROUP_CODES in 
+		the Group File will be displayed.&#160; The Group DESCRIPTION will be 
+		displayed to the right of the GROUP_CODE.&#160; The GROUP_CODE entered 
+		(or selected from the list) will be stored in REC.GROUP_CODE.<br /><code>CALL "CDS039",1,2,0,0,"+group code","FR{MEUM12,DESCRIPTION,,,R}",REC$,"GROUP_CODE"<br /></code><br />		Another option would be to only display the GROUP_CODES that have a 
+		customer assigned to them, i.e., those with a record in the MECM01 file.&#160; 
+		We still want to display the Group DESCRIPTION from the MEUM12 file to 
+		the right of the entered data.<br /><code>CALL "CDS039",1,2,0,0,"+group 
+		code","FR{MECM01:6,MEUM12.DESCRIPTION,,,R},REC$,"GROUP_CODE"</code></td>
+            </tr>
+            <tr>
+                <td>This example uses an external program to perform a calculation with 
+		the result displayed in the F2 window.&#160; Data file XXPO50 contains 
+		Purchase Order Receipt heading information.&#160; It's primary key is a 
+		numeric RCPTNO and includes data fields DATERCVD and BY.&#160; Program 
+		PO134 receives as input a PO50$ record and calculates the value of the 
+		receipt.&#160; PO134 has a template in the Data Dictionary with a field 
+		name of VALUE.&#160; The PO134 program has an ENTER list of 
+		Y$,PO50$,PO134$.&#160; For more information about using external 
+		programs refer to the documentation for <a href="CDS037.htm">CDS037</a> 
+		and <a href="CDS038.htm">CDS038</a>.<br /><code>0100 CALL "CDS095",PO50,"XXPO50","",PO50$<br />		0110 CALL 
+		"CDS039",0,0,0,10,"+receipt#","FN8{XXPO50,DATERCVD|BY|PO134.VALUE,,,R}" 
+		,PO50$,"RCPTNO"<br /><br /></code><img border="0" src="images/CDS0694.jpg" /></td>
+            </tr>
+            <tr>
+                <td>File validation example using lower case 'f' to enable ArrowDn/Up 
+		options to advance through the records in the file.&#160; Line 100 is 
+		used to obtain template SO40$ for file XXSO40.&#160; Line 101 opens data 
+		file XXUK50.&#160; The lower case 'f' option requires the channel number 
+		be passed, not the file name.<br /><br /><img border="0" src="images/CDS0695.jpg" /></td>
+            </tr>
+        </table>
+        <h5><a name="Window_Notepad_Text"></a>Window/Notepad Text</h5>
+        <p>CDS039 and CDS069 can also be used for a two dimensional entry field.&#160; 
+In this case, the entered data is not returned to the calling program but is 
+actually stored in a data file.</p>
+        <p>Window/Notepad text can contain both dim and bold text, underlined text, 
+reverse video text, blinking text, line drawing characters, and any combination 
+of these attributes.</p>
+        <p>The width of the Notepad Text must fit within the logical display window, but 
+can have virtually an unlimited number of rows.&#160; The number of rows of 
+notepad text that exist above and below the active window are displayed on the 
+right side of the window border.</p>
+        <p>The following Dynamo Tools are used with Window/Notepad Text:</p>
+        <table border="1" id="table47">
+            <tr>
+                <th style="text-align: center;">Program Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center"><a target="_blank" href="CDS054.htm">CDS054</a>
+                </td>
+                <td>Window Text - Copy/Append/Delete</td>
+            </tr>
+            <tr>
+                <td align="center"><a target="_blank" href="CDS257.htm">CDS257</a>
+                </td>
+                <td>Read / Print / Convert Window Text (primarily used to print 
+		window/notepad text to printer)&#160; This document also contains 
+		information on types of data files supported.</td>
+            </tr>
+            <tr>
+                <td align="center"><a target="_blank" href="CDS261.htm">CDS261</a>
+                </td>
+                <td>Return Window Text Information (returns all text, first part of 
+		text, or text converted to HTML format)</td>
+            </tr>
+        </table>
+        <p><code>CALL "CDS069", WinCols, WinRows, Col, Row, Desc$, Type$</code>
+        </p>
+        <table border="1" width="100%" id="table40">
+            <tr>
+                <td><code>WinCols</code>
+                </td>
+                <td>Number of display columns for notepad text, excluding the window 
+		border.&#160; WinCols can be passed as zero to use the default of 78, 
+		which will take up the full display width on a typical display with 80 
+		columns.&#160; If text was stored using a larger WinCols, then passed to 
+		CDS039/CDS069, then the larger WinCols value will be used.</td>
+            </tr>
+            <tr>
+                <td><code>WinRows</code>
+                </td>
+                <td>Number of display rows for notepad text, excluding the window 
+		border.&#160; WinRows can be passed as zero to use the default which 
+		will maximize the notepad window based on the Row parameter.</td>
+            </tr>
+            <tr>
+                <td><code>Col</code>
+                </td>
+                <td>Column number for left side of the window border.&#160; Normally 
+		passed as zero so the window border is at the left edge of the physical 
+		display.</td>
+            </tr>
+            <tr>
+                <td><code>Row</code>
+                </td>
+                <td>Row number for the top edge of the window border.&#160; Pass as zero 
+		to use the default value of 2 which allow the top two lines of the 
+		display to remain present during the entry of the window text.</td>
+            </tr>
+            <tr>
+                <td><code>Desc$</code>
+                </td>
+                <td>This is the notepad description that will appear in the border of 
+		the window and in the prompt at the bottom of the page.&#160; If passed 
+		as null, then 'text' will be used.</td>
+            </tr>
+            <tr>
+                <td><code>Type$</code>
+                </td>
+                <td>This string begins with W indicating Window/Notepad text, followed 
+		by comma separated parameters surrounded by braces. <br /><code>W{NotePadFileName,NotePadID,MorD,BorderAttr,TextAttr}</code><br />		Only the first two parameters are required, so a valid Type$ would be:<br /><code>W{XXCM06,ABCDEF}</code><table border="1" width="100%" id="table41" class="lev2"><tr><td><code>NotePadFileName</code></td><td>required</td><td>You can pass either the Notepad File Name or the numeric 
+				channel number of the Notepad File previously opened.&#160; A 
+				template is not required for the Notepad File.&#160; Refer to 
+				the documentation for <a href="CDS257.htm">CDS257</a> for more 
+				information about the file characteristics for window/notepad 
+				files.&#160; Note that the Notepad file name must contain at 
+				least one alpha character and cannot contain a comma.</td></tr><tr><td><code>NotePadID</code></td><td>required</td><td>The NotePadID is the identification for the notepad text.&#160; 
+				It must be non-blank, and can be any length up to one character 
+				less than the key size of the notepad data file.&#160; For 
+				example, if the key size is 7, then the NotePadID can be 1 to 6 
+				characters long.&#160; The NotePadID cannot be a binary field, 
+				nor can it contain a comma.&#160; Use the HTA() function to 
+				convert a binary data element into a valid NotePadID.</td></tr><tr><td><code>MorD</code></td><td>optional</td><td><table border="1" id="table42" class="lev3"><tr><td align="center">M</td><td>Display &amp; Maintain notepad</td></tr><tr><td align="center">D</td><td>Display notepad, prompt user if notepad text does 
+						not exist</td></tr><tr><td align="center">d</td><td>Display notepad, do not prompt user if notepad text 
+						does not exist</td></tr><tr><td align="center">any other value</td><td>Display &amp; Maintain notepad</td></tr></table></td></tr><tr><td><code>BorderAttr</code></td><td>optional</td><td>Mnemonics used to print the notepad window border.&#160; 
+				Defaults to a white border in the current intensity on the 
+				current background color.&#160; For example, <code>'SF'+'RED'</code> 
+				will make the border bold red using the current cell background 
+				color.&#160; To make the border bold red on a black background 
+				pass BorderAttr as <code>'BACKGR'+'BLACK'+'RED'</code>.<p>Any 
+				valid bbx mnemonics can be used including <code>'SF', 'SB', 'RGB'(), 
+				'BACKGR',</code> and all color mnemonics.&#160; Remember that 
+				bbx treats mnemonics like string variables, so use the + symbol 
+				to imbed BorderAttr in the parameter string as shown in this 
+				example:<br /><code>CALL "CDS069",0,0,0,0,"Notepad Text", 
+				"W{XXCM06,123346A,M,"+'SF'+'RED'+"}"</code></p></td></tr><tr><td><code>TextAttr</code></td><td>optional</td><td>Mnemonics used for the notepad text.&#160; Defaults to the 
+				current color settings if not passed.&#160; For example, to have 
+				white text on a black background, pass TextAttr as <code>'BACKGR'+'BLACK'+'WHITE'</code>.</td></tr></table></td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table43" class="example">
+            <tr>
+                <td>Simple example with minimum parameters</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"","W{XXCM06,123456A}"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS069w1.gif" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table44" class="example">
+            <tr>
+                <td>Example with columns, rows, and title specified</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",42,10,0,0,"Notepad Text","W{XXCM06,123456B}"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS069w2.gif" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table45" class="example">
+            <tr>
+                <td>Example with columns and window position column and row specified</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",42,0,18,10,"Notepad Text","W{XXCM06,123456B}"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS069w3.gif" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table46" class="example">
+            <tr>
+                <td>Example using border and text attributes, and text that exceeds 
+		window height.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,0,0,0,"Notepad Text", "W{XXCM06,123456A,M,"+'BACKGR'+'BLACK'+'GREEN'+","+'BACKGR'+'BLACK'+'WHITE'+"}"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS069w4.gif" />
+                </td>
+            </tr>
+        </table>
+        <h5><a name="Special_Keys"></a>Special Keys</h5>
+        <p>The Dynamo Tools input routines support use of cursor movement keys, 
+including the 4 arrow keys, home, end, page up, and page down keys, as well as 
+un-shifted and shifted function keys.&#160; Some of these keys have specific 
+values, that cannot be changed.&#160; Other keys can be selectively enabled to 
+allow the user to touch a key and return a specific CTL value to the calling 
+program.</p>
+        <h5>Reserved Keys</h5>
+        <table border="1" width="100%" id="table48">
+            <tr>
+                <th style="text-align: center;">Key</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td align="center">F1</td>
+                <td>Used as the hotkey which when touched, will display a hotkey menu 
+		list, which will launch a new instance of bbx to run the selected hotkey 
+		application, and return to the input routine upon completion or return 
+		to the menu.</td>
+            </tr>
+            <tr>
+                <td align="center">F2</td>
+                <td>Used to list the valid options when using simple list validation, 
+		list validation with a related field, and file validation.&#160; The 
+		input routines will include "<u>F2</u>=Display" in the prompt whenever 
+		validation is used.&#160; When validation is not applicable, then the F2 
+		key can still be used with or without the Extended Exit options 
+		described below.&#160; When there is no Extended Exit option, then the 
+		F2 key will act like the Enter key, but will set CTL=2.&#160; Note that 
+		in this case, the entry must still meet the minimum size or value 
+		requirement.</td>
+            </tr>
+            <tr>
+                <td align="center">F3</td>
+                <td>Used as the Help key.&#160; Touching this key will present the user 
+		with a brief menu of Help topics including a Help topic related to the 
+		active Dynamo Menu, the active program, any Help text referenced in 
+		PROMPT$, a Help topic for rules for entering dates, general data entry 
+		Help, and display of Dynamo Release Notes.&#160; On most workstations, 
+		selecting a help topic launches a browser window with the selected Help 
+		topic.</td>
+            </tr>
+            <tr>
+                <td align="center">F4</td>
+                <td>Used to exit, quit, get out, etc.&#160; Enabled by including the "+" 
+		key at the end of PROMPT$ which will cause the prompt to include "<u>F4</u>=End".&#160; 
+		You can also include other text with the F4 key, such as passing PROMPT$ 
+		as: "Enter fax number, F4=Abort fax option".&#160; For compatibility 
+		with very old applications written for Basic Four terminals that have 
+		the roman numeral 'motor bar' keys I, II, III, and IV, the clause "OR 
+		CTL IV" will be replaced with "<u>F4</u>=End" which is more accurate for 
+		most workstations today.</td>
+            </tr>
+            <tr>
+                <td align="center">End</td>
+                <td>Unlike the original keyboards that had the motorbar IV key to the 
+		right of the keypad, the F4 key on the current PC keyboard is at the top 
+		and further to the left.&#160; To accommodate right-handed users that 
+		would like an F4 key at the right side of the keyboard, the End key 
+		emulates the F4 key depending on the situation as described below.<table border="1" id="table61" class="lev2"><tr><th colspan="3">End Key Usage</th></tr><tr><td>1</td><td>Window/Notepad entry</td><td>Toggles the cursor position between the end of the window 
+				and to the space to the right of the last non-blank character in 
+				the row.</td></tr><tr><td>2</td><td>List with highlighted record</td><td>Highlights the last entry in the list.</td></tr><tr><td>3</td><td>Normal field with non-blank characters</td><td>Moves cursor to space after last non-blank character in 
+				field</td></tr><tr><td>4</td><td>Normal field all blank</td><td>Emulates F4 to 'End', 'Exit', etc.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="center">PageDn</td>
+                <td>The Page Down key can also act like the F4 key as described below.<table border="1" id="table62" class="lev2"><tr><th colspan="3">PageDn Key Usage</th></tr><tr><td>1</td><td>Window/Notepad entry</td><td>Moves the cursor to the last row of the window, or the last 
+				row of the next page, or to the last non-blank row.</td></tr><tr><td>2</td><td>List with highlighted record</td><td>Moves the highlight bar down to the last row of the current 
+				page, or the last row of the next page, or to the last row in 
+				the list.</td></tr><tr><td>3</td><td>Normal field with non-blank characters</td><td>Emulates F4 to 'End', 'Exit', etc.</td></tr><tr><td>4</td><td>Normal field all blank</td><td>Emulates F4 to 'End', 'Exit', etc.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="center">Enter</td>
+                <td>The Enter key can also act like the F4 key as described below.<table border="1" id="table63" class="lev2"><tr><th colspan="3">Enter Key Usage</th></tr><tr><td>1</td><td>Window/Notepad entry</td><td>Moves the cursor down one row to the first column</td></tr><tr><td>2</td><td>List with highlighted record</td><td>Selects the highlighted record</td></tr><tr><td>3</td><td>Normal field with non-blank characters</td><td>Accepts the entered or default data</td></tr><tr><td>4</td><td>Normal field with zero length - zero length field is 
+				valid</td><td>Accepts the entered or default data</td></tr><tr><td>5</td><td>Normal field with zero length - zero length field is 
+				invalid</td><td>Emulates F4 to 'End', 'Exit', etc.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="center">ArrowUp</td>
+                <td>Typically used to allow the user to 'move up' to the previous field, 
+		especially in file maintenance applications.&#160; CTL will be 3 when 
+		the user touches the ArrowUp key.</td>
+            </tr>
+            <tr>
+                <td align="center">ArrowDn</td>
+                <td>Typically used to allow the user to 'move down' to the next field, 
+		especially in file maintenance applications.&#160; CTL will be 2 when 
+		the user touches the ArrowDn key.</td>
+            </tr>
+            <tr>
+                <td align="center">Other </td>
+                <td>The Tab, ArrowLeft, ArrowRight, Insert, Delete, Home, End, PageUp, 
+		and PageDown keys have specific meaning depending on the type of entry.&#160; 
+		However, some of these keys can be customized by the application.&#160; 
+		See the Extended Exit and Prompt Key options below.</td>
+            </tr>
+        </table>
+        <h5><a name="Extended_Exit_Option"></a>Extended Exit Option</h5>
+        <p>This option can be used to permit the user to touch a special key which will 
+set the system CTL variable to a value that can be tested by the calling 
+routine.&#160; Extended Exit Options are still supported, but in most cases the 
+Prompt Key Option is used instead.</p>
+        <p>This option is enabled by including any of the following two character codes 
+inside braces following the entry type.&#160; Note that the Extended Exit option 
+cannot be used when any other validation option such as list validation, list 
+with related field, or file validation, is used.&#160; Multiple Codes can be 
+used.&#160; CTL will be set to 5 plus the code within the list, i.e., the first 
+code in the list will return CTL=6, the second will return CTL=7, then third 
+CTL=8, etc.&#160; See example below.</p>
+        <p>Note that the minimum value and size requirement is not enforced when the 
+user touches one of the Extended Exit keys.</p>
+        <table border="1" id="table49">
+            <tr>
+                <th style="text-align: center;">Code</th>
+                <th>Key</th>
+            </tr>
+            <tr>
+                <td align="center">F2</td>
+                <td>F2 function key</td>
+            </tr>
+            <tr>
+                <td align="center">HO</td>
+                <td>Home key</td>
+            </tr>
+            <tr>
+                <td align="center">EN</td>
+                <td>End key</td>
+            </tr>
+            <tr>
+                <td align="center">TR</td>
+                <td>Tab key (tab right)</td>
+            </tr>
+            <tr>
+                <td align="center">TL</td>
+                <td>Shifted Tab key (tab left) - not supported by many terminal 
+		emulators</td>
+            </tr>
+            <tr>
+                <td align="center">PD</td>
+                <td>Page Down key</td>
+            </tr>
+            <tr>
+                <td align="center">PU</td>
+                <td>Page Up key</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table50" class="example">
+            <tr>
+                <td>Example: Return CTL=6 if user touches <u>F2</u> key, CTL=2 if user 
+		touches <u>ArrowDn</u> key.&#160; Note that the user will be permitted 
+		to touch the <u>F2</u> key even when the length of <code>VAL$</code> is 
+		zero, i.e., less than the MINLEN argument of 1.&#160; But if the user 
+		touches the <u>ArrowDn</u> key, then the entry must meet the MINLEN 
+		requirement.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,3,0,0,"+value","A{F2}",0,VAL$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table51" class="example">
+            <tr>
+                <td>Example: Return CTL=6 if user touches <u>PageDn</u> key, CTL=7 if 
+		user touches <u>PageUp</u> key.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,3,0,0,"+value","A{PDPU}",0,VAL$</code>
+                </td>
+            </tr>
+        </table>
+        <h5><a name="Prompt_Key_Option"></a>Prompt Key Option</h5>
+        <p>This option is the preferred method to advise the user that a special key can 
+be touched.&#160; Like the Extended Exit Option, it will pass the system CTL 
+variable to the calling application to determine what action to take based on 
+the key touched.</p>
+        <p>The Prompt Key Option is enabled by including the clause in the format "<code>Key=Action,</code>" 
+in <code>PROMPT$</code>.&#160; The valid Keys are listed in the table below.&#160; 
+Note that 'Action' can be null, as in "Key=," which will appear as just "Key" in 
+the prompt.&#160; See example below.</p>
+        <p>Note that the Prompt Key Option temporarily overrides any function key 
+mapping assigned using Terminal Function </p>
+        <table border="1" id="table52">
+            <tr>
+                <th style="text-align: center;">Prompt includes</th>
+                <th style="text-align: center;">CTL</th>
+                <th>Key</th>
+            </tr>
+            <tr>
+                <td align="center">F2=</td>
+                <td align="center">2</td>
+                <td>Function key F2.&#160; Note that in order to provide compatibility 
+		with older programs, the F2= clause is not required in <code>PROMPT$</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">f2=</td>
+                <td>102</td>
+                <td>Function key F2.&#160; Note that it must be a lower case f2 in the 
+		prompt, but is displayed as upper case to the user.&#160; This is 
+		another method to make the F2 key set CTL to a different value than the 
+		ArrowDn key.&#160; This is done so that the ArrowDn key can be used so 
+		the application can advance the the next field down, yet the F2 key can 
+		be used for file lookup or other application specific need.&#160; See 
+		example below.</td>
+            </tr>
+            <tr>
+                <td align="center">F5=</td>
+                <td>
+		105</td>
+                <td>Function key F5</td>
+            </tr>
+            <tr>
+                <td align="center">F6=</td>
+                <td align="center">106</td>
+                <td>Function key F6</td>
+            </tr>
+            <tr>
+                <td align="center">F7=</td>
+                <td align="center">107</td>
+                <td>Function key F7</td>
+            </tr>
+            <tr>
+                <td align="center">F8=</td>
+                <td align="center">108</td>
+                <td>Function key F8</td>
+            </tr>
+            <tr>
+                <td align="center">F9=</td>
+                <td align="center">109</td>
+                <td>Function key F9</td>
+            </tr>
+            <tr>
+                <td align="center">F10=</td>
+                <td align="center">110</td>
+                <td>Function key F10</td>
+            </tr>
+            <tr>
+                <td align="center">F11=</td>
+                <td align="center">111</td>
+                <td>Function key F11</td>
+            </tr>
+            <tr>
+                <td align="center">F12=</td>
+                <td align="center">112</td>
+                <td>Function key F12</td>
+            </tr>
+            <tr>
+                <td align="center">F13=</td>
+                <td align="center">113</td>
+                <td>Function key F13 (Although most PC keyboards do not include function 
+		keys F13 through F16 keys, there are keyboards for workstations that 
+		have 16 or more function keys.&#160; Dynamo Tools supports up to 16 
+		function keys).</td>
+            </tr>
+            <tr>
+                <td align="center">F14=</td>
+                <td align="center">114</td>
+                <td>Function key F14</td>
+            </tr>
+            <tr>
+                <td align="center">F15=</td>
+                <td align="center">115</td>
+                <td>Function key F15</td>
+            </tr>
+            <tr>
+                <td align="center">F16=</td>
+                <td align="center">116</td>
+                <td>Function key F16</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F1=</td>
+                <td align="center">117</td>
+                <td>Shifted Function key F1</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F2=</td>
+                <td align="center">118</td>
+                <td>Shifted Function key F2</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F3=</td>
+                <td align="center">119</td>
+                <td>Shifted Function key F3</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F4=</td>
+                <td align="center">120</td>
+                <td>Shifted Function key F4</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F5=</td>
+                <td align="center">121</td>
+                <td>Shifted Function key F5</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F6=</td>
+                <td align="center">122</td>
+                <td>Shifted Function key F6</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F7=</td>
+                <td align="center">123</td>
+                <td>Shifted Function key F7</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F8=</td>
+                <td align="center">124</td>
+                <td>Shifted Function key F8</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F9=</td>
+                <td align="center">125</td>
+                <td>Shifted Function key F9</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F10=</td>
+                <td align="center">126</td>
+                <td>Shifted Function key F10</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F11=</td>
+                <td align="center">127</td>
+                <td>Shifted Function key F11</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F12=</td>
+                <td align="center">128</td>
+                <td>Shifted Function key F12</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F13=</td>
+                <td align="center">129</td>
+                <td>Shifted Function key F13</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F14=</td>
+                <td align="center">130</td>
+                <td>Shifted Function key F14</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F15=</td>
+                <td align="center">131</td>
+                <td>Shifted Function key F15</td>
+            </tr>
+            <tr>
+                <td align="center">Shift+F16=</td>
+                <td align="center">132</td>
+                <td>Shifted Function key F16</td>
+            </tr>
+            <tr>
+                <td align="center">ArrowRt=</td>
+                <td align="center">200</td>
+                <td>Right Arrow key</td>
+            </tr>
+            <tr>
+                <td align="center">ArrowLf=</td>
+                <td align="center">201</td>
+                <td>Left Arrow key</td>
+            </tr>
+            <tr>
+                <td align="center">PageUp=</td>
+                <td align="center">204</td>
+                <td>Page Up key</td>
+            </tr>
+            <tr>
+                <td align="center">PageDn=</td>
+                <td align="center">205</td>
+                <td>Page Down key</td>
+            </tr>
+            <tr>
+                <td align="center">Home=</td>
+                <td align="center">206</td>
+                <td>Home key</td>
+            </tr>
+            <tr>
+                <td align="center">End=</td>
+                <td align="center">207</td>
+                <td>End key</td>
+            </tr>
+            <tr>
+                <td align="center">Insert=</td>
+                <td align="center">208</td>
+                <td>Insert key</td>
+            </tr>
+            <tr>
+                <td align="center">Delete=</td>
+                <td align="center">209</td>
+                <td>Delete key</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table59" class="example">
+            <tr>
+                <td>Example: Cause the <u>F2</u> key to return a different CTL value 
+		than the ArrowDn key.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,20,0,0,"+serial#, f2=new 
+		serialized+","A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <u>F2</u>=Lookup, <u>F4</u>=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch the <u>ArrowDn</u> key, then CTL will be 2, but if 
+		they touch the <u>F2</u> key, CTL will be 102.</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table53" class="example">
+            <tr>
+                <td>Example: Inform the user that the <u>F5</u> key can be touched to 
+		create a new serialized record.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,20,0,0,"+serial#, F5=new 
+		serialized+","A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <u>F5</u>=new serialized, <u>F4</u>=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch the <u>F5</u> key, then CTL will be 105.</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table60" class="example">
+            <tr>
+                <td>Example: Inform the user that the <u>Shift+F12</u> key can be used 
+		to perform a special Lookup function.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",1,20,0,0,"+serial#, Shift+F12=Lookup+","A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <u>Shift+F12</u>=Lookup, F4=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch the <u>Shift+F12</u> key, then CTL will be 128.</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table55" class="example">
+            <tr>
+                <td>Example: Inform the user that the <u>End</u> key can be touched to 
+		Abort, and the <u>F4</u> key can be used to 'End'.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,20,0,0,"+serial#, End=Abort+","A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <u>End</u>=Abort, <u>F4</u>=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch the <u>End</u> key, then CTL will be 207.</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table57" class="example">
+            <tr>
+                <td>Example: Inform the user that the <u>PageUp</u> and <u>PageDn</u> 
+		keys can be touched, but without any specific action.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS069",0,20,0,0,"+serial#, PageUp=, 
+		PageDn=,+","A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <u>PageUp</u>, <u>PageDn</u>, <u>F4</u>=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch the <u>PageUp</u> key, then CTL will be 204.&#160; If 
+		they touch the <u>PageDn</u> key, then CTL will be 205.</td>
+            </tr>
+        </table>
+        <h5><a name="Interrupt_Option"></a>Interrupt Option</h5>
+        <p>Holding down the Ctrl key and touching the "C" key, is typically configured 
+to be the 'interrupt' key on Linux/Unix/AIX systems.&#160; You can also 
+interrupt bbj applications by clicking the Close icon (red X on Windows, red 
+circle with X on Mac's).&#160; By including the <code>"E"</code> 
+(for Escape) prefix in the <code>TYPE$</code> parameter, the prompt will include 
+"<code><u>Ctrl+C</u>=Abort</code>" in the prompt, and will take the <code>ERR=</code> 
+option on the CALL to CDS039/CDS069 should the operator touch Ctrl+C.&#160; This 
+option should only be used when the <u>F4</u> option cannot be used.</p>
+        <p>By including the <code>"e"</code> prefix in <code>TYPE$</code>, an 
+interrupted program will still take the <code>ERR=</code> option, but not 
+include <code>"Ctrl+C=Abort"</code> in the prompt.</p>
+        <table border="1" width="100%" id="table58" class="example">
+            <tr>
+                <td>Example: Illustrating the Interrupt option.</td>
+            </tr>
+            <tr>
+                <td><code>5020 CALL "CDS069",<span style="color: #FFFF00;">ERR=5090</span>,1,20,0,0,"+serial#+","<span style="color: #FFFF00;">E</span>A",0,SN$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>User will see:</td>
+            </tr>
+            <tr>
+                <td><code>Enter serial#, <span style="color: #FFFF00;"><u>Ctrl+C</u>=Abort,</span> <u>F4</u>=End 
+		____________________</code>
+                </td>
+            </tr>
+            <tr>
+                <td>If they touch <u>Ctrl+C</u>, then the ERR= branch will be taken, and 
+		the ERR system variable will be 99.</td>
+            </tr>
+        </table>
+        <table border="1" id="table70">
+            <tr>
+                <th colspan="2"><a name="Global_Variables"></a>Global Variables</th>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069_DIS</code>
+                </td>
+                <td>Set to related field(s), string or file verified so this information 
+		can be accessed by application.&#160; When "q" Prefix is used, the 
+		global will include cursor positioning expressions, formatted data, and 
+		related field(s) for use with the PRINT option of T type routines.</td>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069_POSN</code>
+                </td>
+                <td>Set to the character position within the field upon exit.&#160; For 
+		example if a string variable contains <code>ABCDEF</code> and the cursor 
+		is on the <code>D</code> when the operator touched Enter, then this 
+		global with be 4, i.e., the 4th character in the variable.</td>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069_EC</code>
+                </td>
+                <td>Set to the exit code used by the operator to exit the field.<table border="1" id="table71"><tr><th>Keystroke used</th><th style="text-align: center;">Exit Code</th></tr><tr><td>ArrowDn</td><td align="center">AD</td></tr><tr><td>ArrowUp</td><td align="center">AU</td></tr><tr><td>Enter</td><td align="center">CR</td></tr><tr><td>Function 2 Key</td><td align="center">F2</td></tr><tr><td>Function 4 Key</td><td align="center">F4</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069_TXT</code>
+                </td>
+                <td>Set to the formatted text displayed.&#160; For dates this would be 
+		the formatted date, not the value of the date variable.</td>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069_DELBUF</code>
+                </td>
+                <td>Set to the characters deleted (cut) and used when un-deleting 
+		(paste) to enable cutting text in one field and pasting the cut text in 
+		another.</td>
+            </tr>
+            <tr>
+                <td><code>SMS_CDS069.LASTPROMPT</code>
+                </td>
+                <td>Set to the PROMPT passed to CDS069 by a background task.&#160; Used 
+		by the Dynamo Tools error routine in order to show the prompt in the 
+		heading section of the error report.</td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td><a name="Prompt_Window_Example"></a>Prompt Window Example</td>
+                </tr>
+                <tr>
+                    <td><code>0010 BEGIN</code>
+                        <br style="mc-tag-and-class: code;" /><code>0020 PRINT 'CS',"Text in main window",
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0030 PRINT 'WINDOW'(0,5,60,10,"Heading",'YELLOW'),
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0040 PRINT 'CS','GREEN',"Text in inner window",
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0050 CALL "CDS069",0,0,0,0,"No prompt window option-"
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0060 CALL "CDS069",0,0,0,0,"Using 'P' prompt window option-","PA"
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0070 CALL "CDS069",0,0,0,0,"Using 'p' prompt window option-","pA"
+</code>
+                        <br style="mc-tag-and-class: code;" /><code>0080 PRINT 'POP',</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Output</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Resources/Images/CDS069-pwin1.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Resources/Images/CDS069-pwin2.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="Resources/Images/CDS069-pwin3.png" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

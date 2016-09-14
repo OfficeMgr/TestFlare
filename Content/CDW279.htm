@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="1231" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW279 - Convert Templated String to HTML Table &amp;&#160;Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW279" />CDW279</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="HTML" />
+                        <MadCap:keyword term="Convert Templated Record Into HTML Table" />Convert Templated String to HTML Table &amp;&#160;Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW279">Last Revised: 02/19/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine takes a string template as input, and produces HTML output in the form of a table. It is frequently used when debugging Dynaweb applications, as you can display in the browser any templated data structure. It also returns the values in text format, suitable for storing in a log file or printing to a display.</p>
+        <p><code><MadCap:keyword term="Title" />CALL "CDW279", REC$, HTML$, { TITLE$, TEXT$, W279$ }</code>
+        </p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tr>
+                <th colspan="3">CDW279</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">REC$</td>
+                <td style="text-align: center;">To</td>
+                <td>Templated data structure. Also can be <code>"!LIST"</code> in which case all global variables that do not begin with <code>!</code> are placed in the table.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">HTML$</td>
+                <td style="text-align: center;">To/From</td>
+                <td>This program appends a table to the end of the <code>HTML$</code> passed</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">TITLE$</td>
+                <td style="text-align: center;">To</td>
+                <td>Optional table title will be placed in the first row if passed</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">TEXT$</td>
+                <td style="text-align: center;">To/From</td>
+                <td>Optional. Templated field names and values will be appended to <code>TEXT$</code> passed with each field on a separate line. Suitable for storing in a log file.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">W279$</td>
+                <td style="text-align: center;">To</td>
+                <td>Optional. Pass a "T" to show field titles instead of field names when present in the template.</td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>HTML Example</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><code>2000 BEGIN</code>
+                        </p>
+                        <p><code>2010 CALL "CDS095",IM27,"DSIM27","",IM27$</code>
+                        </p>
+                        <p><code>2020 READ RECORD(IM27)IM27$</code>
+                        </p>
+                        <p><code>2030 CALL "CDW279",IM27$,HTML$,"DSIM27"</code>
+                        </p>
+                        <p><code>2040 RUN "CDW999"</code>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Note that you can also <code>CALL&#160;"CDW999",HTML$</code> from a program or from console mode when debugging.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <col />
+                            <col style="width: 175px;" />
+                            <tr class="title">
+                                <td colspan="2" align="center"><b>DSIM27</b>
+                                </td>
+                            </tr>
+                            <tr class="head">
+                                <td><b>Field Name</b>
+                                </td>
+                                <td><strong>Value</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PCL</td>
+                                <td>000</td>
+                            </tr>
+                            <tr>
+                                <td>DESC</td>
+                                <td>B &amp; D / Dewalt Tool Sales</td>
+                            </tr>
+                            <tr>
+                                <td>PCLRENT</td>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>PCLUSED</td>
+                                <td>797</td>
+                            </tr>
+                            <tr>
+                                <td>COST_FACTOR</td>
+                                <td>.78</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Text Example</td>
+                </tr>
+                <tr>
+                    <td class="code">2000 BEGIN<br />2010 CALL "CDS095",IM27,"DSIM27","",IM27$<br />2020 READ RECORD(IM27)IM27$<br />2030 CALL "CDW279",IM27$,HTML$,"DSIM27",TEXT$<br />2040 PRINT TEXT$</td>
+                </tr>
+                <tr>
+                    <td class="code">DSIM27<br />PCL=000<br />DESC=B &amp; D / Dewalt Tool Sales<br />PCLRENT=500<br />PCLUSED=797<br />COST_FACTOR=.78<br /></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

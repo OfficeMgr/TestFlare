@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="2047" MadCap:lastWidth="890">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <title>CDS188 - Launch Workstation Application</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS188</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Launch Application</p>
+                </td>
+                <td align="right">
+                    <a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS188">Last Revised: 
+		02/26/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to launch an application on the local workstation.&#160; 
+	It can also be used to launch an interactive bbj application from pro5 using 
+	java web start.</p>
+        <table>
+            <tr>
+                <th colspan="3">Supported Configurations</th>
+            </tr>
+            <tr>
+                <th>Workstation</th>
+                <th style="text-align: center;">Dynamo Tools<br />      Terminal Type</th>
+                <th>Terminal Emulator</th>
+            </tr>
+            <tr>
+                <td>Windows PC, Apple Mac, or Linux Workstation</td>
+                <td align="center">S</td>
+                <td>Dynamo Web Start thin client</td>
+            </tr>
+            <tr>
+                <td>Windows PC</td>
+                <td align="center">f</td>
+                <td>FacetWin</td>
+            </tr>
+            <tr>
+                <td>Windows PC</td>
+                <td align="center">P</td>
+                <td>Ericom PowerTerm Interconnect</td>
+            </tr>
+            <tr>
+                <td>Linux Workstation</td>
+                <td align="center">L</td>
+                <td>Ericom PowerTerm for Linux</td>
+            </tr>
+            <tr>
+                <td>Axel Terminal in GUI Mode</td>
+                <td align="center">L</td>
+                <td>Ericom PowerTerm for Linux</td>
+            </tr>
+            <tr>
+                <td>Apple Mac</td>
+                <td align="center">M</td>
+                <td>Ericom PowerTerm for Apple Mac</td>
+            </tr>
+            <tr>
+                <td>Windows PC, Apple Mac, Linux workstation, Axel Terminal in GUI Mode</td>
+                <td align="center">P</td>
+                <td>Ericom PowerTerm WebConnect</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p>
+            <code>CALL "CDS188", ERR=NA, Y$, CMD$, ARG$, { OPT$ }</code>
+        </p>
+        <p>Set Global Variable <code>"SMS_CDS188"</code> to <code>"D"</code> to enable debug mode, where the command sent to the workstation will be displayed in a prompt.</p>
+        <table>
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ERR=NA</td>
+                <td>Branch to line label NA if the Terminal Type is not one of those shown above.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">Y$</td>
+                <td>Optional session control variable</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CMD$</td>
+                <td>
+        Command to be executed.<table><tr><td>null</td><td><table><tr><th>Workstation Type</th><th>CMD$</th></tr><tr><td>Windows PC</td><td>launch application based on extension of <code>ARG$</code>.&#160; 
+					This would be the default web browser if <code>ARG$</code> 
+					is a URL, Microsoft Word if the extension is .doc, Microsoft 
+					Excel if the extension is .xls, Adobe Reader if the 
+					extension is .pdf, etc.</td></tr><tr><td>Linux or Axel</td><td>launch default web browser (typically firefox)</td></tr><tr><td>Apple Mac</td><td>launch workstations default web browser (typically be 
+					safari, firefox, internet explorer, etc.)</td></tr></table></td></tr><tr><td>program name</td><td>Will launch the program name specified.&#160; Note that in the 
+			case of Windows, the program name has to be in the DOS 8.3 file 
+			format.&#160; So instead of C:\Program Files\... you would need 
+			C:\PROGRA~1\....&#160; If the program is in the PATH then of course 
+			you don't need the full path to the executable.&#160; The 
+			disadvantage to this is that you cannot guarantee what the DOS 8.3 
+			file name is on all PC's.&#160; So the best practice is to keep all 
+			folders and file names to 8 characters or less, excluding the 
+			characters in the file extension.&#160; Note that any file names are 
+			relative to the workstation and not the server.&#160; Windows does 
+			not display any error message if the program does not exist.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>ARG$</code>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <code>CMD$</code>
+                            </td>
+                            <td>
+                                <code>ARG$</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>null<br />(web browser)</td>
+                            <td>Pass URL such as www.excellware.com</td>
+                        </tr>
+                        <tr>
+                            <td>not null<br />(other workstation application)</td>
+                            <td>Pass file or document name for application to open.&#160; 
+				When the workstation is a PC <code>ARG$</code> may need to be in 
+				the DOS 8.3 file name format depending on the application.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <code>OPT$</code>
+                </td>
+                <td>
+        If the workstation or terminal emulator is not one of the supported 
+		types, then you can pass <code>OPT$</code> to have CDS188 prompt the 
+		user to invoke the application manually.&#160; Regardless of <code>OPT$</code>, 
+		CDS188 will <code>EXIT 99</code> causing the calling program to take the 
+		ERR= branch.<table><tr><td align="center"><code>B</code></td><td>Prompt user: "Point your web browser to..."</td></tr><tr><td align="center"><code>Y</code></td><td>Prompt user: "Open file..."</td></tr><tr><td align="center">other</td><td>No prompt</td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Example to launch a web browser to www.excellware.com and prompt the 
+		user if using a non-supported terminal emulator</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"","www.excellware.com","B"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch Microsoft Word opening a specific document located 
+		on the PC</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"","C:\docs\letter.doc","Y"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch Microsoft Word opening a specific document located 
+		on the server</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"","\\server\docs\letter.doc","Y"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch Microsoft Word opening a document "C:\Documents and Settings\Len Krause\My Documents\Excellware\cust\rl\agreement.doc"<br />      Note that DOS 8.3 file names are used and spaces are excluded.&#160; Best practice is to store documents accessed this way in folders and document names of 8 characters or less (not including the file extension).</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"",&#160; "\DOCUME~1\LENKRA~1\MYDOCU~1\EXCELL~1\CUST\RL\AGREEM~1.DOC"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch a DOS window displaying a directory including DOS 8.3 name, and keeping the window open</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"CMD","/K DIR /X"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch a PDF viewer, typically Adobe Reader, for a file located on the server</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"","\\server\docs\letter.pdf"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch windows explorer to the C:\Program Files folder</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"explorer","C:\Program Files"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch windows notepad to a new empty document</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"notepad"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Example to launch the Basis Enterprise Manager from pro5<br />		Requirements:<ul><li>bbj version 9,</li><li>bbj running in a JDK and not a JRE,</li><li>Enterprise Manager 'Run Server' option checked for the 'Web Server' 
+		on the Servers tab,</li><li>Enterprise Manager 'Run Enterprise Manager' option box checked on 
+		the JNLP Configuration page.</li></ul></th>
+            </tr>
+            <tr>
+                <td>
+                    <code>1010 CALL "CDS188",ERR=1020,Y$,"","http://localhost:8888/jnlp/em.jnlp","B"</code>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

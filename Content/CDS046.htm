@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="558" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS046 - Create Lock File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS046" />CDS046</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="LOCK" />
+                        <MadCap:keyword term="Create Lock File" />Create Lock File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS046">Last Revised: 04/24/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called program is used to check for and create lock 
+files. A lock file is a temporary file that indicates that a resource such as a 
+serial port, or a named pipe is being used.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS046", ERR=LINENO, DEV$, PAR$, LOCK$, MSG$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS046</th>
+            </tr>
+            <tr>
+                <td><code>LINENO</code>
+                </td>
+                <td>Branch to LINENO will be taken when lock file could not be created.</td>
+            </tr>
+            <tr>
+                <td><code>DEV$</code>
+                </td>
+                <td>the name of the resource to be locked. It is used to fabricate the name 
+ of the lock file. Typically DEV$ should be set to /dev/tty1a, tty2b, etc.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td><code>PAR$(1,1)</code>
+                            </td>
+                            <td>Y if operator should be prompted when device is busy.</td>
+                        </tr>
+                        <tr>
+                            <td><code>PARS$(2,2)</code>
+                            </td>
+                            <td>
+                                <MadCap:keyword term="CDS069" />time to wait before retry if in use message is displayed. Uses same 
+ time option as CDS069, i.e., values of 1 through 4 are minutes, and 5-99 
+ are seconds.</td>
+                        </tr>
+                        <tr>
+                            <td><code>PARS$(4,2)</code>
+                            </td>
+                            <td>Hours till lock expires.</td>
+                        </tr>
+                        <tr>
+                            <td><code>PARS$(6,2)</code>
+                            </td>
+                            <td>Minutes till lock expires.</td>
+                        </tr>
+                        <tr>
+                            <td><code>PARS$(8,1)</code>
+                            </td>
+                            <td>
+                                <MadCap:keyword term="Hotkey" />If passed as Y, then an unexpired lock for same operator, terminal 
+ and hotkey, will be considered expired.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>LOCK$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="DOS" />Lock file name created by CDS046. The lock files are created in /tmp on 
+ Unix systems and in TEMP/ on DOS systems. A suffix of .lck is added when 
+ there is no period in the device name DEV$.</td>
+            </tr>
+            <tr>
+                <td><code>MSG$</code>
+                </td>
+                <td>Description of device used if operator message is displayed when lock 
+ file is in use.</td>
+            </tr>
+        </table>
+        <p>The application should close the device and erase the lock file LOCK$ 
+manually when the device is no longer needed.</p>
+        <p>An expired lock will be treated as if the lock file did not exist.</p>
+    </body>
+</html>

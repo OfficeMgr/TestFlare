@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS606 - Merge Form with Variable Data &amp; Print</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS606</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Merge Form with Variable Data &amp; Print</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS606">Last Revised: 03/22/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to print a form by merging variable data with an overlay document.&#160; Refer to Form Processing (FMS) for additional details.</p>
+        <p>To print a form:</p>
+        <ol>
+            <li>Call <a href="CDS604.htm">CDS604</a> to obtain the empty template,</li>
+            <li>Assign values to variable data to be printed on the form,</li>
+            <li>Call CDS606 to print the form.</li>
+        </ol>
+        <table border="1" id="table1">
+            <tr>
+                <th colspan="2" nowrap="nowrap">Form Field Types</th>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Text</td>
+                <td>Text to be printed</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Date</td>
+                <td>You can store dates in MM/DD/YY format, or in julian format, or in other formats supported by <a href="CDS055.htm">CDS055</a>.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Radio Button</td>
+                <td>Set the value to the matching value specified when defining the form.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">Checkbox</td>
+                <td>Checkbox value to be printed.&#160; Typically set to <code>"X"</code> or <code>"x"</code> when the checkbox is to be checked.&#160; Each checkbox in a group is represented by an element of a repeating field, i.e., <code>FSM1.HSH$[1]="X",FSM1.HSH$[5]="X"</code>.</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS606", ERR=XXXX, Y$, Y6$, FORMID$, REC$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS606 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:
+<p><code>FORMID$</code> is not on Form File, or<br /><code>REC$</code> is not templated, or<br />
+template for <code>REC$</code> does not match that of the current form as defined using Form Processing (FMS)</p></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Optional Printer Control Variable - Y6$ comes from the Dynamo Tools Printer Selection Routine CDS084.&#160; If not passed to CDS606, then the operator will be prompted to select a PCL capable print device, and the printer will be opened, and closed by CDS606.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>FORMID$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>FormID as defined using Form Processing (FMS).</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Populated data structure containing variable data to be printed on form.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><a href="reports/CDS607.pdf">Form Listing</a>
+                </td>
+            </tr>
+            <tr>
+                <td><code>0100 <span style="color: #FFFF00;">REM "Example printing a form<br /></span> 0110 BEGIN<br />
+0120 CALL "CDS604",ERR=EOJ,Y$,"FSM1",FSM1$; <span style="color: #FFFF00;">REM "Retrieve template</span><br />
+0130 LET FSM1.FHACASENO$="112345"<br />
+0140 LET FSM1.INSTYPE$="R"<br />
+0150 LET FSM1.INSDATE$="02/28/11"<br />
+0160 LET FSM1.PROPADDRESS$[1]="1815 WEST MARKET ST"; <span style="color: #FFFF00;">REM "Repeating text field</span><br />
+0170 LET FSM1.PROPADDRESS$[2]="AKRON, OH 44133"<br />
+0180 LET FSM1.EXA$="N"; <span style="color: #FFFF00;">REM "Radio button</span><br />
+0190 LET FSM1.EXB$="N"<br />
+0200 LET FSM1.HSH$[1]="X"; <span style="color: #FFFF00;">REM "Check box</span><br />
+0210 LET FSM1.HSH$[2]="X"<br />
+0230 LET FSM1.HSH$[9]="X"<br />
+0240 LET FSM1.INSPECTORNAME$="Frank Baker"<br />
+0250 LET FSM1.SIGNATURE$="*** on file ***"<br />
+0260 LET FSM1.PHOTOS$="Y"<br />
+0270 LET FSM1.SERVICECENTER$="N"<br />
+0280 CALL "CDS606",Y$,Y6$,"FSM1",FSM1$; <span style="color: #FFFF00;">REM "Print form</span><br />
+0290 GOTO EOJ</code>
+                    <p><code><br />
+9000 EOJ:<br />
+9010 IF TCB(13) THEN EXIT<br />
+9020 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><a target="_blank" href="reports/CDS606.pdf">Result</a>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

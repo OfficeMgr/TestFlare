@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="4133" MadCap:lastWidth="2498">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS011 - Establish Dynamo Tools Environment</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS011</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Establish Dynamo Tools Environment</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-b&#xD;&#xA;in/tools.cgi?p=r&amp;pgm=CDS011">Last Revised: 06/18/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used when starting bbx or bbj background tasks, bbj stored procedures, and 
+	bbj triggers to create the environment so that calls to Dynamo Tools can be made.&#160; 
+	It is also the first program run for Dynaweb applications started from the 
+	cgi script.&#160; Sessions that use CDS011 will appear in the Display 
+	System Status (SMS) in the Dynaweb and Background Tasks section.</p>
+        <p>CDS011 can either be run as the initial program when starting bbx from a 
+	script such as <a href="background.htm">background</a>, a Dynaweb cgi script, or called at the 
+	beginning of a bbx application, bbj stored procedure, or trigger.</p>
+        <p>Whether run or called, the application should either <code>RUN "CDS001"</code> 
+	or <code>CALL "CDS081","",-1</code> to exit the application and not just
+	<code>RELEASE</code>.&#160; This will update the System Activity Log and 
+	update the list of active processes shown in Display System Status.</p>
+        <p>CDS011 will change the current directory to the base Dynamo Tools 
+	directory (<code>SMSDIR</code>), and set the prefix based on the prefix entries for the 
+	company code specified.&#160; It will also set bbx/bbj <code>SETOPTS</code> based on the 
+	settings in Dynamo Configuration Maintenance (SMC).&#160; If it is necessary 
+	to change the current directory within an application, the prefix entries 
+	relative to<code> SMSDIR</code> will also need to be changed, and a new prefix entry 
+	added to access the Dynamo Tools data files stored in the <code>SMSDIR</code> directory.&#160; </p>
+        <p>When run as the initial program when starting bbx/bbj, arguments are passed 
+	via the pro5/bbj command line arguments.</p>
+        <table>
+            <tr>
+                <th colspan="4">Command Line Arguments (when run as the initial 
+			program when starting bbx/bbj)</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;">Argument position<br />ARGV()</th>
+                <th>Example name</th>
+                <th style="text-align: center;">Required/Optional</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td align="center">1</td>
+                <td align="left" class="nowrap"><code>$basic_pgm</code>
+                </td>
+                <td align="center">Required</td>
+                <td>Basic program to run.&#160; Use path relative to <code>$SMSDIR</code></td>
+            </tr>
+            <tr>
+                <td align="center">2</td>
+                <td align="left" class="nowrap"><code>$company_code</code>
+                </td>
+                <td align="center">Required</td>
+                <td>Two character Dynamo Company Code</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td align="left" class="nowrap"><code>$job_title</code>
+                </td>
+                <td align="center">Optional</td>
+                <td>Job Title or Description.&#160; Replace any blanks with 
+			underscores.&#160; These will be replaced with blanks when seen in 
+			the Display System Status.&#160; Default is "Background Task" if not 
+			passed.</td>
+            </tr>
+            <tr>
+                <td align="center">4</td>
+                <td align="left" class="nowrap"><code>$userinfo</code>
+                </td>
+                <td align="center">Optional</td>
+                <td>UserInfo can contain any user defined arguments (no spaces) that 
+			can be accessed within the application as <code>ARGV(4)</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">5</td>
+                <td align="left" class="nowrap"><code>$mode</code>
+                </td>
+                <td align="center">Optional</td>
+                <td>Mode controls how data files are accessed.<table><tr><td class="nowrap"><code>pro5</code></td><td>start pro5 using normal pro5 file access (default option 
+					if not set)</td></tr><tr><td class="nowrap"><code>bbj</code></td><td>start bbj using bbj file access (only used when there are no pro5 processes, or all pro5 processes access data using the bbj dataserver)</td></tr><tr><td class="nowrap"><code>bbjds</code></td><td>start bbj, but use the pro5 data server for all file access (used when both bbx and bbj processes access the same data files).&#160; 
+					This will cause the <code>SMS_PRE</code> global to be set to
+					<code>"/&lt;localhost,port=1100&gt;"</code> which is used by
+					<a href="CDS095.htm">CDS095</a> when opening all files.</td></tr></table></td>
+            </tr>
+        </table>
+        <p>Calling Format (from bbx):</p>
+        <p><code><code><code>0100 REM&#160;"Program Name, date, description<br />0110 Y$="CD"; REM "Replace CD with your two character company code<br />0120 Y5$="Replace with your Job Title"</code><br /><code>0130 CALL "/u/CDI/CD/CDS011",ERR=ERRMSG,Y$,Y5$,MSG$</code></code><code>; REM&#160;"Establish Dynamo Tools Environment<br />0140 SETERR 8000; SETESC 8000<br />.<br /></code><code>.<br /></code><code>.<br /></code><code>0990 CALL&#160;"CDS081",Y$,-1; REM&#160;"Delete System Activity record and RELEASE</code></code>
+            <br />
+            <br /><code>8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY<br /><br />8900 ERRMSG:<br />8910 PRINT&#160;MSG$; REM&#160;"Log message to logs/bkg<br />8920 RELEASE</code>
+            <br />
+            <br />
+        </p>
+        <p>Calling Format (from bbj), including stored procedures and triggers.</p>
+        <p><code>REM&#160;"Program Name, date, description<br />Y$="CD"; REM "Replace CD with your two character company code<br /><code>Y5$="Replace with your Job Title"</code></code>
+            <br /><code>CALL "/u/CDI/CD/bbj/CDS011",Y$,Y5$,MSG$; REM&#160;"Establish Dynamo Tools environment</code>
+            <br /><code>SETERR DT_ERRESC; SETESC DT_ERRESC</code>
+        </p>
+        <p><code><code>.<br /></code><code>.<br /></code><code>.<br /></code><code>CALL&#160;"CDS081",Y$,-1; REM&#160;"Delete System Activity record and RELEASE</code></code>
+            <br />
+            <br /><code><code>DT_ERRESC: REM "Call Error/Escape Routine<br />CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />IF Y.ERRSTS=0 THEN SETERR 0 ELSE IF Y.ERRSTS=2 RETURN<br />RETRY<br /></code></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Arguments (when called at the start of a bbx or bbj 
+			application)</th>
+            </tr>
+            <tr>
+                <td align="center" class="nowrap"><code>ERR=ERRMSG</code>
+                </td>
+                <td>Branch to this section when CDS011 encounters an error and 
+			cannot complete.&#160; Some possible messages include:<br />			config file not specified in bbj stored procedure or trigger<br />			config file does not contain required LPEXn printer alias entries<br />			Unable to open Operator Information File CDSM01<br />			Either Operator ID 'xxxxx' or 'cdi' must be defined in Operator 
+			Information File CDSM01</td>
+            </tr>
+            <tr>
+                <td align="center" class="nowrap"><code>Y$</code>
+                </td>
+                <td>Pass in as two character company code.&#160; Passed back as 
+			templated Dynamo session control variable.</td>
+            </tr>
+            <tr>
+                <td align="center" class="nowrap"><code>Y5$</code>
+                </td>
+                <td>Pass in as Job Title.&#160; The Dynamo System Activity File uses 
+			a program name that can be up to 6 characters long.&#160; If the 
+			stored procedure is longer than 6 characters long, then you may want 
+			to include the program name in <code>Y5$</code> so that Display 
+			System Status will show the complete program name.</td>
+            </tr>
+            <tr>
+                <td align="center" class="nowrap"><code>MSG$</code>
+                </td>
+                <td>Returned by CDS011 with error message should CDS011 not be able 
+			to run to completion.&#160; Note: when running bbj, this message will also be logged to the /u/basis/bbj/log/Debug
+log file.<br /><table style="width: 100%;"><col /><tbody><tr><th>Possible MSG$ values</th></tr><tr><td>Error NN running program XXXXXX from directory DDDDDDD with prefix PPPPPPP and company CC.</td></tr><tr><td>Either Operator ID&#160;XXXXXX or 'cdi' must be defined using Operator Information Maintenance (SMC).</td></tr><tr><td>Error NN trying to open Operator Information File CDSM01. DIR=DDDD PFX=PPPPPPPPPPPPPP</td></tr><tr><td>config.bbx file is required</td></tr><tr><td>config.bbx file is missing required LPEXn printers</td></tr></tbody></table></td>
+            </tr>
+        </table>
+        <p>When called, CDS011 will change the bbx home directory to <code>$SMSDIR</code> as 
+	specified in the<code> /usr/cdi/.config</code> file.&#160; It will set the <code>PREFIX</code> 
+	relative to the home directory to include <code>CD/</code>, <code>XX/</code> and any additional prefix 
+	entries specified in Company Information Maintenance for the two character 
+	company code passed.</p>
+        <table class="example">
+            <tr>
+                <td>Example when run as initial program when starting bbx</td>
+            </tr>
+            <tr>
+                <td class="pre" xml:space="preserve">
+                    <p><code>#!/bin/sh
+#
+#       Excellware, Inc.
+#
+#       background
+#       script run by cron to initiate background process
+#
+#       usage: /u/CDI/bin/background pgm cc title usr mode logfile
+#       where pgm is bbx/bbj program to run
+#             cc is company code
+#             title is jobtitle (replace blanks in title with underscores)
+#             usr is an optional user field that can be accessed within
+#               the program using ARGV(4)
+#             mode is an optional field
+#               pro5 or not specified - start pro5
+#               bbj - start bbj using bbj as file access
+#               bbjds - start bbj, but use pro5 dataserver for all file access
+#             logfile is an optional, fully qualified path to the log file
+#               defaults to $SMSDIR/log/bkg if not passed
+#
+#       Note: The basic program that is run should terminate itself
+#       by RUNNING "CDS001" which will remove the terminal control record
+#       before releasing.
+#
+#       This script appends the current date, time, process ID, basic_pgm name,
+#       as well as any program output to the LOGFILE.</code>
+                    </p>
+                    <p><code>#
+#       On linux systems, the default LOGFILE is rotated monthly by the logrotate
+#       task and controlled by the log rotate configuration file
+#</code>                <code> /etc/logrotate.d/dt_bkg.</code></p>
+                    <p><code>#
+#       Note that the $SMSDIR/TEMP/BKGOUT logfile is no longer used.
+
+. /usr/cdi/.config
+
+[ -f /etc/vsifax3.sh ] &amp;&amp; . /etc/vsifax3.sh
+
+PATH=$PATH:$SMSDIR/bin:/bin:/usr/bin:/etc:/usr/ucb
+export PATH
+umask 000
+
+basic_pgm=$1
+company_code=$2
+job_title=$3
+userinfo=${4:--}
+mode=${5:-pro5}
+LOGFILE=${6:-$SMSDIR/log/bkg}
+cd $SMSDIR
+mkdir -m 777 TEMP 2&gt;/dev/null
+DATE=`date`
+USER=`uid`
+echo $DATE $USER $$ $basic_pgm $company_code $job_title $userinfo $mode &gt;&gt; $LOGFILE
+if [ $mode = "pro5" ]
+then
+	EXEC=pro5
+else
+	EXEC=../bbj/bin/bbj
+fi
+
+ERRFILE=$SMSDIR/tmp/background.$$
+nohup $BBXDIR/$EXEC -q -m4000 -c$BBXDIR/config.bbx CD/CDS011 - $basic_pgm "$company_code" "$job_title" "$userinfo" "$mode" &gt;&gt; $LOGFILE 2&gt;$ERRFILE &amp;
+
+if [ -s $ERRFILE ]
+then
+	read msg &lt;$ERRFILE
+	echo -e "Unable to start background task: $msg" &gt;&gt; $LOGFILE
+	echo -e "Unable to start background task\n\nJob Title: $job_title\nCompany Code: $company_code\nProgram Name: $basic_pgm\nError Message: $msg" | mail -s "Can't start background task $company_code" support@excellware.com
+fi
+
+rm $ERRFILE 2&gt;/dev/null
+
+exit</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example when called from a bbj stored procedure.<br />	Note that when called, the DT environment has not yet been set, so 
+			the full path name to CDS011 will be required.<br />	Should CDS011 be unable to finish properly, it will log the message 
+			to the BBjServices.err log file, and <code>EXIT 99</code>.</td>
+            </tr>
+            <tr>
+                <td><code>REM "Setup Dynamo Tools Environment</code>
+                    <p><code>Y$="RL"<br />			Y5$="Update Trailer"<br />			CALL "/u/CDI/CD/bbj/CDS011",Y$,Y5$,MSG$</code>
+                    </p>
+                    <p>... rest of stored procedure</p>
+                    <p><code>CALL "CDS081",Y$,-1; REM "Delete System Activity record and 
+			RELEASE</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

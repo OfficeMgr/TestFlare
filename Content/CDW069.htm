@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW069 - File Verified Input</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW069" />CDW069</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">File Verified Input</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW069">Last Revised: 04/18/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used to create a drop down box listing valid choices located in a file.</p>
+        <p><code><MadCap:keyword term="HTML" />CALL "CDW069", W069$, HTML$</code>
+        </p>
+        <p>Before calling CDW069, you typically call <a href="CDS041.htm"><MadCap:keyword term="CDS041" />CDS041</a> to obtain the template for W069$.</p>
+        <p><code>CALL "CDS041", "CDW069", W069$</code>
+        </p>
+        <p>W069$ will contain all of the input arguments to CDW069. HTML$ is the output.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDW069</th>
+            </tr>
+            <tr>
+                <td>W069.FILE$</td>
+                <td>the name of the data file containing the validation data</td>
+            </tr>
+            <tr>
+                <td>W069.ENTFLD$</td>
+                <td>
+                    <MadCap:keyword term="Select" />the field name within the template of the data file of the field to be selected on the web page</td>
+            </tr>
+            <tr>
+                <td>W069.DISFLD$</td>
+                <td>the name of the related field in FILE$ to be displayed (optional)</td>
+            </tr>
+            <tr>
+                <td>W069.FORMFLD$</td>
+                <td>if not provided, the HTML form field name will be the same as ENTFLD$. Specify FORMFLD$ when the HTML form field name must be difference from ENTFLD$</td>
+            </tr>
+            <tr>
+                <td>W069.KNUM</td>
+                <td>the KNUM of FILE$ to use</td>
+            </tr>
+            <tr>
+                <td>W069.KEYPFX$</td>
+                <td>if you only want a subset of records within the file, only keys beginning with KEYPFX$ will be included</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="WHERE" />W069.WHERE$</td>
+                <td>when a KNUM or KEYPFX$ cannot be used to determine what records in FILE$ to include, then assign this variable to a valid where clause to be used on a SELECT. Use REC.fieldname when referencing fields within the record.</td>
+            </tr>
+            <tr>
+                <td>W069.SORTBY$</td>
+                <td>
+        used to alter the sequence of options within the drop down box.&#160; Note that the KNUM and KEYPFX$ arguments are ignored when either the WHERE$ or SORTBY$ arguments are used.
+      </td>
+            </tr>
+            <tr>
+                <td>W069.DEFAULTVAL$</td>
+                <td>if set to the entry field value, then this option will be selected as the default</td>
+            </tr>
+            <tr>
+                <td>W069.INCALL$</td>
+                <td>if passed as Y, then in addition to each of the valid options, an option will be added with a value of all *'s, and a related description of "*** Include All ***" will be added.</td>
+            </tr>
+            <tr>
+                <td>W069.INCVAL$</td>
+                <td>if passed as N, then the entry field will not be included in the drop down display, only the related field will appear. This is especially useful when sorting by the related field.</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example of Selection of State for country code US using data file 
+		DISM02</td>
+            </tr>
+            <tr>
+                <td><code>0110 CALL "CDS041","CDW069",W069$<br />
+		0120 LET W069.FILE$="DISM02"<br />
+		0130 LET W069.ENTFLD$="STATE"<br />
+		0140 LET W069.DISFLD$="NAME"<br />
+		0150 LET W069.KNUM=0<br />
+		0160 LET W069.KEYPFX$="US"<br />
+		0170 LET W069.DEFAULTVAL$="OH"<br />
+		0180 CALL "CDW069",W069$,HTML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Output HTML$</td>
+            </tr>
+            <tr>
+                <td><code>&lt;select name="STATE"&gt;<br />
+		&lt;option value="AA"&gt;AA - Military-Domestic&lt;/option&gt;<br />
+		&lt;option value="AE"&gt;AE - Military-Atlantic Area&lt;/option&gt;<br />
+		&lt;option value="AK"&gt;AK - Alaska&lt;/option&gt;<br />
+		&lt;option value="AL"&gt;AL - Alabama&lt;/option&gt;<br />
+		&lt;option value="AP"&gt;AP - Military-Pacific&lt;/option&gt;<br />
+		&lt;option value="AR"&gt;AR - Arkansas&lt;/optionn&gt;<br />
+		&lt;option value="AS"&gt;AS - American Samoa&lt;/option&gt;<br />
+		&lt;option value="AZ"&gt;AZ - Arizona&lt;/option&gt;<br />
+		&lt;option value="CA"&gt;CA - California&lt;/option&gt;<br />
+		&lt;option value="CO"&gt;CO - Colorado&lt;/option&gt;<br />
+		&lt;option value="CT"&gt;CT - Connecticut&lt;/option&gt;<br />
+		&lt;option value="DC"&gt;DC - District of Columbia&lt;/option&gt;<br />
+		&lt;option value="DE"&gt;DE - Delaware&lt;/option&gt;<br />
+		&lt;option value="FL"&gt;FL - Florida&lt;/option&gt;<br />
+		&lt;option value="FM"&gt;FM - Federated Sates of Micrones&lt;/option&gt;<br />
+		&lt;option value="GA"&gt;GA - Georgia&lt;/option&gt;<br />
+		&lt;option value="GU"&gt;GU - Guam&lt;/option&gt;<br />
+		&lt;option value="HI"&gt;HI - Hawaii&lt;/option&gt;<br />
+		&lt;option value="IA"&gt;IA - Iowa&lt;/option&gt;<br />
+		&lt;option value="ID"&gt;ID - Idaho&lt;/option&gt;<br />
+		&lt;option value="IL"&gt;IL - Illinois&lt;/option&gt;<br />
+		&lt;option value="IN"&gt;IN - Indiana&lt;/option&gt;<br />
+		&lt;option value="KS"&gt;KS - Kansas&lt;/option&gt;<br />
+		&lt;option value="KY"&gt;KY - Kentucky&lt;/option&gt;<br />
+		&lt;option value="LA"&gt;LA - Louisiana&lt;/option&gt;<br />
+		&lt;option value="MA"&gt;MA - Massachusetts&lt;/option&gt;<br />
+		&lt;option value="MD"&gt;MD - Maryland&lt;/option&gt;<br />
+		&lt;option value="ME"&gt;ME - Maine&lt;/option&gt;<br />
+		&lt;option value="MH"&gt;MH - Marshall Islands&lt;/option&gt;<br />
+		&lt;option value="MI"&gt;MI - Michigan&lt;/option&gt;<br />
+		&lt;option value="MN"&gt;MN - Minnesota&lt;/option&gt;<br />
+		&lt;option value="MO"&gt;MO - Missouri&lt;/option&gt;<br />
+		&lt;option value="MP"&gt;MP - Northern Mariana Islands&lt;/option&gt;<br />
+		&lt;option value="MS"&gt;MS - Mississippi&lt;/option&gt;<br />
+		&lt;option value="MT"&gt;MT - Montana&lt;/option&gt;<br />
+		&lt;option value="NC"&gt;NC - North Carolina&lt;/option&gt;<br />
+		&lt;option value="ND"&gt;ND - North Dakota&lt;/option&gt;<br />
+		&lt;option value="NE"&gt;NE - Nebraska&lt;/option&gt;<br />
+		&lt;option value="NH"&gt;NH - New Hampshire&lt;/option&gt;<br />
+		&lt;option value="NJ"&gt;NJ - New Jersey&lt;/option&gt;</code>
+                    <p><code>&lt;option 
+		value="NM"&gt;NM - New Mexico&lt;/option&gt;<br />
+		&lt;option value="NV"&gt;NV - Nevada&lt;/option&gt;<br />
+		&lt;option value="NY"&gt;NY - New York&lt;/option&gt;<br />
+		&lt;option value="OH" selected&gt;OH - Ohio&lt;/option&gt;<br />
+		&lt;option value="OK"&gt;OK - Oklahoma&lt;/option&gt;<br />
+		&lt;option value="OR"&gt;OR - Oregon&lt;/option&gt;<br />
+		&lt;option value="PA"&gt;PA - Pennsylvania&lt;/option&gt;<br />
+		&lt;option value="PR"&gt;PR - Puerto Rico&lt;/option&gt;<br />
+		&lt;option value="PW"&gt;PW - Palau&lt;/option&gt;<br />
+		&lt;option value="RI"&gt;RI - Rhode Island&lt;/option&gt;<br />
+		&lt;option value="SC"&gt;SC - South Carolina&lt;/option&gt;<br />
+		&lt;option value="SD"&gt;SD - South Dakota&lt;/option&gt;<br />
+		&lt;option value="TN"&gt;TN - Tennessee&lt;/option&gt;<br />
+		&lt;option value="TX"&gt;TX - Texas&lt;/option&gt;<br />
+		&lt;option value="UT"&gt;UT - Utah&lt;/option&gt;<br />
+		&lt;option value="VA"&gt;VA - Virginia&lt;/option&gt;<br />
+		&lt;option value="VI"&gt;VI - Virgin Islands&lt;/option&gt;<br />
+		&lt;option value="VT"&gt;VT - Vermont&lt;/option&gt;<br />
+		&lt;option value="WA"&gt;WA - Washington&lt;/option&gt;<br />
+		&lt;option value="WI"&gt;WI - Wisconsin&lt;/option&gt;<br />
+		&lt;option value="WV"&gt;WV - West Virginia&lt;/option&gt;<br />
+		&lt;option value="WY"&gt;WY - Wyoming&lt;/option&gt;<br />
+		&lt;/select&gt;</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Execution example:</td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="plain">
+                        <td align="right">State</td>
+                        <td>
+                            <select name="STATE">
+                                <option value="AA" />AA - Military-Domestic
+<option value="AE" />AE - Military-Atlantic Area
+<option value="AK" />AK - Alaska
+<option value="AL" />AL - Alabama
+<option value="AP" />AP - Military-Pacific
+<option value="AR" />AR - Arkansas
+<option value="AS" />AS - American Samoa
+<option value="AZ" />AZ - Arizona
+<option value="CA" />CA - California
+<option value="CO" />CO - Colorado
+<option value="CT" />CT - Connecticut
+<option value="DC" />DC - District of Columbia
+<option value="DE" />DE - Delaware
+<option value="FL" />FL - Florida
+<option value="FM" />FM - Federated Sates of Micrones
+<option value="GA" />GA - Georgia
+<option value="GU" />GU - Guam
+<option value="HI" />HI - Hawaii
+<option value="IA" />IA - Iowa
+<option value="ID" />ID - Idaho
+<option value="IL" />IL - Illinois
+<option value="IN" />IN - Indiana
+<option value="KS" />KS - Kansas
+<option value="KY" />KY - Kentucky
+<option value="LA" />LA - Louisiana
+<option value="MA" />MA - Massachusetts
+<option value="MD" />MD - Maryland
+<option value="ME" />ME - Maine
+<option value="MH" />MH - Marshall Islands
+<option value="MI" />MI - Michigan
+<option value="MN" />MN - Minnesota
+<option value="MO" />MO - Missouri
+<option value="MP" />MP - Northern Mariana Islands
+<option value="MS" />MS - Mississippi
+<option value="MT" />MT - Montana
+<option value="NC" />NC - North Carolina
+<option value="ND" />ND - North Dakota
+<option value="NE" />NE - Nebraska
+<option value="NH" />NH - New Hampshire
+<option value="NJ" />NJ - New Jersey
+<option value="NM" />NM - New Mexico
+<option value="NV" />NV - Nevada
+<option value="NY" />NY - New York
+<option value="OH" />OH - Ohio
+<option value="OK" />OK - Oklahoma
+<option value="OR" />OR - Oregon
+<option value="PA" />PA - Pennsylvania
+<option value="PR" />PR - Puerto Rico
+<option value="PW" />PW - Palau
+<option value="RI" />RI - Rhode Island
+<option value="SC" />SC - South Carolina
+<option value="SD" />SD - South Dakota
+<option value="TN" />TN - Tennessee
+<option value="TX" />TX - Texas
+<option value="UT" />UT - Utah
+<option value="VA" />VA - Virginia
+<option value="VI" />VI - Virgin Islands
+<option value="VT" />VT - Vermont
+<option value="WA" />WA - Washington
+<option value="WI" />WI - Wisconsin
+<option value="WV" />WV - West Virginia
+<option value="WY" />WY - Wyoming
+</select>
+                        </td>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

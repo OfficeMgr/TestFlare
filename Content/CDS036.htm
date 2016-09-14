@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="3929" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS036 - Extract/Write/Remove Record with logging</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS036" />CDS036</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Remove" />Extract/Write/Remove Record with logging</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS036">Last Revised: 
+		08/31/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Records" />This program should be called whenever it is desired to 
+extract, write, or remove a record.&#160; It provides an external control file 
+for managing extracted records providing information regarding who is using a 
+record, and allows the application to write the record without releasing the 
+extracted control file record.&#160; CDS036 can also log which records have 
+been added, changed, or removed from a file to facilitate file synchronization 
+between multiple systems.</p>
+        <p>The best reason to use CDS036 instead of coding EXTRACT and WRITE operations 
+in an application program, is that the user will be told without any timeout 
+delay, if another user has the desired record EXTRACTed.&#160; An example of 
+such a message is displayed below.&#160; If you do not use CDS036, then the 
+application will get an error 0 without any additional information about what 
+user has the record locked.</p>
+        <p>
+            <img border="0" src="images/CDS0361.jpg" />
+        </p>
+        <p>The functions that CDS036 provides vary depending on the file type and 
+whether there is a template associated with the record.&#160; See table below.&#160; 
+The KEYREC$ column indicates whether the application program should call CDS036 
+passing the record (<code>REC$</code>) or the key (<code>KEY$</code>).</p>
+        <table>
+            <tr>
+                <th>File Type</th>
+                <th align="center">Extract record</th>
+                <th align="center">Write record</th>
+                <th align="center">Remove record</th>
+                <th align="center">Log record</th>
+                <th align="center"><code>KEYREC$</code>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="MKY" />MKY with template</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y*</td>
+                <td align="center">Y</td>
+                <td align="center"><code>REC$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>MKY without template</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center"><code>KEY$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="SKY" />SRT or SKY with zero char/rec</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center"><code>KEY$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>SKY with or without template</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center"><code>KEY$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>DIR with or without template</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center"><code>KEY$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>All other file types such as IND or SER</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N/A</td>
+            </tr>
+        </table>
+        <p>* When used to remove a record from a templated MKY file, you may pass either 
+the record or the key in <code>KEYREC$</code>.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS036", ERR=<a href="#ERRLINE">ERRLINE</a>, <a href="#Y$">Y$</a>,
+<a href="#Y$">CHAN</a>, <a href="#KEYREC$">KEYREC$</a>, <a href="#STATUS$">
+ACTFIL$</a>, <a href="#SEL$">SEL$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS036</th>
+            </tr>
+            <tr>
+                <td><a name="ERRLINE"></a><code>ERRLINE</code>
+                </td>
+                <td>the line to branch to if CDS036 exits with an error.&#160; CDS036 will 
+	exit with an error based on the status code used.&#160; The system variable 
+	ERR will be zero if record is in use, 11 if it does not exist, or other ERR 
+	value if another error occurred.<table><tr><th nowrap="" style="text-align: center;">STATUS$(1,1)</th><th>Status variable passed to CDS036</th></tr><tr><td nowrap="" align="center">E</td><td>Record could not be extracted because it is in use, or if it 
+			does not exist.</td></tr><tr><td nowrap="" align="center">e</td><td>Record could not be extracted because it is in use.</td></tr><tr><td nowrap="" align="center">W</td><td>Record could not be written due to permissions, corrupted file, 
+			etc.&#160; The operator will be prompted with an error message 
+			including the error number, file name &amp; description and file type 
+			before CDS036 exits.</td></tr><tr><td nowrap="" align="center">r</td><td>Record could not be removed.&#160; Note that unsuccessful 
+			removes are still logged when applicable so that the record can be 
+			removed from the remote system if necessary.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>the standard task control variable</td>
+            </tr>
+            <tr>
+                <td><a name="CHAN"></a><code>CHAN</code>
+                </td>
+                <td>the channel number of the file currently open.&#160; Can be passed as 
+	zero when the file name is included in <code>ACTFIL$</code>.&#160; Pass the 
+	file name in <code>ACTFIL$</code> instead of using <code>CHAN</code> when 
+	the record will be extracted for more than a brief moment.</td>
+            </tr>
+            <tr>
+                <td><a name="KEYREC$"></a><code>KEYREC$</code>
+                </td>
+                <td>Pass the entire record for templated MKY files, or the key for all other 
+	file types.&#160; See table above.</td>
+            </tr>
+            <tr>
+                <td><code><a name="STATUS$"></a>ACTFIL$(1,1)</code>
+                </td>
+                <td>Pass to CDS036 to indicate the action to take.
+    <table><tr><td align="center">E</td><td>Extract record (record must exist)</td></tr><tr><td align="center">e</td><td>Extract record, create record if it does not exist.&#160; Applies to 
+		templated MKY files only.</td></tr><tr><td align="center">W</td><td>Write record &amp; release extract</td></tr><tr><td align="center">U</td><td>Update: Write record but do not release extracted Lock Control 
+		Record.</td></tr><tr><td align="center">D</td><td>Write record, but do not replace if it exists (uses <code>DOM=</code> on 
+		<code>WRITE</code>).&#160; 
+ Exits with <code>ERR=11</code> if record exists.</td></tr><tr><td align="center">R</td><td>Remove record.&#160; Do not return with error if unable to 
+ remove.&#160; Removal will be logged if applicable.</td></tr><tr><td align="center">r</td><td>Remove record.&#160; Return with <code>ERR=11</code> if unable to remove.&#160; 
+		Removal will not be logged.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>ACTFIL$(2)</code>
+                </td>
+                <td>Pass to CDS036 the file name instead of <code>CHAN</code>.&#160; CDS036 
+	will manage a private list of channel numbers for each file so that other 
+	applications called during the extract will not release the extracted 
+	record.&#160; File name may begin with XX indicating current company code.&#160; 
+ Note that this option can also be used to retain the current <code>KNUM</code> 
+    of the file opened to <code>CHAN</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="SEL$"></a><code>SEL$</code>
+                </td>
+                <td>optional, and is ignored on branch systems. On headquarters systems, 
+	<code>SEL$</code> 
+    is used to indicate if this transaction should be logged, and if so, whether 
+ it is to be transmitted to each branch, or to one or more branch systems.</td>
+            </tr>
+        </table>
+        <p>CDS036 logs activity to file XXIS01 and will create the file and its template 
+if it does not exist.&#160; Note that to maximize performance, XXIS01 remains open for 
+subsequent calls.</p>
+        <p>
+            <MadCap:keyword term="SMC menu" />
+            <MadCap:keyword term="ISC menu" />
+            <MadCap:keyword term="Inter-System Communication Log File Maintenance" />Only files listed in the Inter-System Communication Log File Maintenance 
+program (ISC menu) with the log indicator set to Y will be logged, even though 
+the data record will be written if applicable regardless of this indicator.&#160; The 
+indicator that defines a particular system as a headquarters or branch system is 
+maintained using Dynamo Configuration Maintenance (SMC menu). Note that if this 
+indicator is blank, then no logging will take place.</p>
+        <p>Logging requires the length of the data file name to be exactly 6 characters, 
+and the maximum length of the key is 32 characters, but the record locking 
+mechanism supports file names up to 12 characters long, with the same 32 
+character keysize limit.</p>
+        <p>If CDS036 cannot perform the <code>WRITERECORD</code> or <code>REMOVE</code> command, then it will 
+return to the calling program with <code>ERR</code> set accordingly.</p>
+        <p>CDS036 may create two global variables SMS_CDS036_FIL and SMS_CDS036_SEL. 
+These globals improve performance by reducing the need to access the ISC control 
+files with each call to CDS036.&#160; Theses globals are cleared when accessing the 
+appropriate ISC control file maintenance program.&#160; They will be rebuilt the next 
+time CDS036 is called.&#160; All other users must logoff to clear these globals when 
+changes are made to the control files.</p>
+        <h5>Note that the current version of file maintenance within limits logs all 
+records accessed whether a change was made or not.</h5>
+        <table class="example">
+            <tr>
+                <th>Extract &amp; Write example using templated MKY file during an 
+		update application</th>
+            </tr>
+            <tr>
+                <td><code>1010 CALL "CDS036",ERR=1010,Y$,CM01,CM01$,"E"; REM 
+		"Retry if record is locked<br />		1020 GOSUB MAPFIELDS; REM "Change any CM01 fields here</code>
+                    <p><code>1030 CALL "CDS036",Y$,CM01,CM01$,"W"; REM "Write 
+		back &amp; release lock control record</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Extract &amp; Write example using MKY file with IOLIST during an 
+		update application</th>
+            </tr>
+            <tr>
+                <td>Note that the code would be similar if using an SKY or DIR file, but 
+		the KNUM=0 is not required.&#160; Since BBx ignores the KNUM= clause on 
+		non-MKY files, it may be best however, to leave the KNUM=0 in place even 
+		on SKY and DIR files, should this file ever be converted to MKY.</td>
+            </tr>
+            <tr>
+                <td><code>1000 IOLIST A$,A1$,A2$,A3$,A4$,A5$,A6$,A7$,A8$,A9$,A0$,A[ALL]<br />		1010 CALL "CDS036",ERR=1010,Y$,UD10,A$,"E"; REM "Retry if 
+		record is locked<br />		1015 EXTRACT (UD10,KNUM=0,KEY=A$)IOL=1000<br />		1020 GOSUB MAPFIELDS</code>
+                    <p><code>1025 WRITE (UD10)IOL=1000<br />		1030 CALL "CDS036",Y$,UD10,A$,"W"; REM "Release lock 
+		control record</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Extract &amp; Write example using templated MKY file</th>
+            </tr>
+            <tr>
+                <td><code>1000 LET SO40.SONO$=&lt;Selected Order&gt;<br />		1010 CALL "CDS036",ERR=1020,Y$,SO40,SO40$,"E"; GOTO 1070<br />		1020 IF ERR&lt;&gt;11 THEN GOTO RESELECT<br />		1030 LET Z$=""; CALL "CDS069",1,1,0,0,"Sales order "+CVS(SO40.SONO$,3)+" 
+		is not on file, Add new order (Y/N)","AYN",0,Z$<br />		1040 IF Z$="N" THEN GOTO RESELECT<br />		1050 CALL "CDS036",Y$,SO40,SO40$,"e"; REM "This will write and extract 
+		the base SO40 record, and write and extract the Lock Control Record.<br />		1060 GOSUB NEWORDER<br />		1070 GOSUB EXISTINGORDER<br />		1080 CALL "CDS036",Y$,SO40,SO40$,"W"; REM "This writes out SO40 and 
+		releases Lock Control Record.</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table1" class="example">
+            <tr>
+                <th>Example using the file name instead of channel#.</th>
+            </tr>
+            <tr>
+                <td>Original logic to extract the record.&#160; Branch to line 0410 if 
+		record is locked elsewhere.<p><code>0260 CALL 
+		"CDS036",ERR=0410,Y$,0,SO40$,"<span style="color: #FFFF00;">E</span>XXSO40"</code></p></td>
+            </tr>
+            <tr>
+                <td>Update the record, but don't release the EXTRACT to store 
+		intermediate results:<p><code>0290 CALL "CDS036",Y$,0,SO40$,"<span style="color: #FFFF00;">U</span>XXSO40"</code></p></td>
+            </tr>
+            <tr>
+                <td>Perform the final write and release the extracted record:<p><code>
+		1440 CALL "CDS036",Y$,0,SO40$,"<span style="color: #FFFF00;">W</span>XXSO40"</code></p></td>
+            </tr>
+        </table>
+        <p>Replace normal MKY write: <code>WRITE RECORD(CM01)CM01$</code> with <code>
+CALL "CDS036",Y$,CM01,CM01$,"W"</code></p>
+        <p>Replace remove of SKY, DIR, SRT, or MKY file: <code>REMOVE (CM01,KEY=K$)</code> 
+with <code>CALL "CDS036",Y$,CM01,K$,"R"</code></p>
+        <p>Templated remove to MKY file can also be done passing a populated <code>REC$</code> as in <code>
+CALL "CDS036",Y$,CM01,CM01$,"R"</code></p>
+        <p>When writing to a DIR file or an SKY file that has a non-zero characters per 
+record, you must do the <code>WRITE</code> in the calling 
+program, then call CDS036 to remove the Lock Control Record and to log the record so that it will be transmitted to 
+another system if required:<br /><code>WRITE RECORD (UD44,KEY=K$)REC$</code> or <code>WRITE (UD44,KEY=K$)IOL=0140<br /></code>follow with:<br /><code>CALL "CDS036",Y$,UD44,K$,"W"<br /></code>Note that in this case, you pass the key value (<code>K$</code>) to CDS036 and not the 
+data record (<code>REC$</code>).</p>
+        <p>
+            <MadCap:keyword term="SRT file" />When writing to a SRT file or a SKY file with zero character per record, the 
+<code>WRITE</code> is not required in the application program.<br /><code>CALL "CDS036",Y$,US42,K$,"W"</code> will log the file write (if 
+applicable), and remove the Lock Control Record (if applicable).</p>
+        <h5>Background Tasks</h5>
+        <p>A background task would be any process that does not have a display device 
+including a real background task, a dynaweb process, a bbj stored procedure or 
+trigger, etc.</p>
+        <p>When CDS036 is called from a non-background task to EXTRACT a record, it will 
+return the record in use message immediately, and not wait the default 10 
+seconds that the EXTRACT continues to retry by default.</p>
+        <p>When CDS036 is called from a background task to EXTRACT a record, it will 
+continue trying for 60 seconds.&#160; If the record remains locked for 60 
+seconds, CDS036 will exit with ERR=0.&#160; In most cases the calling 
+application will take the ERR= branch on the CALL to CDS036 and retry the same 
+line of code.&#160; The application can change the ERR= to other appropriate 
+logic when special handling is needed to handle the situation where the desired 
+record is EXTRACTed by another session.</p>
+    </body>
+</html>

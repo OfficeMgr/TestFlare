@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="636" MadCap:lastWidth="941">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS186 - Post message to BBj Standard Error Log File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS186</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Post message to Log File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS186">Last Revised: 
+10/21/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be used to post a message to a log file.</p>
+        <p class="SectionDesc">For applications running in bbj, the message is posted to the BBJ Debug log which is typically named <code>/u/basis/bbj/log/Debug.log.YYYY-MM-DD.N</code>.&#160; You can easily display 
+this log using the Basis Enterprise Manager or by logging directly into the server.&#160; 
+This log file is rotated and purged automatically by bbj services.</p>
+        <p class="SectionDesc">For bbx background tasks started with the Dynamo Tools background script, the 
+message is added to the <code>$SMSDIR/log/bkg</code> file.&#160; The default log file name can be overridden by an argument passed to the background script. On linux servers, the default log 
+file is rotated by the standard linux log rotation utility.</p>
+        <p class="SectionDesc">For bbx background tasks not started with the Dynamo 
+Tools background script, the message will be sent to standard out which is 
+typically re-directed to a user specified log file.</p>
+        <p>This program is useful when debugging bbj stored procedures, triggers, and 
+bbx background tasks.&#160; The Dynamo Tools error routine calls CDS186 to record error 
+information that occur in bbj background tasks.</p>
+        <p>If called from a bbx foreground task, no logging occurs, and CDS186 exits 
+silently.</p>
+        <p>The date, time, process ID, workspace program name, and operator ID are also added to 
+the log, so this information does not need to be included in <code>MSG$</code>.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS186", MSG$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS186 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>MSG$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Optional message to be appended to the log file</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS186","CC="+Y.COMPCODE$+", Item#="+ITEMNO$+", Cust#="+CUSTNO$+", Date="+DAT$+", 
+Qty="+STR(QTY)</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Output</td>
+            </tr>
+            <tr>
+                <td><code>Fri Feb 19 16:25:46 PID=12345 Prog=IM610SP User=vizion<br />CC=ME, Item#=1701, Cust#=5506, 
+Date=, Qty=1</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

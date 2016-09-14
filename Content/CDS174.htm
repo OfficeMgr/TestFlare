@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS174 - Return Program Stack</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS174</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return Called Program Stack</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS174">Last Revised: 02/23/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to return the current stack of called programs.&#160; It can also be used to count the number of times a routine is called from the same set of calling programs.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS174", S174$ {, LOG}</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS174 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S174$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Templated data structure that includes:
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" width="100%"><tr><td><code>LEVELS</code></td><td>The depth of the Called Program Stack</td></tr><tr><td><code>PROG[LEVELS]</code></td><td>The program name called at each level.&#160; Level 1 is the workspace program.&#160; Level 2 would be the first program called by the workspace program.&#160; Level 3 would be the program called by the Level 2 program, etc.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>LOG</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111">
+                        <tr>
+                            <td align="center">Not Passed</td>
+                            <td>No logging</td>
+                        </tr>
+                        <tr>
+                            <td align="center">0</td>
+                            <td>Clear log.&#160; The log is stored in global variable <code>SMS_CDS174</code>.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">1</td>
+                            <td>Log this Called Program Stack</td>
+                        </tr>
+                        <tr>
+                            <td align="center">2</td>
+                            <td>Return Log in <code>S174$</code><table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111"><tr><td><code>S174.STACKS</code></td><td>Number of different ways that the program was called</td></tr><tr><td><code>S174.TIMES[STACKS]</code></td><td>Number of times that program stack called the program that called CDS174</td></tr><tr><td><code>S174.STACK$[STACKS]</code></td><td>Space separated list of called programs, starting with the workspace program</td></tr></table></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS174",S174$<br />
+CALL "CDS279",S174$<br /><br /><span style="background-color: #800000;"><span style="color: #FFFF00;">&#160;LEVELS&#160;&#160;4&#160;&#160;&#160;&#160;&#160;&#160;</span></span><br /><span style="color: #FFFF00;">&#160;PROG[1]&#160;CDS028&#160;</span><br /><span style="color: #FFFF00;">&#160;PROG[2]&#160;CDS550&#160;</span><br /><span style="color: #FFFF00;">&#160;PROG[3]&#160;CM036&#160;&#160;</span><br /><span style="color: #FFFF00;">&#160;PROG[4]&#160;CDS039&#160;</span><br /></code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" width="100%" class="example">
+            <tr>
+                <td width="100%">Example with logging</td>
+            </tr>
+            <tr>
+                <td width="100%">Initialize log:</td>
+            </tr>
+            <tr>
+                <td width="100%"><code>CALL "CDS174",S174$,0</code>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">Within the called program (CDS039 in this example):</td>
+            </tr>
+            <tr>
+                <td width="100%"><code>CALL "CDS174",S174$,1</code>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">At the end of the job:</td>
+            </tr>
+            <tr>
+                <td width="100%"><code>PRINT STBL("SMS_CDS174")</code>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%"><code>&#160;&#160;&#160;&#160;&#160;1CDS028&#160;CDS550&#160;CM010 CDS039<br />
+&#160;&#160;&#160;&#160;&#160;1CDS028&#160;CDS550 CM011&#160;CDS039<br />
+&#160;&#160;&#160;&#160;&#160;6CDS028&#160;CM037&#160;CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;CDS468&#160;CDS039<br />
+&#160;&#160;&#160;&#160;&#160;1CDS028&#160;CM037 CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;SW109&#160;CDS039<br />
+&#160;&#160;&#160;&#160;&#160;8CDS028&#160;CM037&#160;CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;CDS039<br />
+&#160;&#160;&#160;&#160;20CDS028&#160;CDS550&#160;CDS039<br />
+&#160;&#160;&#160;&#160;&#160;1CDS028&#160;CDS550&#160;CM036&#160;CDS039</code>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">Format &amp; Display Log:</td>
+            </tr>
+            <tr>
+                <td width="100%"><code>CALL "CDS174",S174$,2<br />
+CALL "CDS279",S174$</code>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%"><code><br /><span style="background-color: #800000;">&#160;<span style="color: #FFFF00;">STACKS&#160;&#160;&#160;7</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;&#160;&#160;</span><br />
+&#160;<span style="color: #FFFF00;">COUNT[1]&#160;1</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[2]&#160;1</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[3]&#160;6</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[4]&#160;1</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[5]&#160;8</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[6]&#160;20</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">COUNT[7]&#160;1</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[1]&#160;CDS028&#160;CDS550 CM010&#160;CDS039</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[2]&#160;CDS028&#160;CDS550&#160;CM011&#160;CDS039</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[3]&#160;CDS028&#160;CM037 CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;CDS468 CDS039</span>&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[4]&#160;CDS028&#160;CM037 CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;SW109 CDS039</span>&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[5]&#160;CDS028&#160;CM037 CM109&#160;CDS352&#160;CM110&#160;CDS550&#160;CDS039</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[6]&#160;CDS028&#160;CDS550 CDS039</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<br />
+&#160;<span style="color: #FFFF00;">STACK[7]&#160;CDS028&#160;CDS550 CM036&#160;CDS039</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;<br /></code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

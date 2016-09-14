@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="1672" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS049 - Multiple File Verified Entries</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS049" />CDS049</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Multiple File Verified Entries" />Multiple File Verified Entries</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS049">Last Revised: 12/22/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be called to prompt the operator to enter one or more file verified entries.&#160; For example, CDS049 could be used to enter a series of state/country codes, product classes, salesman numbers, etc.</p>
+        <p>All entries take place within a window displayed by CDS049.</p>
+        <p>Calling Format:</p>
+        <p><code><MadCap:keyword term="Title" />CALL "CDS049", MN, MX, XP, YP, TITLE$, TYP$, OUT$, FILNM$, FLD, OFF, LGTH 
+	{, PRFX$}</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS049</th>
+            </tr>
+            <tr>
+                <td><code>MN</code>
+                </td>
+                <td>minimum value or length</td>
+            </tr>
+            <tr>
+                <td><code>MX</code>
+                </td>
+                <td>maximum value or length</td>
+            </tr>
+            <tr>
+                <td><code>XP</code>
+                </td>
+                <td>window column position<br />      If XP and YP are passed as zero, CDS049 will determine window position</td>
+            </tr>
+            <tr>
+                <td><code>YP</code>
+                </td>
+                <td>
+                    <p>window row position<br />        If XP and YP are passed as zero, CDS049 will determine window position</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>PROMPT$</code>
+                </td>
+                <td>prompt used for entry, and window title followed by " Selection"</td>
+            </tr>
+            <tr>
+                <td><code>TYP$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CDS069" />The entry type can be either a simple CDS069 data entry type such as 
+		A, L, R, 000, etc., or a complete CDS069 data entry type including 
+		verification parameters such as <code>PFA{DYSW03,NAME,,,R}</code>.&#160; 
+		When <code>TYP$</code> includes all verification parameters, then the 
+		arguments<code> FILNAM$</code>, <code>FLD</code>, <code>OFF</code>, and
+		<code>PRFX$</code> are not used.</td>
+            </tr>
+            <tr>
+                <td><code>DTA$</code>
+                </td>
+                <td>Returned data. If passed to CDS049, then the initial window will display the passed data. All entries made will be concatenated together to form
+		<code>DTA$</code>.&#160; <code>DTA$</code> does not include any related 
+		field displayed.</td>
+            </tr>
+            <tr>
+                <td><code>FILNM$</code>
+                </td>
+                <td>Name of the file for verification.&#160; Not used when <code>TYP$</code> 
+		contains file name.</td>
+            </tr>
+            <tr>
+                <td><code>FLD</code>
+                </td>
+                <td>The field number of the related field to display.&#160; Only applies 
+		to traditional field number based records.&#160; Use complete version of
+		<code>TYP$</code> when using string templates.</td>
+            </tr>
+            <tr>
+                <td><code>OFF</code>
+                </td>
+                <td>The starting position or offset for the related field to be displayed.&#160; 
+		Only applies to traditional field number based records.&#160; Use 
+		complete version of <code>TYP$</code> when using string templates.</td>
+            </tr>
+            <tr>
+                <td><code>LGTH</code>
+                </td>
+                <td>Maximum number of characters to display of the related field.&#160; 
+		This is also used to determine the size of the entry window.</td>
+            </tr>
+            <tr>
+                <td><code>PRFX$</code>
+                </td>
+                <td>A prefix to the key in the related file which would be required when the entered data is not the only key segment of the file.&#160; 
+		Not used when TYP$ contains all verification parameters.</td>
+            </tr>
+        </table>
+        <p>Since the parameters to CDS049 parallel those of CDS069, refer to the documentation on <a href="CDS069.htm">CDS069</a> for additional details.</p>
+        <table border="1" id="table1" class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td>To enter one or more state/country codes</td>
+            </tr>
+            <tr>
+                <td>Traditional field based file where the state name is in field 2, 
+		beginning at position 1, for a length of 27 characters.<br /><code>CALL "CDS049",2,2,0,0,"State/Country Code","A",DTA$,"DISM00",2,1,27</code></td>
+            </tr>
+            <tr>
+                <td>Template based file where state name is NAME.<p><code>CALL 
+		"CDS049",2,2,0,0,"State/Country Code","PFA{DYSW03,NAME,,,R}",DTA$,"",0,0,27</code></p></td>
+            </tr>
+            <tr>
+                <td>To enter one or more product classes</td>
+            </tr>
+            <tr>
+                <td>Traditional field based file where the product class description is 
+		in field 2, beginning at position 1, for a length of 30 characters.<p><code>CALL "CDS049",1,3,0,0,"Product Class","R",OUT$,"XXUD27",2,1,30</code></p></td>
+            </tr>
+            <tr>
+                <td>Template based file where the Product Class Description DESC.<p><code>CALL "CDS049",1,3,0,0,"Product Class","PFR{XXIM27,DESC,,,R}",OUT$,"",0,0,30</code></p></td>
+            </tr>
+        </table>
+        <p><code><br /></code>
+            <img border="0" src="images/CDS0491.jpg" />
+        </p>
+    </body>
+</html>

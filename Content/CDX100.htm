@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="11" MadCap:lastHeight="3924" MadCap:lastWidth="949">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDX100 - T-Type external routines</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDX100</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">T-Type External Routines</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDX100">Last Revised: 
+		05/05/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">When special processing is required to enter, display, or validate a field, an external template based callable routine (T-
+	type external routine) can be written.&#160; When interfaced to the Dynamo Data Dictionary, these routines will be called to display, enter, and print records when using the View Manager 
+	<a href="CDS550.htm">CDS550</a>,&#160;or HTML View Manager <a href="CDW550.htm">CDW550</a>. File Maintenance and other application programs call 
+	<a href="CDS550.htm">CDS550</a> to display and manage standard views. <a href="CDS555.htm">CDS555</a> can also call T-Type routines to perform custom data validation.</p>
+        <p>The T-type external routine is recommended over the deprecated C-type and X-type routines.&#160; The primary advantage of the T-type routine, is that the entire record template is passed to the external routine.&#160; The routine can access and even change other fields in the record.</p>
+        <p>There is an example program named CDX100 included with Dynamo Tools that can be copied and used as a template when writing T-Type routines.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDX100", S039$, REC$, X100$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDX100 Arguments</th>
+            </tr>
+            <tr>
+                <th>Field</th>
+                <th>Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>S039$</code>
+                </td>
+                <td align="center">To</td>
+                <td>All parameters for entry and display. See <a href="CDS039.htm">CDS039</a>.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>REC$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>The templated record containing the field to be displayed, entered or printed.&#160; The primary data element used is <code>FIELD(REC$,S039.FLDNAM$,S039.INDEX)</code> or <code>NFIELD(REC$,S039.FLDNAM$,S039.INDEX).</code></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>X100$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>
+        T-type external routine parameters
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1" class="lev2"><tr><th>Field</th><th>Passed To/From</th><th>Description</th></tr><tr><td><code>ACTION$</code></td><td align="center">To/From</td><td>
+              Code to control action that external routine will take.
+
+              <table><tr><th nowrap="" style="text-align: center;">Value</th><th>Description</th></tr><tr><td align="center">B</td><td>The external routine is called with <code>X100.ACTION$="B"</code> when building the display background.&#160; If the routine requires more than one display row, or requires additional text to display on the screen background, then the routine should populate <code>X100.ROWS</code> and <code>X100.BKGFLD$</code>, otherwise the external routine can simply <code>EXIT</code>.</td></tr><tr><td align="center">blank</td><td>Routine should perform any data entry. Note that some T Type routines are used for display only and not used for data entry.</td></tr><tr><td align="center">Q</td><td>Routine should display data</td></tr><tr><td align="center">P</td><td>Routine should return data in <code>X100.OUT$</code> for printing 
+					and should include the cursor positioning expression<code>
+				@(S039.COL,s039.ROW)</code>.</td></tr><tr><td align="center">W</td><td>Routine should return data in <code>X100.OUT$</code> for 
+					display on a web page which cannot include any cursor 
+					positioning expression.</td></tr><tr><td align="center">H</td><td>Routine should return HTML in <code>X100.OUT$</code> that 
+					can be used for data entry on a web page.&#160; Typically 
+					this would include &lt;input&gt; or &lt;select&gt; tag or possibly even 
+					check boxes, radio buttons, or drop down lists.</td></tr><tr><td align="center">V</td><td>Routine should validate data and return any error message in <code>X100.VAL$</code>. The routine can also modify the data. See <a href="CDS555.htm">CDS555</a>.</td></tr><tr><td align="center">R</td><td>Set by the external routine when it changes other fields 
+					in the view to signal view manager <a href="CDS550.htm">
+					CDS550</a> to re-display the view.</td></tr></table></td></tr><tr><td><code>ROWS</code></td><td align="center">From</td><td>In most cases you do not need to set <code>X100.ROWS</code>.&#160; 
+ It can be set to the number of display rows required by this T-type 
+ routine, when the number of rows cannot be determined by counting 
+ the pipe symbols contained in <code>X100.OUT$</code> when <code>X100.ACTION$</code> 
+            is passed as B.</td></tr><tr><td><code>OUT$
+</code></td><td align="center">From</td><td><table><col /><col /><tbody><tr><th style="text-align: center;"><code>X100.ACTION$</code></th><th>T-Type routine should set <code>X100.OUT$</code> to</th></tr><tr><td style="text-align: center;" class="code">B</td><td>Background text that the view must display in addition to the Description field specified in the Data Dictionary. &#160;Note that if the Description field is null, then the Title field is used. This field can contain mnemonics such a <code>'BU'</code> and <code>'EU'</code> as well as cursor positioning expressions <code>@(col,row)</code>.</td></tr><tr><td style="text-align: center;" class="code">P</td><td>Text that can be printed to a printer or other output device. This field can contain mnemonics such a <code>'BU'</code> and <code>'EU'</code> as well as cursor positioning expressions <code>@(col,row)</code>.</td></tr><tr><td style="text-align: center;" class="code">W</td><td>HTML&#160;when displaying a view on a web page. Can include any valid html tags to set text and background colors, include hyperlinks, etc</td></tr><tr><td style="text-align: center;" class="code">H</td><td>HTML when entering this field within an html form</td></tr><tr><td style="text-align: center;" class="code">V</td><td>Validation error message</td></tr></tbody></table></td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>The lines in yellow are intended to be modified or removed</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>0100 REM "CDX100 - 05/03/14 Template for T-type external routine</code>
+                    </p>
+                    <p><code>0110 SETESC 8000; SETERR 8000</code>
+                    </p>
+                    <p><code>0120 ENTER S039$,REC$,X100$</code>
+                    </p>
+                    <p><code>0130 ON POS(X100.ACTION$="BQPWHV") GOSUB ENTRY,BKG,DISPLAY,PRINT,WEB,WEBINPUT,</code><code>VALIDATE</code>
+                    </p>
+                    <p><code>0140 EXIT</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1000 ENTRY:</code>
+                    </p>
+                    <p style="color: #ffff00;"><code style="color: #ffff00;">1010 LET S039.TYPE$="A"</code>
+                    </p>
+                    <p style="color: #ffff00;"><code style="color: #ffff00;">1020 CALL "CDS039",S039$,REC$</code>
+                    </p>
+                    <p><code>1090 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>110</code><code>0 BKG:</code>
+                    </p>
+                    <p><code style="color: #ffff00;">1110 IF MULTIPLE_ROWS THEN LET X100.ROWS=6</code>
+                    </p>
+                    <p><code style="color: #ffff00;">1120 IF ROW_TEXT THEN LET X100.OUT$="| 2nd field row| 3rd field row"</code>
+                    </p>
+                    <p><code>1190 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1200 DISPLAY:</code>
+                    </p>
+                    <p><code>1210 GOSUB PRINT</code>
+                    </p>
+                    <p><code>1220 PRINT X100.OUT$,</code>
+                    </p>
+                    <p><code>1290 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1300 PRINT:</code>
+                    </p>
+                    <p><code>1310 LET X100.OUT$=@(S039.COL,S039.ROW)+FIELD(REC$,S039.FLDNAM$,S039.INDEX)</code>
+                    </p>
+                    <p><code>1390 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1400 WEB:</code>
+                    </p>
+                    <p><code>1410 GOSUB WEBTXT</code>
+                    </p>
+                    <p><code style="color: #ffff00;">1420 IF WHITE_ON_RED</code><code style="color: #ffff00;"> THEN </code><code style="color: #ffff00;">LET TXT$="&lt;div style='color:white;background-color:red'&gt;"+TXT$+"&lt;/</code><code style="color: #ffff00;">div&gt;"</code>
+                    </p>
+                    <p><code>1430 LET X100.OUT$=TXT$</code>
+                    </p>
+                    <p><code>1490 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1500 WEBINPUT:</code>
+                    </p>
+                    <p><code>1510 GOSUB WEBTXT</code>
+                    </p>
+                    <p><code>1520 LET X100.OUT$="&lt;input type='text' name='"+S039.FLDNAM$+"' value='"+TXT$+</code><code>"'&gt;"</code>
+                    </p>
+                    <p><code>1590 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1600 WEBTXT:</code>
+                    </p>
+                    <p><code>1610 LET TXT$=FIELD(REC$,S039.FLDNAM$,S039.INDEX)</code>
+                    </p>
+                    <p><code>1620 CALL "SW002::XML",TXT$</code>
+                    </p>
+                    <p><code>1630 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>1700 VALIDATE:</code>
+                    </p>
+                    <p><code style="color: #ffff00;">1710 IF DATA_IS_INVALID THEN LET X100.OUT$="Data is not valid"</code>
+                    </p>
+                    <p><code>1790 RETURN</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>8000 REM "Call Error/Escape Routine</code>
+                    </p>
+                    <p><code>8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)</code>
+                    </p>
+                    <p><code>8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060</code>
+                    </p>
+                    <p><code>8030 SETERR 0</code>
+                    </p>
+                    <p><code>8040 RETRY</code>
+                    </p>
+                    <p><code>8050 RETURN</code>
+                    </p>
+                    <p><code>8060 RETRY</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>9000 EOJ:</code>
+                    </p>
+                    <p><code>9010 IF TCB(13) THEN EXIT</code>
+                    </p>
+                    <p><code>9020 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>This example is taken from Dynamo where a piece of rental machinery may have a fuel tank. If a fuel tank capacity is entered, then the operator should also be prompted for the fuel type. This is an example where two data fields are entered within a single T-type called routine.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><code>0100 REM "IM003 - 04/16/08 Fuel Capacity &amp; Type (T)</code>
+                        </p>
+                        <p><code>0110 SETESC 8000; SETERR</code><code> 8000</code>
+                        </p>
+                        <p><code>0120 ENTER S039$,IM01$,X100$</code>
+                        </p>
+                        <p><code>0130 ON POS(X100.ACTION$="BQP") GOSUB ENTRY,BKG,DISPLAY,PRINT</code>
+                        </p>
+                        <p><code>0140 EXIT</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>1000 ENTRY:</code>
+                        </p>
+                        <p><code>1010 CALL "CDS039",0,0,S039.COL,S039.ROW,"+fuel capacity",DISP$+"##",IM01$,
+     "FUELCAPACITY"</code>
+                        </p><pre xml:space="preserve"><code>1020 IF IM01.FUELCAPACITY
+        THEN</code></pre><pre xml:space="preserve"><code>           CALL "CDS039",1,1,S039.COL+3,S039.ROW,"+fuel type",DISP$+"A{|,2,|,R,
+           ,Y}GGasoline|DDiesel",IM01$,"FUELTYPE"</code></pre><pre xml:space="preserve"><code>        ELSE
+           IF IM01.FUELTYPE$&lt;&gt;" "
+         </code><code>    THEN</code></pre><pre xml:space="preserve"><code>
+                 LET IM01.FUELTYPE$=" ";
+                 PRINT @(S039.COL+3,S039.ROW),'CL',</code></pre>
+                        <p><code>1090 RETURN</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>1100 BKG:</code>
+                        </p>
+                        <p><code>1110 RETURN</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>1200 DISPLAY:</code>
+                        </p>
+                        <p><code>1210 LET DISP$="Q"</code>
+                        </p>
+                        <p><code>1220 GOSUB ENTRY</code>
+                        </p>
+                        <p><code>1230 RETURN</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>1300 PRINT:</code>
+                        </p>
+                        <p><code>1320 RETURN</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>8000 REM "Call Error/Escape Routine</code>
+                        </p>
+                        <p><code>8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)</code>
+                        </p>
+                        <p><code>8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060</code>
+                        </p>
+                        <p><code>8030 SETERR 0</code>
+                        </p>
+                        <p><code>8040 RETRY</code>
+                        </p>
+                        <p><code>8050 RETURN</code>
+                        </p>
+                        <p><code>8060 RETRY</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>9000 EOJ:</code>
+                        </p>
+                        <p><code>9010 IF TCB(13) THEN EXIT</code>
+                        </p>
+                        <p><code>9020 RUN "CDS001"</code>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

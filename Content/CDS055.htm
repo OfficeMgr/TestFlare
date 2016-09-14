@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="2642" MadCap:lastWidth="730">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS055 - Date Conversion Routine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS055" />CDS055</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Date" />
+                        <MadCap:keyword term="Date Conversion Routine" />Date Conversion Routine</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS055">Last Revised: 11/16/15</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to convert a date to different 
+ display formats.&#160; For web applications, see <a href="CDW055.htm"><MadCap:keyword term="CDW055" />CDW055</a> which formats dates entered during a web form.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS055", <a href="#DIN$">DIN$</a>, <a href="#DAT$[_]">DAT$[ALL]</a></code>
+        </p>
+        <p>
+            <MadCap:keyword term="Julian date" />You do not need to pre-dimension<code> DAT$[ ] </code>before calling.&#160; Excellware 
+	recommends that all dates be stored in julian format.&#160; If using 
+	templates, store julian dates in a U(3) format otherwise use an N(7) format.</p>
+        <p>
+            <MadCap:keyword term="BBx" />
+            <MadCap:keyword term="BBj" />Note that Dynamo Tools use a slightly different convention for an 
+	unassigned date field than the BBx/BBj <code>DATE()</code> function.&#160; Dynamo Tools 
+	considers a zero value julian date field as unassigned.&#160; BBx treats a 
+	zero value julian date as today's date, and uses a negative one value to 
+	mean unassigned.&#160; Dynamo Tools uses zero as unassigned so that 
+	dimensioning a string template that contains date fields does not require 
+	setting each date field to negative one.</p>
+        <table>
+            <tr>
+                <th colspan="2">
+		CDS055 Arguments</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="DIN$"></a>DIN$</td>
+                <td>
+        the input date to be converted, which can be in any of the following formats:<br />&#160;<p>3 character julian date in U(3) format</p><p>4 character date in YYYYMMDD format packed using PCK()</p><p>5 or 6 character Microsoft serial number date</p><p>6 character date in YYMMDD format</p><p>6 character date in MAS90 format</p><p>7 digit BBx julian date</p><p>8 character date in MM/DD/YY format, or MMDDYYYY format, or YYYYMMDD 
+		format</p><p>10 character date in either MM/DD/YYYY or YYYY-MM-DD format</p><p>CDS055 will automatically determine the input format used.</p><p>If the input date <code>DIN$</code> is passed as null, then today's date is used as the input date.&#160; 
+		This is the only situation where today's date is used.</p><p>If the input date <code>DIN$</code> is not any of the formats listed, or if the input date <code>DIN$</code> is all blank 
+ or all zero's, or if <code>DIN$</code> is not a valid date, then no error will be generated and the output array will be all null strings.</p></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="DAT$[_]"></a>DAT$[ALL]</td>
+                <td>
+        Output string array assigned using the formats shown below.<table class="lev2"><tr><td class="nowrapcode">DAT$[0]</td><td>MM/DD/YY</td></tr><tr><td class="nowrapcode">DAT$[1]</td><td>YYMMDD</td></tr><tr><td class="nowrapcode">DAT$[2]</td><td>BBx Julian format (7 digits)</td></tr><tr><td class="nowrapcode">DAT$[3]</td><td>Day of week - long: Monday</td></tr><tr><td class="nowrapcode">DAT$[4]</td><td>Day of week - short: Mon</td></tr><tr><td class="nowrapcode">DAT$[5]</td><td>Display format - long: May 3, 1990</td></tr><tr><td class="nowrapcode">DAT$[6]</td><td>MAS90 format which is a modified YYMMDD where YY is coded to permit years beyond 2000. 1996 for example is represented by "?,"</td></tr><tr><td class="nowrapcode">DAT$[7]</td><td>Microsoft serial number date masked with ###### where 1 is 1/1/1900</td></tr><tr><td class="nowrapcode">DAT$[8]</td><td>YYYYMMDD packed into 4 characters using PCK()</td></tr><tr><td class="nowrapcode">DAT$[9]</td><td>YYYYMMDD</td></tr><tr><td class="nowrapcode">DAT$[10]</td><td>YYYY-MM-DD typically used with SQL&#160;and JSON</td></tr><tr><td class="nowrapcode">DAT$[11]</td><td>MM/DD/YYYY</td></tr></table></td>
+            </tr>
+        </table>
+        <p>Y2K Considerations: This program as well as all Dynamo Tools, uses a sliding window to determine the full 4 digit year. Since the input routine does not allow for entry of the full 4 digit year, the full 4 digit year must be assumed.</p>
+        <p>The rule that is used on BBx Progression 4, was a fixed window, where any year less than 50, is considered 20xx, and any year 50 to 99 was considered 19xx.</p>
+        <p>The PRO/5 and BBj version of these programs permit entries of years up to 9 years in the future, and 90 years in the past. For example, if today is 02/14/99, then 2 digit years of 00,01,02,03,04,05,06,07 and 08 will be considered 20xx.&#160; All others are considered 19xx.&#160; If today is 02/14/2010, then 2 digit years of 00 through 19 will be considered 20xx.&#160; All others are considered 19xx.</p>
+        <p>Note that it is only possible to convert a date prior to 90 years ago, or after 9 years from this year, using the Julian format or one of the formats that include a 4 digit year.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table4" class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS055","04/15/05",DAT$[ALL]<br />&gt;WRITE DAT$[ALL]<br />04/15/05<br />050415<br />2453476<br />Friday<br />Fri<br />April 15, 2005<br />?50415
+  <br /> 38457<br />4%$/<br />20050415<br />2005-04-15<br />04/15/2005</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS055",STR(JUL(2004,12,31)),DAT$[ALL]<br />&gt;WRITE DAT$[ALL]<br />12/31/04<br />041231<br />2453371<br />Friday<br />Fri
+December 31, 2004<br />?41231<br /> 38352<br />4$,?<br />20041231<br />2004-12-31<br />12/31/2004</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS055","20050315",DAT$[ALL]<br />&gt;WRITE DAT$[ALL]<br />03/15/05<br />050315<br />2453445<br />Tuesday<br />Tue
+March 15, 2005<br />?50315<br /> 38426<br />4%#/<br />20050315<br />2005-03-15<br />03/15/2005</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>&gt;CALL "CDS055","050228",DAT$[ALL]<br />&gt;WRITE DAT$[ALL]<br />02/28/05<br />050228<br />2453430<br />Monday<br />Mon
+February 28, 2005<br />?50228<br /> 38411<br />4%"&lt;<br />20050228<br />2005-02-28<br />02/28/2005</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

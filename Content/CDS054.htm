@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1594" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS054 - Window Text - Copy/ Delete</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS054" />CDS054</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Copy" />
+                        <MadCap:keyword term="Delete" />Window Text - Copy/Append/Delete</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS054">Last Revised: 02/16/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be used to copy/append and/or delete window 
+based text created with the W type option of <a href="CDS069.htm">CDS069</a>. It 
+is strongly suggested that you use this routine to copy or delete window based 
+text, since there are data structure changes planned to support new features of 
+window based text. Hardcoded logic to copy or delete may fail when these new 
+features are implemented.</p>
+        <p>
+            <MadCap:keyword term="File Utility" />Window Text is also frequently called Notepad text.</p>
+        <p>Due to the structure of window text files, you cannot simply move the file 
+using the File Utility when it becomes necessary to increase the text ID size or 
+the characters per record. Instead, define the new file with the keysize and 
+characters per record required, then use CDS054 to transfer the data to the new 
+file.</p>
+        <p>Window text files use multiple records to store text. Each record has a 
+single character suffix, in addition to the text ID. This limits the text for 
+each text ID to be 256 records.&#160; Window text files can be defined with any 
+characters per record, but the characters per record will limit the total size 
+of the text.&#160; For most text files, setting the characters per record to 128 
+will provide for over 250 lines of text with some use of attributes (bold, 
+underline, etc.).&#160; In some cases, the text might require more than 250 
+lines, in which case you would set the characters per record to 256, 512, 1024 
+or even larger.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS054", Y$, CHAN, TEXTID$, { NEWID$, NEWCHAN, HEADING$ 
+}</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS054</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>session control variable</td>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td>Channel number of window based text file opened by calling program</td>
+            </tr>
+            <tr>
+                <td><code>TEXTID$</code>
+                </td>
+                <td>Copy 'from' text ID</td>
+            </tr>
+            <tr>
+                <td><code>NEWID$</code>
+                </td>
+                <td>Copy 'to' text ID.&#160; If not passed, or null, then copy from ID text will be deleted.&#160; 
+	Existing text with a textid of <code>NEWID$</code> will be deleted unless
+	<code>HEADING$</code> is passed as null, or with some value. The 'copy from' text is not altered when copying or appending. The original text can be deleted using another call to CDS054. See example below.</td>
+            </tr>
+            <tr>
+                <td><code>NEWCHAN</code>
+                </td>
+                <td>Channel number of copy 'to' file. If zero, or not passed to CDS054, then 
+	the text will be copied to the file opened to <code>CHAN</code>.</td>
+            </tr>
+            <tr>
+                <td><code>HEADING$</code>
+                </td>
+                <td>
+                    <table border="1" id="table3">
+                        <col />
+                        <col />
+                        <tr>
+                            <td>Not included in argument list</td>
+                            <td>Perform delete or copy</td>
+                        </tr>
+                        <tr>
+                            <td>Passed as null</td>
+                            <td>Append text with ID of <code>TEXTID$</code> to text with ID of
+			<code>NEWID$</code></td>
+                        </tr>
+                        <tr>
+                            <td>Passed as non-null text</td>
+                            <td>Append <code>HEADING$</code> to text of <code>NEWID$</code> 
+			followed by text of <code>TEXTID$</code><MadCap:keyword term="Date" />.&#160; Typically used to 
+			indicate the user and date the text was appended.&#160; Useful when 
+			a single notepad text contains a chronological listing of activity.&#160; 
+			See example.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <p>Note that when using the <code>NEWCHAN</code> option to copy text to another file, the new 
+file key size and/or characters per record may be different from the "copy from" file.</p>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td>Delete notepad text from file name XXCM06 with key of <code>CUSTNO$+"A"</code>:</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",CM06,"XXCM06","YNX"<br />		CALL "CDS054",Y$,CM06,CUSTNO$+"A"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Copy notepad text from file name XXCM06 with a key of <code>OLDCUSTNO$</code> to 
+		<code>NEWCUSTNO$</code>:</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",CM06,"XXCM06","YNX"<br />		CALL "CDS054",Y$,CM06,OLDCUSTNO$,NEWCUSTNO$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Copy notepad text with ID "1234" from file name XXCM06 to file 
+		XXVM06 with a new ID of "123456":</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",CM06,"XXCM06","YNX"</code>
+                    <p><code>CALL 
+		"CDS095",VM06,"XXVM06","YNX"<br />		CALL "CDS054",Y$,CM06,"1234","123456",VM06</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Append notepad text from file name XXCM06 with a key of <code>OLDCUSTNO$</code> 
+		to the same file with a key of <code>NEWCUSTNO$</code> without any separator between 
+		original and appended text, then remove notepad text of <code>OLDCUSTNO$</code>.</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>CALL "CDS095",CM06,"XXCM06","YNX"<br />		CALL "CDS054",Y$,CM06,OLDCUSTNO$,NEWCUSTNO$,0,""</code>
+                    </p><code>CALL&#160;"CDS054",Y$,CM06,OLDCUSTNO$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Append notepad text from a temporary file <code>FILNAM$</code> with a key of
+		<code>CBP$</code> 
+		to file RLSC06 with the same text ID with a separator between original 
+		and appended text showing the date and user who authored the appended 
+		text:</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS095",TMP,FILNAM$,"YNX"<br />		CALL "CDS095",SC06,"RLSC06","YNX"<br />		CALL "CDS054",Y$,TMP,CBP$,"",SC06,DATE(0:"%Ds %Mz/%Dz/%Yz")+" by Elsie 
+		Dawson"</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

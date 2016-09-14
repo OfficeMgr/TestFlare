@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="1870" MadCap:lastWidth="949">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS031 - Convert CSV String to Array</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS031" />CDS031</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="CSV" />
+                        <MadCap:keyword term="Convert CSV String" />Convert CSV String to Array</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS031">Last Revised: 05/20/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be used to convert a tab-separated, comma-separated, 
+or pipe-separated string into a string array.&#160; These CSV strings are often 
+created using a spreadsheet program or other data export tool.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS031", <a href="#REC$">CSV$</a>, <a href="#CVS"><MadCap:keyword term="CVS" />CVS</a>, 
+<a href="#FLD$[ALL]">FLD$[ALL]</a>, <a href="#FLDS">FLDS {</a>, FLDS$, CHAN }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS031</th>
+            </tr>
+            <tr>
+                <td><a name="REC$"></a><code>CSV$</code>
+                </td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td><code>CHAN</code>&#160;not passed</td>
+                                <td>Input string containing the separated fields. If passed as null then CDS031 will assume a single null string</td>
+                            </tr>
+                            <tr>
+                                <td><code>CHAN</code> passed</td>
+                                <td>Output string read from file opened to channel <code>CHAN.</code> Will be null when end of file is reached.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="CVS"></a>CVS</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="BBx" />used by CDS031 with the <code>CVS()</code> function when assigning fields, and should 
+ be set to the sum of the functions desired below. See <code>CVS()</code> in the 
+ BBx documentation for additional information<table><tr><td align="center">0</td><td>no action</td></tr><tr><td align="center">1</td><td>strip leading blanks</td></tr><tr><td align="center">2</td><td>strip trailing blanks</td></tr><tr><td align="center">4</td><td>convert to upper case</td></tr><tr><td align="center">8</td><td>convert to lower case</td></tr><tr><td align="center">16</td><td>replace non-displayable characters with blanks</td></tr><tr><td align="center">32</td><td>replace multiple spaces with a single space</td></tr><tr><td align="center">64</td><td>replace "," and "." characters with values specified in OPTS</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="FLD$[ALL]"></a><code>FLD$[ALL]</code>
+                </td>
+                <td>will be returned by CDS031 with one element of the array for each field 
+ in the record.&#160; The leading and trailing quotation marks will be 
+	removed from field that has a quotation mark at the beginning and at the end 
+	of the field.&#160; Since some export programs place quotes around strings, 
+	they often store a quote contained within the field as two quotes.&#160; 
+	CDS031 converts a pair of adjacent quote marks into a single quote mark.&#160; 
+	The first field is <code>FLD$[1]</code> and the last field is <code>FLD$[FLDS]</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="FLDS"></a><code>FLDS</code>
+                </td>
+                <td>set by CDS031 to the number of elements in the 
+	<code>FLD$[ALL]</code> array.</td>
+            </tr>
+            <tr>
+                <td><code>FLDS$</code>
+                </td>
+                <td>optional variable set by CDS031 which is similar to <code>FLD$[ALL]</code> except 
+	that it is in template format.&#160; The first field is <code>FLDS.FLD$[1]</code> and the 
+	last field is <code>FLDS.FLD$[FLDS]</code>.</td>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td>
+                    <p>Optional channel number which can be passed to CDS031 to have it perform the read operations to a string file used as input. Some CSV files include fields that have line feeds that within a quoted field indicating multiple lines of text. Since a line feed also separates records, filtering out these line feeds imbedded within a quotes field can be tricky. By passing <code>CHAN</code> instead of <code>CSV$</code>, CDS031 will read the file opened by the calling program to channel <code>CHAN</code>, and merge the multiple lines within a quoted field into a single field. You can use this option even when you do not expect to have line feeds imbedded within a single field.</p>
+                    <p>When the end of the file is reached, CDS031 will return <code>CSV$</code> as null.</p>
+                </td>
+            </tr>
+        </table>
+        <p>CDS031 determines the separation character automatically, which can be a tab <code>($09$)</code>, a comma, or the pipe <code>(|)</code> symbol.</p>
+        <p>When using comma separated fields, the field can contain commas if the field 
+starts and ends with a quotation mark.</p>
+        <p>It is generally preferred to use a tab as the field separator, as unlike a 
+comma or the pipe symbol, a field cannot contain the tab character.</p>
+        <table class="example">
+            <tr>
+                <td>Example using comma separator</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS031","123,456,789",0,FLD$[ALL]<br />		&gt;WRITE FLD$[ALL]<br />		123<br />		456<br />		789</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example using pipe separator</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS031","abc|d|efghi|jkl",4,FLD$[ALL],FLDS<br />		&gt;?FLDS<br />		4<br />		&gt;WRITE FLD$[ALL]<br />		ABC<br />		D<br />		EFGHI<br />		JKL</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example of a field that contains a pair of adjacent quotes</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CSV$="12"""" NAILS,1.23,SMALL"<br />		&gt;?CSV$<br />		12"" NAILS,1.23,SMALL<br />		&gt;CALL "CDS031",CSV$,0,FLD$[ALL],FLDS<br />		&gt;?FLDS<br />		3<br />		&gt;WRITE FLD$[ALL]<br />		12" NAILS<br />		1.23<br />		SMALL</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example using comma separator with a field that contains commas</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CSV$="""Cable, Parallel Printer, 6 ft"",7.50,33"<br />		&gt;?CSV$<br />		"Cable, Parallel Printer, 6 ft",7.50,33<br />		&gt;call "CDS031",CSV$,0,FLD$[ALL],FLDS<br />		&gt;?FLDS<br />		3<br />		&gt;WRITE FLD$[ALL]<br />		Cable, Parallel Printer, 6 ft<br />		7.50<br />		33</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

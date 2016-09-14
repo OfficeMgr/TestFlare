@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="14" MadCap:lastHeight="2309" MadCap:lastWidth="949">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS654 - Print Bar Code</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS654</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Print Barcode</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS654">Last Revised: 
+07/08/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called to print bar codes on PCL compatible printers.&#160; It supports Code 3 of 9, EAN (8 or 13 digits), UPC (6 or 12 digits), and Intelligent Mail Barcodes.</p>
+        <p>Also see <a href="CDS264.htm">CDS264</a> for printing Postnet Barcodes.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS654", ERR=XXXX, Y6$, S654$, TXT$ {,ZIP$}</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS654 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:
+<ul><li><code>Y6$</code> is not provided</li><li>Printer is not PCL compatible</li><li><code>S654$</code> not templated</li><li><code>S654.TYPE$</code> is not valid</li><li>for Intelligent Mail Barcodes
+<ul><li>The operating system is not 32 or 64 bit linux</li><li><code>TXT$</code> is not 20 digits long</li><li>one or more of the segments in <code>TXT$</code> is invalid</li><li><code>ZIP$</code> is not numeric or 0, 5, 9, or 11 digits</li></ul></li></ul><p>The operator will be prompted unless run from a background task.</p></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S654$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table1">
+                        <tr>
+                            <td><code>TYPE$</code>
+                            </td>
+                            <td>
+                                <table border="1" id="table2">
+                                    <tr>
+                                        <th style="text-align: center;">Code</th>
+                                        <th>Description</th>
+                                        <th style="text-align: center;">Length</th>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">3</td>
+                                        <td>Code 3 of 9</td>
+                                        <td align="center">any</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">E</td>
+                                        <td>European Article Number (EAN) 8 or 13 numeric digits</td>
+                                        <td align="center">8, 13</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">U</td>
+                                        <td>UPC (6 or 12 numeric digits)</td>
+                                        <td align="center">6, 12</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">I</td>
+                                        <td>Intelligent Mail Barcode</td>
+                                        <td align="center">31</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>TEXT$</code>
+                            </td>
+                            <td>
+                                <table border="1" id="table3">
+                                    <tr>
+                                        <td>Y</td>
+                                        <td>Print text below barcode</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>COL</code>
+                            </td>
+                            <td>Dot Column for top left corner of barcode (300 dots/inch)</td>
+                        </tr>
+                        <tr>
+                            <td><code>ROW</code>
+                            </td>
+                            <td>Dot Row for top left corner of barcode.</td>
+                        </tr>
+                        <tr>
+                            <td><code>HEIGHT</code>
+                            </td>
+                            <td>Optional height of barcode in dots.&#160; Defaults to 150, or 1/2".</td>
+                        </tr>
+                        <tr>
+                            <td><code>DCNB</code>
+                            </td>
+                            <td>Optional Dot Columns for Narrow Bar.&#160; Defaults to 2.&#160; Applies to all barcode types except Intelligent Mail Barcodes.</td>
+                        </tr>
+                        <tr>
+                            <td><code>W2NR</code>
+                            </td>
+                            <td>Optional ratio of Wide to Narrow Bar.&#160; Defaults to 2.&#160; Applies to Code 3 of 9 only.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>TXT$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Data to be encoded.
+<table border="1" id="table4"><tr><td><code>S254.TYPE$</code></td><td>Usage</td></tr><tr><td><p align="center"><code>3</code></p></td><td>The standard Code 3 of 9 character set only supports numbers (0-9), Upper Case Letters (A-Z), space, hyphen, dollar sign, slash, plus, and percentage.&#160; However CDS654 support the extended character set that includes all ASCII values from <code>$00$</code> to <code>$7F$</code>.&#160; Note that most bar code readers need to be configured to interpret the extended character set, otherwise they will return the two character code used to represent those characters not included in the standard character set.</td></tr><tr><td align="center"><code>E</code></td><td>8 or 13 numeric digits (last digit is the check digit)</td></tr><tr><td align="center"><code>U</code></td><td>6 or 12 numeric digits (last digit is the check digit)</td></tr><tr><td align="center"><code>I</code></td><td>20 digit tracking code consisting of
+<table border="1" id="table5"><tr><th>Name</th><th style="text-align: center;">Size</th><th style="text-align: center;">Note</th></tr><tr><td>Barcode Identifier</td><td align="center">2</td><td align="center"><p align="left">The Barcode Identifier is typically 00 and is used to define the 
+Optional Endorsement Line (OEL) Description.&#160; Click
+<a target="_blank" href="https://ribbs.usps.gov/intelligentmail_mailpieces/documents/tech_guides/BarcodeIdentifier.pdf">
+here</a> for more information.</p><div align="left"><table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111"><tr><td>00</td><td>Default - No OEL Information</td></tr><tr><td>10</td><td>Carrier Route, Enhanced Carrier Router, and Firm</td></tr><tr><td>20</td><td>5-digit Scheme</td></tr><tr><td>30</td><td>3-digit Scheme</td></tr><tr><td>40</td><td>Area Distribution Center</td></tr><tr><td>50</td><td>Mixed Area Distribution Center, Origin Mixed</td></tr></table></div></td></tr><tr><td>Service Type Identifier</td><td align="center">3</td><td align="center"><p align="left">The Service Type Identifier varies with the Class of Mail and 
+the Address Correction Option.&#160; Click
+<a target="_blank" href="https://ribbs.usps.gov/intelligentmail_mailpieces/documents/tech_guides/stid.pdf">
+here</a> for more details.</p></td></tr><tr><td>Mailer Identifier</td><td align="center">6 or 9</td><td align="center"><p align="left">The Mailer Identifier is a number assigned to the mailer by the 
+Post Office.&#160; The Mailer Identifier can be maintained using Company 
+Information Maintenance (SMC) and can be retrieved using
+<a target="_blank" href="SW005.htm">SW005</a> and referenced as <code>
+DD00.MAILERID$</code>.</p></td></tr><tr><td>Serial Number</td><td align="center">9 or 6</td><td align="center"><p align="left">The Serial# is a number assigned by the mailer that can be used 
+to uniquely identify the mail piece.</p></td></tr></table></td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ZIP$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>For Intelligent Mail Barcode only, <code>ZIP$</code> can be null, or be a 5 digit zip code, 9 digit zip code (zip+4), or 11 digit zip code (zip+4 followed by delivery point bar code#).</td>
+            </tr>
+        </table>
+        <p>Note that the Intelligent Mail Barcode option is currently only supported on 32 or 64-bit linux systems.&#160; It also requires that java be installed.</p>
+        <table class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td><code>2300 TEST:<br />2310 BEGIN<br />2320 CALL "CDS041","CDS654",S654$,"YY"<br />2330 LET S654.ROW=50<br />2340 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$<br />2350 LET S654.TYPE$="3",S654.TEXT$="Y",TXT$="ABC-%.$123",HEAD$="Code 3 of 9"<br />2360 CALL "CDS254",Y6$,"T0,"+STR(S654.ROW)+",3,,12,,4148",HEAD$<br />2370 LET S654.ROW=S654.ROW+45<br />2380 FOR HEIGHT=75 TO 150 STEP 75<br />2390 LET S654.HEIGHT=HEIGHT<br />2400 FOR COL=0 TO 1200 STEP 1200<br />2410 LET S654.COL=COL<br />2420 CALL "CDS654",Y6$,S654$,TXT$,ZIP$<br />2430 NEXT COL<br />2440 LET S654.ROW=S654.ROW+HEIGHT+60<br />2450 IF S654.TYPE$="I" THEN LET HEIGHT=150<br />2460 NEXT HEIGHT<br />2470 LET S654.ROW=S654.ROW+60<br />2480 IF S654.TYPE$="3" THEN LET S654.TYPE$="E",TXT$="00987448",HEAD$="EAN-8"; GOTO 2360<br />2490 IF S654.TYPE$="E" THEN LET S654.TYPE$="U",TXT$="012345678905",HEAD$="UPC"; GOTO 2360<br />2500 IF S654.TYPE$="U" THEN LET S654.TYPE$="I",TXT$="00040123456200800001",ZIP$="987654321", HEAD$="Intelligent Mail Barcode"; GOTO 2360<br />2510 CALL "CDS094",Y6$,"E"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Click <a href="reports/CDS654example1.pdf" target="_blank">here</a> for another example output</td>
+            </tr>
+        </table>
+    </body>
+</html>

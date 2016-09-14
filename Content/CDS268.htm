@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS268 - Enter Telephone Number</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS268" />CDS268</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Enter Telephone Number" />Enter Telephone Number</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS268">Last Revised: 11/09/08</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be called to prompt the user to enter 
+	telephone numbers.&#160; It supports US AAA-EEE-NNNN format as well as 
+	unformatted foreign telephone numbers.&#160; CDS268 uses the X-type ENTER 
+	list.</p>
+        <table border="1" id="table5">
+            <tr>
+                <th colspan="2">Entry Rules</th>
+            </tr>
+            <tr>
+                <td align="center">1</td>
+                <td>Letters entered are converted to their equivalent number</td>
+            </tr>
+            <tr>
+                <td align="center">2</td>
+                <td>Plus and period characters are converted to hyphens</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td>After the above conversion, only numbers, spaces and hyphens are 
+			permitted</td>
+            </tr>
+            <tr>
+                <td align="center">4</td>
+                <td>Foreign phone numbers can being with 011.&#160; Other phone 
+			numbers that begin with zero are invalid</td>
+            </tr>
+            <tr>
+                <td align="center">5</td>
+                <td>Phone numbers cannot begin with 1</td>
+            </tr>
+            <tr>
+                <td align="center">6</td>
+                <td>7 digit phone numbers are formatted in EEE-NNNN format.</td>
+            </tr>
+            <tr>
+                <td align="center">7</td>
+                <td>10 digit phone numbers are formatted in AAA-EEE-NNNN format.</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS268", ERR=XXXX, MINC, MAXC, COL, ROW, PROMPT$, PHLEN, 
+	PHONE$, { CTLVAL, OPT$, FMT$[ALL] }</code>
+        </p>
+        <table border="1" id="table2">
+            <tr>
+                <th>Variable</th>
+                <th style="text-align: center;">To/From</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>ERR=XXXX</code>
+                </td>
+                <td align="center">&#160;</td>
+                <td>Branch to line XXXX if <code>OPT$</code> includes the letter "E" 
+			which is passed to CDS069 to enabled the <code>Ctl+C=Abort</code> 
+			phrase in the prompt.</td>
+            </tr>
+            <tr>
+                <td><code>MINC</code>
+                </td>
+                <td align="center">To</td>
+                <td>Minimum number of non-blank characters that can be entered.&#160; 
+			Typically 7.</td>
+            </tr>
+            <tr>
+                <td><code>MAXC</code>
+                </td>
+                <td align="center">To</td>
+                <td>Maximum number of characters in <code>PHONE$</code>.&#160; 
+			Typically 12 for US telephone numbers, 21 or more for foreign 
+			telephone numbers.</td>
+            </tr>
+            <tr>
+                <td><code>COL</code>
+                </td>
+                <td align="center">To</td>
+                <td>Entry column</td>
+            </tr>
+            <tr>
+                <td><code>ROW</code>
+                </td>
+                <td align="center">To</td>
+                <td>Entry row.&#160; <code>COL</code> and <code>ROW</code> can both 
+			be zero for entry at bottom of window.</td>
+            </tr>
+            <tr>
+                <td><code>PROMPT$</code>
+                </td>
+                <td align="center">To</td>
+                <td>User prompt message such as <code>"+telephone#"</code></td>
+            </tr>
+            <tr>
+                <td><code>PHLEN</code>
+                </td>
+                <td align="center">From</td>
+                <td>Returned by CDS268 as the length of the telephone#.</td>
+            </tr>
+            <tr>
+                <td><code>PHONE$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>Default and returned value.&#160; </td>
+            </tr>
+            <tr>
+                <td><code>CTLVAL</code>
+                </td>
+                <td align="center">From</td>
+                <td>Value of the <code>CTL</code> system variable returned to 
+			calling program.</td>
+            </tr>
+            <tr>
+                <td><code>OPT$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Options for entry and validation.<table border="1" id="table3" class="lev2"><tr><td>null</td><td>Any phone# may be entered</td></tr><tr><td><code>"DIS"</code></td><td>Display <code>PHONE$ @(COL,ROW)</code></td></tr><tr><td><code>"FMT"</code></td><td>Returns <code>PHONE$</code> in <code>FMT$[0]</code></td></tr><tr><td>Pipe separated list of phone numbers</td><td>Allows selection of phone# or entry of a phone# not in 
+					the list</td></tr><tr><td>Complete entry type used by CDS069</td><td>Example: <code>"PEA{|,-22,|,,,Y,,"+NAME$+"}"+PHLIST$</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>FMT$[ALL]</code>
+                </td>
+                <td align="center">From</td>
+                <td><code>FMT$[0]</code> will be the same as <code>PHONE$</code></td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table4" class="example">
+            <tr>
+                <td>Simple example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS268",0,12,0,0,"+phone#",0,PHONE$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><span style="color: #FFFF00;">Enter phone# ____________</span></code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table6" class="example">
+            <tr>
+                <td>Example including a list of phone numbers</td>
+            </tr>
+            <tr>
+                <td><code>CALL 
+			"CDS268",0,12,0,0,"+phone#",0,PHONE$,0,"330-374-1000|800-301-1234"</code>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="color: #FFFF00;">┌──────────────┐<br />
+│</span><span style="background-color: #FF0000;"><span style="color: #FFFF00;">&#160;</span></span></code></span><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;background-color: #FF0000;"><span style="color: #FFFF00;">330-374-1000</span></span></code></span><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="background-color: #FF0000;"><span style="color: #FFFF00;">&#160;</span></span><span style="color: #FFFF00;">│<br />
+│&#160;</span></code></span><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;"><span style="color: #FFFF00;">800-301-1234</span></span></code></span><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="color: #FFFF00;">&#160;│<br />
+└──────────────┘</span></code></span><code><span style="color: #FFFF00;">  <![CDATA[ ]]></span></code>
+                    <p><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;"><span style="color: #FFFF00;">Enter phone#, or 
+			highlight selection and touch Enter ____________</span></span></code></span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table7" class="example">
+            <tr>
+                <td>Example including name in window border</td>
+            </tr>
+            <tr>
+                <td><code>1200 BEGIN<br />
+			1210 LET NAME$="A &amp; A Distributing"<br />
+			1220 LET PHLIST$="330-374-1000|800-302-1234"<br />
+			1230 CALL 
+			"CDS268",0,22,COL,ROW,"+telephone#",0,PHONE$,0,"L{|,-22,|,,,Y,,"+NAME$+"}"+PHLIST$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="color: #FFFF00;">┌─A 
+			&amp; A Distributing─────────────┐<br />
+│</span><span style="background-color: #FF0000;"><span style="color: #FFFF00;">&#160;</span></span></code></span><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;background-color: #FF0000;"><span style="color: #FFFF00;">330-374-1000</span></span></code></span><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="background-color: #FF0000;"><span style="color: #FFFF00;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;</span></span><span style="color: #FFFF00;">│<br />
+│&#160;</span></code></span><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;"><span style="color: #FFFF00;">800-301-1234</span></span></code></span><span style="font-family: Courier New, Courier, Arial Monospaced;"><code><span style="color: #FFFF00;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;│<br />
+└────────────────────────────────┘</span></code></span><code><span style="color: #FFFF00;">  <![CDATA[ ]]></span></code>
+                    <p><span style="font-family: 'WP TypographicSymbols';"><code><span style="font-size: 14pt;"><span style="color: #FFFF00;">Enter 
+			telephone#, or highlight selection and touch Enter 
+			______________________</span></span></code></span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

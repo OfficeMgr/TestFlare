@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS191 - "Working On" Functions</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS191</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">"Working On" Functions</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS191">Last Revised: 
+12/21/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to manage users that are working on the same transaction or batch, such as a Purchase Order Receipt or Accounts Payable Invoice batch.&#160; It can be used to prevent updating the transaction or batch while there are still active users working on it.</p>
+        <p>These functions are managed using the Dynamo Session Control File CDSM08, so that if sessions are killed, or inactive session records are purged, then the number of users working on the same transaction is automatically reduced.&#160; The application does not need to manage active users.&#160; The Working On field is also displayed in Display System Status.</p>
+        <p>Note that these functions are specific to the active company code.</p>
+        <p>CDS191 can also be used for debugging Dynaweb applications, background tasks, stored procedures, triggers, etc. by calling CDS191 to set the Working On field.&#160; The Working On field is displayed in the properties page of Display System Status.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS191", ERR=XXXX, Y$, ACTION$ {, WORKINGON$ , USERS }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS191 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if <code>ACTION$</code> is invalid, or <code>ACTION$</code> 
+is D and there are some users in working on the same transaction or batch, or
+<code>ACTION$</code> is R and there are no inactive processes with the matching
+<code>WORKINGON$</code> value.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ACTION$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table1">
+                        <tr>
+                            <td align="center"><code>S</code>
+                            </td>
+                            <td>Set the current session to be working on the transaction specified in the <code>WORKINGON$</code> field.&#160; Pass <code>WORKINGON$</code> as a null string to indicate the user is no longer working on the specific transaction or batch.</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>C</code>
+                            </td>
+                            <td>Count the number of users working on the <code>WORKINGON$</code> field.</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>D</code>
+                            </td>
+                            <td>Display any users working on the <code>WORKINGON$</code> field.&#160; If there are no users working on the specified transaction or batch, then USERS will be returned as zero, and no prompts will take place.&#160; If there are one or more users working on the specified transaction or batch, then the user will be provided a list of users, and CDS191 will <code>EXIT 99</code>.&#160; This is typically used to indicate the transaction or batch cannot be updated since it is still being used by another session.&#160; If this session is inactive, then use Display System Status, Purge Session Records option to remove the defunct session record, which will reduce the number of users.</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"R"+TransType</code>
+                            </td>
+                            <td>Retrieve &amp; Remove inactive session record.&#160; This option is used to 
+check if there was a particular type of transaction in process for a 
+workstation.&#160; This option only applies to Linux and Unix systems where the 
+IP address of the workstation can be determined.&#160; It requires that the
+<code>WORKINGON$</code> field previously used on a <code>CALL</code> to CDS191 
+with <code>ACTION$="S"</code> to have an asterisk in the 12th character.&#160; 
+These records are not purged during the various System Status purge options, but 
+retained in an effort to restart the aborted transaction.&#160; <code>ACTION$</code> 
+should be passed as <code>"R"</code> plus the starting characters of the 
+transaction type such as SO#, PO#, TO#, VR# etc.&#160; CDS191 will exit with
+<code>ERR=99</code> if there are no inactive processes with the matching <code>
+WORKINGON$</code> prefix.&#160; It will return the <code>WORKINGON$</code> field 
+from the inactive session so the application can attempt to continue with the 
+aborted transaction.&#160; It will also remove the System Status record from 
+CDSM08.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>WORKINGON$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To<br />
+From (<code>ACTION$="R"</code>)</td>
+                <td>Up to 12 characters that describes the activity and transaction number being worked on.&#160; For example, <code>"POR#1234"</code> could indicate a user working on Purchase Order Receipt# 1234, or <code>"APB#1234"</code> could indicate a user working on Accounts Payable Data Entry Batch# 1234.&#160; The <code>WORKINGON$</code> field can be up to 12 characters long.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>USERS</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>When <code>ACTION$</code> is C or D, <code>USERS</code> will be the number of users working on the same transaction or batch.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example: Set working on to POR#1234.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"S","POR#1234"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Clear working on field.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"S"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Request number of users working on POR#1234.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"C","POR#1234",USERS</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Display list of users working on the same transaction or batch.&#160; The program will display the users working on the specified transaction, and the calling program will branch to the <code>NOUPDATE</code> line label.&#160; If there are no users currently working on the specified transaction, then CDS191 will quietly exit.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",ERR=NOUPDATE,Y$,"D","POR#1234"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Set working on field to active sales order#, with no-purge option 
+(*)</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"S","SO#"+SO40.SONO$+"*"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Check if workstation has an aborted sales order</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",ERR=NO_INACTIVE_SESSIONS,Y$,"RSO#",WORKINGON$<br />
+SONO$=WORKINGON$(4,8)<br />
+REM "Continue with logic to attempt to maintain this order</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Set working on field to the Physical Inventory Batch#.&#160; 
+Multiple workstations can access the batch at the same time.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"S","PI#"+STR(IC50.PIBNO:FILL(8,"#"))+"*"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Check to see if anyone else is using this batch.&#160; The current 
+workstation is also working on this batch.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS191",Y$,"C","PI#"+STR(IC50.PIBNO:FILL(8,"#"))+"*",USERS</code>
+                    <p><code>IF USERS&gt;1 THEN CALL "CDS069",0,0,0,0,"There are "+STR(USERS-1)+" 
+workstation(s) still using this batch-"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

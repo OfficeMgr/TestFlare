@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="6" MadCap:lastHeight="844" MadCap:lastWidth="624">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Installation</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <meta name="Microsoft Border" content="none" />
+        <base target="_blank" />
+    </head>
+    <body>
+        <p class="SectionName">dynamo tools</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Software Installation" />Installation</p>
+                </td>
+                <td align="right">Last Revised: 02/20/15</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Running" />
+            <MadCap:keyword term="Microsoft Windows" />The installation procedure is dependent on the operating 
+system of the target system. &#160;Excellware software, called Dynamo, is 
+completely functional on Unix like operating systems such as Linux.&#160; It has 
+been installed on Red Hat Linux, CentOS, SCO Open Server 5 and 6, SCO UnixWare, AIX, Solaris, and HP-UX.&#160; The software will also run in a Microsoft 
+Windows environment either stand alone, or in conjunction with a pro5 or bbj pro5 data 
+server.&#160; Certain functions are not available when running in a stand alone 
+Microsoft Windows environment.</p>
+        <h5>Prerequisites</h5>
+        <p>Download &amp;&#160;install pro5, Vpro5, and/or bbj from Basis as desired.&#160; The preferred folder for pro5 
+	is <code>/u/basis</code>, and <code>/u/basis/bbj</code> for bbj, although other folders such as<code> /usr/local/basis 
+	</code>or <code>/usr/basis</code> can be used.&#160; Pro5 version 12.00, and bbj version 13.02 or higher is recommended.&#160; 
+	Either the standard or sql enabled version of pro5 can be used. Basis is a licensed 
+	product and requires license manager software running somewhere on the 
+	network.&#160; Contact Excellware for assistance installing and configuring 
+	the Basis License Manager (blm).</p>
+        <h5>Linux Distributions that provide 'yum' including Red Hat Enterprise Linux,&#160;Fedora, and CentOS</h5>
+        <p>These instructions apply to Red Hat Enterprise Linux (RHEL)/CentOS version 6 or higher. You can also use these procedures with Enterprise Linux 5, as noted below. Earlier versions of RHEL&#160;do not include the required yum command.</p>
+        <h6>Concept</h6>
+        <p>The following steps can be used to download, install and update Excellware and related software packages on a server running Linux that includes <code>yum</code> and <code>rpm</code> commands and has internet access. &#160;This process must be run as the root user, and will:</p>
+        <ul>
+            <li>Configure the server to obtain packages from <MadCap:variable name="Primary.CompanyName" /></li>
+            <li>Download one or more packages, or package groups</li>
+            <li>Verify that the packages downloaded without error</li>
+            <li>Verify that the packages contain a valid Excellware digital signature</li>
+            <li>Verify that the packages have not been altered since built by Excellware</li>
+            <li>Prompt the user before installation</li>
+            <li>Install packages in default directory</li>
+        </ul>
+        <p><a href="https://access.redhat.com/site/sites/default/files/attachments/rpm_tutorial_20120831.pdf" target="_blank">Here</a> is an additional resource from Red Hat with more information about software packaging. A Red Hat login may be required.</p>
+        <h6>Package Descriptions</h6>
+        <p>The following packages are available from the Excellware repository.</p>
+        <table style="width: 100%;">
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Summary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td class="nowrap">Dynamo-SMS</td>
+                    <td>Dynamo Tools - Runtime Components</td>
+                    <td>This package provides the runtime components of Dynamo Tools,
+        a collection of bbx programs &amp; scripts used to produce
+        consistent, highly functional bbx applications.</td>
+                </tr>
+                <tr>
+                    <td class="nowrap">Dynamo-FMS</td>
+                    <td>Dynamo Tools - Developer Components</td>
+                    <td>This package provides the data dictionary components of
+Dynamo Tools, typically installed on development but not production
+systems.</td>
+                </tr>
+                <tr>
+                    <td class="nowrap">Dynamo-WMS</td>
+                    <td>Dynamo Tools - Dynaweb Components</td>
+                    <td>This package provides the runtime components of Dynamo Tools
+used to create dynamic web applications that interact with bbx
+data.</td>
+                </tr>
+                <tr>
+                    <td class="nowrap">Dynamo-ZIP</td>
+                    <td>Dynamo Tools - Zip Code Database</td>
+                    <td>This package provides a Zip Code Database including
+US Zip Code to City/State cross reference, updated monthly.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>Package Group Name</th>
+                    <th>Packages Included</th>
+                </tr>
+                <tr>
+                    <td>Dynamo-Tools</td>
+                    <td>Dynamo-SMS<br />Dynamo-FMS<br />Dynamo-WMS<br />Dynamo-ZIP</td>
+                </tr>
+            </tbody>
+        </table>
+        <h6>Initial Setup</h6>
+        <ol class="pad">
+            <li>Verify that the following linux package has been installed:<br /><code>yum install yum-utils</code><br />Note:&#160;If linux was originally installed from DVD, and you do not subscribe to an update service, then you may need to mount the DVD to install additional packages.<br /></li>
+            <li>Configure yum to access the Excellware repository:<br /><code>yum-config-manager --add-repo http://dl.excellware.com/dyn/Dynamo.repo</code><br /><br />If using RHEL&#160;version 5, the above command is not supported, although you can accomplish the same thing using:<br /><code>curl http://dl.excellware.com/dyn/Dynamo.repo &gt;&#160;/etc/yum.repos.d/Dynamo</code>.repo<br /></li>
+            <li>Verify installation using:<br /><code>ls /etc/yum.repos.d/Dynamo.repo</code></li>
+            <li>Install Excellware public key using the command:<br /><code>rpm --import http://dl.excellware.com/dyn/RPM-GPG-KEY-excellware</code><br /></li>
+            <li>Verify key installation using:<br /><code>rpm -qia gpg-pubkey | grep excellware</code><br />which should display:
+				<br /><code>Summary: gpg(Support Manager &lt;supportmgr@excellware.com&gt;)<br /></code></li>
+            <li>The ability to view package history and rollback to former versions is enabled by default in RHEL 6.
+	Older version of RHEL do not support this feature.<br />You can confirm that yum will retain package history by checking the <code>/etc/yum.conf</code> file for the key word:<br /><code>history_record<br /></code>If there is no <code>history_record</code> key word, or it is set to true, then history is enabled.</li>
+            <li>Dynamo packages are installed in the <code>/u/CDI</code>&#160;directory. If you want to install in a different directory, then create a symbolic link so that <code>/u/CDI</code>&#160;points to the desired install directory:<br /><code>ln -s /usr/local/CDI /u/CDI</code></li>
+        </ol>
+        <h6>Package Installation</h6>
+        <ol class="pad">
+            <li>To obtain list of Dynamo packages:<br /><code>yum list Dynamo\*</code><br />You should see a list of packages such as:<br /><code>Available Packages</code><br style="mc-tag-and-class: code;" /><code>Dynamo-FMS.noarch&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;1.0-22&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Dynamo</code><br style="mc-tag-and-class: code;" /><code>Dynamo-SMS.noarch&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;1.0-15&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Dynamo</code><br style="mc-tag-and-class: code;" /><code>Dynamo-WMS.noarch&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;1.0-15&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Dynamo</code><br style="mc-tag-and-class: code;" /><code>Dynamo-ZIP.noarch&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;1.0-15&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Dynamo
+            <br /></code></li>
+            <li>To obtain list of Dynamo package groups:<br /><code>yum -v grouplist Dynamo\*
+</code><br />Near the end of the verbose output, you should see a list of package groups such as:<br /><code>Available Groups:</code><br style="mc-tag-and-class: code;" /><code>Dynamo Tools including SMS, FMS, WMS, and ZIP (Dynamo-Tools)</code><br style="mc-tag-and-class: code;" /></li>
+            <li>To download, verify, and install one or more packages:<br /><code>yum install Dynamo-SMS Dynamo-ZIP ...<br /></code>Note:&#160;any required packages will also be installed after user replies to Install prompt.<code><br /></code></li>
+            <li>To download, verify, and install a package group<code>:<br />yum groupinstall Dynamo-Tools<br /></code>Note that on the Dynamo-FMS package provides the Dynamo Tools Data Dictionary Maintenance and related functions on the FMS menu. &#160;This package is often left off of production servers, to prevent changes in production that have not first been made on a development server.</li>
+            <li>To download, but not install a package:<br /><code>yumdownloader Dynamo-SMS</code><br /></li>
+            <li>Verify contents of pointer file <code>/usr/cdi/.config</code>. &#160;It should contain <code>export SMSDIR=/u/CDI</code> and a similar line pointing <code>BBXDIR</code> to either the directory where pro5 is located, i.e., <code>/u/basis/pro5</code>, or a directory where the bbj binary is located, i.e., <code>/u/basis/bbj/bin</code>.<br /></li>
+            <li>Continue with optional steps listed <a href="#Optional">Optional Steps</a>.<br /></li>
+        </ol>
+        <h6>What it does</h6>
+        <p>Installing the Dynamo-SMS package performs the following steps:</p>
+        <ol>
+            <li>Creates a user and group named 'cdi' with id's of 8050 if not already defined</li>
+            <li>Assigns a default password for 'cdi' as cdi123</li>
+            <li>Defines <code>/u</code> and <code>/u/CDI</code> folders if necessary</li>
+            <li>Defines sub-directories as required in <code>/u/CDI</code></li>
+            <li>Places files in <code>/u/CDI</code>, owned by user 'cdi'</li>
+            <li>Creates pointer file /<code>usr/cdi/.config</code> with estimated <code>BBXDIR</code>&#160;value</li>
+            <li>Creates <code>/etc/logrotate.d/dynamo-bkg</code> file used to rotate log file created by Dynamo Tools background tasks</li>
+            <li>Creates <code>/etc/cron.d/dynamo-SMS</code> file used to remove old files from <code>/u/CDI/tmp</code> file daily</li>
+        </ol>
+        <h6>Updating packages</h6>
+        <ol class="pad">
+            <li>To check if any updates are available:<br /><code>yum check-update Dynamo\*<br /></code></li>
+            <li>To update all Dynamo packages previously installed:<br /><code>yum update Dynamo\*<br /></code></li>
+            <li>To update a Dynamo package group:<br /><code>yum groupupdate Dynamo-Tools<br /></code></li>
+        </ol>
+        <h6>Rolling Back</h6>
+        <p>Should it be necessary to rollback to an earlier installed version, and yum history is enabled, you can execute the following commands to view history and perform rollbacks. &#160;Refer to the yum man page for more details.</p>
+        <ol class="pad">
+            <li>To view installed packages:<br />Use the V option at a Dynamo Tools menu, and select the Linux Packages option to view all linux and Dynamo packages installed showing the version and installation date.<br /></li>
+            <li>To view installation history of all packages:<br /><code>yum history list<br /></code></li>
+            <li>To view installation history of all Dynamo packages:<br /><code>yum history list Dynamo\*<br /></code></li>
+            <li>To undo the last update, run the above step to obtain the ID number, then:<br /><code>yum history undo [ID#]<br /></code></li>
+        </ol>
+        <p>Review the yum man page for more options to undo, redo, and rollback multiple packages with a single command.</p>
+        <h6>Removing packages</h6>
+        <ol class="pad">
+            <li>To remove one or more packages:<br /><code>yum remove Dynamo-ZIP …<br /></code></li>
+            <li>To remove a package group:<br /><code>yum groupremove Dynamo-Tools</code></li>
+        </ol>
+        <h5>Unix, AIX, and other linux distros</h5>
+        <h6>Installing</h6>
+        <ol class="pad">
+            <li>Obtain product installation files from Excellware.&#160; These are made 
+	available for ftp download.&#160; Place the downloaded files<code> installcdi, 
+	installcdi.tar</code>, and <code>SMS</code> in the<code> /tmp</code> directory.</li>
+            <li>As root, using an ANSI compatible terminal emulator such as telnet, 
+	putty, or FacetWin, perform these steps:<p><code>cd /tmp</code><br style="mc-tag-and-class: code;" /><code>chmod 755 installcdi</code><br style="mc-tag-and-class: code;" /><code>./installcdi</code></p></li>
+            <li>You will be prompted for:<br />bbx version (pro5 or bbj)<br />path where pro5 or bbj was installed<br />path where Dynamo is to be installed (defaults to <code>/u/CDI</code>)</li>
+            <li>bbx will start and prompt you for the path to the software install image (<code>/tmp/SMS</code>) 
+and will exit when complete.</li>
+            <li>The install process will:<br />create file<code> /usr/cdi/.config</code> which will contain environment variables <code><MadCap:keyword term="SMSDIR" />
+SMSDIR</code> as the path where Dynamo was installed, and <code>BBXDIR</code> as 
+the path where the basis software was installed.<br />create group '<code>cdi</code>' and user '<code>cdi</code>' which will be the owner of all Dynamo files.<br />starts a 'command processor' as root which is used when certain privileged 
+commands are required.</li>
+            <li>
+                <MadCap:keyword term="System Management Configuration" />
+                <MadCap:keyword term="Operator Info Maintenance" />You can run the Dynamo application by logging in as user '<code>cdi</code>'.&#160; 
+Additional users can be created using 'Operator Information Maintenance (Add/Maintain) 
+which is located on the 'System Management Configuration' (SMC) menu.&#160; When 
+creating a Dynamo user, both the Dynamo user as well as the Linux/Unix user is 
+created (if it does not already exist).&#160; This process will also set the 
+users <code>.profile</code> file in their home directory to automatically launch Dynamo when 
+the user logs in.</li>
+        </ol>
+        <h6>Upgrading/reinstalling:</h6>
+        <ol class="pad">
+            <li>Request an updated version from Excellware.</li>
+            <li>Download the software install image file as specified by Excellware.</li>
+            <li>Have all Dynamo users log out of Dynamo, as certain programs and files 
+	will be changed by the upgrade process and cannot be in use during the 
+	upgrade.</li>
+            <li>Login to Dynamo as user 'cdi' and select 'Install/Update 
+Software Package' located on System Management Configuration (SMC) menu. &#160;You 
+will be prompted to enter root's password, and the path to the downloaded 
+	install image file.</li>
+        </ol>
+        <h6>Removing</h6>
+        <ol class="pad">
+            <li>Delete the <code>$SMSDIR</code> folder and its contents and the file <code>/usr/cdi/.config</code>.</li>
+        </ol>
+        <h5><a name="Optional"></a>Optional but recommended additional steps for all linux, Unix, AIX</h5>
+        <ol class="pad">
+            <li>Configure the server to use sendmail.&#160; The sendmail daemon is not 
+	required, just the <code>/usr/lib/sendmail</code> executable which Dynamo uses for 
+	sending email.&#160; Contact Excellware for assistance in configuring 
+	sendmail.</li>
+            <li>The Dynamo-SMS&#160;package includes a demo version of a 3rd party product that is used to produce PDF files.  Contact Excellware for a licensed or fully 
+	functional trial version that includes an advertising watermark on the 
+	bottom of each page.</li>
+            <li>If using FacetWin or samba, share the following folders so that access 
+	is available from Windows workstations.&#160; If using FacetWin, the 
+	facetwin Share folder should contain:<br /><code>D export /u/CDI/export "Dynamo exported data"<br />D import /u/CDI/import "Dynamo imported data"<br />D tmp&#160;&#160;&#160; /u/CDI/tmp&#160;&#160;&#160; "Dynamo tmp folder"<br />D TEMP&#160;&#160; /u/CDI/TEMP&#160;&#160; "Dynamo TEMP folder"</code></li>
+            <li>If using Dynaweb, the web based interface to Dynamo, create a symbolic 
+	link so that the web server and Dynamo share a common tmp folder.&#160; The 
+	following steps can be followed:<br />Change to the web server document root folder (typically <code>/u/web </code>or<code> /var/www/html</code>)<br /><code>cd /u/web<br />ln -s $SMSDIR/tmp tmp</code></li>
+            <li>Some Dynamo applications copy Dynamo data to the Windows clipboard for 
+	use by Windows applications.&#160; For example, you can copy a formatted 
+	customer address from Dynamo, and paste into Microsoft Word.&#160; To enable 
+	this feature, copy the <code>nircmd.exe</code> file, available for download 
+	at <a target="_blank" href="http://www.excellware.com">www.excellware.com</a> to the <code>
+	C:\WINDOWS\SYSTEM32</code> folder on each PC.</li>
+            <li>Use 'Dynamo Configuration Maintenance' to specify the 'Error email 
+	address(es)' that Dynamo will email all Dynamo Error Reports to, as well as 
+	base memory pages, and any other system wide parameters applicable for your 
+	installation.</li>
+            <li>The startup script provided with Dynamo Tools will start bbx or bbj and launch the Dynamo Tools menu. If you would prefer to start another menu, then you can place a script named <code>/u/CDI/bin/profile.local</code> with the command to launch bbx or bbj and launch your preferred menu. No changes to the .profile file is required, as it checks for your profile and will execute that if found.<br /></li>
+            <li>
+                <p>If you choose not to use the profile scripts provided in the Dynamo-SMS package, or you use a profile.local script to launch your menu, you will also need establish the environment necessary for your applications to access Dynamo Tools. This can be accomplished by adding a few lines of code to your bbx application during login and logout.&#160; Refer to the 
+documentation for <a href="CDS000.htm">CDS000</a> for additional details.</p>
+            </li>
+        </ol>
+        <h5>Microsoft Windows</h5>
+        <ol class="pad">
+            <li>Install VPro5 from Basis.&#160; You can install in the default folder
+	<code>C:\BASIS</code> or other convenient location.</li>
+            <li>Use Windows Notepad or other editor, to edit the Vpro5 configuration 
+	file, typically <code><MadCap:keyword term="Config.bbx" />C:\BASIS\VPRO5\config.bbx</code>. Add a line 
+	indicating the path where Dynamo will be installed.&#160; Include the drive 
+	letter, forward slashes, and a trailing slash, i.e.:<br /><code>SET SMSDIR=C:/CDI/</code></li>
+            <li>Download the "Tools for Windows PC's" file named windows.zip file from
+	<a target="_blank" href="http://www.excellware.com">www.excellware.com</a> under the 
+	Downloads section. As a Windows administrator, unzip and save each file in 
+	the folder in the <code>C:\WINDOWS\SYSTEM32</code> folder.&#160; The files 
+	included are:<br /><code>curl.exe</code> and <code>libcurl.dll</code> - used on Vpro5 
+	installations to enable Dynamo to communicate with outside servers<br /><code>putty.exe</code> - terminal emulation software<br /><code>tar.exe</code> - program to unbundle Dynamo software install images<br /><code>nircmd.exe</code> - program to enable Dynamo running on linux/unix to 
+	copy Dynamo data such as name and addresses to the Windows clipboard<br /><code>launchinIE.dll</code> - program to enable selected applications to be 
+	launched from within Dynaweb.</li>
+            <li>Download the install image file from 
+	<a target="_blank" href="ftp://ftp.excellware.com">ftp.excellware.com</a>.&#160; Contact Excellware for login id, password, and 
+	file name to download.</li>
+            <li>Create the directory where Dynamo software will be installed, typically
+	<code>C:\CDI</code>.</li>
+            <li>Unzip the install image file and save the contents in the directory 
+	defined in the above step.</li>
+            <li>Create a shortcut, on the Windows desktop, quick launch toolbar, or 
+	other convenient location, that will be used to start Vpro5 and Dynamo.&#160; 
+	Change the default locations on the following shortcut properties as 
+	required for your installation.<table border="1" id="table2"><tr><td>Target</td><td><code>C:\BASIS\VPRO5\vpro5.exe -tT0 -nT0 -m1024 -cC:\BASIS\VPRO5\config.bbx 
+			C:\CDI\CD\CDS000</code></td></tr><tr><td>Icon</td><td><code>C:\CDI\bin\exlogo.ico</code></td></tr></table></li>
+            <li>If using a pro5 data server, then install Dynamo on the server running 
+	the pro5 data server.&#160; Doing this will enable certain features 
+	including sending email and printing PDFs when using the Windows version of 
+	Dynamo.</li>
+        </ol>
+    </body>
+</html>

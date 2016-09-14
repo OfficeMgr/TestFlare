@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="963" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS039 - Input Routine - Template Field</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS039" />CDS039</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="FIELD" />
+                        <MadCap:keyword term="Template Field" />
+                        <MadCap:keyword term="Input Routine" />Input Routine - Template Field</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS039">Last Revised: 05/26/2008</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is the input routine used when the data is 
+to be stored in a string template field.</p>
+        <p>There are two calling formats:</p>
+        <p><code>CALL "CDS039", ERR=XXXX, MINV, MAXV, COL, ROW, PROMPT$, TYPE$, 
+REC$, FLDNAM${, INDEX, TIMEOUT}<br />CALL "CDS039", ERR=XXXX, S039$, REC$</code>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2">
+            <tr>
+                <th colspan="2">S039$ Fields</th>
+            </tr>
+            <tr>
+                <th>Field Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>ERR=XXXX</code>
+                </td>
+                <td>Take error branch if:<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table3" class="lev2"><tr><td align="center"><code>ERR</code></td><td>Cause of Error</td></tr><tr><td align="center"><code>0</code></td><td><code>S039.TIMEOUT</code> is passed, and operator does not make entry 
+				before time expired</td></tr><tr><td align="center"><code>99</code></td><td><code>S039.FLDNAM$</code> does not exist in <code>REC$</code></td></tr><tr><td align="center"><code>99</code></td><td><code>REC$</code> is not a templated variable.</td></tr><tr><td align="center"><code>99</code></td><td><code>S039.INDEX</code> is invalid for <code>S039.FLDNAM$</code></td></tr><tr><td align="center"><code>99</code></td><td>Non-numeric data contained in field with a numeric template 
+				field type.</td></tr><tr><td align="center"><code>99</code></td><td><code>REC$</code> does not match template</td></tr><tr><td align="center"><code>99</code></td><td>T Type program name is blank or missing</td></tr><tr><td align="center"><code>99</code></td><td>Error calling T Type program</td></tr><tr><td align="center"><code>40</code></td><td>Numeric data entered is too large to fit in numeric template 
+				type</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>MINV/S039.MINV</code>
+                </td>
+                <td>Minimum Value</td>
+            </tr>
+            <tr>
+                <td><code>MAXV/S039.MAXV</code>
+                </td>
+                <td>Maximum Value</td>
+            </tr>
+            <tr>
+                <td><code>COL/S039.COL</code>
+                </td>
+                <td>Display column</td>
+            </tr>
+            <tr>
+                <td><code>ROW/S039.ROW</code>
+                </td>
+                <td>Display row</td>
+            </tr>
+            <tr>
+                <td><code>PROMPT$/S039.PROMPT$</code>
+                </td>
+                <td>Display prompt</td>
+            </tr>
+            <tr>
+                <td><code>TYPE$/S039.TYPE$</code>
+                </td>
+                <td>Entry Type - In addition to the <code>TYPE$</code> options available 
+		to CDS069, CDS039 also supports T type external called routines.<table border="1" id="table4" class="lev2"><tr><th>Value</th><th>Usage</th></tr><tr><td><code>"TPROGNAME" or "T{PROGNAME}"</code></td><td>Entry using program <code>PROGNAME</code></td></tr><tr><td><code>"QTPROGNAME" or "QT{PROGNAME}"</code></td><td>Display using program <code>PROGNAME</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>The templated data structure containing the field to be entered or 
+		displayed</td>
+            </tr>
+            <tr>
+                <td><code>FLDNAM$/S039.FLDNAM$</code>
+                </td>
+                <td>Field name in <code>REC$</code></td>
+            </tr>
+            <tr>
+                <td><code>INDEX/S039.INDEX</code>
+                </td>
+                <td>Used for repeating data elements</td>
+            </tr>
+            <tr>
+                <td><code>TIMEOUT/S039.TIMEOUT</code>
+                </td>
+                <td>Timeout minutes (1-4) or seconds 5+</td>
+            </tr>
+            <tr>
+                <td><code>S039.ONEVAL$</code>
+                </td>
+                <td>Contains the valid value when the field has only one value.&#160; 
+		Only applies when using the second calling format.</td>
+            </tr>
+        </table>
+        <p align="left">Unlike bbx, CDS039 stores numeric data right justified in fixed 
+length template fields.&#160; This enables use of numeric data, stored in either 
+N() or C() template field types in key segments.&#160; CDS039 will use the 
+masked value whenever the NUM() of the masked string does not cause an error due 
+to a comma or special negative value indicator in the mask.</p>
+        <p align="left">Refer to the documentation for <a href="CDS069.htm">CDS069</a> 
+for additional details.</p>
+    </body>
+</html>

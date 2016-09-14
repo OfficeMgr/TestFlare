@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="13" MadCap:lastHeight="3413" MadCap:lastWidth="1099">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS000 - Initial Program</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS000</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Initial Program</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS000">Last Revised: 
+ 03/07/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The Initial Program is the first program run when 
+starting Dynamo.&#160;It is run on Unix systems from the .profile script, and 
+from the shortcut target on Windows systems.&#160;CDS000 can also be called 
+when Dynamo is not launched directly from the Unix .profile or the Windows 
+shortcut.&#160;When called, CDS000 will set the environment necessary to access 
+the Dynamo menu system, and call Dynamo Tools programs from any bbx program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS000", ERR=XXXX, COMPCODE$, MENU$ {, SM01E$, DTOPT$ }</code>
+        </p>
+        <p>Note: CDS000 can only be called from 'foreground' tasks with a display 
+device.&#160; Call <a href="CDS011.htm">CDS011</a> to establish the Dynamo Tools 
+environment for background tasks including bbj stored procedures and triggers.&#160; 
+CDS000 will modify the <code>PREFIX</code> to include absolute paths to Dynamo Tools data 
+files, programs, and customer data dictionary files.&#160; The current directory 
+will not be changed.</p>
+        <table>
+            <tr>
+                <td nowrap="nowrap"><code>XXXX</code>
+                </td>
+                <td>Branch to this line if an error is encountered.&#160;Errors would include 
+	possibilities such as the system files for company <code>COMPCODE$</code> do 
+	not exist, the user <code>OPERID$</code> does not exist and <code>
+	DTOPT$(1,1)&lt;&gt;"A"</code>, if critical Dynamo Tools programs or data files are 
+	missing, or if there are insufficient Dynamo user licenses available.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>COMPCODE$</code>
+                </td>
+                <td>Dynamo uses a separate directory for each company or organization.&#160; 
+	Pass <code>COMPCODE$</code> as the two letter Dynamo company code that the 
+	user should be logged into.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>MENU$</code>
+                </td>
+                <td>This is the name of the bbx menu program that should be run when the user 
+	exits the Dynamo Tools menu.</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>SM01E$</code>
+                </td>
+                <td>This parameter is used to populate the Dynamo Tools Operator Information 
+ File and to designate the Dynamo Tools Operator ID to use for this session.&#160; 
+ Refer to
+  <a target="_blank" href="http://www.excellware.com/docs/dynamo/cd/cdsm01.htm">
+  Operator Information Maintenance</a> for additional details about each field.<table border="1" style="border-collapse: collapse;" width="100%"><tr><th><code>SM01E$</code></th><th>Usage</th></tr><tr><td>null</td><td>The Dynamo Tools Operator ID will be set to <code>INFO(3,2).</code> 
+      All other Operator related fields will be set to default values, with 
+ unlimited access to all menus in company <code>COMPCODE$</code>.</td></tr><tr><td>non-templated field</td><td>The Dynamo Tools Operator ID will be set to <code>SM01E$</code>.&#160; 
+ All other Operator related fields will be set to default values, with 
+ unlimited access to all menus in company <code>COMPCODE$</code>.</td></tr><tr><td>templated field</td><td>The templated fields in the table below will be used to create or 
+ update the Dynamo Tools Operator Information fields.&#160; Fields that are 
+ left blank or zero will be assigned a default value.&#160; Invalid values 
+ will be quietly ignored.<table border="1" style="border-collapse: collapse;" width="100%"><tr><th>Field Name</th><th>Description</th><th>Notes</th></tr><tr><td><code>LOGINID</code></td><td>Login/Operator ID</td><td>Up to 10 characters</td></tr><tr><td><code>NAME</code></td><td>Operator Name</td><td>Up to 25 characters</td></tr><tr><td><code>INITIALS</code></td><td>Operator Initials</td><td>Up to 3 characters</td></tr><tr><td><code>DEPT_LOCN</code></td><td>Department or Location</td><td>Up to 16 characters</td></tr><tr><td><code>PHONE1<br />          PHONE2<br />          PHONE3<br />          PHONE4</code></td><td>Phone#</td><td>First 12 characters are the phone number formatted as NNN-NNN-NNNN.&#160; 
+ Last character is used to indicate type of phone number.&#160; See
+          <a href="CDS048.htm">CDS048</a> for a list of the type codes 
+ supported.</td></tr><tr><td><code>EXT</code></td><td>Extension</td><td>Up to 4 characters</td></tr><tr><td><code>EMAIL</code></td><td>Email Address</td><td>Up to 45 characters</td></tr><tr><td><code>EMAILOPT</code></td><td>Send Error Emails</td><td>Y/N</td></tr><tr><td><code>FONT</code></td><td>Font</td><td>Applies to BBj Thin Client only.&#160; Leave blank to use default 
+ Dynamo Tools font.</td></tr><tr><td><code>SIZE</code></td><td>Font Size</td><td>Applies to BBj Thin Client only.&#160; Leave zero to use default 
+ font size.&#160; Specify either both <code>FONT</code> and <code>SIZE</code> 
+          or neither.</td></tr><tr><td><code>CC</code></td><td>Initial Company Code</td><td>Initial Company Code.&#160; Only required if different than <code>
+          COMPCODE$</code>.</td></tr><tr><td><code>MENU</code></td><td>Initial Menu Code</td><td>Dynamo Tools Menu code to display first when external environment 
+ first runs Dynamo Tools menu (CDS001).</td></tr><tr><td><code>FUNC_KEY_GRP</code></td><td>Function Key Group Code</td><td>Used to override default function key group.&#160; Function Key 
+ Groups are defined using Function Key Maintenance located on SMC menu.</td></tr><tr><td><code>COLORS</code></td><td>Colors</td><td>Optional string of 40 characters per company code.&#160; Each slot 
+ of 40 characters is described in the table below.&#160; The color 
+ numbers are from 1 to 128 and can be viewed
+          <a target="_blank" href="CDS053.htm">here</a>.<table border="1" style="border-collapse: collapse;"><tr><td align="right">(1,2)</td><td>Company Code or ** for all company codes</td></tr><tr><td align="right">(3,3)</td><td>Primary Color number (odd numbers only)</td></tr><tr><td align="right">(6,3)</td><td>F1 window background color#</td></tr><tr><td align="right">(9,3)</td><td>F1 window border color#</td></tr><tr><td align="right">(12,3)</td><td>F1 window highlighted row color#</td></tr><tr><td align="right">(15,3)</td><td>F2 window background color#</td></tr><tr><td align="right">(18,3)</td><td>F2 window border color#</td></tr><tr><td align="right">(21,3)</td><td>F2 window highlighted row color#</td></tr><tr><td align="right">(24,3)</td><td>F3 window background color#</td></tr><tr><td align="right">(27,3)</td><td>F3 window border color#</td></tr><tr><td align="right">(30,3)</td><td>F3 window highlighted row color#</td></tr><tr><td align="right">(33,8)</td><td>blanks - reserved for future use</td></tr></table></td></tr><tr><td colspan="3">Note: The following security fields are set when 
+ creating a new user but are not updated during subsequent calls.&#160; 
+ Use Operator Information Maintenance on SMC menu to change security 
+ settings.</td></tr><tr><td><code>SECID</code></td><td>Same as ID</td><td>Inherit all security information with this Dynamo Tools Operator 
+ ID.&#160; When specified, none of the following fields will be used.</td></tr><tr><td><code>SECADMIN</code></td><td>Security Administrator</td><td>Y/N</td></tr><tr><td><code>CONSMODE</code></td><td>Console Mode Access</td><td>Y/N</td></tr><tr><td><code>MAXHOTKEY</code></td><td>Maximum Hotkey Depth</td><td>1-99</td></tr><tr><td><code>MSG</code></td><td>Dynamo Message Handling</td><td>1, 2, or 3</td></tr><tr><td><code>MSGBCAST</code></td><td>Broadcast Message Option</td><td>Y/N/S</td></tr><tr><td><code>FAX</code></td><td>Enable Faxing</td><td>Y/N</td></tr><tr><td><code>EMAILOK</code></td><td>Enable Emailing</td><td>Y/N</td></tr><tr><td><code>FILE</code></td><td>Enable printing to file</td><td>Y/N</td></tr><tr><td><code>PDF</code></td><td>Enable printing to PDF</td><td>Y/N</td></tr><tr><td><code>ELRM</code></td><td>Early License Renewal Message</td><td>Y/N</td></tr><tr><td><code>DV</code></td><td>May this user Double Vision another session</td><td>Y/N</td></tr><tr><td><code>RLC</code></td><td>May this user connect to remote resources</td><td>Y/N</td></tr><tr><td><code>KUP</code></td><td>May this user kill user processes</td><td>Y/N</td></tr><tr><td><code>PFX</code></td><td>May this user set a job prefix</td><td>Y/N</td></tr><tr><td><code>DISP</code></td><td>May this user Delete Installed Package</td><td>Y/N</td></tr><tr><td><code>DSOU</code></td><td>Dynamo Spooler Other Users</td><td>Y/N</td></tr><tr><td><code>ACCESS</code></td><td>Security Access String</td><td>Optional menu level security access.&#160; Concatenate following 
+ data for each company.<table border="1" style="border-collapse: collapse;" width="100%"><tr><td><code>(X,2)</code></td><td>Company Code or <code>**</code> for all other companies not 
+ specified</td></tr><tr><td><code>(X+2,1)</code></td><td>Blank - reserved for future use</td></tr><tr><td><code>(X+3,3)</code></td><td>Length of menu codes and security levels to follow for this 
+ company code</td></tr><tr><td><code>(X+6,3)</code></td><td>Menu Code or <code>***</code> for all menu codes not listed</td></tr><tr><td><code>(X+9,1)</code></td><td>Security Level 0-9</td></tr></table><p>Examples:<code><br />          "CD 004***6"</code> enables the user to access all menus in company 
+ CD that have a security level of 6 or lower.<br /><code>"SP 008TRN9***0"</code> enables the user to access all options 
+ in company code SP, menu code TRN, but no other menus.<br /><code>"DS 012A/P5G/L4GLU5"</code> enables the user to access company 
+ DS, entries in menu code A/P that have a security code of 5 or lower, 
+ menu code G/L with security code 4 or lower, and menu code GLU with 
+ security code 2 or lower.&#160; No access will not be provided to any 
+ other menu.<br /><code>"** 004***9"</code> Grant access to all menu's for all 
+ companies.</p></td></tr></table></td></tr></table></td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>DTOPT$</code>
+                </td>
+                <td>Optional Dynamo Tool option parameters, defaults to blanks if not passed.
+   <table><tr><td nowrap="nowrap"><code>DTOPT$(1,1)</code></td><td><table><tr><td align="center" nowrap="nowrap">A</td><td>Automatically add the operator to the Dynamo Tools user file CDSM01 
+		if they are not already on file.</td></tr><tr><td align="center" nowrap="nowrap">any other value</td><td>Do not add the user automatically if user is not-on-file.</td></tr></table></td></tr><tr><td nowrap="nowrap"><code>DTOPT$(2,1)</code></td><td><table><tr><td align="center" nowrap="nowrap">N</td><td>Do not assign function keys based on operator preference</td></tr><tr><td align="center" nowrap="nowrap">any other value</td><td>Assign function keys based on operator preference, or Dynamo standard 
+		function keys if no operator preference has been specified in Operator 
+		Preference Maintenance (SMS).</td></tr></table></td></tr></table></td>
+            </tr>
+        </table>
+        <p>You can use the following statement to pre-dimension <code>SM01E$</code> 
+since you cannot call CDS041 to obtain the template since the Dynamo Tools 
+environment has not been established before CDS000 is called.</p>
+        <p><code>DIM 
+SM01E$:"LOGINID:C(10),NAME:C(25),INITIALS:C(3),DEPT_LOCN:C(16),PHONE1:C(13),EXT:C(4),PHONE2:C(13),PHONE3:C(13),PHONE4:C(13),EMAIL:C(45),EMAILOPT:C(1),FONT:C(30),SIZE:N(2),CC:C(2),MENU:C(3),FUNC_KEY_GRP:C(4),COLORS:C(320*),SECID:C(10),SECADMIN:C(1),PSW:C(10),CONSMODE:C(1),MAXHOTKEY:N(2),MSG:N(1),MSGBCAST:C(1),FAX:C(1),EMAILOK:C(1),FILE:C(1),PDF:C(1),DV:C(1),RLC:C(1),KUP:C(1),PFX:C(1),DISP:C(1),ACCESS:C(300*=)"</code>
+        </p>
+        <p>Note that should the application ever rebuild the bbx <code>PREFIX</code>, 
+then the path to Dynamo Tools should also be included at the end&#160;of the 
+prefix.&#160; The prefix required is stored in the <code>SMS_PREFIX</code> 
+global variable.&#160; See example below.</p>
+        <p>When CDS000 is called, a session record is written to CDSM08.&#160; Modify 
+your application not to RELEASE at the end, rather call CDS091 as shown in the 
+example below, which will remove the session record and RELEASE.</p>
+        <p>Note that you can specify the window title when using bbj thin client or Vpro5 by setting the global variable <code>SMS_TITLE</code>. See the <a href="environment.htm">environment documentation</a> for additional details.</p>
+        <table class="example">
+            <tr>
+                <td>Example: Check out a Dynamo Tools license, establish the environment (PREFIX 
+and global variables) necessary to access the DT menu and callable Dynamo Tools 
+programs, set the function key values based on Operator Preference or default 
+Dynamo Tools values.</td>
+            </tr>
+            <tr>
+                <td><code>7000 DT:<br />7010 CALL STBL("SMSDIR",ERR=7020)+"CD/CDS000","RL","CUTSA0","","AY"<br />7020 RETURN</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Enable entry of 'DT' to run the Dynamo Tools menu, and program name 
+followed by ArrowUp to launch the Dynamo Tools program editor for the program 
+name entered.</td>
+            </tr>
+            <tr>
+                <td><code>2510 IF POS(" "&lt;&gt;ENTRY$) AND (CTL=3 OR CVS(ENTRY$,4)="DT") THEN LET 
+TMP$=STBL("SMS_PREFIX",ERR=2511); IF CVS(ENTRY$,4)="DT" THEN LET 
+TMP$=STBL("SMS_MENU.EDIT","CDS001"); 
+START TCB(15),"CDS001" ELSE LET TMP$=STBL("SMS_CDS006",ENTRY$); START 
+TCB(15),"CDS006"; REM "Dynamo Tools menu or program editor</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Application set PREFIX and needs to append Dynamo Tools PREFIX 
+segments.</td>
+            </tr>
+            <tr>
+                <td><code>2910 PREFIX X$<br />2920 PREFIX X$+STBL("SMS_PREFIX",ERR=2921)</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Remove Dynamo Tools session&#160; control record and terminate 
+application</td>
+            </tr>
+            <tr>
+                <td><code>60000 RELEASE:<br />60010 CALL "CDS081",ERR=60020,Y$,-1<br />60020 RELEASE</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

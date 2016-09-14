@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="843" MadCap:lastWidth="624">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Best Practices</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <meta name="Microsoft Border" content="none" />
+    </head>
+    <body>
+        <p class="SectionName">dynamo tools</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Best Practices</p>
+                </td>
+                <td align="right">Last Revised: 06/12/09</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">Successful Information Technology companies all employ 'best practices' to insure company objectives are met.&#160; This document 
+	lists Excellware's recommended practices that apply to bbx and Dynamo Tools installations running on Linux, AIX, and Unix platforms.</p>
+        <p>Goals</p>
+        <ol>
+            <li>To be able to complete bbx application development projects in the shortest amount of time</li>
+            <li>To improve the quality of all applications</li>
+            <li>To design applications that are easy to enhance</li>
+            <li>To provide a consistent, simple, easy to use and understand user interface to minimize end user training</li>
+            <li>To provide clear, accurate, and comprehensive documentation to end users and developers with a minimum of keystrokes</li>
+            <li>To provide reports that can be displayed, printed to a printer, sent to a fax machine, delivered by email, stored in a PDF format, and exported to a format that can be opened with Microsoft Excel with no special conversion, all without any programming logic that is dependent on the target output device</li>
+            <li>To make all code readable, maintainable, and efficient</li>
+            <li>To provide project management and tracking for developers and management</li>
+            <li>To provide automated feedback for application error tracking and resolution</li>
+            <li>To provide a comprehensive environment with tools to maximize programmer productivity and quality of work</li>
+            <li>To have fun and enjoy making computers do things that help people run their businesses better.</li>
+        </ol>
+        <table>
+            <tr>
+                <th colspan="3">Database Design</th>
+            </tr>
+            <tr>
+                <td>File</td>
+                <td>Name</td>
+                <td>Use 6 character file names.&#160; First two characters are the Dynamo company code.&#160; Next two characters indicate the application or file group, such as SO for Sales Order Processing, VM for Vendor Maintenance files, AP for Accounts Payable, GL for General Ledger, etc.&#160; The last two characters are numeric.&#160; For example, file name DSCM01 is in company DS, is in the Customer Master File (CM) group, and will be referenced within all applications as 
+		<code>CM01$</code>.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Type</td>
+                <td>All files should be highly-recoverable MKY files.&#160; Even if only one 
+		<code>KNUM</code> is required initially.&#160; The advantage of MKY files is that all keys can be derived from the data.&#160; Highly recoverable files can be recovered more completely and in a more automated way.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Temporary Files</td>
+                <td>Temporary files should be defined in the Data Dictionary with a period as the last character.&#160; Dynamo Tools depend on that indicator to know that the data file should not be retained upon completion of the job.</td>
+            </tr>
+            <tr>
+                <td>Field</td>
+                <td>Name</td>
+                <td>Field names of up to 16 characters can be used in the Dynamo Data Dictionary.&#160; Use short, descriptive field names.&#160; Use the underscore character only when needed to make the variable more readable.&#160; For example, the customer number should be 
+		<code>CUSTNO</code>, not <code>CUSTOMERNO</code> nor <code>
+		CUSTOMER_NUMBER</code>.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Type</td>
+                <td>All fields should be fixed length without any field separators.&#160; There are only rare exceptions to this rule.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Title</td>
+                <td>The number of characters in the Title should not exceed the maximum number of characters in the printed or displayed data field.&#160; Single character fields can use 3 character Titles.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Description</td>
+                <td>The field description should be brief but descriptive.&#160; Avoid abbreviations when space permits.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Dates</td>
+                <td>Store all dates in bbx julian format in a <code>U(3)</code> field.&#160; Use the 
+		<code>DATE()</code> function to format dates for display.</td>
+            </tr>
+            <tr>
+                <th colspan="3">Program Design</th>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Name</td>
+                <td>Use 5 character program names.&#160; First two characters are the application (see File Name above).&#160; Last three characters are numeric.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Line Labels</td>
+                <td>Start each subroutine with a line label.&#160; Use short but descriptive line labels such as 
+		<code>GETCUST</code> and not <code>GET_CUSTOMER_RECORD</code>.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Extract</td>
+                <td>Use CDS036 to Extract all records.&#160; This provides a clear message to another user attempting to access a locked record.&#160; Use CDS036 to Write back and release the locked record.&#160; Keep the time a record is locked to a minimum.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>File Definition</td>
+                <td>Verbs to define data files such as <code>DIRECT</code>, <code>SORT</code>,
+		<code>MKEYED</code>, etc. should not be used within any application.&#160; Rather, define the data file in the Data Dictionary, then call CDS034 within the application to define (or convert) the file based.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Data Entry</td>
+                <td>Verbs such as INPUT and INPUTE should not be used within any application.&#160; Rather use CDS039 and CDS069 for all data entry.&#160; These tools will always display a prompt at the bottom one or two lines of the display, providing a clear set of options available for the user.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Data Entry Conventions</td>
+                <td>F4 is used to exit, or backup.&#160; Do not use END or any other entry for this purpose.&#160; Use the "+" option at the end of the CDS039/69 prompt as a shortcut to cause "<u>F4</u>=End" to appear at the end of the prompt.&#160; You can also imbed<p>&#160;prompt text such as "<u>F4</u>=Abort" when "<u>F4</u>=End" applicable.</p><p>Use "+" as the starting character of the prompt to indicate "Enter" 
+		or if the Enter key is not used "Touch".</p><p>Use "-" as the last character of the prompt to indicate 
+		"Enter=Continue".&#160; Do not manually type any alternative versions 
+		such as "ENTER TO CONTINUE".&#160; This will keep the prompts very 
+		consistent independent of the developer.</p></td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Remarks</td>
+                <td>Remarks can be added to the end of any program statement to clarify what is being done.&#160; Avoid Remarks that do not provide additional information.&#160; For example the Remark on the following statement is redundant.&#160; 
+		<code>IF A=B THEN GOSUB GETCUST; REM "Get Customer Record</code></td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Variable Names</td>
+                <td>Use short but descriptive variable names.&#160; Use <code>COLNO</code> not 
+		<code>C</code> or <code>C0</code> as a column number, or <code>OPT</code> not 
+		<code>X</code> or <code>Z</code> to store the option entered.&#160; Use 
+		<code>Z$</code>, <code>Zn$</code>, <code>Z</code>, and <code>Zn</code> as very temporary variables with a small scope.&#160; Do not use a 
+		<code>Z</code> variable in one section of a program that might need to be tested in another.&#160; Should a Y/N entry be needed in a section of code not immediately following the entry, then use a more descriptive variable such as
+		<code>YN$</code>.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Display Area</td>
+                <td>The top two and bottom two lines of the display are reserved for application and data entry use.&#160; These are rows 0, 1, 23, and 24.&#160; Restrict applications to use lines display lines 2 through 22.&#160; When absolutely necessary, line 1 can also be used other than the 48 characters in the middle of the display that is used to show the current application title.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Simple</td>
+                <td>Keep program statements simple.&#160; Don't combine statements onto a single line using semi-colons unless necessary, or if the individual statements should always be kept together.&#160; Avoid lines of code that wrap to the next line when possible.&#160; Strive to make the code readable.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>IF statements</td>
+                <td>
+        Use <code>SWITCH/SWEND</code> instead of complex <code>IF</code> statements when possible.
+
+        <table class="example"><tr><td>Example</td></tr><tr><td><code>1440 IF CHAR$&gt;="0" AND CHAR$&lt;="9" THEN LET TYPE$="N" ELSE IF CHAR$&gt;="A" AND CHAR$&lt;="Z" THEN LET TYPE$="A" ELSE IF CHAR$=" " THEN LET TYPE$=" " ELSE LET TYPE$="?"</code></td></tr><tr><td>would be more readable, understandable, and maintainable if replaced with:</td></tr><tr><td><code>1440 SWITCH 1<br />            1450 CASE CHAR$&gt;="0" AND CHAR$&lt;="9"; LET TYPE$="N"; BREAK<br />            1460 CASE CHAR$&gt;="A" AND CHAR$&lt;="Z"; LET TYPE$="A"; BREAK<br />            1470 CASE CHAR$=" "; LET TYPE$=" "; BREAK<br />            1480 CASE DEFAULT; LET TYPE$="?"; BREAK<br />            1490 SWEND</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Code Completion</td>
+                <td>
+        Use the <a href="CDS140B.htm">Code Completion</a> feature of the Dynamo Tools Program Editor to paste each of the following:
+
+        <ul><li>Field names within a data file or data structure</li><li>Line Labels</li><li><code>CALL</code> argument lists</li><li>Merge code from existing programs</li><li><code>ENTER</code> argument lists for external routines</li><li>Defined Function argument lists</li><li>Line/Box drawing characters</li></ul></td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Template programs</td>
+                <td>Copy and customize the Template Program examples instead of starting each program from scratch.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Error Routine</td>
+                <td>Include the Dynamo Tools error routine in all applications</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Reports</td>
+                <td>Use the CDS038 report writer engine for all reports, and the CDW038 report writer engine for all web reports.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Select record from a list</td>
+                <td>Use CDS037 whenever it is necessary to select records from a list</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>File Maintenance</td>
+                <td>Use Data Dictionary based file maintenance for all file maintenance applications.&#160; Use multiple views whenever possible to reduce re-entering common key fields, and separate menu selections.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Views</td>
+                <td>Use the CDS550 View Manager to assist in custom applications to provide users with a convenient way to enter and change data before saving the information to disc.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Printer Selection</td>
+                <td>Use CDS084 for all printer selection so that the operator can print to any target output device without customizing the application.&#160; Use CDS094 for all new page logic and not the 
+		<code>'FF'</code> nmemonic.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Templates</td>
+                <td>Store all data templates in the Data Dictionary, and retrieve using CDS041.&#160; Do not store the template structure within the application program.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>Disc Access</td>
+                <td>Never use the <code>KEY()</code> function when not required, or when 
+		you can perform tests required after reading the next record instead of 
+		before.<br />		Never use a <code>KEY= </code>clause when you want to <code>READ</code> 
+		the next sequential record in the file.<p>Slow:<br /><code>K$=KEY(1,END=NNNN);<br />		IF K$(1,3)&lt;&gt;TER$ GOTO NNNN<br />		READ (1,KEY=K$)...</code></p><p>Faster:<br /><code>K$=KEY(1,END=NNNN);<br />		IF K$(1,3)&lt;&gt;TER$ GOTO NNNN<br />		READ (1)...</code></p><p>Fastest:<br /><code>READ (1,END=NNNN)K$,...<br />		IF K$(1,3)&lt;&gt;TER$ GOTO NNNN</code></p></td>
+            </tr>
+        </table>
+    </body>
+</html>

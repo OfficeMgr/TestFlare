@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS264 - Print Postnet Bar Code</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS264" />CDS264</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Printing:postnet" />
+                        <MadCap:keyword term="Postnet" />
+                        <MadCap:keyword term="Print Postnet Bar Code" />Print Postnet Bar Code</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS264">Last Revised: 07/29/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">A postnet bar code is a bar code used by the Post 
+	Office for routing mail.&#160; It can be printed by the sender and be 
+	located above or below the recipient's address.&#160; The Post Office will 
+	often print a postnet bar code in the lower right of the envelope.&#160; If you print the postnet code by the address, then the Post Office does not need to print it also, and if you mail enough pieces at the same time, you are entitled to a lower postage rate.</p>
+        <p>CDS264 currently supports the following printers:</p>
+        <ol>
+            <li>
+                <MadCap:keyword term="PCL" />Any printer that supports PCL, as specified in Printer Type 
+		Maintenance (SMC)</li>
+            <li>Okidata Dot Matrix printers running Microline (ML) emulation 
+		including Printer Type Codes OK520/521 and OK590,591</li>
+            <li>IBM 4232 Dot Matrix printer, Printer Type Code I4232</li>
+            <li>
+                <MadCap:keyword term="Eltron" />Eltron/Zebra Thermal printers, Printer Type Code E2046</li>
+        </ol>
+        <p>CDS264 will print the zip code, zip+4 if provided, and delivery point bar code if provided.</p>
+        <p><code>CALL "CDS264",Y6$,COL,ROW,ZIP$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS264</th>
+            </tr>
+            <tr>
+                <td>Y6$</td>
+                <td>The printer control variable, from <a href="CDS084.htm">CDS084</a>.</td>
+            </tr>
+            <tr>
+                <td>COL</td>
+                <td>The leftmost column where the bar code will be printed.<br />
+      For dot matrix printers, COL is the @() location with 10 characters per 
+		inch.<br />
+      For PCL printers COL is the number of dots in 300 per inch.</td>
+            </tr>
+            <tr>
+                <td>ROW</td>
+                <td>The topmost row, in 300 dots per inch, where the bar code will be 
+		printed.&#160; This value is ignored when using dot matrix printers, as 
+		CDS264 needs to be called at that point on the appropriate row on the 
+		page.&#160; If the bar code is printed, then ROW will be incremented by 60 dots on PCL printers.</td>
+            </tr>
+            <tr>
+                <td>ZIP$</td>
+                <td>
+        the zip code which can contain a 5 digit zip, a zip plus 4, and optionally the delivery point 
+		bar code.&#160; Note that if the zip is blank or contains alpha characters, as do Canadian zip codes, then no error is generated, and nothing is printed.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1626" MadCap:lastWidth="1024">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS284 - Return Operator Info</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS284" />CDS284</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Return Operator Info" />Return Operator Info</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS284">Last Revised: 07/02/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Operator Information Maintenance" />This is a called routine that returns the operator information that is maintained using Operator Information Maintenance, such as name, phone numbers, etc.</p>
+        <p>It is typically used within <code>DISP$</code> as an external routine of <a href="CDS037.htm">CDS037</a> and <a href="CDS038.htm">CDS038</a>.&#160;
+	<code>S284$</code> will contain all fields contained within the Operator 
+	Information Record in file CDSM01.</p>
+        <p><code>CALL "CDS284",Y$,REC$,S284$</code>
+        </p>
+        <table border="1" width="100%" id="table2">
+            <tr>
+                <th align="center">Argument</th>
+                <th align="center">To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center"><code>Y$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Session Control Variable.&#160; May be passed as null.</td>
+            </tr>
+            <tr>
+                <td align="center"><code>REC$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Templated input variable.&#160; If passed as null, then <code>
+		Y.OPERID$</code> is used, otherwise <code>REC$</code> must contain either <code>
+		REC.LOGINID$, REC.OPERID$</code> or <code>REC.BY$</code> and these must 
+		be 10 characters long.</td>
+            </tr>
+            <tr>
+                <td align="center"><code>S284$</code>
+                </td>
+                <td align="center">From</td>
+                <td><span style="font-family: d;"><code>S284$</code></span> will contain all fields in 
+		the operator information record (<code>SM01$</code>). For additional details refer to Operator Information Maintenance.<table border="1" width="100%" id="table3" class="lev2"><tr><th>Field Name</th><th>Description</th></tr><tr><td class="nowrapcode"><code>LOGINID</code></td><td>Login ID, also called the operator ID.</td></tr><tr><td class="nowrapcode"><code>NAME</code></td><td>User name</td></tr><tr><td class="nowrapcode"><code>INITIALS</code></td><td>User's initials, can be used when there is not room for the <code>LOGINID</code> 
+				or <code>NAME</code> on the display or report.</td></tr><tr><td class="nowrapcode"><code>DEPT_LOCN</code></td><td>User's department or location</td></tr><tr><td class="nowrapcode"><code>PHONE1</code></td><td>12 character telephone number followed by single character 
+				telephone type.</td></tr><tr><td class="nowrapcode"><code>EXT</code></td><td>User's telephone extension</td></tr><tr><td class="nowrapcode"><code>PHONE2<br />PHONE3<br />PHONE4</code></td><td>Other telephone numbers for user. Same format as <code>PHONE1</code>.</td></tr><tr><td class="nowrapcode"><code>EMAIL</code></td><td>User's internet email address</td></tr><tr><td class="nowrapcode"><code>WINLOGIN</code></td><td>This is a placeholder for the Windows Login Field. The actual Windows Login is stored in the <code>/u/facetwin/fct_alias</code> file and only applies when using FacetWin.</td></tr><tr><td class="nowrapcode"><code>LOGINDATE</code></td><td>Date of last login</td></tr><tr><td class="nowrapcode"><code>LOGINTIME</code></td><td>Time of last login</td></tr><tr><td class="nowrapcode"><code>LASTCC</code></td><td>Last company code used by user.&#160; Will be used as the 
+				company code at next login unless the user has a company 
+				specified in their operator preference record.</td></tr><tr><td class="nowrapcode">EMAILOPT</td><td>Send email on program errors</td></tr><tr><td class="nowrapcode">FONT</td><td>Preferred Dynastart font name</td></tr><tr><td class="nowrapcode">SIZE</td><td>Preferred Dynastart font size</td></tr><tr><td class="nowrapcode">CC</td><td>Preferred startup company code</td></tr><tr><td class="nowrapcode">MENU</td><td>Preferred startup menu code</td></tr><tr><td class="nowrapcode">FUNC_KEY_GRP</td><td>Preferred Function Key Group Code</td></tr><tr><td class="nowrapcode">PASSWORD</td><td>Dynamo Password - encrypted</td></tr><tr><td class="nowrapcode">EDITOR</td><td>Path to preferred program editor</td></tr><tr><td class="nowrapcode">OSPH</td><td>Operating System placeholder</td></tr><tr><td class="nowrapcode">SECIDPH</td><td>Security ID placeholder</td></tr><tr><td class="nowrapcode">FUTURE</td><td>Reserved for future expansion</td></tr><tr><td class="nowrapcode">COLORS</td><td>Users color preferences</td></tr><tr><td class="nowrapcode"><code>SEC</code></td><td>Unpublished operator security fields.</td></tr></table></td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table4" class="example">
+            <tr>
+                <td>Example: Display Users that are running a particular application 
+			for a particular company.&#160; The CDSM08 record contains the OPERID 
+			field so CDS284 is used to obtain the user's name.</td>
+            </tr>
+            <tr>
+                <td><code>1010 LET WHERE$="REC.COMPCODE$="""+Y.COMPCODE$+""" AND REC.APPID$(3,4)=""U010"""<br />1020 CALL "SW404",Y$,"CDSM08",SM08$,WHERE$,RECS,1<br />			1030 LET WINTITLE$="The following users must return to the menu to book orders 
+to the new month"<br />1040 IF RECS THEN CALL "CDS037","CDSM08",KNO,KEYPFX$, "OPERID|<span style="color: #FFFF00;">CDS284.NAME</span>|JOBTITLE", 
+WINX,WINY,WINROWS,WINCOLS,WINTITLE$,COLORS$,SELRTN$,WHERE$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2841.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

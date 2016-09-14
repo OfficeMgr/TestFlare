@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1234" MadCap:lastWidth="730">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS133 - File Copy</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS133" />CDS133</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Fast File Copy" />File Copy</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS133">Last Revised: 11/16/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="STR" />This called program can be used to copy a file to a new location without any changes in the file structure. &#160;It can copy data files using a record-by-record method, or a block-by-block method. The record method copy is useful when downsizing a data file. &#160;The block copy method will quickly duplicate the file without changing the file size.</p>
+        <p>CDS133 can copy any type of data file including <code><MadCap:keyword term="MKY" /><MadCap:keyword term="SKY" /><MadCap:keyword term="EPG" />MKY, SKY, DIR, IND, PGM, EPG, STR</code>, etc.&#160; It cannot copy directories. The source and/or target file names can include a data server prefix.</p>
+        <p>
+	Depending on the parameters specified, and whether or not the source file can be locked, CDS133 will copy the file in large blocks minimizing copy time approximating the speed of an operating system copy, or copy the file record by record.</p>
+        <p>This program can also be called from the File Utility (SMU) Fast File Copy 
+	option which performs a block method copy.</p>
+        <p><code>CALL "CDS133", ERR=XXXX, OLDFIL$ {, NEWFIL$, PAR$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS133</th>
+            </tr>
+            <tr>
+                <td><code>XXXX</code>
+                </td>
+                <td>
+                    <p>Represents the line to branch to if the copy is unsuccessful.&#160; Some conditions that would cause the copy to fail include:</p>
+                    <ol>
+                        <li>Unable to open the source data file</li>
+                        <li>Unable to lock the source data file, if <code>PAR$(4,1)&lt;&gt;"Y"</code></li>
+                        <li>Unable to erase an existing 
+		<code>NEWFIL$</code></li>
+                        <li>Unable to define <code>NEWFIL$</code></li>
+                    </ol>
+                </td>
+            </tr>
+            <tr>
+                <td><code>OLDFIL$</code>
+                </td>
+                <td>Name of existing file to be copied.</td>
+            </tr>
+            <tr>
+                <td><code>NEWFIL$</code>
+                </td>
+                <td>
+                    <p>
+                        <MadCap:keyword term="Date" />Name of target file or directory. &#160;If <code>NEWFIL$</code>&#160;is an existing directory, or ends with a /, then the base name of <code>OLDFIL$</code> will be used as the base name of <code>NEWFIL$</code>.</p>
+                    <p>If passed as null, then the new file name will be the same as the old file name with a <code>.YYMMDDs</code> 
+		suffix. The <code>"s"</code> suffix character will be optionally used to create a 
+		unique file name.&#160; If the new file name is passed with a period as 
+		the last character, the same date suffix logic will be added. The actual name of the target data file will be passed back to the calling program.</p>
+                    <p>Note that when <code>PAR$(4,1)="r"</code>, any <code>NEWFIL$</code> passed to <code>CDS133</code> is ignored, and <code>NEWFIL$</code> is returned to the calling program as the new name of the original source file.</p>
+                    <p>The following characters &lt;, &gt;, |, *, ?, and the space character contained within the base file name are replaced with the underscore character. When the file name must contain one of these special characters, you may be able to call <code><a href="CDS092.htm">CDS092</a></code> to rename the output file after the copy is complete.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>PAR$(1,1)</code>
+                </td>
+                <td>Display progress &amp; error messages:<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1" class="lev2"><col style="width: 19px;" /><col /><tr><td align="center" class="nowrapcode">Y</td><td>Display file copy progress, prompt operator if any error is 
+			encountered and at end of job</td></tr><tr><td class="nowrapcode" style="text-align: center;">N</td><td>Do not display any progress indicators, nor error message. &#160;If an error occurs, including not being able to open <code>OLDFIL$</code>, then the calling program will take the <code>ERR=</code> branch on the <code>CALL</code>&#160;to CDS133 with <code>ERR</code> set to the error that occurred.</td></tr><tr><td align="center" class="nowrapcode">E</td><td>Prompt operator with any error message, but do not display any 
+			file copy progress (default if not passed)</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>PAR$(2,1)</code>
+                </td>
+                <td>Replace existing file:<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2" class="lev2"><tr><td align="center" class="nowrapcode">Y</td><td>Replace existing file (default if not passed)</td></tr><tr><td align="center" class="nowrapcode">N</td><td>Only replace existing file if empty.&#160; Otherwise exit to 
+			ERR= line.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>PAR$(3,1)</code>
+                </td>
+                <td>Create directories in path to <code>NEWFIL$</code>.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table4" class="lev2"><tr><td align="center" class="nowrapcode">Y</td><td>Create directories (folders) as needed (default if not passed).</td></tr><tr><td align="center" class="nowrapcode">N</td><td>Do not create directories specified in path to <code>NEWFIL$</code> 
+			and exit with ERR=12.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>PAR$(4,1)</code>
+                </td>
+                <td>Copy method (block/record)<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table5" class="lev2"><tr><td align="center" class="nowrapcode">Y</td><td>Use block copy method if source file can be locked, otherwise use record copy method.&#160; Note 
+			that record by record copy may take longer and may not include 
+			records added or changed during the copy process.</td></tr><tr><td align="center" class="nowrapcode">N (or blank)</td><td>Use block copy method, but take <code>ERR=</code> branch on CALL if unable to lock source file 
+			(default if not passed).</td></tr><tr><td align="center" class="nowrapcode">R</td><td>Use record copy method. Source file must be lockable.</td></tr><tr><td align="center" class="nowrapcode">r</td><td>Use record copy method. Source file must be lockable. Rename source to target, and target to source after copy is complete. The new name for the source file is returned in <code>NEWFIL$</code>.</td></tr></table></td>
+            </tr>
+        </table>
+        <p>Note that if <code>OLDFIL$</code><MadCap:keyword term="CDS095" /> is open at the time of the CDS133 call, 
+	and was opened using CDS095 without the <code>"P"</code> Private copy option, then CDS133 
+	will close the file.</p>
+        <p>Also note that any file defined by CDS133, even if defined in a folder 
+	with <code>tmp</code> in its name, will not be erased upon return to the 
+	menu.</p>
+    </body>
+</html>

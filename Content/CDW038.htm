@@ -1,0 +1,1314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="13" MadCap:lastHeight="8151" MadCap:lastWidth="2151.089">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW038 - HTML Report Writer Engine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW038" />CDW038</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Dynaweb Report Writer Engine</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW038">
+		Last Revised: 02/22/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is similar to <a href="CDS038.htm">CDS038</a><MadCap:keyword term="HTML" /> 
+	except that it produces HTML output for use on a web page or email.</p>
+        <p>Note: The requirements for the HOVER global, the dwLib.js javascript 
+	library, and XX.js company specific javascript library have been eliminated.</p>
+        <p><code>CALL "CDW038", <a href="#Y$">Y$</a>, <a href="#Y5$">Y5$</a>, 
+	<a href="#Y5A$_">Y5A$</a>, <a href="#HTML$_">HTML$</a>, <a href="#W038$_">W038$</a>, 
+	<a href="#FILENAME$_">FILENAME$</a>, <a href="#KNO">KNO</a>, 
+	<a href="#KEYBEGIN$">KEYBEGIN$</a>, <a href="#KEYEND$">KEYEND$</a>, 
+	<a href="#DISP$"><MadCap:keyword term="DISP$" />DISP$</a>, <a href="#WHERE$"><MadCap:keyword term="WHERE" />WHERE$</a>, <a href="#SORTBY$">SORTBY$</a>, 
+	<a href="#MODE$">MODE$</a>, <a href="#LIMITVAL"><MadCap:keyword term="LIMITVAL" />LIMITVAL</a>, 
+	<a href="#SUBHEAD$">SUBHEAD$</a>, <a href="#FOOT$">FOOT$</a>,
+	<a href="#ENV$">ENV$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDW038</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="Y$"></a>Y$</code>
+                </td>
+                <td>Standard task control variable.&#160; The company name <code>Y.COMPNAME$</code> 
+		will be included at the top of each page.&#160; You 
+		can disable this by either clearing it (<code>Y.COMPNAME$=""</code>) before calling 
+		CDW038 or by setting the global variable <code>"$stdhead"</code> which indicates a 
+		standard page heading is to be used.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="Y5$"></a>Y5$</code>
+                </td>
+                <td>If passed as a non-blank value, <code>Y5$</code> will appear in the page heading 
+		on a separate row below the company name (if present) using style sheet class 
+      <code><MadCap:keyword term="Title" />'title'</code> if 
+		present, or cell background color <code>#ccffff</code> if not.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="Y5A$_"></a>Y5A$</code>
+                </td>
+                <td>If passed as a non-blank value, <code>Y5A$</code> will appear in the page heading 
+		on a separate row below <code>Y5$</code> (if present) using style sheet class 'title' if present, or 
+		cell background color #ffffcc if not.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="HTML$_"></a>HTML$</code>
+                </td>
+                <td>
+                    <p><code>HTML$</code> will contain the first page of output from CDW038 
+		which contains the html table.&#160; If the output is being sent in an 
+		email, then the output is typically printed to the channel opened by
+		<code><a target="_blank" href="CDS084.htm">CDS084</a></code> as in <code>
+		PRINT (Y6.CH)HTML$</code>.&#160; If the output is being displayed on a 
+		web page, then after calling CDW038, <code>HTML$</code> is ultimately 
+		passed to <a target="_blank" href="CDW999.htm"><code>CDW999</code></a> 
+		which will send the output to the client browser.</p>
+                    <p>Note that <code>HTML$</code> will be null if there are no records in
+		<code>FILENAME$</code> that meet the conditions specified by either the
+		<code>WHERE$</code> clause or <code>KNO</code>, <code>KEYBEGIN$</code> 
+		and <code>KEYEND$</code>.&#160; In many cases, the line of code after 
+		the call to CDW038 sets <code>HTML$</code> to some message when it comes 
+		back from CDW038 as null, i.e., <code>IF LEN(HTML$)=0 THEN HTML$="No 
+		information to be displayed"</code>. In some cases it is beneficial to 
+		include the <code>WHERE$</code> expressing to assist in debugging, i.e., <code>IF 
+		LEN(HTML$)=0 THEN HTML$="No information to be displayed using WHERE 
+		clause ""+WHERE$+"""".</code></p>
+                    <p><code>HTML$</code> will contain error messages with white text on a 
+		red background when CDW038 is unable to complete the task.&#160; See 
+		error messages below.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="W038$_"></a>W038$</code>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.PRINTCOUNT$</code>
+                            </td>
+                            <td>If Y then the number of records included in the report will 
+				be show below the table.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BLANKS_B</code>
+                            </td>
+                            <td>If non-zero, a blank row will be inserted after each table 
+				row and before each call of <code>W038.EXTRTN$</code>.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.EXTRTN$</code>
+                            </td>
+                            <td>External program called after each record is processed.
+
+        <p>Called using:<br /><code>CALL W038.EXTRTN$,Y$,Y5$,Y5A$,HTML$,REC$</code><br />        where <code>REC$</code> is the record just processed, and <code>HTML$</code> is the table prepared through this record. This option is useful when it is necessary to insert another table or other data below a table row.</p></td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BLANKS_A</code>
+                            </td>
+                            <td>If non-zero, a blank row will be inserted after each call of 
+				<code>W038.EXTRTN$.</code></td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BLANKS_EOR</code>
+                            </td>
+                            <td>If non-zero, blank lines using <code>&lt;BR&gt;</code> will be added to the HTML at the end of the job</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.PROGRESS$</code>
+                            </td>
+                            <td>If W, then after 100 records have been processed, the progress message "Preparing Report..." will be sent to the browser, and an asterisk after every additional 100 records processed.&#160; 
+				This progress indicator can be used to prevent the client 
+				browser from timing out and displaying an error page.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.ROWSPERPAGE</code>
+                            </td>
+                            <td>Indicates the number of data table rows that should appear 
+				on each page.&#160; After <code>CDW038</code> has built the html 
+				table, it calls <code><a target="_blank" href="CDW040.htm">
+				CDW040</a></code> to separate the output into pages with links 
+				at the bottom of each page to enable navigation to any specific 
+				page.&#160; See 
+				<a href="CDW040.htm"><code>CDW040</code></a> for default values 
+				if <code>W038.ROWSPERPAGE</code> is passed as zero.&#160; Set
+				<code>W038.ROWSPERPAGE</code> to a negative number to cause the 
+				html output to replace the current page, clearing any progress 
+				indicators that might have been displayed as the report was 
+				prepared.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.ROWSHEAD</code>
+                            </td>
+                            <td>If non-zero, then the heading row with the column headings will be inserted in the table after every 
+				<code>W038.ROWSHEAD</code> rows. Often set to 15 so that as the browser scrolls through the table, a heading row always appears somewhere on the view.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.USECLASS$</code>
+                            </td>
+                            <td>
+                                <table>
+                                    <col />
+                                    <col />
+                                    <tbody>
+                                        <tr>
+                                            <td>blank</td>
+                                            <td>Include the class= attributes in the row tags as shown in the table below. This option should be used when a reference to an external style sheet is included in the resultant HTML. Note that CDW999 will include a reference to the default style sheet if one is specified in Dynaweb Configuration Maintenance (WMS). &#160;Produces the shortest HTML code and is the preferred option when using an external style sheet can be used.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">S</td>
+                                            <td>Some email applications including Gmail and 
+				Hotmail have limited support for cascading style sheets (css). Our tests indicate that these applications do not support external style sheets, nor styles based on a class or id. However, they do support inline style attributes located inside an html tag, as well as style tags contained in the <code>&lt;head&gt;</code> section. This option will include a &lt;style&gt; section at the start of <code>HTML$</code> which includes table, and td tags. Row based styles will be specified within each &lt;tr&gt; tag.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">N</td>
+                                            <td>The class= references shown below will not be included within the row tags. Each row and cell tag will include attributes inline. &#160;This option creates the longest HTML so it should be used only when one of the other options cannot be used, as would be the case when the web page or email contains multiple tables with different styles.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table border="1" id="table9">
+                                    <tr>
+                                        <th colspan="2">Class names used by CDW038 and can be specified by an external style sheet</th>
+                                    </tr>
+                                    <tr>
+                                        <th>class=</th>
+                                        <th>Usage</th>
+                                    </tr>
+                                    <tr>
+                                        <td>top</td>
+                                        <td>Top row which contains company name &amp; <code>SUBHEAD$</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>title</td>
+                                        <td>Title row which contains <code>Y5$</code> and <code>
+						Y5A$</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>head</td>
+                                        <td>Column heading row which contains column headings</td>
+                                    </tr>
+                                    <tr>
+                                        <td>rowodd</td>
+                                        <td>Odd numbered rows</td>
+                                    </tr>
+                                    <tr>
+                                        <td>roweven</td>
+                                        <td>Even numbered rows</td>
+                                    </tr>
+                                    <tr>
+                                        <td>foot</td>
+                                        <td>Footer row which contains <code>FOOT$</code></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.INPUTROW$</code>
+                            </td>
+                            <td>When using the report as a form for data entry, i.e., <code>
+                DISP$</code> options segment described below includes an "I", 
+ setting <code>INPUTROW$="Y"</code> causes the row number to be 
+ appended to each field name.&#160; For example, a field named
+                <code>POINTS</code> will become <code>POINTS1</code>, <code>
+                POINTS2</code>, <code>POINTS3</code>, etc. so that each row in 
+ the table has unique field names.&#160; This is often the 
+ preferred option as it is easier to process the form.&#160; In 
+ addition, the total number of rows will be returned in <code>
+                CGI.WMS_ROWS$</code>.&#160; You may also want to set <code>
+                W038.ROWSPERPAGE</code> to a high number to prevent pagination.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGTOP$</code>
+                            </td>
+                            <td>6 character background color to be used for top row of the 
+				table.&#160; Top row contains company name from <code>Y.COMPNAME$</code> 
+				with <code>SUBHEAD$</code> passed to CDW038 below the company 
+				name.&#160; If using a standard page heading specified using the
+				<code>"$stdhead"</code> global, then the company name is 
+				excluded from the row.&#160; You can also set <code>Y.COMPNAME$=""</code> 
+				before calling CDW038 to suppress the company name.&#160; If not 
+				passed, the default background color of <code>FFFFCC</code> is 
+				used which is a light yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGTITLE$</code>
+                            </td>
+                            <td>6 character background color to be used for the title rows 
+				of the table.&#160; The title rows appear below the top row and 
+				contains the information from <code>Y5$</code> and <code>Y5A$</code> 
+				passed to CDW038.&#160; The default color is <code>FFFF99</code> 
+				which is a medium yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGHEAD$</code>
+                            </td>
+                            <td>6 character background color to be used for the column 
+				heading row of the table.&#160; The column heading row appears 
+				below the title rows.&#160; The contents of the column headings 
+				comes from the template but can be overridden using the <code>
+				TITLE</code> slot in <code>DISP$</code>.&#160; The default color 
+				is <code>FFFF66</code> which is a dark yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGSUB$</code>
+                            </td>
+                            <td>6 character background color to be used for sub-total rows.&#160; 
+				The default color is <code>FFFF99</code> which is a medium 
+				yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGTOT$</code>
+                            </td>
+                            <td>6 character background color to be used for the report total 
+				row.&#160; The default color <code>FFFF66</code> which is a dark 
+				yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.BGFOOT$</code>
+                            </td>
+                            <td>6 character background color to be used for the footer row 
+				of the table.&#160; The footer row appears at the bottom of the 
+				table and is used for <code>FOOT$</code> and links to page 
+				numbers within the document.&#160; The default color is <code>
+				FFFF99</code> which is a medium yellow.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.TABLECLASS$</code>
+                            </td>
+                            <td>Used to specify the class of the html table.&#160; This 
+				class should be defined in the style sheet.&#160; If not passed, 
+				then the style sheet for the 'table' tag will be used.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>W038.PLINK$</code>
+                            </td>
+                            <td>
+                                <p>The text to be added to the base <code>[DSN]</code> (Dynaweb 
+				Script Name) when using hypertext links.&#160; For example, set
+				<code>W038.PLINK$="p=WA012"</code> to run program <code>WA012</code> when link is clicked.&#160; 
+				Dynaweb typically uses the <code>p</code> variable in the link 
+				to designate the program to be run, after <code>WA010</code> 
+				performs basic web initialization.</p>
+                                <p><code>PLINK$</code> can 
+				also be used to pass other field values to the linked program.&#160; 
+				For example, if the program needs a temporary work file named
+				<code>WORKFIL$</code> created 
+				by the initial program, you could pass the work file name to the 
+				linked program WA012 in
+				<code>PLINK$</code> as in <code>W038.PLINK$="p=WA012&amp;wfil="+WORKFIL$</code>.&#160; 
+				The linked program can them determine the work file name by 
+				referencing <code>CGI.WFIL$</code>.</p>
+                                <p>If the linked program also 
+				calls CDW038 to display records from the temporary work file, 
+				then it will retrieve the work file template from the data 
+				dictionary.&#160; If the linked program does not use CDW038, 
+				then you can open the temporary work file and obtain the 
+				template using the <code>"D"</code> option in the fifth 
+				character of <code>PAR$</code> when calling <a href="CDS095.htm">
+				CDS095</a>.</p>
+                                <p>If the Data Dictionary 
+				file name for the work file is <code>"IM040W."</code> and <code>
+				W038.PLINK$</code> included <code>"wfil="+WORKFIL$</code>, 
+				then the following code can be used to read records from the 
+				temporary work file:</p>
+                                <p><code>CALL "CDS095",IM040W,CGI.WFIL$,"YNYND",IM040W$<br />				READRECORD (IM040W)IM040W$</code>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="FILENAME$_"></a>FILENAME$</code>
+                </td>
+                <td>
+        The file name of the primary data file.&#160; The file can be type MKY, 
+		SKY, or DIR and requires a template.&#160; <code>FILENAME$</code> 
+		will be opened using either <code>OPEN</code> or <code>SELECT</code>.&#160; If 
+		<code>WHERE$</code>, <code>SORTBY$</code>, or <code>MODE$</code> is specified, then 
+		<code>SELECT</code> will be used and <code>KNO</code>, 
+		<code>KEYBEGIN$</code>, and <code>KEYEND$</code> will be ignored.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="KNO"></a>KNO</code>
+                </td>
+                <td>
+        The <code>KNUM</code> of the file to be used.&#160; Ignored if <code>WHERE$</code>,
+		<code>SORTBY$</code>, or <code>MODE$</code> is used.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="KEYBEGIN$"></a>KEYBEGIN$</code>
+                </td>
+                <td>
+        The starting key or partial key in <code>FILENAME$</code>.&#160; If 
+		passed as null, then the first record in the file will be used.&#160; 
+		Ignored if <code>WHERE$</code>, <code>SORTBY$</code>, or <code>MODE$</code> 
+		is used.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="KEYEND$"></a>KEYEND$</code>
+                </td>
+                <td>
+        The ending key or partial key in <code>FILENAME$</code>.&#160; If passed 
+		as null, then <code>KEYEND$</code> will be the same as <code>KEYBEGIN$</code>.&#160; 
+		For example, in a file where the primary key includes a customer#, date, 
+		and invoice#, you could pass <code>KEYBEGIN$</code> as the customer#, 
+		and <code>KEYEND$</code> as null.&#160; All records in the file with the 
+		first part of the key matching the customer# passed will be included.&#160; 
+		Ignored if <code>WHERE$</code>, <code>SORTBY$</code>, or <code>MODE$</code> 
+		is used.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="DISP$"></a>DISP$</code>
+                </td>
+                <td><code>DISP$</code> contains field names to appear in the html table.&#160; Each field is separated with the | symbol, and any optional elements of the field are separated by the \ symbol.&#160; 
+		The complete format of each field is <code>FILE.FIELD[INDEX]\TITLE\MASK\COL,ROW\OPTIONS\WHERE\SORTBY\LINKNAME\</code>.&#160; 
+		Each of the elements are described below.<table><tr><td><code>FILE.FIELD[INDEX]</code></td><td>This field typically contains only a field name such as 
+				CUSTNO, NAME, DESC1, etc.&#160; If <code>FILE.</code> is not 
+				specified, then it is assumed that the field occurs in the 
+				primary file specified by <code>FILENAME$</code>.<p>
+				However, CDW038 can also include fields from related files.&#160; 
+				Related files can be used when the primary key of the related 
+				file is a single field with the same name as any field in the 
+				primary file.&#160; For example, if the key of the primary data 
+				file is CUSTNO+DATE+INVNO then all fields in the customer file, 
+				such as the customer name could be referenced by XXCM01.NAME 
+				where XXCM01 is the file name of the customer file.&#160; See 
+				additional examples below.</p><p><code>FILE.</code> can also be a program name, which will be 
+				called with an argument list of <code>Y$,PRIMARY$,RELATED$</code> 
+				where <code>Y$</code> is the standard task control variable,
+				<code>PRIMARY$</code> is the templated data structure for the 
+				primary file (<code>FILENAME$</code>), and <code>RELATED$</code> 
+				is the templated data structure returned by the calling program.&#160; 
+				The option is useful when certain calculations or file access is 
+				required to provide the data to be included in the output.&#160; 
+				If the called program exits with an error 99, <code>EXIT 99</code>, 
+				then this signals CDW038 to skip this record.&#160; This 
+				technique can be used when the conditions to include a record is 
+				based on some calculation or other logic from an external 
+				program that you can write.&#160; The programs output fields 
+				must be defined in the data dictionary using the program name as 
+				the data dictionary file name.</p><p>If this field simply contains * then all fields (and all 
+				indexes of any repeating fields) will be included using the 
+				default <code>TITLE</code> and <code>MASK</code>.&#160; The 
+				asterisk can also be used to include all fields in a related 
+				file or called program as in <code>XXCM01.*</code> or <code>
+				IC031.*</code>.</p><p>The <code>[INDEX]</code> specified on repeating fields to 
+				indicate the specific <code>INDEX</code> desired, such as <code>
+				SALES[4]</code>.&#160; <code>[ALL]</code> may also be specified 
+				as a shortcut for including all indexes of the repeating field.&#160; 
+				When the repeating field has 12 elements where each element 
+				represents one month you can specify an <code>INDEX</code> of
+				<code>[ALL]</code> and <code>TITLE</code> element (below) as
+				<code>Mth</code> to cause short month names (Jan, Feb, Mar, ...) 
+				to be used as the <code>TITLE</code> for each column, or <code>
+				Month</code> to cause long month names (January, February, 
+				March, ...) to be used as the <code>TITLE</code> for each 
+				column.</p></td></tr><tr><td><code>TITLE</code></td><td><p>Normally the <code>TITLE</code> is derived from the template 
+				and passed here as null, however you may override the <code>
+				TITLE</code> by passing it in this position of <code>DISP$</code>.</p><p>You can also use the <code>TITLE</code> segment to create a hyperlink for 
+				the column, typically provided to enable sorting by column.&#160; 
+				For example, to provide a hyperlink to program xxxx and pass 
+				variable col as 'NAME' specify the <code>TITLE</code> segment, 
+				as well as other arguments necessary to create the report such 
+				as arg1 and arg2:</p><p><code>&lt;a href='[DSN]?p=xxxx&amp;col=NAME&amp;arg1=VALUE&amp;arg2=VALUE'&gt;Name&lt;/a&gt;</code></p><p>
+				Should the operator click on this link, then program xxxx will 
+				run which can check the value of the col variable and sort the 
+				data by the desired column.</p></td></tr><tr><td><code>MASK</code></td><td><p>Normally the <code>MASK</code> is also derived from the 
+				template and passed here as null, however you may override the
+				<code>MASK</code> by passing it in this position of <code>DISP$</code>.&#160; 
+				Since the template mask size may not be large enough for 
+				sub-totals or totals, a mask larger than that in the template is 
+				often used.&#160; Date and time masks can also be used for date 
+				and numeric time and elapsed time fields.</p><p>
+				For string variables, mask segment can also be used for a 
+				sub-string expression, instead of a mask.&#160; For example, the 
+				mask segment could contain <code>(1,10)</code> or <code>(5,10)</code> 
+				or <code>(5)</code>.</p></td></tr><tr><td><code>COL,ROW</code> or <code>FLDNAME</code></td><td><p>Normally, CDW038 will create a separate column for each 
+				field, with one row of data per record.&#160; You can start 
+				another row using the same data record by specifying the <code>
+				COL</code> and <code>ROW</code> or <code>FLDNAME</code>.&#160;
+				</p></td></tr><tr><td><code>OPTIONS</code></td><td>The <code>OPTIONS</code> element can contain the following 
+				characters.&#160; Any other characters are ignored.<table><tr><td align="center" class="nowrapcode">T</td><td>Total this numeric field. Totals are displayed in the last row of the table.</td></tr><tr><td align="center" class="nowrapcode"><code>u</code></td><td>Sub-total and total this numeric field</td></tr><tr><td align="center" class="nowrapcode"><code>S</code></td><td>Sub-total but do not total this numeric field</td></tr><tr><td align="center" class="nowrapcode"><code>B</code></td><td>Display field as blank if same as value in previous 
+						row.&#160; This can improve the readability of the 
+						output by not repeating the same value over and over, 
+						especially in the leftmost columns of the output.</td></tr><tr><td align="center" class="nowrapcode"><code>l</code></td><td>(Lower case L) Override default field alignment and 
+						left justify this field</td></tr><tr><td align="center" class="nowrapcode"><code>r</code></td><td>Override default field alignment and right justify 
+						this field.&#160; <code>CDW038</code> will right justify 
+						all numeric values by default.</td></tr><tr><td align="center" class="nowrapcode"><code>c</code></td><td>Override default field alignment and center this 
+						field.&#160; <code>CDW038</code> will center by default, 
+						all date and time fields, as well as fields where the 
+						maximum field length is 5 or less.</td></tr><tr><td align="center" class="nowrapcode"><code>w</code></td><td>Do not wrap the contents of this cell to multiple 
+						lines (nowrap).</td></tr><tr><td align="center" class="nowrapcode"><code>L</code></td><td>Create a hyperlink for this field.&#160; The link 
+						value for date fields is always in julian date format.<p>If <code>W038.PLINK$</code> begins with "http", then the 
+						link starts with <code>W038.PLINK$</code>.</p><p>If <code>W038.PLINK$</code> does not begin with 
+						"http", the the link starts with <code>STBL("SCRIPT_NAME")</code>.&#160; 
+						If the SCRIPT_NAME includes a "?" then the link will 
+						include all characters through the last "?" followed by
+						<code>W038.PLINK$</code> otherwise a "?" and <code>
+						W038.PLINK$</code> is appended to the link.</p><p>If the <code>LINKNAME</code> element is not 
+						specified, then the current field name and value is 
+						appended to the link, as in &amp;SONO=888222 or ?SONO=888222.&#160; 
+						When <code>LINKNAME</code> is specified, then it's field 
+						name and value are used in the link instead of the 
+						current field name and value.</p><p>All template field types are supported including C, 
+						N, U, etc.&#160; Leading and trailing blanks are removed 
+						from the link value for C type fields.&#160; </p><p>A typical field with a link will result in html code 
+						such as:</p><p><code>&lt;a href="http://dynaweb.excellware.com/cgi-bin/ex.cgi?p=WA020&amp;SONO=888222"&gt;888222&lt;/a&gt;</code></p></td></tr><tr><td align="center" class="nowrapcode">b</td><td>When used with the L hyperlink option, the lower 
+						case b indicates that the hyperlink should include 
+						"target=_blank" so that clicking the link will cause the 
+						resultant page to appear in a separate browser window or 
+						tab.</td></tr><tr><td align="center" class="nowrapcode">p</td><td>Indicates that the cell data may also include cell 
+						formatting data, which precedes the data and is 
+						separated from the data using the pipe (|) character.&#160; 
+						This feature allows the programmer to change the colors 
+						or other attributes of cells conditionally based on data 
+						values.&#160; The valid cell formatting options are 
+						listed below.<table><tr><td><code>b</code></td><td>bold</td></tr><tr><td><code>i</code></td><td>italic</td></tr><tr><td><code>gxxxxxx</code></td><td>background color xxxxxx</td></tr><tr><td><code>fxxxxxx</code></td><td>foreground (text) color xxxxxx</td></tr><tr><td><code>sxxx</code></td><td>set fonts size to xxx</td></tr><tr><td>blank followed by text</td><td>adds text to cell style tag</td></tr></table><p>For example, if the data field contains "<code>bgff0000 
+						font-family:Courier|Shipped"</code>, then the cell data 
+						(Shipped) will be displayed in bold (b), with a red cell 
+						background (gff0000), in the Courier font.&#160; The 
+						html text generated will be: <code>&lt;td style="font-weight:bold; 
+						background-color:#ff0000; font-family:Courier"&gt;Shipped&lt;/td&gt;</code>.</p></td></tr><tr><td align="center" class="nowrapcode">z</td><td>Show zero value numbers as blank</td></tr><tr><td align="center" class="nowrapcode">I</td><td>Use an input tag for operator entry in this field.&#160; 
+						The input will be type text, with a name equal to the 
+						field name, with the size and maxlength set to the field 
+						size, and the value set to the current field value.&#160; 
+						Example html: <code>&lt;input type='text' name='POINTS' 
+						size=4 maxlength=4 value='7'&gt;</code>.&#160; Note the 
+						HTML output of CDW038 will require a <code>&lt;form&gt;</code> tag and 
+						attributes, a submit button, and a <code>&lt;/form&gt;</code> tag to make 
+						the web page a form that can be submitted and processed 
+						by a bbx program.</td></tr><tr><td align="center" class="nowrapcode">H</td><td>Create a hidden input tag for this field.&#160; 
+ Hidden input tags are included in <code>CGI$</code> just 
+ like non-hidden inputs.&#160; This is useful when using 
+ CDW038 to create an input form.&#160; A key field or 
+ other row identifier can be marked with the H option to 
+ facilitate identifying the record key value when 
+ processing the form.&#160; Note that the H and I options 
+ cannot be used on the same field.</td></tr></table></td></tr><tr><td><code>WHERE</code></td><td>In most cases, there is one row of output displayed for each 
+				primary data record.&#160; However, there is a way to include 
+				multiple rows of data for each primary data record, based on 
+				records in another file.&#160; For example if the primary key to 
+				the warehouse file is ITEMNO+WHS, then even though the primary 
+				file (<code>FILENAME$</code>) is the item file, a row can be 
+				displayed for each warehouse record on file.&#160; This feature 
+				is enabled by providing the <code>WHERE</code> element as a 
+				'where' clause suitable for use on a <code>SELECT</code> verb.&#160; 
+				In the item and warehouse file example, <code>WHERE</code> would 
+				be passed as: <code>XXUM21.ITEMNO$=REC.ITEMNO$</code> assuming 
+				the warehouse file name is <code>XXUM21</code>.&#160; The 
+				primary data file is referred to as <code>REC$</code>.</td></tr><tr><td><code>SORTBY</code></td><td><code>SORTBY</code> is only used in conjunction with the
+				<code>WHERE</code> option above and can be used to alter the 
+				sequence of the records processed in the related file.&#160; For 
+				example, to change the sequence of the related records from the 
+				default warehouse code sequence to have the warehouse records 
+				with the highest quantity-on-hand shown first, then pass a <code>
+				SORTBY</code> element as <code>ADJN(-EXT.QOH)</code> where the 
+				related external file is referred to as <code>EXT$</code> and
+				<code>QOH</code> is the field name for quantity-on-hand.&#160; 
+				The <code>ADJN()</code> function is used when sorting numeric 
+				fields.&#160; The leading "-" will change the sequence to 
+				highest-to-lowest.</td></tr><tr><td><code>LINKNAME</code></td><td>This element is only used in conjunction with the <code>L</code> 
+				(link) option described above.&#160; It is needed when the 
+				hyperlink needs to refer to a different field name than the 
+				current field.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="WHERE$"></a>WHERE$</code>
+                </td>
+                <td>
+                    <p>Where clause used with <code>SELECT</code> verb to limit the records 
+		to be displayed.&#160; The primary data file can be referred to as either
+		<code>REC$ </code>or the base file name excluding the company code as in
+		<code>CM01$, IM02$, </code>etc.&#160; Example: <code>REC.STATE$="OH" and 
+		REC.SALES&gt;0</code>.&#160; Since the <code>WHERE</code> element is also a 
+		string field, any imbedded quotes need to be duplicated as in <code>
+		REC.STATE$=""OH"" and REC.SALES&gt;0</code>.&#160; You can also omit <code>
+		REC$</code> or the file name as in <code>STATE$=""OH"" and SALES&gt;0</code>.&#160; 
+		Note that when <code>WHERE$</code> is used, then <code>KNO</code>, <code>
+		KEYBEGIN$</code> and <code>KEYEND$</code> are ignored.</p>
+                    <p>The <code>WHERE</code> clause can refer to any field in the primary 
+		file.&#160; It cannot refer to fields in related files, or fields 
+		derived from a called program.&#160; In that situation, you can either 
+		create and populate a work file, then pass the work file name to CDW038.&#160; 
+		In some cases you can use <a href="CDS038.htm">CDS038</a> to create a 
+		work file.</p>
+                    <p>When the <code>WHERE</code> clause refers to fixed length numeric 
+		fields, i.e., <code>U(3), I(3), N(6),</code> use the string 
+		representation of the field instead of the numeric.&#160; This is done so that bbx will read only a 
+		portion of a data file instead of the entire file when one of the 
+		numeric fields is used in a key segment.&#160; For example if you used&#160;
+		<code>WHERE$="REC.DATE&gt;="+STR(JUL(2007,1,1))+" AND 
+		REC.DATE&lt;="+STR(JUL(2007,12,31))"</code>&#160; and <code>REC.DATE</code> 
+		is a <code>U(3)</code> field, and even though there was a <code>KNUM</code> by <code>
+		REC.DATE</code>, bbx would read through the entire data file.&#160; 
+		Instead, use <code>WHERE$="REC.DATE$&gt;="""+BIN(JUL(2007,1,1),3)+""" AND 
+		REC.DATE$&lt;="""+BIN(JUL(2007,12,31),3)+"""" </code>
+		or<code> WHERE$="REC.DATE$&gt;="""+STR(FDATE)+""" AND REC.DATE$&lt;="""+STR(TDATE)+"""".</code></p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="SORTBY$"></a>SORTBY$</code>
+                </td>
+                <td>
+                    <p>Optional sortby clause also used with <code>SELECT</code> verb to 
+		control the sequence that records are displayed and to create sub-total 
+		rows.&#160; Note that you must use <code>SORTBY$</code> in order to 
+		create sub-total rows, even when the data file is pre-sorted.&#160; The file name 
+		does not need to precede the field name but can be <code>REC.</code> or
+		<code>CM01.</code> as described above.&#160; For example, to sort by 
+		descending sales (a B type field) within state, pass <code>SORTBY$</code> 
+		as <code>STATE$+ADJN(-SALES)</code>.&#160; 
+		Note that when <code>SORTBY$</code> is used, then <code>KNO</code>, <code>
+		KEYBEGIN$</code> and <code>KEYEND$</code> are ignored.&#160; You can 
+		sort by fields contained within the primary file, fields contained in 
+		related/external files, or even fields determined from a called program.</p>
+                    <p>Sub-totals are enabled by including a <code>"T"</code> or <code>"S"</code> 
+		in the OPTIONS field described above, and by using a <code>/S</code> 
+		following the field name in <code>SORTBY$</code> such as <code>SORTBY$="STATE$/S+ADJN(-SALES)".</code>&#160; 
+		Multiple sub-total levels can be enabled by additional <code>/S</code> 
+		codes in the <code>SORTBY$</code> clause, i.e., <code>SORTBY$="REGION$/S+STATE$/S+CITY$/S+CUSTNO$"</code>.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="MODE$"></a>MODE$</code>
+                </td>
+                <td><code>MODE$</code> is passed to the <code>SELECT</code> verb.&#160; The most popular use is for creating a log file describing the optimization logic used by 
+		<code>SELECT</code>.&#160; To enable this option, pass <code>MODE$</code> as 
+		<code>"debug=tmp/cdw038.txt"</code>, and a text file will be created with optimization data.&#160; 
+		You can review the optimization data to determine how BBx chooses the 
+		bests KNUM to use.&#160; You have some options to override the default 
+		behavior of BBx by passing <code>"opt=nowhere"</code>, <code>"opt=nosort"</code>, or 
+		<code>"opt=none"</code>.&#160; 
+		Refer to the BBx documentation for the <code>SELECT</code> verb for additional 
+		details.&#160; Note that when <code>MODE$</code> is used, then <code>KNO</code>, <code>
+		KEYBEGIN$</code> and <code>KEYEND$</code> are ignored.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="LIMITVAL"></a>LIMITVAL</code>
+                </td>
+                <td>Optional limit to the number of records to be displayed.&#160; For 
+		example, to limit the output to the top 50 customers based on sales, the
+		<code>LIMITVAL</code> would be passed as 50.&#160; Note that the <code>
+		LIMITVAL</code> can be used whether the primary data file is opened 
+		using <code>OPEN</code> or <code>SELECT</code>.&#160; <code>LIMITVAL</code> 
+		can also be passed during testing to reduce the size or the time to 
+		produce the output.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="SUBHEAD$"></a>SUBHEAD$</code>
+                </td>
+                <td>This field can contain text that will appear in the first row, below 
+		the company name (<code>Y.COMPNAME$</code>).&#160; It might contain the 
+		actual customer name or other report heading information.&#160; Multiple 
+		lines can be passed using the html <code>&lt;BR&gt;</code> tag as a separator, 
+		as in <code>Metal Mouldings&lt;BR&gt;Cleveland Division</code>.&#160; The
+		<code>SUBHEAD$</code> field uses the style sheet class 'top' or cell 
+		background color #ffffcc if not using a style sheet.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="FOOT$"></a>FOOT$</code>
+                </td>
+                <td><code>FOOT$</code> can be passed to <code>CDW038</code> as html text 
+		that is appended to each page of the <code>CDW038</code> output.&#160; 
+		It typically would contain links to return to a menu and to logoff.&#160; 
+		The footer text is placed in a separate row at the bottom of the table.&#160; 
+		The style sheet class 'foot' will control the appearance of this row.&#160; 
+		If not using a style sheet then <code>CDW038</code> will use a cell 
+		background color of #ccffff.&#160; Example: <code>&lt;a href=""/cgi-bin/em.cgi?p=WA020""&gt;Report 
+		Entries&lt;/a&gt; | &lt;a href=""/cgi-bin/em.cgi""&gt;Home&lt;/a&gt; | &lt;a href=""/cgi-bin/em.cgi?p=WA998""&gt;Customer 
+		Selection&lt;/a&gt; | &lt;a href=""/cgi-bin/em.cgi?p=WA999""&gt;Logout&lt;/a&gt; | [HELP].		</code>Quotes are doubled since this text is within a BBx string.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code><a name="ENV$"></a>ENV$</code>
+                </td>
+                <td>The bbweb environment variable which can be passed to <code>CDW038</code>, 
+ but is not currently being used.</td>
+            </tr>
+        </table>
+        <p><code>CDW038</code> produces an HTML table that consists of the following sections with 
+	style sheet class names shown.&#160; The appearance of each section, 
+	including text and background color, is determined by the style sheet.&#160; If you are not using a 
+	style sheet, or the class name does not exist, then the default colors 
+	listed will be used.&#160; The classes shown are used on the table row tag, 
+	so the style sheet can contain either:</p>
+        <p><code>tr.top {background-color: #rrggbb}</code>
+        </p>
+        <p>or</p>
+        <p><code>.top {background-color: #rrggbb}</code>
+        </p>
+        <p>Other attributes including the font color, may be also assigned using the 
+	style sheet:</p>
+        <p><code>tr.title</code>
+        </p>
+        <p><code>&#160;&#160;&#160;&#160;&#160;&#160;&#160; {<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160; background-color: red;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160; color: white;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160; font-family:verdana,arial,sans-serif;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160; font-weight:600;<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160; }</code>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1">
+            <tr>
+                <th>class name</th>
+                <th>Description</th>
+                <th>Default Color</th>
+            </tr>
+            <tr>
+                <td>top</td>
+                <td>Very top row of table, typically used for company name.&#160; If 
+			the global variable <code>$stdhead</code> is present, then it will be placed in 
+			this row, otherwise <code>Y.COMPNAME$</code> will be used with <code>&lt;strong&gt;</code> tag for 
+			emphasis.&#160; In the same row, the <code>SUBHEAD$</code> field will be added 
+			following a <code>&lt;br&gt;</code> tag.</td>
+                <td bgcolor="#FFFFCC">ffffcc<br />(very light yellow)</td>
+            </tr>
+            <tr>
+                <td>title</td>
+                <td>Next row of table, contains report title from <code>Y5$</code></td>
+                <td bgcolor="#CCFFFF">ffff99<br />(light yellow)</td>
+            </tr>
+            <tr>
+                <td>title</td>
+                <td>Next row of table, contains report sub-title from <code>Y5A$</code></td>
+                <td bgcolor="#FFFFCC">ffff99<br />(light yellow)</td>
+            </tr>
+            <tr>
+                <td>head</td>
+                <td>Next row of the table contains column headings</td>
+                <td nowrap="" bgcolor="#FFFFCC">ffff66 (yellow)</td>
+            </tr>
+            <tr>
+                <td>rowodd</td>
+                <td>The odd numbered rows are assigned this style sheet class so 
+			that you may have alternating row colors if desired</td>
+                <td>uses body color</td>
+            </tr>
+            <tr>
+                <td>roweven</td>
+                <td>Even numbered rows in table body</td>
+                <td>uses body color</td>
+            </tr>
+            <tr>
+                <td>foot</td>
+                <td>The first footer row is typically used for links to successive 
+			pages</td>
+                <td bgcolor="#CCFFFF">ccffff (blue)</td>
+            </tr>
+            <tr>
+                <td>foot</td>
+                <td>The second footer row is typically used for links to other pages on 
+			the site</td>
+                <td bgcolor="#CCFFFF">ccffff (blue)</td>
+            </tr>
+            <tr>
+                <td>subtotal</td>
+                <td>Rows containing subtotals</td>
+                <td bgcolor="#CCFFFF">99ff99</td>
+            </tr>
+            <tr>
+                <td>total</td>
+                <td>Row containing totals</td>
+                <td bgcolor="#CCFFFF">99ff99</td>
+            </tr>
+        </table>
+        <table border="1" id="table8">
+            <tr>
+                <th colspan="2">Error Messages</th>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <th>Corrective Action</th>
+            </tr>
+            <tr>
+                <td>Filename not specified</td>
+                <td>Verify that <code>FILENAME$</code> is non-blank</td>
+            </tr>
+            <tr>
+                <td>Invalid field name: _XXXX</td>
+                <td>Field name shown is not supported in CDW308</td>
+            </tr>
+            <tr>
+                <td>Formatting Error with field XXXXX</td>
+                <td>Problem parsing <code>_FILL</code> parameters <code>(SIZE,CHAR$)</code></td>
+            </tr>
+            <tr>
+                <td>Unable to locate external field named XXXX in any external 
+			record</td>
+                <td>Field name XXXX located in <code>DISP$</code> must be a 
+			templated field contained within the primary record, a called 
+			program, or an external file that can be accessed using a key 
+			comprised of a single field. </td>
+            </tr>
+            <tr>
+                <td>Missing field name at XXXX</td>
+                <td>Check to be sure there is a | symbol separating each field in
+			<code>DISP$</code></td>
+            </tr>
+            <tr>
+                <td>Index value of XXX is invalid for field name XXXX in file XXXX</td>
+                <td>The index for a repeating field exceeds the number of repeating 
+			elements</td>
+            </tr>
+            <tr>
+                <td>CDW038 does not yet support the subtotal sortby expression XXXX</td>
+                <td>Check <code>SORTBY$</code> syntax.&#160; Be sure string 
+			variables include the <code>$</code>.</td>
+            </tr>
+            <tr>
+                <td>Field name XXX is an invalid template field for file XXXX.</td>
+                <td>Verify that the field name specified is contained in the 
+			template file if file XXXX is a data file, or in the data dictionary 
+			if XXXX is a program.</td>
+            </tr>
+            <tr>
+                <td>Error XX selecting records to be printed, with a table that 
+			includes FILENAME$, template, DISP$, WHERE$, Revised WHERE$ (after 
+			pre-processing), SORTBY$, Revised SORTBY$ (after pre-processing).</td>
+                <td>This error indicates that a field specified in <code>WHERE$</code> 
+			or <code>SORTBY$</code> is not valid, or these clauses contain an 
+			invalid character, or in some cases, the fields in a record are too 
+			short to build the key for sorting.&#160; If the fields being sorted 
+			are variable length, you may need to pad them out using expressions 
+			such as <code>SORTBY$=REC.NAME$+FILL(30-LEN(REC.NAME$))</code>.</td>
+            </tr>
+            <tr>
+                <td>Error XX selecting records from related file, including table 
+			information as described in above row</td>
+                <td>Verify that the <code>WHERE</code> and <code>SORTBY</code> 
+			clauses contained in <code>DISP$</code> are valid for the related 
+			file.</td>
+            </tr>
+            <tr>
+                <td>Field name XXX is an invalid template field in current file, 
+			File=XXX, Template=XXXX</td>
+                <td>Invalid <code>LINKNAME</code> in <code>DISP$</code></td>
+            </tr>
+            <tr>
+                <td>Error XX trying to open file name XXXX and retrieve template</td>
+                <td>Unable to open primary data file <code>FILENAME$</code> or 
+			retrieve template from global memory, template file, or data 
+			dictionary</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table6" class="example">
+            <tr>
+                <td>Simple example with minimal parameters specified, and no style sheet</td>
+            </tr>
+            <tr>
+                <td><code>Y5$="Shipper Services"<br />			FILENAME$="DSCW21" <br />			CALL "CDW038",Y$,Y5$,Y5A$,HTML$,W038$,FILENAME$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <style>
+.none
+{
+	border: 1;
+}
+
+</style>
+                    <table class="none" align="center" border="1" cellspacing="0" cellpadding="3">
+                        <colgroup>
+                            <col align="center" />
+                            <col align="right" />
+                            <col align="left" />
+                            <col align="center" />
+                            <col align="center" />
+                            <col align="right" />
+                            <col align="right" />
+                        </colgroup>
+                        <tr class="none" bgcolor="#ffffcc">
+                            <td align="center" colspan="7"><strong>Dynamo by Excellware</strong>
+                            </td>
+                        </tr>
+                        <tr class="none" bgcolor="#ccffff">
+                            <td align="center" colspan="7">Shipper Services</td>
+                        </tr>
+                        <tr bgcolor="#ffffcc" class="none">
+                            <td>Carrier</td>
+                            <td>Seq</td>
+                            <td>Service</td>
+                            <td>USF</td>
+                            <td>Air</td>
+                            <td>Max Lbs</td>
+                            <td>Max Ozs</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>FDX</td>
+                            <td>1</td>
+                            <td>Ground</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>FDX</td>
+                            <td>2</td>
+                            <td>Home Delivery</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>FDX</td>
+                            <td>3</td>
+                            <td>Express Saver</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>FDX</td>
+                            <td>4</td>
+                            <td>2 Day</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>FDX</td>
+                            <td>5</td>
+                            <td>Standard Overnight</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>FDX</td>
+                            <td>6</td>
+                            <td>Priority Overnight</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>FDX</td>
+                            <td>7</td>
+                            <td>First Overnight</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>INO</td>
+                            <td>1</td>
+                            <td>US Mail</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>15</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>OTH</td>
+                            <td>1</td>
+                            <td>Best Way</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>OTH</td>
+                            <td>2</td>
+                            <td>Will Call</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>OTH</td>
+                            <td>3</td>
+                            <td>Our Truck</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>UPS</td>
+                            <td>1</td>
+                            <td>Ground</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>UPS</td>
+                            <td>2</td>
+                            <td>3 Day Select</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>UPS</td>
+                            <td>3</td>
+                            <td>2nd Day Air</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>UPS</td>
+                            <td>4</td>
+                            <td>2nd Day Air AM</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>UPS</td>
+                            <td>5</td>
+                            <td>Next Day Air Saver</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>UPS</td>
+                            <td>6</td>
+                            <td>Next Day Air</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>UPS</td>
+                            <td>7</td>
+                            <td>Next Day Early AM</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>1</td>
+                            <td>Best Way</td>
+                            <td>B</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>2</td>
+                            <td>Media Mail</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>4</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>3</td>
+                            <td>First Class</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>13</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>4</td>
+                            <td>Parcel Post</td>
+                            <td>U</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>5</td>
+                            <td>Priority Mail</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>6</td>
+                            <td>Express Mail</td>
+                            <td>U</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>7</td>
+                            <td>Airmail Letter Post</td>
+                            <td>F</td>
+                            <td>Y</td>
+                            <td>4</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>8</td>
+                            <td>Airmail Parcel Post</td>
+                            <td>F</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>9</td>
+                            <td>Economy Letter Post</td>
+                            <td>F</td>
+                            <td>N</td>
+                            <td>4</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>10</td>
+                            <td>Economy Parcel Post</td>
+                            <td>F</td>
+                            <td>N</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="rowodd">
+                            <td>USM</td>
+                            <td>11</td>
+                            <td>Global Priority Mail</td>
+                            <td>F</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#ccffcc" class="roweven">
+                            <td>USM</td>
+                            <td>12</td>
+                            <td>Global Express Mail</td>
+                            <td>F</td>
+                            <td>Y</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr bgcolor="#66ff66" class="total">
+                            <td>&#160;</td>
+                            <td>141</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                            <td>&#160;</td>
+                            <td>12</td>
+                            <td>28</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <p>Example:</p>
+        <table align="center" border="1" cellspacing="0" cellpadding="3">
+            <col align="right" />
+            <col align="center" />
+            <col align="left" />
+            <col align="left" />
+            <col align="center" />
+            <col align="left" />
+            <col align="left" />
+            <col align="center" />
+            <col align="right" />
+            <tr class="top" bgcolor="#ffffcc">
+                <td align="center" colspan="9"><strong>Envelope Mart</strong>
+                    <br />BUSH ASSOCIATES, INC</td>
+            </tr>
+            <tr class="title" bgcolor="#ccffff">
+                <td align="center" colspan="9">Open Orders/Closed Orders/Quotations<br />Order Date Range: 07/20/04 to 08/19/04</td>
+            </tr>
+            <tr class="head" bgcolor="#ffffcc">
+                <td>Order#</td>
+                <td>Order Date</td>
+                <td>Your PO#</td>
+                <td>Enduser PO#</td>
+                <td>Whs</td>
+                <td>Reference</td>
+                <td>Form#</td>
+                <td>Date Shipped</td>
+                <td>Invoice Amount</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>160302</u>
+                </td>
+                <td>Wed 08/18/04</td>
+                <td>CLN-Q</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>#10 REG &amp; WIND 2/0</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>890.00</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>160298</u>
+                </td>
+                <td>Wed 08/18/04</td>
+                <td>CLN-Q</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>CSI / CHEMICAL SOLVENTS CHE004</td>
+                <td>CHE004</td>
+                <td>&#160;</td>
+                <td>447.50</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>160297</u>
+                </td>
+                <td>Wed 08/18/04</td>
+                <td>CLN-Q</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>CSI/CHEMICAL SOLVENTS #10 POLY</td>
+                <td>CHE006</td>
+                <td>&#160;</td>
+                <td>505.00</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>160159</u>
+                </td>
+                <td>Wed 08/18/04</td>
+                <td>CLN-Q</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>CA 10 X 13 1/0</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>662.30</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>160137</u>
+                </td>
+                <td>Wed 08/18/04</td>
+                <td>CLN-Q</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>A-2 CLASSIC CREST NAT.WHITE</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>83.79</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>159960</u>
+                </td>
+                <td>Tue 08/17/04</td>
+                <td>56497</td>
+                <td>MI-20396</td>
+                <td>E</td>
+                <td>#14 Regular * BLANK STOCK</td>
+                <td>BAR142</td>
+                <td>Est. Fri 08/20/04</td>
+                <td>450.00</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>159959</u>
+                </td>
+                <td>Tue 08/17/04</td>
+                <td>QUOTE VAL - PHONE</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>KIRKWOOD INDUSTRIES</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>172.38</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>159953</u>
+                </td>
+                <td>Tue 08/17/04</td>
+                <td>QUOTE</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>#10 WINDOW 3m &amp; 5m</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>448.10</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>159544</u>
+                </td>
+                <td>Fri 08/13/04</td>
+                <td>QUOTE VAL - PHONE</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>#14 Regular * BLANK STOCK</td>
+                <td>BAR142</td>
+                <td>&#160;</td>
+                <td>450.00</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>159543</u>
+                </td>
+                <td>Fri 08/13/04</td>
+                <td>KRK</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>9 X 12 BOOKLET UNPRINTED KRK</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>1674.00</td>
+            </tr>
+            <tr class="rowodd">
+                <td><u>159539</u>
+                </td>
+                <td>Fri 08/13/04</td>
+                <td>KRK</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>9 X 12 BOOKLET COMOB 108 LOTS</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>12204.00</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>159015</u>
+                </td>
+                <td>Wed 08/11/04</td>
+                <td>CCF</td>
+                <td>&#160;</td>
+                <td>Q</td>
+                <td>4-3/8 X 5-3/4</td>
+                <td>&#160;</td>
+                <td>&#160;</td>
+                <td>80.33</td>
+            </tr>
+            <tr class="roweven">
+                <td><u>158186</u>
+                </td>
+                <td>Mon 08/09/04</td>
+                <td>55403</td>
+                <td>SONDRA ARTHUR</td>
+                <td>E</td>
+                <td>FERRO * INDEPENDENCE (POLYMER)</td>
+                <td>FER833</td>
+                <td>Tue 08/10/04</td>
+                <td>16.47</td>
+            </tr>
+            <tr class="foot" bgcolor="#ccffff">
+                <td align="center" colspan="99"><strong>1 </strong><u>2</u> <u>Next page&gt;</u></td>
+            </tr>
+            <tr class="foot" bgcolor="#ccffff">
+                <td align="center" colspan="9"><u>Report Entries</u> | <u>Home</u> | <u>Customer Selection</u> |  <u>Logout</u>  | <u>Help</u></td>
+            </tr>
+        </table>
+    </body>
+</html>

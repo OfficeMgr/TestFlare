@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="1569" MadCap:lastWidth="955">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDX101 - Wrap Text over Multiple Rows</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDX101</p>
+        <table class="revision">
+            <col />
+            <col />
+            <tr>
+                <td>
+                    <p class="SectionTitle">Wrap Text over Multiple Rows</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDX101">Last Revised: 
+		11/06/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDX101 is another example of a "T" type external routine. It can be used to display text that requires more than one display row. You can also use CDX101 without copying it to another program name.</p>
+        <p>Note that CDX101 is intended for display/print purposes within a view, and does not currently support data entry of multi-row fields.</p>
+        <p>Use the Data Dictionary field properties to set the Data Entry Type to "T", program name CDX101. You can also specify the maximum number of display rows to reserve for this field in the Maximum property. The default is 2 rows when the Maximum is less than 2.</p>
+        <p>CDX101 attempts to break lines at a blank space when possible.</p>
+        <p>If even the wrapped text does not fit in the number of rows allocated for the field, then each display row will be filled with text and trailing characters will be truncated.</p>
+        <table class="example">
+            <tr>
+                <td>CDX101 Source Code</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "CDX101 - 11/06/13 Wrap multi-row field (T)</code>
+                    <br style="mc-tag-and-class: code;" /><code>0110 SETESC 8000; SETERR 8000</code>
+                    <br style="mc-tag-and-class: code;" /><code>0120 ENTER S039$,REC$,X100$</code>
+                    <br style="mc-tag-and-class: code;" /><code>0130 ON POS(X100.ACTION$="BQP") GOSUB ENTRY,BKG,DISPLAY</code>
+                    <br style="mc-tag-and-class: code;" /><code>0140 EXIT</code>
+                    <br style="mc-tag-and-class: code;" />
+                    <br style="mc-tag-and-class: code;" /><code>1000 ENTRY:</code>
+                    <br style="mc-tag-and-class: code;" /><code>1010 RETURN</code>
+                    <br style="mc-tag-and-class: code;" />
+                    <br style="mc-tag-and-class: code;" /><code>1100 BKG:</code>
+                    <br style="mc-tag-and-class: code;" /><code>1110 LET X100.OUT$=FILL(MAX(2,S039.MAXV)-1,"|")</code>
+                    <br style="mc-tag-and-class: code;" /><code>1120 RETURN</code>
+                    <br style="mc-tag-and-class: code;" />
+                    <br style="mc-tag-and-class: code;" /><code>1200 DISPLAY:</code>
+                    <br style="mc-tag-and-class: code;" /><code>1210 CALL "CDS252",0,"",FIN$</code>
+                    <br style="mc-tag-and-class: code;" /><code>1220 LET MAXROWS=MAX(2,S039.MAXV); REM "Set display rows in Data Dictionary, Max Length property</code>
+                    <br style="mc-tag-and-class: code;" /><code>1230 LET WIDTH=FIN.LOGCOLS-S039.COL</code>
+                    <br style="mc-tag-and-class: code;" /><code>1240 LET VAL$=CVS(FIELD(REC$,S039.FLDNAM$,S039.INDEX),3)</code>
+                    <br style="mc-tag-and-class: code;" /><code>1250 FOR PASS=1 TO 2</code>
+                    <br style="mc-tag-and-class: code;" /><code>1260 LET ROW=0,OUT$=""</code>
+                    <br style="mc-tag-and-class: code;" /><code>1270 REPEAT</code>
+                    <br style="mc-tag-and-class: code;" /><code>1280 IF LEN(VAL$)&lt;=WIDTH THEN LET Z=LEN(VAL$) ELSE IF PASS=2 THEN LET Z=WIDTH</code>
+                    <br style="mc-tag-and-class: code;" /><code>1280:ELSE LET Z=POS(" "=VAL$(1,WIDTH+1),-1); IF Z THEN LET Z=Z-1 ELSE LET Z=WIDTH</code>
+                    <br style="mc-tag-and-class: code;" /><code>1290 LET OUT$=OUT$+@(S039.COL,S039.ROW+ROW)+VAL$(1,Z)+'CL',ROW=ROW+1,VAL$=CVS(
+1290:VAL$(Z+1),1)</code>
+                    <br style="mc-tag-and-class: code;" /><code>1300 UNTIL LEN(VAL$)=0 OR ROW=MAXROWS</code>
+                    <br style="mc-tag-and-class: code;" /><code>1310 IF LEN(VAL$)=0 THEN BREAK</code>
+                    <br style="mc-tag-and-class: code;" /><code>1320 NEXT PASS</code>
+                    <br style="mc-tag-and-class: code;" /><code>1330 IF X100.ACTION$="Q" THEN PRINT OUT$, ELSE LET X100.OUT$=OUT$</code>
+                    <br style="mc-tag-and-class: code;" /><code>1340 RETURN</code>
+                    <br style="mc-tag-and-class: code;" />
+                    <br style="mc-tag-and-class: code;" /><code>8000 REM "Call Error/Escape Routine</code>
+                    <br style="mc-tag-and-class: code;" /><code>8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)</code>
+                    <br style="mc-tag-and-class: code;" /><code>8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060
+8030 SETERR 0</code>
+                    <br style="mc-tag-and-class: code;" /><code>8040 RETRY</code>
+                    <br style="mc-tag-and-class: code;" /><code>8050 RETURN</code>
+                    <br style="mc-tag-and-class: code;" /><code>8060 RETRY</code>
+                    <br style="mc-tag-and-class: code;" />
+                    <br style="mc-tag-and-class: code;" /><code>9000 EOJ:</code>
+                    <br style="mc-tag-and-class: code;" /><code>9010 IF TCB(13) THEN EXIT</code>
+                    <br style="mc-tag-and-class: code;" /><code>9020 RUN "CDS001"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="Resources/Images/cdx101dd.png" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="Resources/Images/cdx101ex.png" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

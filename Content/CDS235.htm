@@ -1,0 +1,457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="8227" MadCap:lastWidth="972">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS235 - Convert Templated String to XML</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS235</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert Templated String to XML</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS235">Last Revised: 03/30/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be called to convert a templated string to XML.&#160; It supports simple (text only) fields, repeating fields, 
+dates, and subelements to represent header/detail relationships.</p>
+        <p>Note: CDS235 does not use, nor require use of the Dynamo Tools Data 
+Dictionary.&#160; For fastest performance, all information required is obtained 
+directly from the template.&#160; Since templates are stored in global memory, 
+CDS235 requires no disc access to complete its task.&#160; However, the Data 
+Dictionary should be used to describe the XML structure of the root element, and 
+all subelements.&#160; CDS235 does call CDS041 to obtain all templates, which 
+it will obtain from either global memory, or the data dictionary.</p>
+        <p>CDS235 includes all fields in the template.&#160; It does not exclude 
+optional fields.</p>
+        <p>CDS235 does not support XML attributes.&#160; <code><span style="color: #FF0000;">
+lang="en"</span></code> is a attribute in <code>
+&lt;title <span style="color: #FF0000;">lang="en"</span>&gt;<span style="color: #000000;">Harry Potter</span>&lt;/title&gt;</code>.&#160; 
+The use of attributes is often discouraged, as the information can typically be 
+contained in another element.</p>
+        <p>CDS235 does not support mixed content elements such as <code>&lt;Note&gt;<span style="color: #000000;">Your 
+Order# </span>&lt;OrderNo&gt;<span style="color: #000000;">12345</span>&lt;/OrderNo&gt;<span style="color: #000000;"> 
+was shipped on </span>&lt;ShipDate&gt;<span style="color: #000000;">Fri Jan 22, 2010</span>&lt;/ShipDate&gt;<span style="color: #000000;"> 
+with Tracking Number </span>&lt;TrackNo&gt;<span style="color: #000000;">1Z123450001</span>&lt;/TrackNo&gt;</code>.</p>
+        <p>CDS235 does not perform validation against a Document Type Definition (dtd) 
+or a XML Schema (xsd), however there are several java api's that can be used to 
+validate the XML data produced by CDS235.</p>
+        <p>CDS235 will use the XML standard line-feed character to place each element on 
+its own line.</p>
+        <table>
+            <tr>
+                <th colspan="2">Supported Field Types</th>
+            </tr>
+            <tr>
+                <td>simple numeric</td>
+                <td>All numeric field types are supported, fixed and variable length, i.e., 
+N(5), N(10*), U(4), I(3), B, etc.</td>
+            </tr>
+            <tr>
+                <td>simple string</td>
+                <td>Character fields C() are placed in XML with leading and trailing spaces 
+removed, and any non-ASCII characters replaced with blanks.&#160; The reserved 
+characters shown in the table are replaced with their XML equivalent.<table id="table1"><tr><th colspan="2" align="center">XML Reserved Characters</th></tr><tr><th align="center">Character</th><th>XML Representation</th></tr><tr><td align="center"><code>&lt;</code></td><td align="center"><code>&amp;lt;</code></td></tr><tr><td align="center"><code>&gt;</code></td><td align="center"><code>&amp;gt&gt;;</code></td></tr><tr><td align="center"><code>&amp;</code></td><td align="center"><code>&amp;amp;</code></td></tr><tr><td align="center"><code>'</code></td><td align="center"><code>&amp;apos;</code></td></tr><tr><td align="center"><code>"</code></td><td align="center"><code>&amp;quot;</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td>repeating numeric</td>
+                <td>the repeat index <code>[NNN]</code> is not included in the XML.</td>
+            </tr>
+            <tr>
+                <td>repeating string</td>
+                <td>the repeat index <code>[NNN]</code> is not included in the XML.</td>
+            </tr>
+            <tr>
+                <td>dates</td>
+                <td>Dates (numeric or string are always exported in YYYY-MM-DD format).&#160; 
+Note: Since CDS235 does not require the Data Dictionary, it determines if a 
+field is a date by looking for date type components (<code>%M, %D, %Y</code>) in 
+the mask.&#160; If the XML dates are not appearing in YYYY-MM-DD format, then 
+change the data dictionary to add a mask suitable for a date.&#160; If the 
+template is being created locally, not using the data dictionary, then include 
+the omask user defined field, i.e., <code>DATE:C(8):omask=%Mz/%Dz/%Yz:.</code></td>
+            </tr>
+            <tr>
+                <td>subelements</td>
+                <td>Subelements, also called child elements, are elements that contain other 
+elements.&#160; A subelement is indicated by a double underscore in the Field 
+Name.&#160; The part of the Field Name to the right of the double underscore us 
+used to obtain the template for the subelement structure.&#160; See Subelement 
+section below and example.&#160; Warning: You cannot use a double underscore in 
+a field name that is not a subelement.</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS235", ERR=XXXX, REC$, XML$, S235$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS235 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if an error occurs, and the operator selected the option to abort.&#160; See Error Descriptions below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <p>Templated string variable.&#160; For simple XML documents without any subelements (header/detail structures), any template can be used.&#160; The user defined template field 'title' can be used as the XML tag name based on <code>S235.TAGNAME$</code> setting.</p>
+                    <p>For XML documents that have subelements (header/detail structures), refer to the Subelements section below.</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>XML$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Returned XML data</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.TAGNAME$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td align="center">blank</td>
+                            <td>Use Field Name as Tag Name (all upper case)</td>
+                        </tr>
+                        <tr>
+                            <td align="center">T</td>
+                            <td>Use title as Tag Name, removing any blanks in title.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">U</td>
+                            <td>Use title as Tag Name, replace blanks with underscore.&#160; This is the 
+most popular choice, as XML tag names are typically mixed case with underscores.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th align="left" nowrap="nowrap"><code>S235.ROOTELEMENT$</code>
+                </th>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Pass the Tag Name for the Root Element.&#160; CDS235 will use 'Record' as the Root Element Tag Name if not passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.DECLARATION$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Optional Declaration tag that to be placed at the beginning of <code>XML$</code>.&#160; Pass as "default" to use default value of<br /><span class="sc3"><span class="re1"><code>&lt;?xml</code></span> <code><span class="re0">version</span>=<span class="st0">"1.0"</span> <span class="re0">encoding</span>=<span class="st0">"UTF-8"</span></code> <span class="re2"><code>?&gt;</code></span></span></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.SUBELEMENTS</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Describes the structure of subelements.&#160; See examples below.<table border="1" id="table2"><tr><td align="center">blank</td><td>Subelements are concatenated together without any length prefix.&#160; 
+		This option does not enable subelements to contain other subelements and 
+		requires all subelement fields to be fixed length.</td></tr><tr><td align="center">U</td><td>Subelements are concatenated together with a length prefix 
+		indicating the overall length of the subelement.&#160; This option 
+		supports unlimited nesting of subelements.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.INDENT</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Number of blank spaces to indent each row</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.ERRCNT</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Counter set by CDS235 for each error encountered.&#160; See Error Descriptions below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S235.ERRMSG$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td align="center">blank</td>
+                            <td>Report error message to operator, and prompt to display record, ignore error, or abort application</td>
+                        </tr>
+                        <tr>
+                            <td align="center">N</td>
+                            <td>Do not prompt operator with any error messages.&#160; Note if S235.ERRMSG$ is passed as a blank, and an error occurs, and the operator selected the option to ignore errors, then S235.ERRMSG$ will be set to "N" by CDS235.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>Error Descriptions</th>
+            </tr>
+            <tr>
+                <th>Message to operator if <code>S235.ERRMSG$&lt;&gt;"N"</code></th>
+            </tr>
+            <tr>
+                <td>Data does not match template at Field Name NNNNN</td>
+            </tr>
+            <tr>
+                <td>Non-numeric data of 'value' at Field Name NNNN</td>
+            </tr>
+            <tr>
+                <td>Subelements cannot contain field separators or binary data</td>
+            </tr>
+            <tr>
+                <td>Subelement length is not an exact multiple of Subelement template</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code> variable must be templated.</td>
+            </tr>
+        </table>
+        <p><b>Subelements (Header/Detail Structures)</b>
+        </p>
+        <p>Elements that contain other elements, other than the root element, are Subelements.&#160; Subelements are indicated by a 
+double underscore in the Field Name.&#160; If the double underscore is at the 
+end of the field name, then the subelement template is based on the field name 
+less the double underscore.&#160; If the double underscore is not at the end of 
+the field name, then the subelement template is based on the field name that 
+follows the underscodes.&#160; For example, the field name <code>
+LINE__</code> and <code>
+LINEITEMS__LINE</code> indicate a subelement.&#160; A template for <code>
+"LINE"</code> will be required either in Global Memory (<code>TPL_LINE</code>), 
+or in the Data Dictionary.</p>
+        <p>CDS235 supports subelements in two different formats.&#160; </p>
+        <table border="1" id="table3">
+            <tr>
+                <th>Subelement formats</th>
+                <th>S235.SUBELEMENTS$=" "</th>
+                <th>S235.SUBELEMENTS$="U"</th>
+            </tr>
+            <tr>
+                <td>Subelement fields</td>
+                <td>must be fixed length, i.e., C(10) not C(10*), N(8) not N(8*)</td>
+                <td>may be variable length</td>
+            </tr>
+            <tr>
+                <td>depth</td>
+                <td>only one level of subelements, i.e., subelements cannot contain 
+		other subelements</td>
+                <td>unlimited subelement depth</td>
+            </tr>
+            <tr>
+                <td>length prefix</td>
+                <td>not used</td>
+                <td>4 digit length required as prefix to each subelement</td>
+            </tr>
+        </table>
+        <p>XML document desired:</p><pre><code>&lt;Order&gt;
+ &lt;OrderNumber&gt;<span style="color: #000000;">12345</span>&lt;/OrderNumber&gt;
+ &lt;OrderDate&gt;<span style="color: #000000;">10/15/02</span>&lt;/OrderDate&gt;
+<span style="background-color: #FFFF99;"> &lt;lineitem&gt;
+  &lt;ItemNumber&gt;<span style="color: #000000;">1111</span>&lt;/ItemNumber&gt;
+  &lt;Description&gt;<span style="color: #000000;">6&amp;apos; Ladder</span>&lt;/Description&gt;
+  &lt;Quantity&gt;<span style="color: #000000;">5</span>&lt;/Quantity&gt;
+ &lt;/lineitem&gt;
+ &lt;lineitem&gt;
+  &lt;ItemNumber&gt;<span style="color: #000000;">2222</span>&lt;/ItemNumber&gt;
+  &lt;Description&gt;<span style="color: #000000;">Mouse Pad &amp;lt;Red&amp;gt;</span>&lt;/Description&gt;
+  &lt;Quantity&gt;<span style="color: #000000;">15</span>&lt;/Quantity&gt;
+ &lt;/lineitem&gt;
+ &lt;lineitem&gt;
+  &lt;ItemNumber&gt;<span style="color: #000000;">3333</span>&lt;/ItemNumber&gt;
+  &lt;Description&gt;<span style="color: #000000;">Third Description</span>&lt;/Description&gt;
+  &lt;Quantity&gt;<span style="color: #000000;">-12</span>&lt;/Quantity&gt;
+ &lt;/lineitem&gt;</span>
+ &lt;OrderTotal&gt;<span style="color: #000000;">12345.67</span>&lt;/OrderTotal&gt;
+&lt;/Order&gt;</code></pre>
+        <p>In this example, there are three line items on the order.&#160; Each line item has 3 
+elements.&#160; Lineitem is a subelement since it contains elements ItemNumber, 
+Description, and Quantity.&#160; The template for the root element <code>ORDER$</code> is:</p>
+        <p><code>ORDNO:C(8),:title=Order_Number:,<br />ORDDATE:C(8):title=Order_Date:,<br />LINES__<span style="color: #FF0000;">LINE</span>:C(1*):title=line_item:,<br />TOTAL:N(10*):title=Order_Total:</code>
+        </p>
+        <p>The template for the subelement lineitem <code><span style="color: #FF0000;">LINE</span>$</code> is:</p>
+        <p><code>ITEMNO:C(5):title=Item_Number:,<br />DESC:C(30):title=Description:,<br />QTY:N(4):title=Quantity:</code>
+        </p>
+        <p>Note that <code>REC.LINES__LINE$</code> will contain all the line item 
+information.&#160; CDS235 will use CDS041 to retrieve the template with a Data 
+Dictionary Name of <code>LINE</code>.&#160; However, if not using the Dynamo 
+Data Dictionary, you can set a global variable for each subelement template as done in the example below.</p>
+        <p>The subelement itself (<code>LINES_LINE</code>) in this example, must be 
+variable length, as it will contain an unlimited number of line items.&#160; The 
+fields contained in the subelement (<code>ITEMNO</code>, <code>DESC</code>, and
+<code>QTY</code>) must all be fixed length type <code>C</code> or <code>N</code>.&#160; 
+Subelements cannot include field separators when <code>S235.SUBELEMENT$</code> 
+is blank.&#160; They cannot be binary field types 
+such as <code>U()</code>, <code>I()</code> or <code>B</code>.</p>
+        <p>Since <code>REC.LINES__LINE$</code> can contain zero, one or more detail line items.&#160; 
+Since the subelement template fields are all fixed length, the subelement 
+field (<code>LINES__LINE$</code>) is actually a concatenated list.&#160; When 
+the subelement is zero length, the subelement is excluded from the XML, and no 
+error is reported.</p>
+        <p>Note that you can have multiple subelements in the root element.</p>
+        <p>If a subelement contains another subelement, then the pass <code>
+S235.SUBELEMENTS$</code> as <code>"U"</code> and prefix each subelement with a 4 
+digit length.&#160; Note that each nested subelement requires a different field 
+terminator.&#160; For example the first subelement can have template type <code>
+C(1*=1)</code>, and any subelements below this could have template type <code>
+C(1*=2)</code>, and the next <code>C(1*=3)</code>, etc.&#160; You can use field 
+terminators with values 0-9, 11-31 and 128-255.&#160; The standard line feed 
+terminator <code>C(1*=10)</code> can be used for variable length fields, and 
+should not be used as the subelement terminator.&#160; This enables nesting of 
+subelements up to 160 levels deep.&#160; Binary field types such as <code>U(), 
+I(),</code> and <code>B()</code> are not supported.</p>
+        <p>See examples below.</p>
+        <table class="example">
+            <tr>
+                <td>Simple example using field names as XML tags</td>
+            </tr>
+            <tr>
+                <td><code>DIM REC$:"CUSTNO:C(6),NAME:C(30*),CITY:C(28*),STATE:C(2),ZIP:C(5)"<br />REC.CUSTNO$="123456",REC.NAME$="Excellware, Inc."<br />REC.CITY$="Cleveland",REC.STATE$="OH",REC.ZIP$="44133"<br />CALL "CDS235",REC$,XML$<br />?XML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><pre><code><span style="color: #FFFF00;">&lt;Record&gt;
+ &lt;CUSTNO&gt;</span>123456<span style="color: #FFFF00;">&lt;/CUSTNO&gt;
+ &lt;NAME&gt;</span>Excellware, Inc.<span style="color: #FFFF00;">&lt;/NAME&gt;
+ &lt;CITY&gt;</span>Cleveland<span style="color: #FFFF00;">&lt;/CITY&gt;
+ &lt;STATE&gt;</span>OH<span style="color: #FFFF00;">&lt;/STATE&gt;
+ &lt;ZIP&gt;</span>44133<span style="color: #FFFF00;">&lt;/ZIP&gt;
+&lt;/Record&gt;</span></code></pre>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Simple example using default XML declaration, titles with spaces removed as XML tag names, a repeating field, and a Root Element Tag Name.</td>
+            </tr>
+            <tr>
+                <td><code>0110 BEGIN<br />0120 LET TPL$="CUSTNO:C(6):title=Customer_Number:"<br />0130 LET TPL$=TPL$+",NAME[2]:C(30):title=Customer_Name:"<br />0140 LET TPL$=TPL$+",CITY:C(28)"<br />0150 LET TPL$=TPL$+",STATE:C(2)"<br />0160 LET TPL$=TPL$+",ZIP:C(5):title=zip_code:"<br />0170 DIM REC$:TPL$<br />0180 LET REC.CUSTNO$="123456"<br />0190 LET REC.NAME$[1]="Excellware, Inc."<br />0200 LET REC.NAME$[2]="Attn: Jim Mathers"<br />0210 LET REC.CITY$="Cleveland"<br />0220 LET REC.STATE$="OH"<br />0230 LET REC.ZIP$="44133"<br />0240 CALL "CDS041","CDS235",S235$<br />0250 LET S235.TAGNAME$="T"<br />0260 LET S235.ROOTELEMENT$="Customer"<br />0270 LET S235.DECLARATION$="default"<br />0280 CALL "CDS235",REC$,XML$,S235$<br />0290 PRINT XML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code><span style="color: #FFFF00;">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;<br />&lt;Customer&gt;<br />&#160;&lt;CustomerNumber&gt;</span>123456<span style="color: #FFFF00;">&lt;/CustomerNumber&gt;<br />&#160;&lt;CustomerName&gt;</span>Excellware, Inc.<span style="color: #FFFF00;">&lt;/CustomerName&gt;<br />&#160;&lt;CustomerName&gt;</span>Attn: Jim Mathers<span style="color: #FFFF00;">&lt;/CustomerName&gt;<br />&#160;&lt;CITY&gt;</span>Cleveland<span style="color: #FFFF00;">&lt;/CITY&gt;<br />&#160;&lt;STATE&gt;</span>OH<span style="color: #FFFF00;">&lt;/STATE&gt;<br />&#160;&lt;zipcode&gt;</span>44133<span style="color: #FFFF00;">&lt;/zipcode&gt;<br />&lt;/Customer&gt;</span></code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example with a single subelement: a sales order with multiple line items.<p>Lines 
+1560-1650 are only required when building the templates locally.<br />The best practice is to use the Data Dictionary and not build templates locally.&#160; 
+In this case you would use CDS041 to retrieve the root element template, and all 
+sub element templates from the Data Dictionary.&#160; See next example.</p></td>
+            </tr>
+            <tr>
+                <td><code>1500 TEST:<br />1510 BEGIN<br />1520 CALL "CDS041","CDS235",S235$,"YY"<br />1530 LET S235.TAGNAME$="U"<br />1540 LET S235.ROOTELEMENT$="Order"<br />1550 LET S235.DECLARATION$="default"<br />1560 LET TPL$="ORDNO:C(8):title=Order_Number:"<br />1570 LET TPL$=TPL$+",ORDDATE:C(8):title=Order_Date omask=%Mz/%Dz/%Yz:"<br />1580 LET TPL$=TPL$+",LINES__LINE:C(1*):title=line_item:"<br />1590 LET TPL$=TPL$+",TOTAL:N(10*):title=Order_Total:"<br />1600 DIM ORDER$:TPL$<br />1610 LET TPL$="ITEMNO:C(5):title=Item_Number:"<br />1620 LET TPL$=TPL$+",DESC:C(30):title=Description:"<br />1630 LET TPL$=TPL$+",QTY:N(4):title=Quantity:"<br />1640 DIM LINE$:TPL$<br />1650 LET TMP$=STBL("TPL_LINE",FATTR(LINE$)); REM "Save template in global space<br />1660 LET ORDER.ORDNO$="12345"<br />1670 LET ORDER.ORDDATE$="10/15/02"<br />1680 LET LINE.ITEMNO$="1111",LINE.DESC$="6' Ladder",LINE.QTY=5<br />1690 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1700 LET LINE.ITEMNO$="2222",LINE.DESC$="Mouse Pad &lt;Red&gt;",LINE.QTY=15</code>
+                    <p><code>1710 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1720 LET LINE.ITEMNO$="3333",LINE.DESC$="Plastic Cup",LINE.QTY=-12<br />1730 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1740 LET ORDER.TOTAL=12345.67<br />1750 CALL "CDS235",ORDER$,XML$,S235$<br />1760 PRINT 'CS',XML$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Same example using Data Dictionary to retrieve root element and sub element 
+templates.</td>
+            </tr>
+            <tr>
+                <td><code>1500 TEST:<br />1510 BEGIN<br />1520 CALL "CDS041","CDS235",S235$,"YY"<br />1530 LET S235.TAGNAME$="U"<br />1540 LET S235.ROOTELEMENT$="Order"<br />1550 LET S235.DECLARATION$="default"<br />1560 CALL "CDS041","ORDER",ORDER$,"YY"<br />1570 CALL "CDS041","LINE",LINE$,"YY"<br />1660 LET ORDER.ORDNO$="12345"<br />1670 LET ORDER.ORDDATE$="10/15/02"<br />1680 LET LINE.ITEMNO$="1111",LINE.DESC$="6' Ladder",LINE.QTY=5<br />1690 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1700 LET LINE.ITEMNO$="2222",LINE.DESC$="Mouse Pad &lt;Red&gt;",LINE.QTY=15<br />1710 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1720 LET LINE.ITEMNO$="3333",LINE.DESC$="Plastic Cup",LINE.QTY=-12<br />1730 LET ORDER.LINES__LINE$=ORDER.LINES__LINE$+LINE$<br />1740 LET ORDER.TOTAL=12345.67<br />1750 CALL "CDS235",ORDER$,XML$,S235$<br />1760 PRINT 'CS',XML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+Result shown below, which is the same whether templates are built locally, or 
+derived from Data Dictionary.</td>
+            </tr>
+            <tr>
+                <td><pre><code><span style="color: #FFFF00;">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;Order&gt;
+ &lt;Order_Number&gt;</span>12345<span style="color: #FFFF00;">&lt;/Order_Number&gt;
+ &lt;Order_Date&gt;</span>2002-10-15<span style="color: #FFFF00;">&lt;/Order_Date&gt;
+ &lt;line_item&gt;
+  &lt;Item_Number&gt;</span>1111<span style="color: #FFFF00;">&lt;/Item_Number&gt;
+  &lt;Description&gt;</span>6<span style="color: #00FFFF;">&amp;apos;</span> Ladder<span style="color: #FFFF00;">&lt;/Description&gt;
+  &lt;Quantity&gt;</span>5<span style="color: #FFFF00;">&lt;/Quantity&gt;
+ &lt;/line_item&gt;
+ &lt;line_item&gt;
+  &lt;Item_Number&gt;</span>2222<span style="color: #FFFF00;">&lt;/Item_Number&gt;
+  &lt;Description&gt;</span>Mouse Pad <span style="color: #00FFFF;">&amp;lt;</span>Red<span style="color: #00FFFF;">&amp;gt;</span><span style="color: #FFFF00;">&lt;/Description&gt;
+  &lt;Quantity&gt;</span>15<span style="color: #FFFF00;">&lt;/Quantity&gt;
+ &lt;/line_item&gt;
+ &lt;line_item&gt;
+  &lt;Item_Number&gt;</span>3333<span style="color: #FFFF00;">&lt;/Item_Number&gt;
+  &lt;Description&gt;</span>Plastic Cup<span style="color: #FFFF00;">&lt;/Description&gt;
+  &lt;Quantity&gt;</span>-12<span style="color: #FFFF00;">&lt;/Quantity&gt;
+ &lt;/line_item&gt;
+ &lt;Order_Total&gt;</span>12345.67<span style="color: #FFFF00;">&lt;/Order_Total&gt;
+&lt;/Order&gt;</span></code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+Example with nested subelements.&#160; The DESC subelement is inside the 
+line_item subelement.&#160; Note the use of the FNS$ defined function which can 
+be used to include the length of each subelement.&#160; Line 3150 sets the 
+SUBELEMENT$ type to "U".&#160; Line 3200 includes a variable length field.&#160; 
+Line 3190 uses a subelement with template type C(1*=1) and line 3230 uses a 
+template type C(1*=2) since the DESC subelement is inside the LINE subelement.</td>
+            </tr>
+            <tr>
+                <td><code>3100 TEST3:<br />3110 DEF FNS$(BASE$,TXT$)=BASE$+STR(LEN(TXT$):"0000")+TXT$<br />3120 CALL "CDS041","CDS235",S235$,"YY"<br />3130 LET S235.TAGNAME$="U"<br />3140 LET S235.ROOTELEMENT$="Order"<br />3150 LET S235.SUBELEMENTS$="U"<br />3160 LET S235.DECLARATION$="default"<br />3170 LET TPL$="ORDNO:C(8):title=Order_Number:"<br />3180 LET TPL$=TPL$+",ORDDATE:C(8):title=Order_Date omask=%Mz/%Dz/%Yz:"<br />3190 LET TPL$=TPL$+",LINES__LINE:C(1*=1):title=line_item:"<br />3200 LET TPL$=TPL$+",TOTAL:N(10*):title=Order_Total:"<br />3210 DIM ORDER$:TPL$<br />3220 LET TPL$="ITEMNO:C(5):title=Item_Number:"<br />3230 LET TPL$=TPL$+",DESC__:C(1*=2):title=Description:"<br />3240 LET TPL$=TPL$+",QTY:N(4):title=Quantity:"<br />3250 DIM LINE$:TPL$<br />3260 LET TMP$=STBL("TPL_LINE",FATTR(LINE$)); REM "Save template in global space<br />3270 LET TPL$="COLOR:C(20)"<br />3280 LET TPL$=TPL$+",NECK:N(5)"<br />3290 LET TPL$=TPL$+",SLEEVE:N(5)"<br />3300 DIM DESC$:TPL$<br />3310 LET TMP$=STBL("TPL_DESC",FATTR(DESC$)); REM "Save template in global space<br />3320 LET ORDER.ORDNO$="12345"<br />3330 LET ORDER.ORDDATE$="10/15/02"<br />3340 DIM LINE$:FATTR(LINE$)<br />3350 LET DESC.COLOR$="Blue",DESC.NECK=16,DESC.SLEEVE=34<br />3360 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3370 LET DESC.COLOR$="Blue",DESC.NECK=16.5,DESC.SLEEVE=34<br />3380 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3390 LET LINE.ITEMNO$="1111",LINE.QTY=5<br />3400 LET ORDER.LINES__LINE$=FNS$(ORDER.LINES__LINE$,LINE$)<br />3410 DIM LINE$:FATTR(LINE$)<br />3420 LET DESC.COLOR$="Blue",DESC.NECK=17,DESC.SLEEVE=35<br />3430 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3440 LET DESC.COLOR$="White",DESC.NECK=14,DESC.SLEEVE=30<br />3450 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3460 LET DESC.COLOR$="White",DESC.NECK=14.5,DESC.SLEEVE=32<br />3470 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3480 LET DESC.COLOR$="White",DESC.NECK=15,DESC.SLEEVE=32<br />3490 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3500 LET LINE.ITEMNO$="2222",LINE.QTY=15<br />3510 LET ORDER.LINES__LINE$=FNS$(ORDER.LINES__LINE$,LINE$)<br />3520 DIM LINE$:FATTR(LINE$)<br />3530 LET DESC.COLOR$="Yellow",DESC.NECK=14,DESC.SLEEVE=30<br />3540 LET LINE.DESC__$=FNS$(LINE.DESC__$,DESC$)<br />3550 LET LINE.ITEMNO$="3333",LINE.QTY=-12<br />3560 LET ORDER.LINES__LINE$=FNS$(ORDER.LINES__LINE$,LINE$)<br />3570 LET ORDER.TOTAL=12345.67<br />3580 CALL "CDS235",ORDER$,XML$,S235$<br />3590 PRINT 'CS',XML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><pre><code><span style="color: #FFFF00;">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;Order&gt;
+ &lt;Order_Number&gt;</span>12345<span style="color: #FFFF00;">&lt;/Order_Number&gt;
+ &lt;Order_Date&gt;</span>2002-10-15<span style="color: #FFFF00;">&lt;/Order_Date&gt;</span> <span style="color: #00FFFF;">&lt;line_item&gt;</span> <span style="color: #00FFFF;">&lt;Item_Number&gt;</span>1111<span style="color: #00FFFF;">&lt;/Item_Number&gt;
+</span> <span style="color: #FF9900;">&lt;Description&gt;
+   &lt;COLOR&gt;</span>Blue<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>16<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>34<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;
+  &lt;Description&gt;
+   &lt;COLOR&gt;</span>Blue<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>16.5<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>34<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;</span> <span style="color: #00FFFF;">&lt;Quantity&gt;</span>5<span style="color: #00FFFF;">&lt;/Quantity&gt;</span> <span style="color: #00FFFF;">&lt;/line_item&gt;
+ &lt;line_item&gt;
+  &lt;Item_Number&gt;</span>2222<span style="color: #00FFFF;">&lt;/Item_Number&gt;</span> <span style="color: #FF9900;">  &lt;Description&gt;
+   &lt;COLOR&gt;</span>Blue<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span><Order>17<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>35<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;
+  &lt;Description&gt;
+   &lt;COLOR&gt;</span>White<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>14<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>30<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;
+  &lt;Description&gt;
+   &lt;COLOR&gt;</span>White<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>14.5<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>32<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;
+  &lt;Description&gt;
+   &lt;COLOR&gt;</span>White<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>15<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>32<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;</span> <span style="color: #00FFFF;">&lt;Quantity&gt;</span>15<span style="color: #00FFFF;">&lt;/Quantity&gt;
+</span> <span style="color: #00FFFF;">&lt;/line_item&gt;
+ &lt;line_item&gt;
+  &lt;Item_Number&gt;</span>3333<span style="color: #00FFFF;">&lt;/Item_Number&gt;
+</span><span style="color: #FF9900;">  &lt;Description&gt;
+   &lt;COLOR&gt;</span>Yellow<span style="color: #FF9900;">&lt;/COLOR&gt;
+   &lt;NECK&gt;</span>14<span style="color: #FF9900;">&lt;/NECK&gt;
+   &lt;SLEEVE&gt;</span>30<span style="color: #FF9900;">&lt;/SLEEVE&gt;
+  &lt;/Description&gt;</span> <span style="color: #00FFFF;">&lt;Quantity&gt;</span>-12<span style="color: #00FFFF;">&lt;/Quantity&gt;
+ &lt;/line_item&gt;
+</span> <span style="color: #FFFF00;">&lt;Order_Total&gt;12345.67&lt;/Order_Total&gt;
+&lt;/Order&gt;</span></Order></code></pre>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

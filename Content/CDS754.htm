@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="14" MadCap:lastHeight="2892" MadCap:lastWidth="949">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS754 - Zebra Label Printing</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS754</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Zebra Label Printing</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS754">Last Revised: 
+06/14/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to simplify printing to Zebra Label printers. It provides high level commands to print text, lines, boxes, and bar codes. The text font size is automatically scaled in order to fit the text into the width specified.</p>
+        <p>The Printer Type, as set in Printer Control Maintenance, must start with a "Z" to use this tool.</p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th colspan="2" nowrap="nowrap">Printing Text</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" colspan="2"><code>CALL&#160;"CDS754",Y6$,COL,ROW,HEI,WID,TEXT$ {,LCR$,MAXCOLS}</code>
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">COL</td>
+                <td>Column to start printing. &#160;Leftmost COL=0. There are typically 203 columns per inch, although this can vary with printer model.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROW</td>
+                <td>Top of Row where text will print. Topmost ROW=0.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">HEI</td>
+                <td>Text height in dots. 25 is a good starting value.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">WID</td>
+                <td>Width of a single character cell. 25 is a good starting value.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>TEXT$</code>
+                </td>
+                <td>
+                    <p>Text to be printed. Leading and trailing blank spaces are automatically trimmed by CDS754.</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">LCR$</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">L</td>
+                                <td>Left justify (default is not passed)</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">C</td>
+                                <td>Center text</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">R</td>
+                                <td>Right justify text (requires <code>MAXCOLS</code>)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">MAXCOLS</td>
+                <td>Maximum number of columns that the text can use. CDS754 will automatically reduce the font size if the text takes more than this value. (defaults to <code>812-COL</code> if not passed which is 4 inches times 203 dots per inch less the starting column.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <table>
+            <col />
+            <col style="width: 360px;" />
+            <tr>
+                <th colspan="2" nowrap="nowrap">Printing Vertical Line</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" colspan="2"><code>CALL&#160;"CDS754::VLINE",Y6$,COL,ROW,HEIGHT {,THICK}</code>
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">COL</td>
+                <td>Column for upper left pixel of line</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROW</td>
+                <td>Row for upper left pixel of line</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">HEIGHT</td>
+                <td>Height of line in dots</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">THICK</td>
+                <td>Line thickness in dots (defaults to 1 if not passed)</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th colspan="2" nowrap="nowrap">Printing Horizontal Line</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" colspan="2"><code>CALL&#160;"CDS754::HLINE",Y6$,COL,ROW {,LENGTH,THICK}</code>
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">COL</td>
+                <td>Column for upper left pixel of line</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROW</td>
+                <td>Row for upper left pixel of line</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">LENGTH</td>
+                <td>Length of line in dots (defaults to <code>812-COL</code>)</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">THICK</td>
+                <td>Line thickness in dots (defaults to 1 if not passed)</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th colspan="2" nowrap="nowrap">Printing Box</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" colspan="2"><code>CALL&#160;"CDS754::BOX",Y6$,COL,ROW,WIDTH,HEIGHT {,THICK,RND}</code>
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">COL</td>
+                <td>Column for upper left pixel of box</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROW</td>
+                <td>Row for upper left pixel of box</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">WIDTH</td>
+                <td>Width of box in dots</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">HEIGHT</td>
+                <td>Height of box in dots</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">THICK</td>
+                <td>Line thickness in dots (defaults to 1 if not passed)</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">RND</td>
+                <td>Corner rounding parameter where 0 has no rounding and 8 is maximum rounding radius (defaults to 0 if not passed)</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th colspan="2" nowrap="nowrap">Printing Bar Code</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" colspan="2"><code>CALL&#160;"CDS754::BARCODE",Y6$,COL,ROW,BARCODE$ {,TYPE$,HEIGHT,TEXT$,ROTATION,WIDTH}</code>
+                </th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td>Printer Control from Printer Selection routine <a href="CDS084.htm">CDS084</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">COL</td>
+                <td>Column for upper left pixel of bar code region</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROW</td>
+                <td>Row for upper left pixel of bar code region</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">BARCODE$</td>
+                <td>The text to be represented in the bar code</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">TYPE$</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">3</td>
+                                <td>Code 3 of 9 (default if not passed)</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">9</td>
+                                <td>UPC-E (9 digits)</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">U</td>
+                                <td>UPC-A (12 digits)</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;">E</td>
+                                <td>EAN-13 (13 digits)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">HEIGHT</td>
+                <td>Height of bar code in dots (defaults to 25 if not passed)</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">TEXT$</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td>N</td>
+                                <td>Do not print barcode text (default if not passed)</td>
+                            </tr>
+                            <tr>
+                                <td>A</td>
+                                <td>Print barcode text above bar code</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>Print barcode text below bar code</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">ROTATION</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>Normal orientation (default if not passed)</td>
+                            </tr>
+                            <tr>
+                                <td>90</td>
+                                <td>90 degrees clockwise</td>
+                            </tr>
+                            <tr>
+                                <td>180</td>
+                                <td>180 degrees clockwise (inverted)</td>
+                            </tr>
+                            <tr>
+                                <td>270</td>
+                                <td>270 degrees clockwise</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">WIDTH</td>
+                <td>Width of narrow bar code line (defaults to 2 if not passed)</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>
+                    <p>Example</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>1000 PRINT_LABEL:<br /></code><code>1010 LET COL=10,ROW=36,HEI=25,WID=25,MAXCOLS=210</code>
+                    </p>
+                    <p><code>1020 PRINT (Y6.CH)"^XA"</code>
+                    </p>
+                    <p><code>1030 PRINT (Y6.CH)"^PW230"; REM "Label width</code>
+                    </p>
+                    <p><code>1040 CALL "CDS754::BOX",Y6$,0,18,225,157,1,2</code>
+                    </p>
+                    <p><code>1050 CALL "CDS754",Y6$,COL,ROW,HEI,WID,IM01.DESC1$,"C",MAXCOLS</code>
+                    </p>
+                    <p><code>1060 LET ROW=ROW+25</code>
+                    </p>
+                    <p><code>1070 CALL "CDS754",Y6$,COL,ROW,HEI,WID,IM01.DESC2$,"C",MAXCOLS</code>
+                    </p>
+                    <p><code>1080 LET ROW=ROW+25</code>
+                    </p>
+                    <p><code>1090            CALL "CDS754",Y6$,COL,ROW,HEI,WID,CVS(STR(PRICE:"$##,###.00"),1),           "C",MAXCOLS</code>
+                    </p>
+                    <p><code>1100 LET ROW=ROW+25</code>
+                    </p>
+                    <p><code>1110 CALL "CDS754::BARCODE",Y6$,COL+7,ROW,BARCODE$,BCTYPE$</code>
+                    </p>
+                    <p><code>1120 LET ROW=ROW+40</code>
+                    </p>
+                    <p><code>1130 CALL "CDS754",Y6$,COL,ROW,20,WID,IM01.ITEMNO$,"C",MAXCOLS</code>
+                    </p>
+                    <p><code>1140 PRINT (Y6.CH)"^XZ"</code>
+                    </p>
+                    <p><code>1150 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="images/CDS754ex1.PNG" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

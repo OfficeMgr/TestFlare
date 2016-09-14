@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="6043" MadCap:lastWidth="1076">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS553 - Driver Entries</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS553</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Driver Entries</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS553">Last Revised: 
+		03/31/09</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS553 is used to prompt operator to choose the sequence and range of a multi-keyed file.&#160; The sequence corresponds to the KNUM's.&#160; CDS553 is typically called by reports.&#160; 
+	CDS553 will open a channel that the application reads from to obtain the 
+	records in the sequence and range selected.&#160; In most cases, CDS553 will 
+	open the data file using the SELECT verb.&#160; But if there are multiple 
+	KNUM's that are similar, it is possible that the SELECT verb will not use 
+	the KNUM based on the operator entries.&#160; In that case CDS553 will use 
+	the OPEN verb.</p>
+        <p>Unlike the previous version of the Driver entry program, 
+	<a href="CDS003.htm">CDS003</a> and CDLIST33/CDS003, CDS553 cannot be called by the menu processor before running the report.&#160; In order to display the selected sequence and range, as well as modify these entries before printing, CDS553 is called by the application program during the other operator entries section.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS553", <a href="#ERR=XXXX_">ERR=XXXX</a>, <a href="#Y$">Y$</a>, <a href="#S553$">S553$</a> {, REC$, RECK$ }</code>
+        </p>
+        <p>All arguments after <code>S553$</code> are optional.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS553 Arguments</th>
+            </tr>
+            <tr>
+                <td><code><a name="ERR=XXXX_"></a>ERR=XXXX</code>
+                </td>
+                <td>Branch to XXXX if operator uses F4 to exit, if data file cannot be opened, or if the data dictionary is missing or invalid.</td>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>Standard task control variable.</td>
+            </tr>
+            <tr>
+                <td><code><a name="S553$"></a>S553$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td><code>S553.CC$</code>
+                            </td>
+                            <td>Company Code for Data Dictionary.&#160; Specify only when not using the current company
+			<code>Y.COMPCODE$</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.DDFILNAM$</code>
+                            </td>
+                            <td>The file name to be used to access the Data Dictionary.&#160; Note that this typically excludes the company code.&#160; Required.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.COL<br />            S553.ROW</code>
+                            </td>
+                            <td>If passed to CDS553,<code> S553.COL </code>and <code>S553.ROW</code> refer to the column and row on the display where the selected sequence and range should be displayed.&#160; 
+			If left as zero, then the selected sequence and range will not be 
+			displayed.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.CHAN</code>
+                            </td>
+                            <td>Assigned by CDS553 to the channel that the data file was opened to.&#160; Used by the calling program to read records from the file.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.KNO</code>
+                            </td>
+                            <td>Assigned by CDS553 as the knum used if the data file is opened using 
+			<code>OPEN</code> and not <code>SELECT</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.SELKNO</code>
+                            </td>
+                            <td>Assigned by CDS553 as the knum used by <code>SELECT</code>.&#160; If the 
+			<code>SELECT</code> verb choose a knum that differs from <code>S553.KNO</code>, then 
+			<code>S553.SELKNO</code> is set to -1 and the file is opened using 
+			<code>OPEN</code> instead of <code>SELECT</code>.&#160; Note that 
+			when the <code>OPEN</code> verb is used, CDS553 will position the 
+			file so that the application will read the first record in the range 
+			selected.&#160; See examples.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.RANGE$</code>
+                            </td>
+                            <td>
+                                <table class="lev3">
+                                    <tr>
+                                        <td align="center">A</td>
+                                        <td>Operator selected all records within range</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">S</td>
+                                        <td>Operator selected a range of records in the file.&#160; CDS553 checks to insure that there are records within the range specified.</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.FILNAM$</code>
+                            </td>
+                            <td>Should be set by the calling program and passed to CDS553 when using the data dictionary from one company, but the data file from another.&#160; If not passed, then CDS553 will assume the data file name to be 
+			<code>Y.COMPCODE$+CVS(S553.DDFILNAM$,2)</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.SEQDISP$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the sequence selected by the operator in a display format.&#160; This is the same data displayed<code> @(S553.COL,S553.ROW)</code> if the columns and rows are assigned.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.RANGEDISP$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the range of records selected by the operator in a display format.&#160; This is the same data displayed 
+			<code>@(S553.COL,S553.ROW+1)</code> if the columns and rows are assigned.&#160; Will contain "*** All Records ***" if all records are selected.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.DISP$</code>
+                            </td>
+                            <td>
+              Assigned by CDS553 as a pipe separated list of fields that make up 
+				the selected key.&#160; This is often useful with CDS038 reports 
+				where it is desirable that the fields on the left of the report 
+				are in the same sequence as the key segments.&#160; <code>
+				S553.DISP$</code> is often used to build <code>DISP$</code> to 
+				pass to CDS038.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.KEYEXP$</code>
+                            </td>
+                            <td>
+              Assigned by CDS553 as the key expression.&#160; <code>KEYEXP$</code> 
+can be used by the calling program to determine the key which may be needed for control break tests, as in 
+<code>K$=SEVAL(S553.KEYEXP$)</code>.<br />              Examples:<br /><code>AP10.VENDNO$+AP10.DATERCV$+AP10.PONO$+AP10.RCTSEQ$<br />              CM01.SLSMANNO$+CM01.ALPHASORT$+CM01.CUSTNO$<br />				IM01.VENDNO$+IM01.PCL$+IM01.RSN$+IM01.ITEMNO$</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.WHERE$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the WHERE clause using <code>REC$</code> which would be used by the calling program if necessary to re-open the data file using 
+			<code>SELECT</code>.&#160; Example: <code>REC.SLSMANNO$&gt;="LEK" and REC.SLSMANNO$&lt;="PLW".&#160; 
+			S553.WHERE$</code> is often used to pass <code>WHERE$</code> to 
+			CDS038.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.SORTBY$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the SORTBY expression using <code>REC$</code> which would be used by the calling program if necessary to re-open the data file using SELECT.&#160; Example:
+			<code>REC.SLSMANNO$+REC.ALPHASORT$+REC.CUSTNO$.&#160; S553.SORTBY$</code> 
+			is often used to pass <code>SORTBY$</code> to CDS038.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.LONGSORTBY$</code>
+                            </td>
+                            <td>Similar to <code>S553.SORTBY$</code> except that the complete file name is used.&#160; Example: 
+			<code>EXCM01.SLSMANNO$+EXCM01.ALPHASORT$+EXCM01.CUSTNO$</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.HTAFRK$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the starting key of the range selected, converted to hex format using 
+<code>HTA()</code> so that all possible characters may be contained within the starting key.<p>
+			Typically used to pass <code>KEYBEGIN$</code> to CDS038 when <code>
+			OPEN</code> is used, i.e.,<code> IF S553.SELKNO&lt;0</code> <code>
+			KEYBEGIN$=ATH(S553.HTAFRK$)</code>.</p><p>May be needed by calling program if they need to re-process the range of records selected.&#160; 
+It is not necessary to perform a positional read to the file before reading 
+records as CDS553 has already done that.</p><p>Example:<code> READ (CHAN,KNUM=S553.KNO,DIR=0,KEY=ATH(S553.HTAFRK$),DOM=NextLine). </code></p></td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.HTATOK$</code>
+                            </td>
+                            <td>Assigned by CDS553 as the ending range selected.<p>Typically 
+			used to pass <code>KEYEND$</code> to CDS038 when <code>OPEN</code> 
+			is used, i.e., <code>IF S553.SELKNO&lt;0</code> <code>KEYEND$=ATH(S553.HTATOK$)</code>.</p><p>See <code>S553.EOF$ </code>below for preferred logic to determine 
+			if the application has read past the last record of the selected 
+			range.</p></td>
+                        </tr>
+                        <tr>
+                            <td><code>S553.EOF$</code>
+                            </td>
+                            <td>Expression assigned by CDS553 which should be used to determine if you are at the end of the selected range when not using 
+			<code>SELECT</code>.&#160; Example: <span style="color: #FFFF00;"><code>IF S553.SELKNO&lt;0 AND NEVAL(S553.<a name="EOF Example0"></a>EOF$) THEN GOTO 
+			DONE&#160; </code></span>See complete <a href="#EOF%20Example">example</a> 
+			below.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td>Assigned by CDS553 as the templated string variable to be used when reading records.&#160; Normally the file name less the company code is used as the variable as in 
+		<code>CM01$, IM03$,</code> etc.&#160; The application typically reads 
+		from the data file using this variable, i.e., <span style="color: #FFFF00;"><code>READ RECORD(S553.CHAN,END=DONE)CM01$.</code></span></td>
+            </tr>
+            <tr>
+                <td><code><a name="RECK$"></a>RECK$</code>
+                </td>
+                <td>Assigned by CDS553 as the string used by the <code>KGEN</code> function to describe the files key structure.&#160; Needed when using 
+		<code>S553.EOF$</code> to determine if you are at the end of the range, or when using the
+		<code>KGEN()</code> function to derive the key for removal, etc.</td>
+            </tr>
+        </table>
+        <p>CDS553 is normally called in the section of the program where all other operator entries are made.&#160; CDS553 is designed so that it can be called again using the selected entries as default, should the entries need to be made again.</p>
+        <table class="example">
+            <tr>
+                <td>Example taken from Inventory Evaluation Report, using the Item File 
+		where CDS038 is not used, and the program reads the file directly.</td>
+            </tr>
+            <tr>
+                <td><code>0150 <span style="color: #FFFF00;">CALL "CDS041","CDS553",S553$;</span> <span style="color: #00FF00;">REM "Obtain template for CDS553<br /></span> 0160 <span style="color: #FFFF00;">LET S553.DDFILNAM$="UD20"; REM "Indicate the file name<br /></span> 0170 LET EFFDATE$=STR(Y.JDATE)<br />        0180 DIM PRT$(5,"Y")<br />        0190 CALL "CDS276","Effective Date|Item Sequence|Range|Detail by Receipt|Summary by Item#|Summary by Product Class|Summary by Vendor|Summary by Warehouse|Warehouses|Format",COL; REM "Display the background<br />        0200 <span style="color: #FFFF00;">LET S553.COL=COL,S553.ROW=3;</span> <span style="color: #00FF00;">REM "Assign the col and row for CDS553 to display the sequence &amp; range<br /></span> 0210 REPEAT<br />        0220 CALL "CDS069",0,0,COL,2,"Value Inventory as of this date","D",EFFDATE,<br />        EFFDATE$<br />        0230 <span style="color: #FFFF00;">CALL "CDS553",ERR=EOJ,Y$,S553$,UD20$,UD20K$<br /></span> 0240 FOR I=1 TO LEN(PRT$)<br />        0250 CALL "CDS069",1,1,COL,I+4,"Print this report (Y/N)","AYN",I,PRT$<br />        0260 NEXT I<br />        0270 CALL "DIS430",Y$,"E"+STR(COL:"00")+"10","",WHSLST$<br />        0280 IF LEN(WHSLST$)=1 THEN LET FMT$="W",DISP$="Q" ELSE LET DISP$=""<br />        0290 CALL "CDS069",1,1,COL,11,"+format option",DISP$+"A{|,2,|,R,,Y}IList<br />        warehouses together by item|WSeparate pages for each warehouse",0,FMT$<br />        0300 LET Z$="Y"; CALL "CDS069",1,1,0,0,"Are entries correct (Y/N)+","AYN",0,Z$<br />        0310 IF CTL=4 THEN GOTO EOJ<br />        0320 UNTIL Z$="Y"<br />        .</code>
+                    <p><code>.<br />        . Additional logic<br />        .<br />        .<br />        0390 <span style="color: #FFFF00;">ON S553.RANGE$="R" GOSUB ALL,RANGE;</span> <span style="color: #00FF00;">REM "This program uses different logic when all items are selected<br /></span> .<br />        .<br />        . Additional logic<br />        .</code>
+                    </p>
+                    <p><code>1300 RANGE:<br />        1310 <span style="color: #FFFF00;">READ RECORD(S553.CHAN,END=1500)UD20$;</span> <span style="color: #00FF00;">REM "This channel may be opened by SELECT or OPEN<br /></span> 1320 <span style="color: #FFFF00;">IF S553.SELKNO&lt;0 AND NEVAL(S553.<a name="EOF Example"></a>EOF$) THEN GOTO 1500;</span> <span style="color: #00FF00;">REM "This logic is used to determine if you are at the end of the operator specified range when the channel was opened using OPEN<br /></span> .<br />        .<br />        . Additional logic<br />        .<br />        .<br />        1490 GOTO 1310; REM "Loop to next record<br />        .<br />        .<br />        . Additional logic<br />        .<br />        .</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example using CDS038</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "PO200 - 12/19/06 Purchase Order Listing<br />			0110 SETESC 8000; SETERR 8000<br />			0120 CALL "CDS276","<span style="color: #FFFF00;">Sequence|Range</span>|Detail",COL<span style="color: #00FF00;">; 
+			REM "CDS553 takes two rows, one for Sequence and one for Range</span><br />			0130 <span style="color: #FFFF00;">CALL "CDS041","CDS553",S553$</span><span style="color: #00FF00;">; 
+			REM "Obtain Template for CDS553</span><br />			0140 <span style="color: #FFFF00;">LET 
+			S553.DDFILNAM$="PO40",S553.COL=COL,S553.ROW=2</span><span style="color: #00FF00;">; 
+			REM "Indicate DD file name and entry column and row</span><br />			0150 LET DETAIL$="N"<br />			0160 REPEAT<br />			0170 <span style="color: #FFFF00;">CALL "CDS553",ERR=EOJ,Y$,S553$<br /></span>0180 CALL "CDS069",1,1,COL,4,"Include line item detail","AYN",0,DETAIL$<br />			0190 LET Z$="Y"; CALL "CDS069",1,1,0,0,"Are entries correct 
+			(Y/N)+","AYN",0,Z$<br />			0200 IF CTL=4 THEN GOTO EOJ<br />			0210 UNTIL Z$="Y"<br />			0220 CALL "CDS041","CDS038",S038$<br />			0230 LET S038.PRINTCOUNT$="Y"<br />			0240 <span style="color: #FFFF00;">LET WHERE$=S553.WHERE$</span><span style="color: #00FF00;">; 
+			REM "Pass S553.WHERE$ clause to WHERE$ for use by CDS038</span><br />			0250 <span style="color: #FFFF00;">LET SORTBY$=S553.SORTBY$</span><span style="color: #00FF00;">; 
+			REM "Pass S553.SORTBY$ clause to SORTBY$ for use by CDS038</span><br />			0260 IF DETAIL$="Y" THEN LET 
+			S038.EXTRTN$="PO201",S038.BLANKS_A=1,S038.COLHEAD$="E"<br />			0270 LET DISP$="PONO|OPEN|WHS|DATEORD|DATEDUE|ALPHASORT|BUYER|REFERENCE|SHIP2NAME|ACKNO|TOTCOST\\\\T"</code>
+                    <p><code>0280 CALL 
+			"CDS038",Y$,Y5$,Y5A$,Y6$,Y6,L,P,S038$,"XXPO40",KNO,KEYBEGIN$,KEYEND$,DISP$,<span style="color: #FFFF00;">WHERE$,SORTBY$,</span>MODE$,LIMITVAL,SUBHEAD$<br />			0290 GOTO EOJ<br /><br />			8000 REM "Call Error/Escape Routine<br />			8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />			8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />			8030 SETERR 0<br />			8040 RETRY<br />			8050 RETURN<br />			8060 RETRY<br /><br />			9000 EOJ:<br />			9010 IF TCB(13) THEN EXIT<br />			9020 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example showing all CDS553 fields</td>
+            </tr>
+            <tr>
+                <td><code>4100 REM "CDS553 parameters<br />			4101 PRINT 'CS',<br />			4105 CALL "CDS276","Sequence|Range",COL<br />			4110 CALL "CDS041","CDS553",S553$,"YY"<br />			4120 LET S553.DDFILNAM$="SO40",S553.COL=COL,S553.ROW=2<br />			4130 CALL "CDS553",ERR=EOJ,Y$,S553$,SO40$,SO40K$<br />			4140 CALL "CDS279",S553$<br />			4150 ESCAPE</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Data Entry screen</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS5531.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>S553$ field values</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS5532.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS052 - Multi-Record File Maintenance</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS052" />CDS052</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Multi-Record File Maintenance" />Multi-Record File Maintenance</p>
+                </td>
+                <td align="right">Last Revised:02/20/11</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used for file maintenance 
+applications.&#160; Unlike the dictionary based file maintenance, CDS052 displays 
+multiple records on the display at the same time, on one or more display rows 
+per record.&#160; It allows the 
+user to add, modify, or delete records, but unlike the dictionary based file 
+maintenance, 2 or 3 programs are required.&#160; First, the program that calls 
+CDS052.&#160; Second, the <code>EXTRTN$</code> program that displays and 
+maintains the non-key fields in the record.&#160; The third program is only 
+required when special data entry validation is required, and an external routine 
+(T, C, or X type) is used.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS052", ERR=XXXX, <a href="#Y$">Y$</a>, 
+<a href="#CHAN">CHAN</a>,
+<a href="#REC$">REC$</a>, <a href="#KFN$">KFN$</a>, <a href="#KSM">KSM</a>,
+<a href="#KSD$">KSD$</a>, <a href="#KST$">KST$</a>, <a href="#LMIN">LMIN</a>,
+<a href="#LMAX">LMAX</a>, <a href="#LDELTA">LDELTA</a>, <a href="#EXTRTN$">
+EXTRTN$</a> {, <a href="#USERDEF$">USERDEF$</a>, <a href="#KNUM">KNUM</a>,
+<a href="#S036SEL$">S036SEL$</a>,</code> <code><a href="#PAR$">PAR$</a></code><span style="color: #000080;"><code> 
+}</code></span></p>
+        <table>
+            <tr>
+                <th colspan="2">CDS052</th>
+            </tr>
+            <tr>
+                <td><code>XXXX</code>
+                </td>
+                <td>Line label or number to branch to should CDS052 be unable to execute.&#160; 
+	The user will be presented with an error message prior to the error being 
+	generated.&#160; Possible error conditions:<br />
+&#160;<table border="1" id="table4" class="lev2"><tr><td>Invalid file channel <code>CHAN</code></td></tr><tr><td>File not opened to <code>CHAN</code></td></tr><tr><td>File type not supported</td></tr><tr><td>Unable to locate <code>EXTRTN$</code> program</td></tr><tr><td><code>EXTRTN$</code> is not a program</td></tr><tr><td><code>REC$</code> not passed as a templated record structure</td></tr><tr><td>Key segment field named <code>KFN$</code> not contained within 
+			record <code>REC$</code></td></tr><tr><td>Key segment field named <code>KFN$</code> not contained within 
+			key at knum <code>KNUM</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>task control variable</td>
+            </tr>
+            <tr>
+                <td nowrap="" height="27"><code><a name="CHAN"></a>CHAN</code>
+                </td>
+                <td height="27">channel# of file to be maintained, opened to by calling 
+	program.&#160; MKY, SKY, DIR, and SRT files are supported.</td>
+            </tr>
+            <tr>
+                <td><a name="REC$"></a><code>REC$</code>
+                </td>
+                <td>templated record of file to be maintained</td>
+            </tr>
+            <tr>
+                <td><a name="KFN$"></a><code>KFN$</code>
+                </td>
+                <td>The template field name for the entered key segment.&#160; Any key 
+	segments not entered must be pre-set in <code>REC$</code> before calling 
+	CDS052.&#160; You may enter multiple key segments using a T type external 
+	routine.&#160; Examples: "ITEMNO" or "PCL" or "TRAILERNO" </td>
+            </tr>
+            <tr>
+                <td><a name="KSM"></a><code>KSM</code>
+                </td>
+                <td>the maximum length or value of entered key segment</td>
+            </tr>
+            <tr>
+                <td><a name="KSD$"></a><code>KSD$</code>
+                </td>
+                <td>the description of the key segment entered.&#160; Examples: "Item#" or 
+	"Product Class" or "Trailer#".</td>
+            </tr>
+            <tr>
+                <td><a name="KST$"></a><code>KST$</code>
+                </td>
+                <td>entry type of key segment.&#160; Any type supported by
+	<a href="CDS069.htm">CDS039</a> 
+    is permitted including string and file verification options and external 
+ routines.<table border="1" id="table2" class="lev2"><tr><th>KST$ Examples</th><th>Usage</th></tr><tr><td><code>"L"</code></td><td>Simple left-justified alphanumeric entry</td></tr><tr><td><code>"R"</code></td><td>Simple right-justified alphanumeric entry</td></tr><tr><td><code>"000"</code></td><td>Masked numeric entry</td></tr><tr><td><code>"L{2}OHNYPA"</code></td><td>List verified entry with no related field</td></tr><tr><td><code>"L{2,,,,,Y}FLGANC"</code></td><td>List verified entry with pop-up list</td></tr><tr><td><code>"L{|,3,|,R}FLFlorida|GAGeorgia|NCNorth Carolina"</code></td><td>List verified entry with related field displayed to right</td></tr><tr><td height="35"><code>"FL{SM01,0,12,25,R}"</code></td><td height="35">File verified entry using field numbers</td></tr><tr><td><code>"FL{XXCM01,NAME|CITY|STATE}"</code></td><td>File verified entry using field names</td></tr><tr><td><code>"C{CDS089}"</code></td><td>C Type external routine used for IP Address, PC Name, HW Address</td></tr><tr><td><code>"X{CDS275}"</code></td><td>X Type external routine used for email address entry</td></tr><tr><td><code>"T{programname}"</code></td><td>T Type external routine used to call 'programname'.&#160; See
+			<a href="CDX100.htm">CDX100</a> for T type routine documentation.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="LMIN"></a><code>LMIN</code>
+                </td>
+                <td>first line of display or window to use</td>
+            </tr>
+            <tr>
+                <td><a name="LMAX"></a><code>LMAX</code>
+                </td>
+                <td>last line of display or window to use.&#160; If passed as 0, then this routine 
+ will compute the number of lines based on the window size.</td>
+            </tr>
+            <tr>
+                <td><a name="LDELTA"></a><code>LDELTA</code>
+                </td>
+                <td>lines per record.&#160; If passed as 0, then 1 is assumed.</td>
+            </tr>
+            <tr>
+                <td><a name="EXTRTN$"></a><code>EXTRTN$</code>
+                </td>
+                <td>name of external routine to be called by CDS052 to display or modify records in the file.&#160; Also optionally called when accepting or deleting a record.</td>
+            </tr>
+            <tr>
+                <td><a name="USERDEF$"></a><code>USERDEF$</code>
+                </td>
+                <td>user defined variable passed to the external routine <code>EXTRTN$</code></td>
+            </tr>
+            <tr>
+                <td><a name="KNUM"></a><code>KNUM</code>
+                </td>
+                <td>the KNUM used to access the file</td>
+            </tr>
+            <tr>
+                <td><a name="S036SEL$"></a><code>S036SEL$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CDS036" />the selection codes passed to CDS036 when writing or removing records.&#160; Only required when Inter-System Communication is used to synchronize files 
+ between a branch and warehouse.&#160; See <a href="CDS036.htm">CDS036</a> 
+    documentation for additional details.</td>
+            </tr>
+            <tr>
+                <td><code>S052$</code>
+                </td>
+                <td>
+    The calling application can <code>CALL "CDS041","CDS052",S052$,"YY"</code> 
+	to obtain the templated <code>S052$</code>, then set any options desired.&#160; 
+	A non-templated string can also be passed although not recommended since the 
+	templated <code>S052$</code> parameter makes the code more readable.<table class="lev2"><tr><td><code>S052.<a name="PAR$"></a>CALLEXTONSEL$</code></td><td>if <code>"C"</code> then for an existing record the external routine will be 
+ called as if the operator entered C to change the record</td></tr><tr><td><code>S052.COL</code></td><td>the column number where the key segment entered within CDS052 should 
+ be displayed after entry.&#160; Will display at column zero if not passed.</td></tr><tr><td><code>S052.CDCOL</code></td><td>the column number where the Change/Delete entry will be entered.&#160; If 
+ not provided, CDS052 will use the rightmost column of the active window.</td></tr><tr><td><code>S052.DELETE$</code></td><td>if <code>"N"</code> then deleting existing records will be disabled</td></tr><tr><td><code>S052.CALLEXTONDEL$</code></td><td>if <code>"Y"</code> then when deleting a record, the external routine 
+		<code>EXTRTN$</code> will be called with <code>DEXA$</code> as <code>"X"</code>.&#160; 
+		This enables execution of custom logic when a record is deleted.&#160; If the external routine exits with an error (<code>EXIT 99</code> for example), 
+		the delete will be vetoed, and CDS052 will not delete the record.&#160; 
+		Note that when used, the external routine should not delete the record, 
+		just exit without an error to allow CDS052 to delete the record.</td></tr><tr><td><code>S052.BYPASSADDNEW$</code></td><td>if <code>"Y"</code> then when adding a new record, CDS052 will bypass 
+ entry: <code>Add new record (Y/N)</code> and assume a Y response.</td></tr><tr><td><code>S052.BLANKOK$</code></td><td>if <code>"Y"</code> then a blank key entry is permitted, otherwise CDS052 
+ will ring the bell and reject the entry.</td></tr><tr><td><code>S052.CHANGEOPT$</code></td><td>if <code>"N"</code> then the <code>C=Change</code> option is disabled which may be 
+ desirable when the <code>EXTRTN$</code> routine has no entries.</td></tr><tr><td><code>S052.CALLEXTONADD$</code></td><td>if <code>"Y"</code> then when accepting a record, the external routine 
+		<code>EXTRTN$</code> will be called with <code>DEXA$</code> as <code>"A"</code>.&#160; If the external routine exits with an error (<code>EXIT 99</code> for example), then CDS052 will not write the record.&#160; Instead, the user will be prompted to change or delete the record.&#160; This option is useful when additional validation is required before the record is written.</td></tr><tr><td><code>S052.MINKEYVAL</code></td><td>The minimum key value <code>MINV</code> passed to CDS039 or the 
+		external routine specified in <code>KST$</code>.</td></tr><tr><td><code>S052.F5PRINT$</code></td><td>if <code>"N"</code> then the <code>F5=Print</code> option will be 
+		disabled.</td></tr></table></td>
+            </tr>
+        </table>
+        <p>CDS052 performs the basic record selection, reads the data, and scrolling of 
+records, but calls program external program <code>EXTRTN$</code> to display and maintain a 
+single record.</p>
+        <p>The enter statement within <code>EXTRTN$</code> should include:</p>
+        <p><code>ENTER Y$, L, DEXA$, USERDEF$, REC$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">External program parameters</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td align="center">To</td>
+                <td>session control variable</td>
+            </tr>
+            <tr>
+                <td><code>L</code>
+                </td>
+                <td align="center">To</td>
+                <td>the display row where the data is to be displayed or maintained</td>
+            </tr>
+            <tr>
+                <td><code>DEXA$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Operation that <code>EXTRTN$</code> program should perform.<table border="1" id="table3" class="lev2"><tr><td>D</td><td>Display record <code>REC$</code> at line <code>L </code>
+			including key segments</td></tr><tr><td>E</td><td>Enter/Maintain non-key fields in <code>REC$</code> (if any)</td></tr><tr><td>X</td><td>Record <code>REC$</code> is about to be deleted by CDS052.&#160; 
+			Only used when <code>PAR$(8,1)="Y"</code>.&#160; <code>EXTRTN$</code> 
+			should <code>EXIT 99</code> to veto delete.</td></tr><tr><td>A</td><td>Record <code>REC$</code> is about to be added by CDS052.&#160; 
+			Only used when <code>PAR$(12,1)="Y"</code>.&#160; <code>EXTRTN$</code> 
+			should <code>EXIT 99</code> to veto add.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>USERDEF$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>is passed from the CDS052 enter list and can be used when additional variables may be needed within the 
+	<code>EXTRTN$</code> routine.</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>contains the data from the record to be displayed or maintained</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="CDX060" />There is an example program named CDX060 which can be copied to your <code>EXTRTN$</code> 
+routine then customized.</p>
+        <h5>Example</h5>
+        <p>If you wanted enter contact names for a customer you would use the following 
+call:</p>
+        <p><code>CALL "CDS052",Y$,SK01,SK01$,"CODE",1,"contact code","R",6,0,1,"DIU151", 
+USERDEF$</code>
+        </p>
+        <p>Display of the file will begin on line 6, and each record displayed will use 
+only one line. The subsequent call from CDS052 to the program passed in the 
+<code>EXTRTN$</code> variablewould look like this:</p>
+        <p><code>CALL EXTRTN$,ERR=EOJ,Y$,L,"D",USERDEF$,REC$</code>
+        </p>
+        <p><code>EXTRTN$</code> would be <code>"DIU151".</code></p>
+        <p>Note that when using multi-keyed files, then <code>EXTRTN$</code> routine 
+cannot change the current <code>KNUM</code> of the file.</p>
+    </body>
+</html>

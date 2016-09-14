@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS352 - Array Maintenance</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS352" />CDS352</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Array Maintenance</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS352">Last Revised: 05/04/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Templated" />This called program is used to display and/or maintain 
+	a string array of templated records.</p>
+        <p>Like <a href="CDS052.htm">CDS052</a><MadCap:keyword term="ArrowUp" /><MadCap:keyword term="Insert" /><MadCap:keyword term="PageDn" /><MadCap:keyword term="PageUp" /><MadCap:keyword term="ArrowDn" /><MadCap:keyword term="Delete" />, it relies on an external program segment to perform the display, adding, and modification of elements of the array.&#160; Each element of the array is described by a string template. CDS352 provides logic to use all editing keys including ArrowUp and ArrowDn, PageUp and PageDn, Home, End, Insert and Delete.</p>
+        <p><code>CALL "CDS352", <a href="#Y$">Y$</a>, <a href="#REC$">REC$</a>, <a href="#EXTRTN$">EXTRTN$</a>, <a href="#DATA$[ALL]">DATA$[ALL]</a>, <a href="#HIGHSEQ">HIGHSEQ</a>, <a href="#LMIN">LMIN</a>, <a href="#LMAX">LMAX</a>, <a href="#LDELTA">LDELTA</a>, <a href="#USERDEF$">USERDEF$</a>, 
+	<a href="#PAR$">S352$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS352</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td><a name="Y$"></a>
+                    <MadCap:keyword term="Terminal Control Variable" />standard terminal control variable
+
+        <p>If <code>Y.PASSPARM$="Q"</code> then CDS352 will operate in an inquiry only mode, 
+		displaying the elements of the array but not allowing changes to be 
+		made.</p></td>
+            </tr>
+            <tr>
+                <td><a name="REC$"></a><code>REC$</code>
+                </td>
+                <td>a variable that has been dimensioned with the template that describes each element of the array</td>
+            </tr>
+            <tr>
+                <td><code>EXTRTN$</code>
+                </td>
+                <td>
+                    <p><a name="EXTRTN$"></a>name of the external program segment to be called by CDS352.<br />
+        It is called with the variables <code>Y$,L,DAEXQP$,USERDEF$,REC$</code><MadCap:keyword term="CDX070" />.&#160; See example program CDX070.</p>
+                    <table>
+                        <tr>
+                            <td><code>L</code>
+                            </td>
+                            <td>line number (row) when display or entry should begin</td>
+                        </tr>
+                        <tr>
+                            <td><code>DAEXQP$</code>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td><code>D</code>
+                                        </td>
+                                        <td><code>EXTRTN$</code> should display <code>REC$</code> at line 
+                  <code>L</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>A</code>
+                                        </td>
+                                        <td>
+                                            <p>new record may be added.<br />
+                    Permit F4 entry.<br />
+                    If <code>EXTRTN$</code> exits with <code><MadCap:keyword term="CTL" />CTL=4</code>, then the record will not be 
+ added.</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>E</code>
+                                        </td>
+                                        <td>existing record may be edited.<br />
+                  If <code>EXTRTN$</code> exits with <code>CTL=4</code> then the record will be deleted.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>X</code>
+                                        </td>
+                                        <td>operator indicated record is to be deleted.&#160; <code>EXTRTN$</code> routine need not take any action if it is OK to delete this record.<br />
+                  If <code>EXTRTN$</code> exits with an error as in <code>EXIT 99</code> then CDS352 will not delete the record.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Q</code>
+                                        </td>
+                                        <td>During Inquiry mode, if <code>S352.INQ$="Y"</code>, existing record was selected for extended display.&#160; Useful when there is more information that can be displayed using the standard D option.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>P</code>
+                                        </td>
+                                        <td>When a deleted record is pasted and <code>S352.POPT$="Y"</code>.&#160; 
+ Useful when the external routine needs to manage and/or 
+ display totals.</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>USERDEF$</code>
+                            </td>
+                            <td>see below</td>
+                        </tr>
+                        <tr>
+                            <td><code>REC$</code>
+                            </td>
+                            <td>templated record containing the data to display/add/edit</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>DATA$[ALL]</code>
+                </td>
+                <td><a name="DATA$[ALL]"></a>the array where the data is to be stored.&#160; It does not have to be dimensioned prior to calling CDS352.&#160; This array should be one based, i.e., 
+      <code>DIM DATA$[1:X]</code>. The first element of the array used in index 1 not zero (if index zero exists).&#160; 
+		The array will be expanded by CDS352 if the user adds records in excess 
+		of the number of elements dimensioned in the array.</td>
+            </tr>
+            <tr>
+                <td><code>HIGHSEQ</code>
+                </td>
+                <td><a name="HIGHSEQ"></a>if <code>DATA$[ALL]</code> is passed to CDS352, then 
+      <code>HIGHSEQ</code> should also be passed indicating the number of elements of the array that contain data.&#160; 
+      <code>HIGHSEQ</code> will be modified by CDS352 indicating the number of elements used.</td>
+            </tr>
+            <tr>
+                <td><code>LMIN</code>
+                </td>
+                <td><a name="LMIN"></a>the top line on the display that can be used by CDS352.&#160; If not passed, or passed as zero, 
+ 3 will be used.&#160; Pass <code>LMIN</code> as <code>-1</code> to use top line of window, i.e.,
+      <code>LMIN=0</code>.</td>
+            </tr>
+            <tr>
+                <td><code>LMAX</code>
+                </td>
+                <td><a name="LMAX"></a>the bottom line on the display to be used.&#160; If not passed, or passed as zero, CDS352 will use the entire screen or window as appropriate.</td>
+            </tr>
+            <tr>
+                <td><code>LDELTA</code>
+                </td>
+                <td><a name="LDELTA"></a>the number of display lines require per array element.&#160; 
+ If not passed, or passed as zero, CDS352 will assume one display line per 
+ record.</td>
+            </tr>
+            <tr>
+                <td><code>USERDEF$</code>
+                </td>
+                <td><a name="USERDEF$"></a>an optional string passed to CDS352 that will be passed to 
+      <code>EXTRTN$</code> for its use when required</td>
+            </tr>
+            <tr>
+                <td><code>S352$</code>
+                </td>
+                <td><a name="PAR$"></a>optional parameters, may be passed as positional 
+		parameters, or using template for CDS352, as in <code>CALL 
+		"CDS041","CDS352",S352$,"YY"</code><table><tr><td><code>S352.ADDINS$</code></td><td>
+              enable insert &amp; add option&#160;
+
+              <table><tr><td><code>Y</code></td><td>insert and add allowed (default)</td></tr><tr><td><code>I</code></td><td>insert allowed, no add</td></tr><tr><td><code>A</code></td><td>add allowed, no insert</td></tr><tr><td><code>N</code></td><td>insert &amp; add not allowed</td></tr></table></td></tr><tr><td><code>S352.DEL$</code></td><td>permit delete (Y/N), default=Y</td></tr><tr><td><code>S352.INQ$</code></td><td>Inquiry Only Mode is enabled by passing <code>Y.PASSPARM$="Q"</code>.&#160; 
+			When in Inquiry Only Mode, pass <code>S352.INQ$</code> as <code>"Y"</code> if the
+            <code>EXTRTN$</code> 
+			program supports <code>DAEXQP$="Q"</code> to display extended information not 
+			displayed when <code>DAEXQP$</code> is <code>"D"</code>.&#160; If 
+            <code>S352.INQ$</code> is <code>"Y"</code>, then when 
+			the user touches enter to select the highlighted record, CDS352 will 
+			call <code>EXTRTN$</code> with <code>DAEXQP$</code> as <code>"Q"</code>.</td></tr><tr><td><code>S352.DISP1$</code></td><td>if <code>"Y"</code> then display first screen and exit</td></tr><tr><td><code>S352.COL</code></td><td>CDS352 displays the * symbol on the row indicating which record 
+ is active.&#160; The * symbol will display in column zero unless the 
+ optional parameter indicates a different column should be used.</td></tr><tr><td><code>S352.PASTE$</code></td><td>CDS352 can offer the user the option to 'paste' a deleted 
+			record, enabling them to move the record to a different position of 
+			the array, or even to another array that uses the same template.&#160; 
+			For example, you could delete a vendor contact and 'paste' it back 
+			into a different position within the same vendor, or exit the 
+			application, maintain a different vendor, and paste the contact 
+			record.
+			<table><tr><td align="center"><code>blank or Y</code></td><td>Allow multiple 'paste' of deleted records</td></tr><tr><td align="center"><code>1</code></td><td>Allow single 'paste' of deleted record</td></tr><tr><td align="center"><code>N</code></td><td>Disable 'paste' option.</td></tr></table></td></tr><tr><td><code>S352.POPT$</code></td><td>If passed as <code>"Y"</code>, then CDS352 will call <code>
+            EXTRTN$</code> with <code>DAEXQP$</code> as <code>"P"</code>.&#160; 
+ This would be needed if the <code>EXTRTN$</code> program managed 
+ some totals or other information that would need to be updated when 
+ a deleted record is pasted.</td></tr></table></td>
+            </tr>
+        </table>
+    </body>
+</html>

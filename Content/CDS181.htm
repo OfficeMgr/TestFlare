@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1544" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS181 - Read/Extract/Copy/Remove Data Dictionary</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS181</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Read/Extract/Copy/Remove Data Dictionary</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS181">Last Revised: 
+		02/15/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used for most data dictionary disk operations.&#160; It is called by other Dynamo Tools, and would be called by an application program primarily to copy data dictionary entries from one company to another during an application upgrade.</p>
+        <p>All records associated with the passed Data Dictionary Name from the Data 
+	Dictionary, Views, and File Maintenance Configuration are processed.</p>
+        <p><code>CALL "CDS181", ERR=<a href="#ERRLINE">ERRLINE</a>, <a href="#Y$_">Y$</a>, 
+	<a href="#CO$">CO$</a>, <a href="#FILNAM$_">FILNAM$</a>, <a href="#PAR$">PAR$</a>, 
+	<a href="#DD10$">DD10$</a>, <a href="#TPL$">TPL$</a>, <a href="#FLDCNT_">FLDCNT</a>, 
+	<a href="#F131$_">F131$</a>, <a href="#F131$[ALL]">F131$[ALL]</a>,
+	<a href="#KNCNT">KNCNT</a>, <a href="#KNTPL$">KNTPL$</a>, 
+	<a href="#KN$[ALL]">KN$[ALL]</a>, <a href="#DD12$">DD12$</a>,
+	<a href="#COTO$">COTO$</a>, <a href="#FILNAMTO$">FILNAMTO$</a></code>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1">
+            <tr>
+                <td align="left"><a name="ERRLINE"></a><code>ERRLINE</code>
+                </td>
+                <td>
+        Line label or number to branch to should an error occur.&#160; Possible errors include:
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2" class="lev2"><tr><th align="center">Error #</th><th>Description</th></tr><tr><td align="center">0</td><td>Data Dictionary File or desired record is locked by another session.</td></tr><tr><td align="center">11</td><td>Record not found.</td></tr><tr><td align="center">12</td><td>Data Dictionary File not found.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><a name="Y$_"></a><code>Y$</code>
+                </td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="CO$"></a><code>CO$</code>
+                </td>
+                <td>Optional company code or folder/company code.&#160; Will use <code>Y.COMPCODE$</code> if not passed.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="FILNAM$_"></a><code>FILNAM$</code>
+                </td>
+                <td>Base Data Dictionary Name, up to 10 characters long.&#160; Does not need to be padded to maximum size.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="PAR$"></a><code>PAR$(1,1)</code>
+                </td>
+                <td>
+        Function
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3" class="lev2"><tr><td align="center">R</td><td>Read/Retrieve Data Dictionary Information (default if not passed or invalid)</td></tr><tr><td align="center">E</td><td>Same as R, except extract DD10 record</td></tr><tr><td align="center">D</td><td>Delete data dictionary</td></tr><tr><td align="center">C</td><td>Copy data dictionary records</td></tr><tr><td align="center">F</td><td>Read &amp;&#160;return Fields only, not key segments nor <code>DD10$</code></td></tr><tr><td align="center">K</td><td>Read &amp;&#160;return key segments and <code>TPL$</code>, not <code>DD10$</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><code>PAR$(2,1)</code>
+                </td>
+                <td>
+        File open error message, passed to CDS095
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table4" class="lev2"><tr><td align="center">Y</td><td>Display Error message if unable to open file.</td></tr><tr><td align="center">D</td><td>Display error message except for files that are not defined.</td></tr><tr><td align="center">N</td><td>Do not display error message during file open.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><code>PAR$(3,1)</code>
+                </td>
+                <td>
+        File open type, passed to CDS095
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table5" class="lev2"><tr><td align="center">N</td><td>Do not lock</td></tr><tr><td align="center">Y</td><td>Lock file</td></tr><tr><td align="center">U</td><td>Return channel that file is already opened to</td></tr><tr><td align="center">P</td><td>Open file in private mode where subsequent&#160; file opens do not return this channel#</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><code>PAR$(4,1)</code>
+                </td>
+                <td>Process Linked Field<table border="1" id="table6" class="lev2"><tr><td align="center">blank or Y</td><td><code>F131$</code> array will have linked field information</td></tr><tr><td align="center">N</td><td><code>F131$</code> array will have original field information</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><a name="DD10$"></a><code>DD10$</code>
+                </td>
+                <td>Returns <code>DD10$</code> record from Data Dictionary XXDD10 file.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="TPL$"></a><code>TPL$</code>
+                </td>
+                <td>Returns template with omask and title user defined variables.&#160; 
+		Will not include linked field type information if <code>PAR$(4,1)="N"</code>.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="FLDCNT_"></a><code>FLDCNT</code>
+                </td>
+                <td>Field Count: Returns number of data elements in template.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="F131$_"></a><code>F131$</code>
+                </td>
+                <td>Templated variable representing a single element in the <code>F131$</code> array.&#160;
+		<code>F131$</code> contains all of the fields in <code>DD11$</code> plus
+		<code>F131.VERPAR$</code> which contains field verification information 
+		in a display format similar to type field passed to CDS039.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="F131$[ALL]"></a><code>F131$[ALL]</code>
+                </td>
+                <td>Array with information about each data element such as Title, Description, mask, repeat, etc.&#160; One based.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="KNCNT"></a><code>KNCNT</code>
+                </td>
+                <td><code>KNUM</code> Count: Returns number of indexes and number of data elements in the 
+		<code>KN$</code> array.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="KNTPL$"></a><code>KNTPL$</code>
+                </td>
+                <td>Templated variable representing a single element in the <code>KN$</code> array.<table border="1" id="table7" class="lev2"><tr><td><code>.DISPLAY$</code></td><td>Key structure formatted for display, i.e., <code>
+			VENDNO+STATUS+INVDATE\D+INVNO\D</code></td></tr><tr><td><code>.DRIVER$</code></td><td>Key structure formatted for use with end-user selected <code>
+			KNUM</code>, i.e., <code>Vend# + Status + Inv Date + Invoice#</code></td></tr><tr><td><code>.SORTBY$</code></td><td>Sortby expression using <code>REC.</code> prefix, i.e., <code>
+			REC.VENDNO$+REC.STATUS$+REC.INVDATE$+REC.INVNO$</code></td></tr><tr><td><code>.KEYEXP$</code></td><td>Sortby expression using file name prefix, i.e., <code>
+			AP12.VENDNO$+AP12.STATUS$+AP12.INVDATE$+AP12.INVNO$</code></td></tr><tr><td><code>.FLDS$</code></td><td>String of 4 character field numbers in record that are used in 
+			key segments, i.e.,&#160; <code>"&#160;&#160; 4&#160; 18&#160;&#160; 
+			8&#160;&#160; 7"</code></td></tr><tr><td><code>.DISP$</code></td><td>Pipe separated list of field names that comprise key segments, 
+			i.e., <code>VENDNO|STATUS|INVDATE|INVNO|</code></td></tr><tr><td><code>.DD12$</code></td><td>concatenated DD12 records that comprise all segments in <code>
+			KNUM</code>.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left"><a name="KN$[ALL]"></a><code>KN$[ALL]</code>
+                </td>
+                <td>Array of <code>KNUM</code> information.&#160; One based.&#160; Each 
+		element in array consists of data described in <code>KNTPL$</code> 
+		above.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="DD12$"></a><code>DD12$</code>
+                </td>
+                <td>Templated variable representing a single key segment.&#160; Used for 
+		template purposes only, one or more DD12 records are contained in <code>
+		KNTPL.DD12$</code></td>
+            </tr>
+            <tr>
+                <td align="left"><a name="COTO$"></a><code>COTO$</code>
+                </td>
+                <td>Company code or folder/company code used as target for copy option.&#160; Defaults to
+		<code>CO$</code> if not passed.</td>
+            </tr>
+            <tr>
+                <td align="left"><a name="FILNAMTO$"></a><code>FILNAMTO$</code>
+                </td>
+                <td>Copy to Data Dictionary Name.&#160; Existing Data Dictionary will be replaced during copy.</td>
+            </tr>
+        </table>
+    </body>
+</html>

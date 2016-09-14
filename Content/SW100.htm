@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="7098" MadCap:lastWidth="903">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW100 - Application Menu Processor</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW100</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Application Menu Processor (Deprecated)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW100">Last Revised: 
+02/25/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be called to present the user with a menu of options.&#160; The menu options are contained within a file and are maintained using Application Menu Maintenance (CWP).&#160; There is a separate called routine for each menu option. &#160;Note that this routine has been replaced by SW101.</p>
+        <p>Note that the CDS069 call that is used to prompt the user for the application menu selection includes a 600 second (5 minute) timeout.&#160; This means that the menu prompt will disappear after 5 minutes of inactivity as the master record may be extracted during while the application is running.&#160; This helps to prevent problems when the primary record <code>REC$</code> is updated by some of the menu options, but does not get written back to the disc until SW100 returns control to the calling program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "SW100", ERR=XXXX, Y$, Y5$, REC$, CW04$, CW04ALL$ {, SW100$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">SW100 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if one of the called routines does an <code>EXIT</code><br /></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>Y5$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Application Title, typically passed to application from menu</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>The Application Menu Processor typically is used when displaying options available for a single record.&#160; The record and <code>REC$</code> could be a Customer record, Item record, Vendor record, Purchase Order, Transfer Order, etc.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>CW04$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>The Application Menu Option file is XXCW04.&#160; The dimensioned template for this file is passed to SW100 using <code>CW04$</code>, but the data in <code>CW04$</code> is not used.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>CW04ALL$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>The calling program should read all the CW04 records for the application, concatenate them together as pass them to SW100 in <code>CW04ALL$</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>SW100$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To<br />Optional</td>
+                <td>Used when there are one or two Standard Views on the display that might need to be updated if any of the menu options change anything in <code>REC$</code>.&#160; Note that the View needs to be defined using the Views Option within Data Dictionary Maintenance (FMS).
+One or two views can be displayed.&#160; See example.<table border="1" id="table1" class="lev2"><tr><td class="nowrapcode"><code>CC$</code></td><td>Company code passed to the View Manager <a href="CDS550.htm">CDS550</a>.</td></tr><tr><td class="nowrapcode"><code>FILNAM$</code></td><td>The data dictionary name passed to the View Manager <a href="CDS550.htm">CDS550</a>.</td></tr><tr><td class="nowrapcode"><code>VIEW$[2]</code></td><td>The view code(s) passed to the View Manager <a href="CDS550.htm">CDS550</a>.</td></tr><tr><td class="nowrapcode"><code>VIEWCOL[2]</code></td><td>The column(s) for the top left of each view passed to the View Manager
+<a href="CDS550.htm">CDS550</a>.&#160; Note that the view row is currently hard 
+coded at row 2.</td></tr><tr><td class="nowrapcode"><code>COL$</code></td><td>The column position that the menu window should be placed on the display.&#160; Passed to <a href="CDS069.htm">CDS069</a>.&#160; Blank or L left justified the window, C centers, R right justifies, and a number will be the actual column number of the upper left corner of the window that the menu is displayed in.&#160;</td></tr><tr><td class="nowrapcode"><code>ROW</code></td><td>Also passed to <a href="CDS069.htm">CDS069</a> as the <code>ROW</code> number where the menu window should be displayed.&#160; Typically not set to allow CDS069 to compute the <code>ROW</code> based on placing it at the bottom of the active display.</td></tr></table></td>
+            </tr>
+        </table>
+        <p><b>Global Variables</b>
+        </p>
+        <p>Global Variable <code>SMS_SW100</code> can be set to automate certain menu selections.&#160; For example, if you want to automatically select menu options 1, 2, 3 and 6, you should
+<code>TMP$=STBL("SMS_SW100",CHR(1)+CHR(2)+CHR(3)+CHR(6))</code>.&#160; Once the automatic menu selections have been made, SW100 will present the menu for user selected menu options.&#160; SW100 will strip the first entry off the global variable as each automated selection is made.</p>
+        <p>To prevent global variable conflicts when SW100 is called recursively, call 
+program <a href="CDS556.htm">CDS556</a> to save and restore the global 
+variables.</p>
+        <p>SW100 calls each program specified in Application Menu Maintenance (CWP).</p>
+        <p>Each called program typically starts with these lines and includes the three subroutines for each of the 3 tasks.</p>
+        <p><code>0110 SETESC 8000; SETERR 8000<br />0120 ENTER Y$,Y5$,Y6$,CM01$<br />0130 ON POS(Y6$="CD") GOSUB PRINT,CHECK,DISPLAY<br />0140 GOTO EOJ</code>
+        </p>
+        <p>The called program can <code>EXIT&#160;98</code> to have SW100 re-evaluate all option available indicators. This is only necessary when the execution of one option might enable or disable another option and the primary record did not change.</p>
+        <table id="table3">
+            <tr>
+                <th colspan="3" nowrap="nowrap">Called Program Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y5$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Application Title, typically passed to application from menu</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>Y6$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>
+                    <table border="1" id="table4" class="lev2">
+                        <tr>
+                            <td align="center"><code>"C"</code>
+                            </td>
+                            <td>Check - Called routine should check to see if the menu option should be enabled by passing <code>Y6$</code> back to SW100 as <code>"*"</code> to enable the menu option indicating there is data available, <code>"A"</code> to indicate the menu option is available, but there is no data, or null or space indicating the menu option is disabled.</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"D"</code>
+                            </td>
+                            <td>Display - Called routine should display data or perform logic desired when menu option has been selected by user.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">Printer Control String from Printer Selection Routine <a href="CDS084.htm">CDS084</a></td>
+                            <td>Print - Called routine should print data to channel <code>Y6.CH</code>.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>The Application Menu Processor typically is used when displaying options available for a single record.&#160; The record and <code>REC$</code> could be a Customer record, Item record, Vendor record, 
+Sales Order, Purchase Order, Transfer Order, etc.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Here are some examples of using SW100 in Dynamo applications.&#160; The window with the menu is presented by SW100.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/SW100.5.jpg" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/SW100.2.jpg" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/SW100.3.jpg" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/SW100.4.jpg" alt="" />
+                </td>
+            </tr>
+            <tr>
+                <td>Example logic that calls SW100 where there is not a Standard View to be updated on the main display window.</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>0160 GOSUB SETUP<br />0170 CALL "SW100",Y$,Y5$,IM01$,CW04$,CW04ALL$<br />0180 GOTO EOJ</code>
+                    </p>
+                    <p><code>1000 SETUP:<br />1010 CALL "CDS095",ERR=EOJ,CW04,"XXCW04","YNY",CW04$<br />1020 LET CW04.PGM$=PGM(-2),PGM$=CW04.PGM$; REM "Pad<br />1030 READ (CW04,KEY=PGM$,DOM=1040,KNUM=0)<br />1040 READ RECORD(CW04,END=1060)CW04$<br />1050 IF CW04.PGM$=PGM$ THEN LET CW04ALL$=CW04ALL$+CW04$; GOTO 1040<br />1060 IF LEN(CW04ALL$)=0 THEN CALL "CDS069",0,0,0,0,"Application Menu Option (CWP) records not found in file XXCW04-"; GOTO EOJ<br />1070 LET CW04$=CW04ALL$(1,LEN(CW04$))<br />1080 RETURN</code>
+                    </p>
+                    <p><code>9000 EOJ:<br />9010 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example logic that calls SW100 where there is a Standard View to be updated on the main display window.&#160; This application is designed to be RUN or CALLED.</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "PO100 - 01/07/08 POP Main<br />0110 SETESC 8000; SETERR 8000<br />0120 ENTER Y$,PO40$,L,ERR=0160<br />0130 CALL "CDS053",Y$,0,"","R",COLPRN$<br />0140 PRINT 'WINDOW'(0,0,80,Y.ROWS),COLPRN$,'CS','SP',<br />0150 CALL "CDS016",Y$,"Purchase Order Processing"<br />0160 CALL "CDS041","CDS550",S550$<br />0170 LET S550.FILNAM$="PO40",S550.VIEW$="A",S550.BKG=1,S550.DISP=0,S550.MAINT=0,S550.ROW=2<br />0180 CALL "CDS550",ERR=EOJ,Y$,PO40$,S550$<br />0190 GOSUB SETUP<br />0200 ON TCB(13) GOSUB RUN,CALLED<br />0210 CALL "CDS036",ERR=0270,Y$,PO40,PO40$,"E"<br />0220 IF POS(" "&lt;&gt;PO40.VENDNO$)=0 THEN LET <span style="color: #ffff00;">TMP$=STBL("SMS_SW100",CHR(1)+CHR(2)+CHR(3)+CHR(4)</span>)<br />0230 LET S550.BKG=0,S550.DISP=1,S550.MAINT=0<br />0240 CALL "CDS550",Y$,PO40$,S550$<br />0250 <span style="color: #ffff00;">CALL "SW100",ERR=0260,Y$,Y5$,PO40$,CW04$,CW04ALL$,SW100$</span><br />0260 IF POS(" "&lt;&gt;PO40.PONO$) THEN CALL "CDS036",Y$,PO40,PO40$,"W"<br />0270 ON TCB(13) GOTO 0280,EOJ</code>
+                    <p><code>0280 PRINT 'CF',<br />0290 DIM PO40$:FATTR(PO40$)<br />0300 READ RECORD(PO40,END=0310)PO40$; REM "Default to next PO in current KNUM<br />0310 GOTO 0200<br /><br />1000 SETUP:<br />1010 CALL "CDS095",ERR=EOJ,CW04,"XXCW04","YUY",CW04$<br />1020 LET CW04.PGM$=PGM(-2),PGM$=CW04.PGM$; REM "Pad<br />1030 READ (CW04,KEY=PGM$,DOM=1040,KNUM=0)<br />1040 READ RECORD(CW04,END=1060)CW04$<br />1050 IF CW04.PGM$=PGM$ THEN LET CW04ALL$=CW04ALL$+CW04$; GOTO 1040<br />1060 IF LEN(CW04ALL$)=0 THEN CALL "CDS069",0,0,0,0,"Specify Application Menu Options (CWP) for "+PGM$+"-"; GOTO EOJ<br />1070 LET CW04$=CW04ALL$(1,LEN(CW04$))<br />1080 CALL "CDS041","SW100",SW100$<br />1090 LET SW100.FILNAM$="PO40",SW100.VIEW$="A",SW100.COL$="R"<br />1100 RETURN<br /><br />1200 CALLED:<br />1210 IF LEN(PO40$)=8 THEN CALL "SW001",ERR=EOJERR,"XXPO40",0,PO40$+"",PO40$<br />1220 IF POS(" "&lt;&gt;PO40.PONO$)=0 THEN CALL "CDS069",0,0,0,0,"PO has been deleted-"; GOTO EOJ<br />1230 CALL "CDS095",PO40,"XXPO40","YUY"<br />1240 RETURN<br /><br />1300 RUN:<br />1310 CALL "PO120",Y$,"Y"+STR(S550.COLENT:"00")+"02",PO40$<br />1320 IF CTL=4 THEN GOTO EOJ<br />1330 IF POS(" "&lt;&gt;PO40.PONO$)=0 THEN CALL "PO121",Y$,PO40$; REM "Assign PO#<br />1340 RETURN<br /><br />8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY<br /><br />9000 EOJ:<br />9010 IF TCB(13) THEN PRINT 'POP',; EXIT<br />9020 RUN "CDS001"<br /><br />9100 EOJERR:<br />9110 PRINT 'POP',<br />9120 EXIT 99</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example of program called by SW100</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "IM102 - 10/10/06 Item Inquiry - Vendor Part Numbers<br />0110 SETESC 8000; SETERR 8000<br />0120 ENTER Y$,Y5$,Y6$,IM01$<br />0130 ON POS(Y6$="PCD")-1 GOSUB PRINT,CHECK,DISPLAY<br />0140 GOTO EOJ<br /><br />1000 CHECK:<br />1010 CALL "SW004","XXIM03",0,IM01.ITEMNO$,RECS,1<br />1020 IF RECS THEN Y6$="*" ELSE Y6$=""<br />1030 RETURN<br /><br />1100 DISPLAY:<br />1110 LET DISP$="VENDNO|XXVM01.ALPHASORT|VENDPARTNO|NOTE\\\B|POCOST|CU|RECDATE"<br />1120 CALL "CDS037","XXIM03",0,IM01.ITEMNO$,DISP$,WINX,4,WINROWS,0,"Vendor Part Numbers"<br />1140 RETURN<br /><br />1200 PRINT:<br />1210 CALL "CDS041","CDS038",S038$<br />1220 LET S038.COLHEAD$="Y",S038.KEEPOPEN$="Y"</code>
+                    <p><code>1230 LET DISP$="VENDNO|XXVM01.ALPHASORT|VENDPARTNO|NOTE\ \\VENDPARTNO,1|POCOST|CU|RECDATE"<br />1240 CALL "CDS038",Y$,Y5$,Y5A$,Y6$,Y6,L,P,S038$,"XXIM03",0,IM01.ITEMNO$,"",<br />DISP$,WHERE$,SORTBY$,MODE$,LIMITVAL,"Vendor Part Numbers"<br />1250 RETURN<br /><br />8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY<br /><br />9000 EOJ:<br />9010 EXIT</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example where two views are displayed by SW100 between each option 
+selection.&#160; The first view is the left column that begins with 'Sales 
+Order#'.&#160; The second view is the right column that begins with 'Order 
+Value'.</td>
+            </tr>
+            <tr>
+                <td><code>1080 CALL "CDS041","SW100",SW100$<br />1090 LET 
+SW100.FILNAM$="SO40",SW100.VIEW$[1]="A",SW100.VIEW$[2]="T",SW100.VIEWCOL[2]=S550B.COL,SW100.ROW=13</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/SW100.1.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

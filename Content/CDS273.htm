@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="375" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS273 - Remove Records</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS273" />CDS273</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Remove Records" />Remove Records</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS273">Last Revised: 02/23/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine removes records from keyed files. It can be used to remove a single record, or multiple records with the same starting key characters.</p>
+        <p><code>CALL "CDS273",ERR=NNNN,Y$,FILNAM$,KNO,KEYVAL$ {,RECS,S273$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS273</th>
+            </tr>
+            <tr>
+                <td><code>ERR=NNNN</code>
+                </td>
+                <td>Branch to this line or line label if the file cannot be opened, or if <code>KEYVAL$</code> exceeds the key length for 
+		the<code> KNO</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />Session control variable.</td>
+            </tr>
+            <tr>
+                <td><code>FILNAM$</code>
+                </td>
+                <td>Name of the file where records are to be removed.&#160; XX is 
+		permitted as the company code.</td>
+            </tr>
+            <tr>
+                <td><code>KNO</code>
+                </td>
+                <td>For MKx files, the <code>KNUM</code> of the file corresponding to the <code>KEYVAL$</code> provided.</td>
+            </tr>
+            <tr>
+                <td><code>KEYVAL$</code>
+                </td>
+                <td>Starting characters of the key(s) to be removed.</td>
+            </tr>
+            <tr>
+                <td><code>RECS</code>
+                </td>
+                <td>Optional, and if present CDS273 will return the number of records removed.</td>
+            </tr>
+            <tr>
+                <td><code>S273$</code>
+                </td>
+                <td>Optional, pass as <code>"N"</code> to bypass user prompt if unable to open <code>FILNAM$</code>.</td>
+            </tr>
+        </table>
+        <p>CDS273 calls <a href="CDS036.htm">CDS036</a> to remove the record so that it will be logged for 
+	synchronization with another server if required.</p>
+    </body>
+</html>

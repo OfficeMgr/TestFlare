@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="2645" MadCap:lastWidth="1057">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW002 - Replace Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW002</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Replace Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW002">Last Revised: 11/09/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to replace all occurrences of text within a string variable.&#160; 
+	It can also be used to replace reserved characters in HTML, XML, and URL's 
+	with their equivalent expressions. It can now also replace all non-printable characters with a space.</p>
+        <p>Calling Formats:</p>
+        <table border="1" id="table1">
+            <col />
+            <col />
+            <tr>
+                <td class="nowrapcode"><code>CALL "SW002", TXT$, SEA$, REP$</code>
+                </td>
+                <td>Replace all occurrences of <code>SEA$</code> in <code>TXT$</code> 
+		with <code>REP$</code></td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW002::XML",TXT$</code>
+                </td>
+                <td>Replace all XML reserved characters in <code>TXT$</code><table border="1" id="table5"><col /><col /><tr><th align="center">Reserved Character</th><th align="center">Replaced with</th></tr><tr><td align="center"><code>&amp;</code></td><td align="center"><code>&amp;amp;</code></td></tr><tr><td align="center"><code>&lt;</code></td><td align="center"><code>&amp;lt;</code></td></tr><tr><td align="center"><code>&gt;</code></td><td align="center"><code>&amp;gt;</code></td></tr><tr><td align="center"><code>'</code></td><td align="center"><code>&amp;apos;</code></td></tr><tr><td align="center"><code>"</code></td><td align="center"><code>&amp;quot;</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW002::XML2",TXT$</code>
+                </td>
+                <td>Replace all XML expressions in <code>TXT$</code><table border="1" id="table2"><tr><th align="center">XML Expression</th><th align="center">Replaced with</th></tr><tr><td align="center"><code>&amp;amp;</code></td><td align="center"><code>&amp;</code></td></tr><tr><td align="center"><code>&amp;lt;</code></td><td align="center"><code>&lt;</code></td></tr><tr><td align="center"><code>&amp;gt;</code></td><td align="center"><code>&gt;</code></td></tr><tr><td align="center"><code>&amp;apos;</code></td><td align="center"><code>'</code></td></tr><tr><td align="center"><code>&amp;quot;</code></td><td align="center"><code>"</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW002::HTML",TXT$</code>
+                </td>
+                <td>Replace all HTML reserved characters in <code>TXT$</code><table border="1" id="table3"><tr><th align="center">Reserved Character</th><th align="center">Replaced with</th></tr><tr><td align="center"><code>&amp;</code></td><td align="center"><code>&amp;amp;</code></td></tr><tr><td align="center"><code>&lt;</code></td><td align="center"><code>&amp;lt;</code></td></tr><tr><td align="center"><code>&gt;</code></td><td align="center"><code>&amp;gt;</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW002::URL",TXT$</code>
+                </td>
+                <td>Replace all URL reserved characters in <code>TXT$</code><table border="1" id="table4"><tr><th align="center">Reserved Character</th><th align="center">Replaced with</th></tr><tr><td align="center"><code>blank</code></td><td align="center"><code>+</code></td></tr><tr><td align="center"><code>?</code></td><td align="center"><code>%3f</code></td></tr><tr><td align="center"><code>%</code></td><td align="center"><code>%25</code></td></tr><tr><td align="center"><code>#</code></td><td align="center"><code>%23</code></td></tr><tr><td align="center"><code>&amp;</code></td><td align="center"><code>%26</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW002::URL2",TXT$</code>
+                </td>
+                <td>Replace all URL reserved characters in <code>TXT$</code><table border="1" id="table6"><tr><th align="center">Reserved Character</th><th align="center">Replaced with</th></tr><tr><td align="center"><code>blank</code></td><td align="center"><code>%20</code></td></tr><tr><td align="center"><code>"</code></td><td align="center"><code>%22</code></td></tr><tr><td align="center"><code>%</code></td><td align="center"><code>%25</code></td></tr><tr><td align="center"><code>&lt;</code></td><td align="center"><code>%3c</code></td></tr><tr><td align="center"><code>&gt;</code></td><td align="center"><code>%3e</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>CALL "SW002::JSON",TXT$</code>
+                </td>
+                <td>Replace special JSON characters in <code>TXT$</code> with their escaped representation. Used when converting 'to' JSON format.<br /><table border="1" id="table6"><col /><col /><col /><tr><th>Description</th><th align="center">Special Character</th><th align="center">JSON Value</th></tr><tr><td>back slash</td><td align="center" class="nowrapcode">\</td><td align="center" class="nowrapcode">\\</td></tr><tr><td>backspace</td><td align="center" class="nowrapcode">$08$</td><td align="center" class="nowrapcode">\b</td></tr><tr><td>form feed</td><td align="center" class="nowrapcode">$0C$</td><td align="center" class="nowrapcode">\f</td></tr><tr><td>new line - line feed</td><td align="center" class="nowrapcode">$0A$</td><td align="center" class="nowrapcode">\n</td></tr><tr><td>carriage return</td><td align="center" class="nowrapcode">$0D$</td><td align="center" class="nowrapcode">\d</td></tr><tr><td>tab</td><td align="center" class="nowrapcode">$09$</td><td align="center" class="nowrapcode">\t</td></tr><tr><td>quote</td><td align="center" class="nowrapcode">"</td><td align="center" class="nowrapcode">\"</td></tr><tr><td>other non-printable character</td><td align="center" class="nowrapcode">$00$ - $1F$<br />$7F$ - $FF$</td><td align="center" class="nowrapcode">\uxxyy</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CALL "SW002::FROMJSON",TXT$</td>
+                <td>Converts JSON&#160;Values as shown in above table back to the Special Character. Used when converting 'from' JSON&#160;format.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CALL&#160;"SW002::NONPRINT",TXT$</td>
+                <td>Replace all non-printable characters with a blank space. This is similar to <code>CVS(TXT$,16)</code> which for bbj does not convert many characters that are 'printable' in that they may be letters with diacritical marks and line drawing characters.<br />SW002 considers any character below a space ($00$ - $1F$) and above a tilde ($7F$&#160;- $FF$) as non-printable, and replaces these with blanks.</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th colspan="2">SW002</th>
+            </tr>
+            <tr>
+                <td><code>TXT$</code>
+                </td>
+                <td>Text to be searched.&#160; Used for both input and output.</td>
+            </tr>
+            <tr>
+                <td><code>SEA$</code>
+                </td>
+                <td>Search string.</td>
+            </tr>
+            <tr>
+                <td><code>REP$</code>
+                </td>
+                <td>Replacement string.&#160; Can be null, shorter, or longer than <code>SEA$</code>.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$="This is a test"<br />  CALL "SW002",TXT$,"s","xxx"</code>
+                    <p><code>?TXT$<br />      Thixxx ixxx a texxxt</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>TXT$="Eliminate blanks in this string"<br />       CALL "SW002",TXT$," ","_"</code>
+                    <p><code>?TXT$<br />       Eliminate_blanks_in_this_string</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        XML Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$="2"" Nails"<br />	?TXT$<br />	2" Nails<br />CALL "SW002::XML",TXT$<br />	?TXT$<br />	2&amp;quot; Nails</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        HTML Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$="IF A&lt;&gt;B PRINT ""Different"""<br />	?TXT$<br />	IF A&lt;&gt;B PRINT "Different"<br />	CALL "SW002::HTML",TXT$<br />	?TXT$<br />	IF A&amp;lt;&amp;gt;B PRINT "Different"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        URL Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$="dynaweb.excellware.com/cgi-bin/ex.cgi/?p=WA021&amp;orderno=12345"<br />CALL "SW002::HTML",TXT$<br />?TXT$<br />	dynaweb.excellware.com/cgi-bin/ex.cgi/?p=WA021&amp;amp;orderno=12345</code>
+                </td>
+            </tr>
+            <tr>
+                <td>JSON&#160;Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$="James Brown"+$0d0a$+"1815 West Market St"<br />CALL "SW002::JSON",TXT$<br />?TXT$<br />James Brown\r\n1815 West Market St</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Non-Printable Example</td>
+            </tr>
+            <tr>
+                <td><code>TXT$=$0001021C1D1E1F$+"!ABCabc~"+$7F80FF$<br />CALL "SW002::NONPRINT",TXT$<br />?HTA(TXT$)<br />20202020202020214142436162637E202020
+</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

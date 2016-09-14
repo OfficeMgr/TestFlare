@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="2770" MadCap:lastWidth="834">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS354 - Print two column PCL box</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p>&#160;&#160;&#160;</p>
+        <p class="SectionName">CDS354</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Print 2 column PCL Box</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS354">Last Revised: 
+ 04/12/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used with PCL 5 compatible 
+devices such as most laser or ink-jet printers, to print a PCL box with two columns 
+and one or more rows.&#160; The left column is typically used for the field 
+title and is shaded.&#160; The right column is typically used for the field 
+data.</p>
+        <p>CDS354 requires the printer to have an internal, scalable, Univers typeface.&#160; 
+This has traditionally been available on most laser printers and copiers.&#160; 
+However Hewlett Packard has removed this internal typeface on many printers that 
+support PCL 6, such as the LaserJet 2015 and the Color Laser All-in-One 2840.&#160; 
+Print the printer's PCL font list to insure compatibility.</p>
+        <p>CDS354 is called once for each row in the box, then one more time indicating 
+that there will be no more rows.</p>
+        <h5>Data Row</h5>
+        <p><code>CALL "CDS354", <a href="#COL1$">COL1$</a>, <a href="#LRC$">COL2$</a>,
+<a href="#LRC$">LRC$</a></code>
+        </p>
+        <p><span style="font-family: Tahoma;">Note: You may call with less than the complete ENTER list 
+to assume default values.</span>
+        </p>
+        <p><span style="font-family: Tahoma;">See Also:<br /><a href="CDS254.htm">CDS254</a> - Print PCL Text, Line, Box and Overlay<br /><a href="CDS454.htm">CDS454</a> - Print PCL Grid<br /><a href="CDS554.htm">CDS554</a> - Advanced PCL Grid</span>
+        </p>
+        <table>
+            <tr>
+                <th nowrap="" colspan="2">CDS354</th>
+            </tr>
+            <tr>
+                <th nowrap="" colspan="2">Data Row</th>
+            </tr>
+            <tr>
+                <td><a name="COL1$"></a><code>COL1$</code>
+                </td>
+                <td>Pass to CDS354 the data to appear in the left column of the box.&#160; 
+ Use line feed characters (<code>$0A$</code>) to separate the text into multiple lines 
+ within the same cell.&#160; This data will print in 9 point bold Universe 
+ proportional font, top aligned in the cell.</td>
+            </tr>
+            <tr>
+                <td><a name="COL2$"></a><code>COL2$</code>
+                </td>
+                <td>Pass to CDS354 the data to appear in the right column of the box.&#160; 
+ Like <code>COL1$</code>, you may use line feed characters when the cell contains multiple 
+ rows of data.&#160; This data will print in in 10 point Universe 
+ proportional font, left and top aligned in the cell.</td>
+            </tr>
+            <tr>
+                <td><a name="LRC$"></a><code>LRC$</code>
+                </td>
+                <td>This optional parameter determines the horizontal alignment, color, and font weight, of the text 
+ within the cell.&#160; If not passed, then a default value of <code>LL00</code> 
+    is used.<table border="1" style="border-collapse: collapse;"><tr><td><code>LRC$(1,1)</code></td><td>Left Column Alignment (L=Left, C=Center, R=Right)</td></tr><tr><td><code>LRC$(2,1)</code></td><td>Right Column Alignment</td></tr><tr><td><code>LRC$(3,1)</code></td><td>Left Column Color (0=Black, 1=Red, 2=Green, 3=Yellow, 4=Blue, 
+ 5=Magenta, 6=Cyan, 7=White)</td></tr><tr><td><code>LRC$(4,1)</code></td><td>Right Column Color</td></tr><tr><td><code>LRC$(5,1)</code></td><td>Set to <code>"B"</code> to print Right Column text in bold weight</td></tr></table></td>
+            </tr>
+        </table>
+        <p>The text will be automatically reduced in size to fit in the cell should the 
+column width be too small at the default font size.&#160;</p>
+        <h5>End of Data</h5>
+        <p>Use CDS041 to obtain template for S345$ early in the program:<code><br />CALL "CDS041","CDS354",S354$,"YY"</code></p>
+        <p>Clear template's previous values, then populate and call:<code><br />S354.COL=10,S354.ROW=100<br />CALL "CDS354::DONE",<a href="#Y6$">Y6$</a>,<a href="#S354.COL">S354$</a></code></p>
+        <table>
+            <tr>
+                <th nowrap="" colspan="2">End of Data Call</th>
+            </tr>
+            <tr>
+                <td><a name="Y6$"></a><code>Y6$</code>
+                </td>
+                <td>Printer control variable set by CDS084 and used by CDS354 to determine 
+ printer channel, etc.</td>
+            </tr>
+            <tr>
+                <td><a name="S354.COL"></a><code>S354.COL</code>
+                </td>
+                <td>Dot column for upper left or upper right corner of box.&#160; A positive 
+	value indicates the position of the upper left corner.&#160; A negative 
+	value indicates the position of the upper right corner.&#160; This is useful 
+	when you want the box flush with the right side of the page.&#160; There are 
+	300 dot columns per inch.&#160; With standard 8.5" wide paper in portrait 
+	orientation, the dot columns range from 0 to 2399 with a 1/4 inch margin on 
+ either side.</td>
+            </tr>
+            <tr>
+                <td><code>S354.ROW</code>
+                </td>
+                <td>Dot row for upper left corner of box.&#160; There are 300 dot rows per 
+	inch.&#160; With standard 11" long paper in portrait orientation, the dot 
+	rows range from 0 to 3299 with a 1/4 inch margin on top and bottom.&#160;&#160;</td>
+            </tr>
+            <tr>
+                <td><code>BOXCOLS</code>
+                </td>
+                <td>Optional.&#160; Width of overall box in dot columns.
+    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber2" class="lev2"><tr><td>Positive Value</td><td>Box will be specified size</td></tr><tr><td>Zero</td><td>CDS354 will determine the box width based on the position of the box 
+ and the dots required for the data.</td></tr><tr><td>Negative Value</td><td>Box will not exceed size specified, but width will shrink to actual 
+ size required when size required is less than value passed.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>MARGIN</code>
+                </td>
+                <td>Optional parameter used to control the top &amp; bottom margin in dots in 
+ the cell.&#160; The default value is 10, which makes a row with one line of 
+ text 50 + 10 = 60 dots high, with two lines of text 50 + 50 + 10 = 110 dots 
+ high.&#160; The smallest value is 1 which means a row would be 51 dots high.&#160; 
+ You may pass MARGIN values of 1 to 255.&#160; Note the default margin was 
+ changed on April 25, 2012 from 25 to 10 in order to duplicate the row height 
+ used in CDS454.&#160; Check the date of CDS354 to determine your default 
+ margin.</td>
+            </tr>
+            <tr>
+                <td><a name="ROWEND0"></a><code>LCOLWIDTH</code>
+                </td>
+                <td>Optional parameter indicating the width of the left column in dots.
+    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="table2" class="lev2"><tr><td>Positive Value</td><td>The left column will be the number of dots specified.</td></tr><tr><td>Zero</td><td>CDS354 will determine the width of the left column based 
+ on a ratio of the longest data to appear in each column.</td></tr><tr><td>Negative Value</td><td>CDS354 will set the column width so that the longest text in 
+ the column fits without font size reduction.&#160; All remaining space 
+ in the box will be in the right column.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>R</code><a name="ROWEND"></a><code>COLWIDTH</code>
+                </td>
+                <td>Optional parameter indicating the width of the right column in dots.
+    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber3" class="lev2"><tr><td>Positive Value</td><td>The right column will be the number of dots specified.</td></tr><tr><td>Zero</td><td>CDS354 will determine the width of the right column based 
+ on a ratio of the longest data to appear in each column.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="ROWEND"></a><code>LCOLSHADE</code>
+                </td>
+                <td>Optional parameter indicating the shading for the left column.
+    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber4" class="lev2"><tr><td>Positive Value</td><td>Left column will be shaded using value indicated.&#160; Typically 
+ not set greater than 1.</td></tr><tr><td>Zero</td><td>Left column will be shaded to default value, which is 1.</td></tr><tr><td>Negative Value</td><td>Left column will not be shaded.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="ROWEND"></a><code>RCOLSHADE</code>
+                </td>
+                <td>Optional parameter indicating the shading for the right column.
+    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber4" class="lev2"><tr><td>Positive Value</td><td>Right column will be shaded using value indicated.&#160; Typically 
+ not set greater than 1.</td></tr><tr><td>Zero</td><td>Right column will be shaded to default value, which is no shading.</td></tr><tr><td>Negative Value</td><td>Right column will not be shaded.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="ROWEND"></a><code>COLEND</code>
+                </td>
+                <td>Set by CDS354 to the rightmost dot column used by the box.&#160; Useful 
+ when it is necessary to know where data can be printed to the right of the 
+ box.</td>
+            </tr>
+            <tr>
+                <td><a name="ROWEND"></a><code>ROWEND</code>
+                </td>
+                <td>Set by CDS354 to the dot row for the bottom of the box.&#160; This can 
+ be used by the calling application for printing other data below this box.</td>
+            </tr>
+        </table>
+        <p>CDS354 uses a temporary global variable SMS_CDS354 to store the text to be 
+printed, and is cleared upon the final call.</p>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Simple Example</td>
+            </tr>
+            <tr>
+                <td><code>0110 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$<br />0120 CALL "CDS041","CDS354",S354$<br />0130 CALL "CDS354","Name","Jones Oxygen"<br />0140 CALL "CDS354","Address","1815 West Market St"+$0A$+"Akron, OH&#160; 44333"<br />0150 CALL "CDS354","Phone","440-985-1445"<br />0160 CALL "CDS354","Total","1,234.56","RR"<br />0170 S354.ROW=300<br />0180 CALL "CDS354::DONE",Y6$,S354$<br />0190 CALL "CDS094",Y6$,"E"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS3541.gif" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Output of example illustrating cells with multiple lines of text and 
+ color</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS354.PNG" width="380" height="401" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

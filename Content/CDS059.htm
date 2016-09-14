@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS059 - Change CTL or ERR Value</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS059" />CDS059</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="CTL" />Change CTL or ERR Value</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS059">Last Revised: 06/09/2009</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be called to set the CTL system 
+	variable to any value from 0 to 255, or the ERR system variable.</p>
+        <p>This may be desired when a program tests for a particular CTL value, but is not set naturally by the program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS059",ERR=NNNN, CTLERR</code>
+        </p>
+        <table border="1" id="table1">
+            <tr>
+                <th>Argument</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>ERR=NNNN</code>
+                </td>
+                <td>Branch to this line when setting ERR</td>
+            </tr>
+            <tr>
+                <td><code>CTLERR</code>
+                </td>
+                <td>Zero or positive integer: Set CTL<br />
+		Negative integer: Set ERR to -CTLERR</td>
+            </tr>
+        </table>
+        <table border="1" id="table2" class="example">
+            <tr>
+                <td>Example: Set CTL=4</td>
+            </tr>
+            <tr>
+                <td><code>?CTL</code>
+                    <p><code>&#160;0</code>
+                    </p>
+                    <p><code>CALL "CDS059",4; ?CTL<br />
+&#160;4</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Set CTL=200</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS059",200; ?CTL</code>
+                    <p><code>&#160;200</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Set ERR=99</td>
+            </tr>
+            <tr>
+                <td><code>0100 CALL "CDS059",ERR=0110,-99<br />
+			0110 PRINT ERR</code>
+                    <p><code>&#160;99</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

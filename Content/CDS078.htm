@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS078 - Time Conversion (to display format)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS078" />CDS078</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="TIM" />
+                        <MadCap:keyword term="Time Conversion" />Time Conversion (to display format)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS078">Last Revised: 10/26/06</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="AM" />CDS078 is called to convert either the the system 
+	variable TIM or a passed variable in the same format as TIM into two, eight 
+	character display formats.&#160; See <a href="CDS178.htm">CDS178</a> for 
+	conversion from display format back to TIM format.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS078", HMS$, HMA$, TIME</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS078</th>
+            </tr>
+            <tr>
+                <td><code>HMS$</code>
+                </td>
+                <td>will be returned the time in hours:minutes:seconds (military) format such as " 1:15:22" or "23:55:38"</td>
+            </tr>
+            <tr>
+                <td><code>HMA$</code>
+                </td>
+                <td>will be returned the time in hours:minutes XM format such as " 1:15 AM" or "11:55 PM"</td>
+            </tr>
+            <tr>
+                <td><code>TIME</code>
+                </td>
+                <td>Optional variable passed to CDS078 to use instead of the system variable TIM.&#160; It 
+		can be used to format a stored time, or to format elapsed time.&#160; The variable is in hours and fractions of an hour, just like the TIM 
+		system variable.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example using the system time</td>
+            </tr>
+            <tr>
+                <td><code>&gt;call "CDS078",HMS$,HMA$<br />
+		&gt;?HMS$<br />
+		13:03:12<br />
+		&gt;?HMA$<br />
+&#160;1:03 PM<br />
+		&gt;?TIM<br />
+		13.06</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example using user specified time</td>
+            </tr>
+            <tr>
+                <td><code>&gt;TIME=14.5<br />
+			&gt;CALL "CDS078",HMS$,HMA$,TIME<br />
+			&gt;?HMS$<br />
+			14:30:00<br />
+			&gt;?HMA$<br />
+&#160;2:30 PM</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example using elapsed time</td>
+            </tr>
+            <tr>
+                <td><code>&gt;PRECISION 6</code>
+                    <p><code>&gt;STARTTIME=TIM<br />
+			&gt;other program logic to be timed<br />
+			&gt;CALL "CDS078",HMS$,HMA$,TIM-STARTTIME<br />
+			&gt;PRECISION 2<br />
+			&gt;?HMS$<br />
+			00:00:46<br />
+			&gt;?HMA$<br />
+			12:00 AM</code>
+                    </p>
+                    <p>Note: The HMA$ AM/PM format is not applicable for elapsed times.&#160; 
+			You may need to set the PRECISION to 6 or higher in order to get an 
+			accurate measure of elapsed time.</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

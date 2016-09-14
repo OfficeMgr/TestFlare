@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS085 - Sort String Data File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS085" />CDS085</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Sort String Data File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS085">Last Revised: 04/09/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to sort a string type data file and 
+store the sorted records in another string file.</p>
+        <p>Records in the file should be terminated with either a line feed, or carriage 
+return and line feed characters.&#160; The 
+entire record is treated as the key beginning in position 1.</p>
+        <p>This program is often used in a Windows environment where opening a pipe to 
+sort, i.e., <code>OPEN (PIPE)"|sort"</code> is not possible.</p>
+        <p>Calling format:</p>
+        <p><code>CALL "CDS085", FILEIN$, FILEOUT$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS085</th>
+            </tr>
+            <tr>
+                <td><code>FILEIN$</code>
+                </td>
+                <td>Input file name.&#160; Must be string type with line feed or carriage 
+	return &amp; line feed separators 
+ between records.</td>
+            </tr>
+            <tr>
+                <td><code>FILEOUT$</code>
+                </td>
+                <td>Output file name.&#160; If the output file name exists, it will be 
+ replaced.&#160; If the output file name is null, then <code>FILEOUT$</code> 
+	will be the same as <code>FILEIN$</code> with an additional suffix of .srt 
+	and returned to calling program.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

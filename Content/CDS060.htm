@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS060 - Text Printing</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS060" />CDS060</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Text Printing" />Text Printing</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS060">Last Revised: 02/19/05</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Documentation Manual Printing" />
+            <MadCap:keyword term="Text Editor" />This program is not normally called by application programs. It is used by the Text Printing and Documentation Manual Printing programs to print text created with the Text Editor program to a printer.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS060", ERR=1234, <a href="#Y$">Y$</a>,<a href="#G">G</a>, <a href="#T2$">T2$</a>, <a href="#G1">G1</a>, <a href="#L$">L$</a>, L, P, <a href="#C$">C$</a>, <a href="#T$">T$</a>, <a href="#C0$">C0$</a>, <a href="#K$">K$</a>, <a href="#K0$">K0$</a>, <a href="#F">F</a>, <a href="#T3$">T3$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS060</th>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the standard terminal control variable</td>
+            </tr>
+            <tr>
+                <td><a name="G"></a><code>G</code>
+                </td>
+                <td>indicates characters to be indented. Text is printed <code>@(G)</code></td>
+            </tr>
+            <tr>
+                <td><a name="T2$"></a><code>T2$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td><code>(5,1)</code>
+                            </td>
+                            <td>Print text code<br />
+            Y - yes<br />
+            N - no<br />
+            S - selector summary text only</td>
+                        </tr>
+                        <tr>
+                            <td><code>(6,1)</code>
+                            </td>
+                            <td>print missing text list (Y/N)</td>
+                        </tr>
+                        <tr>
+                            <td><code>(7,1)</code>
+                            </td>
+                            <td>continuous paper/single fed sheets (C/S)</td>
+                        </tr>
+                        <tr>
+                            <td><code>(8,1)</code>
+                            </td>
+                            <td>print text id at top of each page (Y/N)</td>
+                        </tr>
+                        <tr>
+                            <td><code>(9,2)</code>
+                            </td>
+                            <td>company code for text opened</td>
+                        </tr>
+                        <tr>
+                            <td><code>(13,1)</code>
+                            </td>
+                            <td>lower case printer (Y/N)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="G1"></a><code>G1</code>
+                </td>
+                <td>number of extra blank lines to insert</td>
+            </tr>
+            <tr>
+                <td><a name="L$"></a><code>L$</code>
+                </td>
+                <td>no longer used, pass as null</td>
+            </tr>
+            <tr>
+                <td><a name="C$"></a><code>C$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Documentation Control Number" />documentation control number</td>
+            </tr>
+            <tr>
+                <td><a name="T$"></a><code>T$</code>
+                </td>
+                <td>title to use</td>
+            </tr>
+            <tr>
+                <td><a name="C0$"></a><code>C0$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Company Name" />company name to use (no page headings if null)</td>
+            </tr>
+            <tr>
+                <td><a name="K$"></a><code>K$</code>
+                </td>
+                <td>key to text file including company code, but excluding page number (8 characters)&#160;</td>
+            </tr>
+            <tr>
+                <td><a name="K0$"></a><code>K0$</code>
+                </td>
+                <td>local use only, pass as null</td>
+            </tr>
+            <tr>
+                <td><a name="F"></a><code>F</code>
+                </td>
+                <td>channel number to use as text file</td>
+            </tr>
+            <tr>
+                <td><a name="T3$"></a><code>T3$</code>
+                </td>
+                <td><code>(1,1)</code> update with new documentation control number (Y/N)<br /><code>(2,1)</code> force new title (Y/N)</td>
+            </tr>
+        </table>
+    </body>
+</html>

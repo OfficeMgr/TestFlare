@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS099 - Get File Positioning String</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS099" />CDS099</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Get File Positioning String" />Get File Positioning String</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS099">Last Revised: 
+	07/08/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to provide a string variable which can be used to establish a position within a keyed file.</p>
+        <p>Traditionally, when necessary to locate a group of records in a file with the same starting characters in the key, a positional read would be used:</p>
+        <p><code>1010 READ (1,KEY=A$,DOM=1020)<br />1020 ...</code>
+        </p>
+        <p>However, if the file is multi-keyed, with a descending segment following the characters in 
+<code>A$</code>, then the position within the file is after the last record, instead of before the first record. CDS099 can be used with any keyed file, DIR, SRT, SKx, or MKx to assist in positioning the file based on the structure of the keys in the file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS099", CN, KN, PS$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS099</th>
+            </tr>
+            <tr>
+                <td><code>CN</code>
+                </td>
+                <td>the channel number of an opened file</td>
+            </tr>
+            <tr>
+                <td><code>KN</code>
+                </td>
+                <td>the KNUM if applicable</td>
+            </tr>
+            <tr>
+                <td><code>PS$</code>
+                </td>
+                <td>
+        is returned as a positional string, used as shown in the example:<br />
+        &#160;
+        <table class="example"><tr><th>Example</th></tr><tr><td>Early in the program:</td></tr><tr><td><code>0130 CALL "CDS099",1,0,PS$</code></td></tr><tr><td>Later in the logic to position the file before the first record (whether ascending or descending):</td></tr><tr><td><code>1010 READ (1,KEY=A$+PS$(1+LEN(A$)),DOM=1020)<br />
+			1020 ...</code></td></tr></table></td>
+            </tr>
+        </table>
+        <p>The advantage of using CDS099 is that if the file structure changes, and a descending key segment is added or removed, then the application program will work properly.</p>
+        <p>CDS099 uses the <code><MadCap:keyword term="FID" />FID()</code> and <code><MadCap:keyword term="FIN" />FIN()</code> data to build <code>PS$</code><MadCap:keyword term="File Data Dictionary" />. No File Data Dictionary information is used.</p>
+    </body>
+</html>

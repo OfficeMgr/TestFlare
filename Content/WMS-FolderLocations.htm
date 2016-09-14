@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="4" MadCap:lastHeight="410" MadCap:lastWidth="941">
+    <head><title>Dynaweb - Folder Locations</title>
+    </head>
+    <body>
+        <p class="SectionName">folder Locations</p>
+        <p class="SectionTitle">
+            <MadCap:keyword term="Web Management Software" />Dynaweb Components</p>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Cgi" />
+            <MadCap:keyword term="index.html" />
+            <MadCap:keyword term="Documents Folder" />Dynaweb applications require a web server such as the apache server that is available on linux distributions. Other web servers such as Lotus Domino and Netscape have also been used.</p>
+        <p>The information below applies to the apache web server, but a similar structure applies to other web servers.</p>
+        <p>The web server is typically installed on the same server as the apache web server, however it is also possible to install pro5 or bbj on the web server, and access all Dynamo Tools using the pro5 or bbj data server. In this case the web server only requires a few scripts to enable operation.</p>
+        <p>Data files can be located on the web server, or on the same server that has Dynamo Tools installed, or another server accessible using the pro5 or bbj data server.</p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th>Component</th>
+                <th>Location</th>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="AIX" />apache configuration file</td>
+                <td>/etc/httpd/conf/httpd.conf</td>
+            </tr>
+            <tr>
+                <td>Document Root Folder</td>
+                <td>/var/www/html/</td>
+            </tr>
+            <tr>
+                <td>Script Alias Folder</td>
+                <td>/var/www/cgi-bin/</td>
+            </tr>
+            <tr>
+                <td>Default Dynaweb Script</td>
+                <td>/u/CDI/bin/xx.cgi<br /></td>
+            </tr>
+            <tr>
+                <td>Temporary web file directory</td>
+                <td>/var/www/html/tmp -&gt;&#160;Symbolic link to /u/CDI/tmp</td>
+            </tr>
+            <tr>
+                <td>apache log file directory</td>
+                <td>/var/log/httpd/</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="SMSDIR" />
+            <MadCap:keyword term="Folder Name" />
+        </p>
+        <p>&#160;</p>
+    </body>
+</html>

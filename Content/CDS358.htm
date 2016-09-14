@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS358 - Validate Address</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS358</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Validate Address</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS358">Last Revised: 03/06/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine used to validate and standardize an address.&#160; It will change the spelling of street names, change the street, directional abbreviations, and city to the standard format as determined by the US Postal Service, and assign the Zip+4 for US addresses.&#160; It supports US and Canadian addresses.&#160; An active internet connection is required.</p>
+        <p>This application is only available to customers that participate in the Excellware Priority Support plan, as this program uses a fee-based service provided by Melissa Data.&#160; You can verify that the Dynamo Address Correction option is enabled on a particular system using the I menu option.&#160; In the Application Software section, the Licensed Options will include 'DAC' when this option is enabled.</p>
+        <p>Program <a href="SW022.htm">SW022</a> can be used as a View Validation routine which calls CDS358 to validate an address.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS358", S358$</code>
+        </p>
+        <table>
+            <tr>
+                <th>CDS358</th>
+                <th nowrap="" style="text-align: center;">In/Out</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>S358.NAME$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Company or person's name.&#160; This field is used to determine whether the standardized address should be in all capital letters or in proper case.&#160; If the <code>NAME</code> field contains 
+		more upper case letters, than lower case, then the standardized address will be returned using all capital letters.&#160; 
+		This is done so that a name like SAM MacSHANE will return an address 
+		using all capital letters, but Sam MacShane will have a proper case 
+		address.</td>
+            </tr>
+            <tr>
+                <td><code>S358.ADDRESS$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>The address to be validated.&#160; Note that only one address line can be used.&#160; If you have two lines of address then use the address line 2 if not blank, otherwise use address line 1.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CITY$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>City Name</td>
+            </tr>
+            <tr>
+                <td><code>S358.STATE$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>State Code</td>
+            </tr>
+            <tr>
+                <td><code>S358.ZIP$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>US Zip Code or Canadian Postal Code</td>
+            </tr>
+            <tr>
+                <td><code>S358.COUNTRY$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>"US" for United States, "CA" for Canadian addresses.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CRRT$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Carrier Route for US addresses.</td>
+            </tr>
+            <tr>
+                <td><code>S358.DPBC$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Assigned the Delivery Point Bar Code for US addresses.&#160; Used when printing the postnet bar code to obtain lower postage rates.</td>
+            </tr>
+            <tr>
+                <td nowrap="" height="45"><code>S358.COUNTYCODE$</code>
+                </td>
+                <td align="center" height="45">Out</td>
+                <td height="45">Assigned the County Code that the US address is located in.&#160; Useful for county based sales tax rates.&#160; File DYSW05 contains the list of county codes and names.</td>
+            </tr>
+            <tr>
+                <td><code>S358.ADDERRCODE$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Non-blank indicates the address could not be verified.</td>
+            </tr>
+            <tr>
+                <td><code>S358.ADDERRDESC$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Assigned to a brief description of the reason an address could not be verified.</td>
+            </tr>
+            <tr>
+                <td><code>S358.DISPMSG</code>
+                </td>
+                <td align="center">In</td>
+                <td>If passed as non-zero then progress and error messages are displayed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGADDRESS</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>ADDRESS$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGCITY</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>CITY$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGSTATE</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>STATE$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGZIP</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>ZIP$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGCOUNTRY</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>COUNTRY$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGCRRT</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>CRRT$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGDPBC</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>DPBC$</code> field was changed.</td>
+            </tr>
+            <tr>
+                <td><code>S358.CHGCOUNTYCODE</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Returned as non-zero if the <code>COUNTYCODE$</code> field was changed.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>
+        Example
+
+        <p>Note how the Street Type (Way), Zip+4, Carrier Route, Delivery Point 
+		Bar Code, County Code and County Name have been populated by CDS358.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS3581.jpg" alt="" width="648" height="374" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

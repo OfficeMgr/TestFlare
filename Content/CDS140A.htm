@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head><title>Program Editor - Statement Editing</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Program Editor" />Program Editor</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Statement Editor</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS140">Last Revised: 
+			04/29/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Line Label" />To edit an existing program statement, enter an apostrophe followed by the line number or line label.&#160;&#160; For compatibility with an older version, you can still use the "at sign symbol @" in place of the apostrophe.&#160;&#160; When you edit a program statement in this way, the program statement will be displayed and you can edit it using the following commands.</p>
+        <p>
+            <MadCap:keyword term="Terminal Function Key Maintenance" />The first column indicates the primary key to press.&#160; The second column indicates the control key to press (Hold Ctrl down while touching key).&#160; The primary key is dependent on the function key mapping established using Terminal Function Key Maintenance (SMC).&#160; The table below assumes use of the STD Function key Group Code.</p>
+        <table>
+            <colgroup>
+                <col />
+                <col />
+                <col />
+            </colgroup>
+            <tr>
+                <th rowspan="1" colspan="3">
+                    <MadCap:keyword term="Cursor Movement" />Cursor Movement</th>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="ArrowRt" />ArrowRt</code>
+                </td>
+                <td><code>^L</code>
+                </td>
+                <td>Right 1 character</td>
+            </tr>
+            <tr>
+                <td><code>Tab</code>
+                </td>
+                <td><code>^I</code>
+                </td>
+                <td>Right&#160;8 characters</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="PageDn" />PageDn</code>
+                </td>
+                <td><code>^N</code>
+                </td>
+                <td>Right to next semicolon</td>
+            </tr>
+            <tr>
+                <td><code>End</code>
+                </td>
+                <td><code>^E</code>
+                </td>
+                <td colspan="1" rowspan="2">One character after last character of statement</td>
+            </tr>
+            <tr>
+                <td><code>F4</code>
+                </td>
+                <td><code>^_</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="ArrowLf" />ArrowLf</code>
+                </td>
+                <td><code>^V</code>
+                </td>
+                <td>Left 1 character</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="ShiftTab" />ShiftTab</code>
+                </td>
+                <td><code>^B</code>
+                </td>
+                <td>Left 8 characters</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="PageUp" />PageUp</code>
+                </td>
+                <td><code>^O</code>
+                </td>
+                <td>Left to previous semicolon</td>
+            </tr>
+            <tr>
+                <td><code>Home</code>
+                </td>
+                <td><code>^P</code>
+                </td>
+                <td>To first character in statement</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="ArrowUp" />ArrowUp</code>
+                </td>
+                <td><code>^K</code>
+                </td>
+                <td>Up one line, or same as Home if on first line</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="ArrowDn" />ArrowDn</code>
+                </td>
+                <td><code>^J</code>
+                </td>
+                <td>Down one line, or same as End if on last line</td>
+            </tr>
+            <tr>
+                <th colspan="3" rowspan="1">Inserting</th>
+            </tr>
+            <tr>
+                <td><code>Insert</code>
+                </td>
+                <td><code>^Y</code>
+                </td>
+                <td>Toggles between insert (block cursor) and typeover (line cursor) modes</td>
+            </tr>
+            <tr>
+                <td><code>F12</code>
+                </td>
+                <td><code>^Z</code>
+                </td>
+                <td>Inserts blank character</td>
+            </tr>
+            <tr>
+                <td><code>Sh+F12</code>
+                </td>
+                <td><code>^W</code>
+                </td>
+                <td>Inserts 8 blank characters</td>
+            </tr>
+            <tr>
+                <td><code>Sh+Insert</code>
+                </td>
+                <td><code>^A</code>
+                </td>
+                <td>Inserts one line (typically 80 characters)</td>
+            </tr>
+            <tr>
+                <th colspan="3" rowspan="1">Deleting</th>
+            </tr>
+            <tr>
+                <td><code>Delete</code>
+                </td>
+                <td><code>^T</code>
+                </td>
+                <td>Deletes character at cursor</td>
+            </tr>
+            <tr>
+                <td><code>Backspace</code>
+                </td>
+                <td><code>^H</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Insert Mode" />
+        Insert Mode: Deletes character to left of cursor
+
+        <p><MadCap:keyword term="Typeover Mode" />Typeover Mode: Blanks character to left of cursor</p></td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td><code>^U</code>
+                </td>
+                <td>Delete all blanks between cursor and next non-blank</td>
+            </tr>
+            <tr>
+                <td><code>Sh+F10</code>
+                </td>
+                <td><code>^G</code>
+                </td>
+                <td>Delete from cursor to end of line</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td><code>^X</code>
+                </td>
+                <td>Delete from cursor through character before semicolon</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td><code>^F</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Delete from/to" />Delete from/to.&#160;&#160; Touch ^F, move cursor, then touch ^F again.</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td><code>^D</code>
+                </td>
+                <td>Delete one line (typically 80 characters)</td>
+            </tr>
+            <tr>
+                <td><code>Sh+F1</code>
+                </td>
+                <td><code>^R</code>
+                </td>
+                <td>Inserts (restores) last deletion (even if deleted on different program statement or program)</td>
+            </tr>
+            <tr>
+                <th colspan="3">Other Statement Editor Commands</th>
+            </tr>
+            <tr>
+                <td><code>Enter</code>
+                </td>
+                <td><code>^M</code>
+                </td>
+                <td>Accept program statement</td>
+            </tr>
+            <tr>
+                <td><code>Escape</code>
+                </td>
+                <td><code>^[</code>
+                </td>
+                <td>Abandon changes made to program statement, restore original</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td><code>^C</code>
+                </td>
+                <td>Abandon changes made, exit statement editor</td>
+            </tr>
+            <tr>
+                <td><code>F1</code>
+                </td>
+                <td><code>^\</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Hotkey" />Hotkey</td>
+            </tr>
+            <tr>
+                <td><code>F2</code>
+                </td>
+                <td><code>^[</code>
+                </td>
+                <td>Paste line drawing character or context sensitive code.&#160; See 
+		Lookup and Paste Commands below.</td>
+            </tr>
+            <tr>
+                <td><code>F3</code>
+                </td>
+                <td><code>^^</code>
+                </td>
+                <td>Help - display Statement Editor Commands</td>
+            </tr>
+            <tr>
+                <th colspan="3">Lookup &amp; Paste Commands</th>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><code>File.</code>
+                </td>
+                <td>Template field name</td>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><code>CALL "XX</code>
+                </td>
+                <td>Callable routines</td>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><code>CALL "XXXXX"</code>
+                </td>
+                <td>Called routine arguments</td>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><code>GOSUB<br />
+		ON xxx GOSUB xxx,</code>
+                    <p><code>GOTO</code>
+                    </p>
+                    <p><code>ON xxx GOTO xxx,</code>
+                    </p>
+                    <p><code>END=</code>
+                    </p>
+                    <p><code>ERR=</code>
+                    </p>
+                    <p><code>DOM= etc.</code>
+                    </p>
+                </td>
+                <td>Line Label</td>
+            </tr>
+            <tr>
+                <td colspan="2"><code>ENTER </code>
+                </td>
+                <td>Enter argument list for external routines</td>
+            </tr>
+            <tr>
+                <td colspan="2"><code>FN</code>
+                </td>
+                <td>Defined Function argument list</td>
+            </tr>
+        </table>
+    </body>
+</html>

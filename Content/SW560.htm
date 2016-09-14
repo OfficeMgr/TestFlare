@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="3026" MadCap:lastWidth="1031">
+    <head>
+        <style type="text/css">
+.none
+{
+	border: 1;
+}
+
+</style>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW560 - UPS Service Level</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW560</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">UPS Shipping Quotes</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW560">Last Revised: 09/14/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program will interact with the UPS&#160;"Rating" API and will retrieve delivery pricing and time-frame information for the requested UPS shipping service. This will ultimately allow for comparison of this information among different service options to choose the most appropriate combination of price and delivery time. In order of increasing priority (and cost), the most commonly used services offered by UPS for single-package shipments include UPS Ground, 3 Day Select, 2nd Day Air, 2nd Day Air A.M., UPS Next Day Saver, Next Day Air, and Next Day Air Early A.M.</p>
+        <p>See also <a href="CDS279.htm">CDS279</a></p>
+        <p>&#160;</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "SW560", Y$, SW560$, SW561$</code>
+        </p>
+        <p><code>CALL "CDS030", ERR=EOJ, Y$, "SW560", -10, SW560$, SW561$</code>
+        </p>
+        <p>&#160;</p>
+        <table>
+            <col />
+            <col style="width: 60px;" />
+            <col />
+            <col />
+            <tr>
+                <th colspan="4" nowrap="nowrap">SW560 UPS Input Parameters</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Field</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>templated</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIP2ADDR$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(30)</code>
+                </td>
+                <td>The street address where the package will be delivered to</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIP2CITY$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(28)</code>
+                </td>
+                <td>The city where the package will be delivered to</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIP2STATE$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(2)</code>
+                </td>
+                <td>The state where the package will be delivered to</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIP2ZIP$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(10)</code>
+                </td>
+                <td>The zip code where the package will be delivered to</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIP2CNTRY$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(2)</code>
+                </td>
+                <td>The country where the package will be delivered to</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIPFADDR$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(30)</code>
+                </td>
+                <td>The street address where the package will be shipped from</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIPFCITY</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(28)</code>
+                </td>
+                <td>The city where the package will be shipped from</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIPFSTATE</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(2)</code>
+                </td>
+                <td>The state where the package will be shipped from</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIPFZIP</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(10)</code>
+                </td>
+                <td>The zip code where the package will be shipped from</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SHIPFCNTRY$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(2)</code>
+                </td>
+                <td>The country where the package will be shipped from</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.PCKGTYPE$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(2)</code>
+                </td>
+                <td>The type of package to be shipped (box, letter, pallet, etc.). <a href="http://www.ups.com/worldshiphelp/WS11/ENU/AppHelp/Codes/Package_Type_Codes.htm">More detail on UPS package codes</a> can be found on the UPS&#160;website.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.WEIGHT$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(5)</code>
+                </td>
+                <td>The weight of the package to be shipped. The more accurate the weight, the more accurate the estimate.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW560.SPEC_RATE$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>C(1)</code>
+                </td>
+                <td><i>Yes</i> or <i>No</i> are the options here. If you get a special discount through UPS and would like to pass that price along to a cusomer, select <i>Yes</i> and you will be quoting the shipping price, including discount. If you do not get a special rate, or you do not wish to pass the discount on to your customer, choose <i>No</i>.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <h5>SW561 </h5>
+        <p>Contains the parameters for the output to BBj and BBx</p>
+        <table style="width: 969px;">
+            <col style="width: 225px;" />
+            <col style="width: 78px;" />
+            <col />
+            <col />
+            <tr>
+                <th colspan="4" nowrap="nowrap">SW561 UPS Output Parameters</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Field</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.NEXTDAYAIR$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Guaranteed delivery by end of day on next business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.SECONDDAYAIR$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Guaranteed delivery by end of day on 2nd business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.GROUND$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Delivery based on distance 
+to destination. <a href="http://www.ups.com/maps?loc=en_US">View map</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.THREEDAYSELECT$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Delivery by end of day on 3rd business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.NEXTDAYSAVER$[4]</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Guaranteed delivery by 3:00 p.m. on next business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.NEXTDAYAM$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Guaranteed delivery by 10:30 a.m. on next business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.SECONDDAYAM</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>Guaranteed delivery by 10:30 a.m. on 2nd business day</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.WWEXPRESS</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>International shipping 1-3 business days with delivery by 10:30 a.m. or 12:00 noon</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SW561.WWEXPEDITED</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>N(9)</code>
+                </td>
+                <td>International shipping 2-5 business days with delivery by end of day</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>
+            <img src="Resources/Images/SW560.png" />
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <h5>Screenshots illustrating the input and output in BBj and BBx.</h5>
+        <p>&#160;</p>
+        <p>BBj input:</p>
+        <p>
+            <img src="Resources/Images/SW560-1.png" />
+        </p>
+        <p>BBj output</p>
+        <p>
+            <img src="Resources/Images/SW560-2.png" />
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>BBx input:</p>
+        <p>
+            <img src="Resources/Images/SW560-3.png" />
+        </p>
+        <p>&#160;</p>
+        <p>BBx output:</p>
+        <p>
+            <img src="Resources/Images/SW560-4.png" />
+        </p>
+        <p>&#160;</p>
+    </body>
+</html>

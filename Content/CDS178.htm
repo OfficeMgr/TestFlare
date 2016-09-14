@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS178 - Time Conversion (from display format to numeric)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS178</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Time Conversion (from display format to numeric)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS178">Last Revised: 02/09/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS178 is called to convert an 8 character formatted time to a numeric variable in the same format as the system 
+	<code>TIM</code> variable which is in hours and fractions of an hour.&#160; See also <a href="CDS078.htm">CDS078</a> which converts a numeric time value to the display format.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS178", TIME$, TIME</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS178</th>
+            </tr>
+            <tr>
+                <td><code>TIME$</code>
+                </td>
+                <td>is passed to CDS178 as an 8 character string, in either HH:MM:SS or HH:MM XM format.&#160; 
+		The leading hours digit may be zero or blank.<table border="1" width="100%" id="table1" class="lev2"><tr><td>HH:MM XM</td><td>In this format, <code>TIME$</code> includes hours and minutes 
+			and the AM or PM indicator.&#160; The hours can be from "01" to 
+			"12", and the minutes can be from "00" to "59".</td></tr><tr><td>HH:MM:SS</td><td>In this format, <code>TIME$</code> includes hours, minutes, and 
+			seconds in military format.&#160; The hours can be from "00" to 
+			"23", minutes and seconds from "00" to "59".</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>TIME</code>
+                </td>
+                <td>Numeric version of the <code>TIME$</code> variable as calculated by CDS178.&#160; It is in the same format at the system 
+		<code>TIM</code> variable, which will be a number between 0 for midnight and 23.99972222 for 11:59:59 PM.</td>
+            </tr>
+        </table>
+        <p>Note that if <code>TIME$</code> is blank or is not in the format supported, <code>TIME</code> will be returned as zero and no error will be generated.</p>
+        <table class="example">
+            <tr>
+                <td>Examples using AM/PM format</td>
+            </tr>
+            <tr>
+                <td><code>)precision 4<br />
+		)call "CDS178","12:00 AM",TIME<br />
+		)?TIME<br />
+		0<br />
+		)call "CDS178","12:30 AM",TIME<br />
+		)?TIME<br />
+		.5<br />
+		)call "CDS178","01:00 AM",TIME<br />
+		)?TIME<br />
+		1<br />
+		)call "CDS178"," 1:00 AM",TIME<br />
+		)?TIME<br />
+		1<br />
+		)call "CDS178","01:30 AM",TIME<br />
+		)?TIME<br />
+		1.5<br />
+		)call "CDS178","11:30 AM",TIME<br />
+		)?TIME<br />
+		11.5</code>
+                    <p><code>)call "CDS178","11:59 AM",TIME<br />
+		)?TIME<br />
+		11.9833<br />
+		)call "CDS178","12:00 PM",TIME<br />
+		)?TIME<br />
+		12<br />
+		)call "CDS178","12:01 PM",TIME<br />
+		)?TIME<br />
+		12.0167<br />
+		)call "CDS178","01:00 PM",TIME<br />
+		)?TIME<br />
+		13<br />
+		)call "CDS178"," 1:30 PM",TIME<br />
+		)?TIME<br />
+		13.5<br />
+		)call "CDS178","11:30 PM",TIME<br />
+		)?TIME<br />
+		23.5<br />
+		)CALL "CDS178","11:59 PM",TIME<br />
+		)?TIME<br />
+		23.9833</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Examples using hours:minutes:seconds format</td>
+            </tr>
+            <tr>
+                <td><code>)call "CDS178","00:00:00",TIME<br />
+			)?TIME<br />
+			0<br />
+			)call "CDS178","00:00:01",TIME<br />
+			)?TIME<br />
+			.0003</code>
+                    <p><code>)CALL "CDS178","00:30:00",TIME<br />
+			)?TIME<br />
+			.5<br />
+			)CALL "CDS178","01:00:00",TIME<br />
+			)?TIME<br />
+			1<br />
+			)CALL "CDS178","11:30:00",TIME<br />
+			)?TIME<br />
+			11.5<br />
+			)call "CDS178","11:59:00",TIME<br />
+			)?TIME<br />
+			11.9833<br />
+			)call "CDS178","12:00:00",TIME<br />
+			)?TIME<br />
+			12<br />
+			)call "CDS178","12:00:01",TIME<br />
+			)?TIME<br />
+			12.0003<br />
+			)call "CDS178","13:00:00",TIME<br />
+			)?TIME<br />
+			13<br />
+			)call "CDS178","23:30:00",TIME<br />
+			)?TIME<br />
+			23.5<br />
+			)call "CDS178","23:59:59",TIME<br />
+			)?TIME<br />
+			23.9997</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

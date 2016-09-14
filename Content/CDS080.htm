@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS080 - Enter Time</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS080" />CDS080</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="TIME" />
+                        <MadCap:keyword term="Enter Time" />Enter Time</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS080">Last Revised: 05/06/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="AM" />This called program may be used to format, display, or enter a time 
+	or elapsed time.&#160; It may be called directly from an application or from <a href="CDS069.htm"><MadCap:keyword term="CDS069" />CDS069</a>, <a href="CDS039.htm">CDS039</a> or 
+	used in file maintenance as type X.</p>
+        <p>The entry may consist of a number with an optional embedded colon or period and an optional trailing A, P, AM, or PM.&#160; If the entered number is an integer less than twenty-four, it is assumed to be hours, otherwise it is assumed to be hours and minutes.&#160; 
+	When the entry is not for elapsed time, if the hour is between one and six, inclusive, or twelve, it is assumed to be PM unless it was entered with a trailing A, P, AM, or PM, or a leading zero.&#160; 
+	An F3 help text option will be displayed for the operator with examples for 
+	entering times.</p>
+        <p>With template based files, store the time in a B type template field in the 
+	same format as the TIM system variable, which is in hours and fractions of 
+	an hour.&#160; Use the TIME variable on the ENTER list.&#160; Pass TIME$ as 
+	null for the default display format of HH:MM XM.&#160; Pass TIME$ as a 5 
+	character string (blank or non-blank) for entries of elapsed time in HH:MM 
+	format.</p>
+        <p>With IOLIST based files, store the time in a string variable.&#160; 
+	Typically time is stored in an 8 character string in HH:MM XM format.&#160; 
+	Elapsed time can be stored is typically stored in a 5 character string in 
+	HH:MM format.&#160; Note that when using elapsed time, due to the limits of 
+	the DATE() function, this program limits the time range from 0 hours to 23 
+	hours, 59 minutes.</p>
+        <p>Calling format:</p>
+        <p><code>CALL "CDS069", <a href="#MIN">MIN</a>, <a href="#MAX">MAX</a>, <a href="#COL">COL</a>, <a href="#ROW">ROW</a>, <a href="#PROMPT$">PROMPT$</a>, <a href="#TIME">TIME</a>, 
+	{ <a href="#TIME$">TIME$</a>, <a href="#CTLVAL">CTLVAL</a>, 
+	<a href="#DIS$">DIS$</a>, <a href="#FMT$[0]">FMT$[ALL]</a> }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS080</th>
+            </tr>
+            <tr>
+                <td><a name="MIN"></a>MIN</td>
+                <td>
+                    <MadCap:keyword term="TIM format" />Earliest time permitted, in TIM format</td>
+            </tr>
+            <tr>
+                <td><a name="MAX"></a>MAX</td>
+                <td>Latest time permitted, in TIM format</td>
+            </tr>
+            <tr>
+                <td><a name="COL"></a>COL</td>
+                <td>column for entry/display</td>
+            </tr>
+            <tr>
+                <td><a name="ROW"></a>ROW</td>
+                <td>row for entry/display</td>
+            </tr>
+            <tr>
+                <td><a name="PROMPT$"></a>PROMPT$</td>
+                <td>CDS069 prompt. If passed as null, "Enter time" is used.</td>
+            </tr>
+            <tr>
+                <td><a name="TIME"></a>TIME</td>
+                <td>
+        If passed as non-zero, TIME is used as the default time for entry.
+ TIME returns the time in the same format as the system variable TIM, 
+		i.e., hours and fractions of an hour.</td>
+            </tr>
+            <tr>
+                <td>TIME$</td>
+                <td>
+        If <a name="TIME$"></a>TIME is passed as zero, and TIME$ is non-blank, then TIME$ is evaluated the same as an entry and used as the default time for entry.
+
+        <p>TIME$ returns the time in a format determined by the length of TIME$ upon entry.</p><table class="lev2"><tr><th style="text-align: center;">Length</th><th>Format</th></tr><tr><td align="center">0</td><td><MadCap:keyword term="Hours/minutes" />HH:MM AM&#160;
+ (hours/minutes, AM/PM format)</td></tr><tr><td align="center">1</td><td>A (A for AM, P for PM)</td></tr><tr><td align="center">2</td><td><MadCap:keyword term="24 hour format" />HH (hours, 24 hour format)</td></tr><tr><td align="center">3</td><td>HHA (hours, AM/PM format)</td></tr><tr><td align="center">4</td><td>HHMM (hours/minutes, 24 hour format)</td></tr><tr><td align="center">5</td><td>HH:MM (elapsed time in hours &amp; minutes, 23:59 max)</td></tr><tr><td align="center">6</td><td>HH:MMA (hours/minutes, AM/PM format)</td></tr><tr><td align="center">7</td><td>HH:MMAM (hours/minutes, AM/PM format)</td></tr><tr><td align="center">8+</td><td>HH:MM AM (hours/minutes, AM/PM format)</td></tr></table>
+
+        If TIME$ was passed with a length of zero, it is returned with a length of eight, otherwise it is returned at the same length as passed.</td>
+            </tr>
+            <tr>
+                <td>CTLVAL</td>
+                <td>
+        the <a name="CTLVAL"></a>CTL value of the time entry</td>
+            </tr>
+            <tr>
+                <td><a name="DIS$"></a>DIS$</td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2" class="lev2">
+                        <tr>
+                            <td>DIS</td>
+                            <td>Display the time</td>
+                        </tr>
+                        <tr>
+                            <td>FMT</td>
+                            <td>Format the time and return in FMT$[0]</td>
+                        </tr>
+                        <tr>
+                            <td>opt</td>
+                            <td>Enter the time, but a null entry is permitted</td>
+                        </tr>
+                        <tr>
+                            <td>all other values</td>
+                            <td>Enter a valid time</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="FMT$[0]"></a>FMT$[0]</td>
+                <td>the time in the format as determined by the length of TIME$</td>
+            </tr>
+        </table>
+        <h5>Examples</h5>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table3" class="example">
+            <tr>
+                <td>Enter any valid time using default prompt, display in HH:MM AM 
+		format, store in numeric variable named TIME</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS080",0,0,0,0,"",TIME</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter stop time, greater that start time, at row 50, column L.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS080",STARTTIME,0,50,L,"+stop time",STOPTIME</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter elapsed time, stored in a numeric variable</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS080",0,0,0,0,"+elapsed time",elapsedtime,"HH:MM"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter any valid time using the default prompt, store in 8 character 
+		string</td>
+            </tr>
+            <tr>
+                <td><code>TIME$="03:45 PM"<br />
+		CALL "CDS080",0,0,0,0,"",0,TIME$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter elapsed time, stored in a string variable</td>
+            </tr>
+            <tr>
+                <td><code>TIME$="15:30"<br />
+		CALL "CDS080",0,0,0,0,"",0,TIME$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Return formatted TIME in FMT$[0]</td>
+            </tr>
+            <tr>
+                <td><code>TIME=5.5<br />
+		CALL "CDS080",0,0,0,0,"",TIME,"",0,"FMT",FMT$[ALL]<br />
+		?FMT$[0]<br />
+		05:30 AM</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

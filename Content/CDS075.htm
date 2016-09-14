@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="429" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS075 - Erase File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS075" />CDS075</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Erase File" />Erase File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS075">Last Revised: 10/31/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS075 is a called routine which will permanently erase 
+ a data file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS075",ERR=NNNN, CHAN</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS075</th>
+            </tr>
+            <tr>
+                <td><code>NNNN</code>
+                </td>
+                <td>the line to GOTO in the case of an error</td>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td>the channel number of the file currently opened to be erased.</td>
+            </tr>
+        </table>
+        <p>With versions dated 10/31/15 and later, CDS075 will also clear the global variable used for template retrieval.</p>
+        <h5>Examples:</h5>
+        <p>A program to sort the customer file created a work file at the beginning of the program, has printed the report, and now the work file must be erased. It was created using device 6 and is still open.</p>
+        <p><code>CALL "CDS075",6</code>
+        </p>
+        <p>This routine will not generate an error if there is no file open to the specified device. This permits any program that may define a work file to unconditionally call the routine. If the program is terminated, even before the work file has been defined, no error will occur.</p>
+        <h5>Possible Errors:</h5>
+        <p>0 the file is in use by another task and cannot be locked</p>
+        <p>17 device opened to channel <code>CHAN</code> is not a disc file</p>
+    </body>
+</html>

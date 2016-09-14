@@ -1,0 +1,743 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="7119" MadCap:lastWidth="1414">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS038 - Print Records</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <base target="_blank" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS038" />CDS038</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Print Records" />Print Records</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS038">Last Revised: 
+		11/16/12</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="LIMIT" />CDS038 is a very powerful Dynamo Tool used to print
+reports to printers (or other output devices), create tab delimited text files,
+and create files that can be used as input on subsequent calls
+to CDS038.</p>
+        <p>
+            <MadCap:keyword term="Printing" />
+            <MadCap:keyword term="Printing:PCL" />
+            <MadCap:keyword term="Inkjet" />
+            <MadCap:keyword term="PCL" />The capabilities of CDS038 are best realized when printing to a PCL
+compatible printer, such as a laser or inkjet.&#160; On these printers, CDS038
+will perform font reduction, automatically rotate to landscape, and supports
+landscape on legal size paper, in order to place as many fields on the same line
+as possible.</p>
+        <p>CDS038 is designed for printed output.&#160; See <a href="CDS037.htm"><MadCap:keyword term="CDS037" />CDS037</a> for similar features that is designed for display output including scrolling up 
+and down.&#160; See <a href="CDW038.htm">CDW038</a> for HTML output.&#160; 
+CDS038 creates tab delimited files with a .xls extension when printing to 
+printer ID PFIL.&#160; These files can be opened with a spreadsheet application 
+such as Microsoft Excel.&#160; You can also create these spreadsheet files in 
+Dynaweb.&#160; See example below.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS038", <a href="#Y$">Y$</a>, <a href="#Y5$">Y5$</a>,
+<a href="#Y5A$">Y5A$</a>, <a href="#Y6$">Y6$</a>, <a href="#Y6">Y6</a>,
+<a href="#L">L</a>, <a href="#P">P</a>, <a href="#S038$">S038$</a>,
+<a href="#FILENAME$">FILENAME$</a>, { <a href="#KNUM">KNUM</a>,
+<a href="#KEYBEGIN$">KEYBEGIN$</a>, <a href="#KEYEND$">KEYEND$</a>,
+<a href="#DISP$"><MadCap:keyword term="DISP$" />DISP$</a>, <a href="#WHERE$"><MadCap:keyword term="WHERE" />WHERE$</a>, <a href="#SORTBY$">
+SORTBY$</a>, <a href="#MODE$">MODE$</a>, <a href="#LIMIT">LIMIT</a>,
+<a href="#SUBHEAD$">SUBHEAD$</a> }</code>
+        </p>
+        <p>All fields after <code>FILENAME$</code> are optional.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS038 Arguments</th>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Company Name" />Standard task control variable and is used to print the company name
+ at the center of the top line of each page.</td>
+            </tr>
+            <tr>
+                <td><a name="Y5$"></a><code>Y5$</code>
+                </td>
+                <td>Report title to be centered on the second line of each page.&#160;
+ Normally passed to application from Menu Processor.</td>
+            </tr>
+            <tr>
+                <td><a name="Y5A$"></a><code>Y5A$</code>
+                </td>
+                <td>Optional report sub-title to be centered below the report title.</td>
+            </tr>
+            <td><code><a name="Y6$"></a>Y6$</code>
+            </td>
+            <td>
+                <MadCap:keyword term="CDS084" />
+                <MadCap:keyword term="Select" />Standard printer control record returned by the printer selection
+ routine (CDS084).&#160; If <code>Y6$</code> is passed to CDS038 as null, then CDS038 will call CDS084 to
+ open the printer.&#160; In this case the <code>Y6.MSG$</code> will be displayed by CDS038.&#160; On PCL compatible printers that support scalable fonts, CDS038 will
+ automatically select the characters per inch required for the report. It
+ will also automatically select landscape printing when the number of columns
+ required for portrait printing exceeds 136 columns. This permits up to 210
+ columns to print using 20 characters per inch in landscape mode.</td>
+            <tr>
+                <td><a name="Y6"></a><code>Y6</code>
+                </td>
+                <td>No longer used. It has been replaced by <code>Y6.CH</code>, which is the channel
+ number of the printer or output device.</td>
+            </tr>
+            <tr>
+                <td><a name="L"></a><code>L</code>
+                </td>
+                <td>No longer used. It has been replaced by <code>Y6.L</code>, which is the number of
+ lines left to print on the page.</td>
+            </tr>
+            <tr>
+                <td><a name="P"></a><code>P</code>
+                </td>
+                <td>No longer used. It has been replaced by <ode><code>Y6.P</code> which is the last page
+ number printed.</ode></td>
+            </tr>
+            <tr>
+                <td><code>S038$</code>
+                </td>
+                <td><a name="S038$"></a>
+                    <MadCap:keyword term="STR" />S038$ contains optional parameters. You may pass a
+ null string to use all default values, or a string literal, or retrieve the
+ template for S038$ with <code>CALL "CDS041",CDS038,S038$</code> and set any
+ of the parameters you require that differ from the default value.
+    <table class="lev2"><tr><td><code>S038.NOTIFY$ - Y/N</code></td><td>will notify operator if set to Y and no records are determined to be
+ printed. Default is Y.</td></tr><tr><td><code>S038.PRINTCOUNT$ - Y/N</code></td><td>will print the number of records printed at the end of the output if
+ set to Y. Default is N.</td></tr><tr><td><code>S038.KEEPOPEN$</code></td><td><table class="lev3"><tr><td align="center">blank, N, or E</td><td><MadCap:keyword term="CDS094" />Printer device is closed using CDS094 at end of report.&#160; 
+			User is offered option to view report if output is PDF or text file.</td></tr><tr><td align="center">e</td><td>Printer device is closed using CDS094 at end of report.&#160; 
+			User is not offer option to view report if output is PDF or text 
+			file.</td></tr><tr><td align="center">Y</td><td>Keep printer open at end of job.&#160; Useful if additional
+ printing or calls to CDS038 are required to same printer.</td></tr></table></td></tr><tr><td><code>S038.COLHEAD$</code></td><td><table class="lev3"><tr><th nowrap="" style="text-align: center;">Value</th><th>Normal Report</th><th>Creating tab delimited spreadsheet compatible files</th></tr><tr><td align="center">blank or N</td><td>Normal - column headings based on column titles are printed at 
+			the top of each page.</td><td>Column headings will be field names.&#160; Repeating fields will 
+			include index in square brackets, i.e., <code>SALES[9]</code>.</td></tr><tr><td align="center">Y</td><td>Print column heading at start of job, typically used when multiple
+ CDS038 calls are issued to the same printed report and column headings
+ are required even if not at top of page.&#160; </td><td>Column headings will be the column titles, and not the field 
+			names.</td></tr><tr><td align="center">S</td><td>Suppress all column headings.</td><td>First row will contain first row of data and not field names nor 
+			titles.</td></tr><tr><td align="center">E</td><td>Print column headings before each record.&#160; This might be 
+			desired when printing a heading/detail type report where the column 
+			headings for the heading rows print before each heading record.&#160; 
+			The detail section is printed by the <code>S038.EXTRTN$</code> 
+			program which also calls CDS038 to print the detail section.</td><td><MadCap:keyword term="Date:designate" />Column headings will be field names, but repeating fields will 
+			be designated with and underscore followed by the index, instead of 
+			using square brackets, i.e., <code>SALES_9</code>.&#160; This is 
+			useful when importing into other databases, such as MySQL, that do 
+			not support repeating fields.</td></tr></table></td></tr><tr><td><code>S038.WORKFILE$</code></td><td><table class="lev3"><tr><td align="center">blank or N</td><td>Output will be directed to printer or other output device as 
+			specified by printer control variable <code>Y6$</code>
+            (Default).</td></tr><tr><td align="center">Y</td><td><MadCap:keyword term="SKY" />Stores all output in an SKY file and ignore <code>DISP$</code> column headings and
+ row/column numbers. The file will be created in the tmp directory with a
+ name based on the program that called CDS038. A template will be created
+ (in memory only) to describe the output file. This file name is returned
+ to the calling program in the printer control variable <code>Y6$</code>. When the
+ program returns to the menu, the data file will be erased. This
+ option is useful when it is desired to select records based on fields
+ that do not exist in the primary data file. The first step would be to
+ call CDS038 using the primary data file with all external fields
+ specified and pass this parameter as Y. Then call CDS038 again,
+ selecting records from the temporary file just created.</td></tr><tr><td align="center">P</td><td>Permanent - Similar to the Y option, except that the file is 
+			created in the same directory as <code>FILENAME$</code> using a numeric suffix to 
+			the original file name.&#160; A template file is also defined on the 
+			disk, and the file is not erased upon return to the menu.</td></tr></table></td></tr><tr><td><code>S038.BLANKS_B</code></td><td>indicates the number of blank lines to print after each record. If
+ there is an external routine, indicated below, then these blank lines
+ print before the external routine.</td></tr><tr><td><code>S038.EXTRTN$</code></td><td>can contain a program name which is called by CDS038 after each
+ record is printed. This may be needed when additional printing is
+ required that cannot be done by CDS038. The <code>ENTER</code> list for the called
+ routine is <code>Y$,Y5$,Y5A$,Y6$,REC$</code> where <code>Y$</code> thru 
+		<code>Y6$</code> are the same variables
+ described above, and <code>REC$</code><MadCap:keyword term="Templated" /> is the templated data from the primary data
+ file. Note that the external routine must decrement <code>Y6.L</code> for every line
+ printed. CDS094 should be called for new page logic since it resets
+		<code>Y6.L</code>
+        and increments <code>Y6.P</code>. Note the previous <code>ENTER</code> list that included 
+		<code>Y6, L,</code>
+        and <code>P</code> is no longer supported.</td></tr><tr><td><code>S038.BLANKS_A</code></td><td>blank lines to print after external routine is called.</td></tr><tr><td><code>S038.BLANKS_EOR</code></td><td>blank lines to print at the end of the report. This is useful when
+ multiple calls to CDS038 are made to produce a report and blanks are
+ needed between calls.</td></tr><tr><td><code>S038.LEGAL$</code></td><td>OK to use legal sized paper (Y/N). When set to Y, CDS038 will format
+ the columns assuming legal size (14") paper is used if the columns to be
+ printed require landscape mode and printing at the greatest characters
+ per inch of the printer does not fit on standard 11" paper.</td></tr><tr><td><code>S038.FORMAT$</code></td><td><table class="lev3"><tr><td align="center">blank</td><td>Use normal formatting as described in <code>DISP$</code>.</td></tr><tr><td align="center">P</td><td>Print each record on a separate page.</td></tr><tr><td align="center">1</td><td>Print one field per row, one record per page.&#160; This option
+ ignores any row and column options within <code>DISP$</code>.</td></tr><tr><td align="center">C</td><td>Similar to blank, except print lines are combined into a single
+ line when possible.&#160; This is useful when a report normally
+ takes multiple print lines, but should be combined onto a single
+ line when there is only one non-blank character per print column.</td></tr><tr><td align="center">T</td><td>CDS038 creates tab delimited files, suitable for opening with a 
+			spreadsheet application, when the printer selected is <code>"PFIL"</code>.&#160; 
+			In order to create a formatted text file instead of a tab delimited 
+			file, pass <code>S038.FORMAT$</code> as "T".</td></tr></table></td></tr><tr><td><code>S038.PROGRESS$</code></td><td>If W then Web based progress indicator is displayed to prevent
+ browser from timing out.</td></tr><tr><td><code>S038.RPTHEAD$</code></td><td><table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber2" class="lev3"><tr><td align="center">blank</td><td>Print standard page headings</td></tr><tr><td align="center">N</td><td><MadCap:keyword term="Documentation Control Number" /><MadCap:keyword term="Date" /><MadCap:keyword term="TIME" />Suppress printing of documentation control number, date, time,
+ and page number.&#160; Useful on financial statements or other
+ reports where headings are not desired.</td></tr><tr><td align="center">T</td><td>Used to indicate that first print line as described in <code>DISP$</code>
+            should print centered on the top of the page, instead of in the body
+ of the report.&#160; Subsequent <code>DISP$</code> rows print in the normal
+ position.&#160; Note that when using this option <code>Y5A$</code> is ignored.&#160;
+            </td></tr></table></td></tr><tr><td><code>S038.BLANKS_ARH</code></td><td>Number of blank lines to print after report heading.</td></tr><tr><td><code>S038.UNIQUEFLDS</code></td><td>Used when creating a work file (<code>S038.WORKFILE$="Y"</code>) to modify the
+ field name of all fields in the work file to include the file name.&#160;
+ This is needed when a field name in the primary file, is the same as a
+ field name in a related file.&#160; For example, if a work file is
+ created using <code>DISP$</code> of <code>"NAME|CM03.NAME"</code> the work file field names will
+ be <code>WORK.NAME$</code> and <code>WORK.CM03__NAME$.</code></td></tr><tr><td><code>S038.AUTODUP$</code></td><td>Set to N if you want to disable the new default behavior that prints all fields with a B in the 
+		<code>DISP$</code> 
+		options (segment 5) field when an earlier field in <code>DISP$</code> also with a B 
+		in the <code>DISP$</code> options segment differs from the line above.&#160; Best 
+		understood in this <a href="#Example_of_use_of_S038.AUTODUP$">example</a>.</td></tr><tr><td><code>S038.MARGIN</code></td><td>Assigned by CDS038 when it indents the report to allow for room for 
+		three hole notebook paper.&#160; Used by the calling application should 
+		it need to print additional information on the report, i.e., <code>PRINT 
+		(Y6.CH)@(S038.MARGIN),S553.RANGEDISP$</code></td></tr><tr><td><code>S038.RECORDS</code></td><td>Set by CDS038 to the number of records in the primary file that were 
+		processed.&#160; This is useful when calling program logic needs to know 
+		if any records were printed.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="FILENAME$"></a>FILENAME$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="MKY" />The file name of the primary data file.&#160; The file can be type MKY,
+		SKY, or DIR and requires a template.&#160; <code>FILENAME$</code> 
+		will be opened using either <code>OPEN</code> or <code>SELECT</code>.&#160; If 
+		<code>WHERE$</code>, <code>SORTBY$</code>, or <code>MODE$</code> is specified, then 
+		<code>SELECT</code> will be used and <code>KNUM</code>, 
+		<code>KEYBEGIN$</code>, and <code>KEYEND$</code> will be ignored.</td>
+            </tr>
+            <tr>
+                <td><code><a name="KNUM"></a>KNUM</code>
+                </td>
+                <td>The KNUM of the file to be used.&#160; Ignored if <code>WHERE$</code>,
+		<code>SORTBY$</code>, or <code>MODE$</code> is used or if the file type 
+	is not MKY.</td>
+            </tr>
+            <tr>
+                <td><code><a name="KEYBEGIN$"></a>KEYBEGIN$</code>
+                </td>
+                <td>Indicates the starting characters of the first key when printing a range of records in <code>FILENAME$</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="KEYEND$"></a><code>KEYEND$</code>
+                </td>
+                <td>Indicates the last key of the range.&#160; If <code>KEYEND$</code> is null, then it will be assumed
+ to be the same as <code>KEYBEGIN$</code>.</td>
+            </tr>
+            <tr>
+                <td><code>DISP$</code>
+                </td>
+                <td>If <a name="DISP$"></a><code>DISP$</code> is null, not passed, or the field name is
+ *, then all fields in the record will be output, excluding any field that
+ begins with the word "UNUSED" or "FS". Fields named FSn are often used to
+ designate field separators at the end of a multi-segment IOLIST type field,
+ in order to insure new records created with the template have fields padded
+ to the proper length.&#160; Note that the * wildcard may also be used to include
+ all fields in a related file or external routine.&#160; For example a <code>DISP$</code> of
+    <code>"*|XXIM01.*|WO020.*"</code> would include all fields in the primary data file,
+ followed by all fields in related file XXIM01, and then all fields provided
+ by the external routine WO020.<p>The fields within <code>DISP$</code> are separated by the pipe (|) symbol. The
+ optional segments within each field are separated by the backslash (\).&#160; If all segments in a field are specified, the format of each field would be
+	<code>FILE.FIELD[INDEX]\Title\Mask\Col,Row\Options\Where\Sort|</code>.</p><p>You may skip over fields not needed using the separator character as in
+    <code>"NAME\\\\B"</code>.</p><table class="lev2"><tr><td>Segment 1<br />        Field Name</td><td>If the field is contained within <code>FILENAME$</code>, then only the field name
+ is required as in <code>NAME</code>.
+        <p>If the field is a repeating field, then you may include the index as
+ in <code>AMT[3]</code>.&#160; You may also use the <code>ALL</code> index as in
+		<code>AMT[ALL]</code> to include all elements of a repeating field.</p><p>If the field is contained in a related file, then specify the file
+ name in template format: <code>XXCM01.NAME</code>.</p><p>If the field is provided by a called program, specify the program
+ name in template format: <code>PGMNAME.VALUE</code>.&#160; For example, if a program
+ named AP101 computes a balance, and has a template associated with the
+ program, you can specify <code>AP101.BALANCE</code> in segment 1.&#160; The 
+		<code>ENTER</code>
+        list on AP101 must be <code>Y$,REC$,AP101$</code> where <code>REC$</code> is the input record from
+        <code>FILENAME$</code>, and <code>AP101$</code> is the templated string that is populated by the
+ AP101 program.&#160; In some cases the called routine performs logic to 
+		further condition printing of the primary record.&#160; If the called 
+		routine exits with an error, as in <code>EXIT 99</code><MadCap:keyword term="Data Dictionary" /> for example, the primary 
+		record will be excluded from the report.&#160; The called program 
+		requires a Data Dictionary entry.&#160; The location of the program will 
+		determine the company used to access the Data Dictionary.&#160; For 
+		example, if a program is DY/AP101, then the DY Data Dictionary will be 
+		used to obtain the template for AP101.</p><p>There are also some special fields that may be used to print a
+ sequential counter, underlines, compute gross margin, compute percent
+ change, etc.&#160; See <a href="#special field names">special fields</a>
+        section below.</p></td></tr><tr><td>Segment 2<br />        Title</td><td><p>The Best Practice is not to specify anything in Segment 2.&#160; 
+		In that case, CDS038 will use the title from the template, which 
+		originated in the Data Dictionary.&#160; If the template does not 
+		contain a title, then the field name itself will be used for the column 
+		title and will be converted to mixed case.</p><p>The Title prints as a column heading on the report.</p><p>An entry in Segment 2 is required only when you want to override the 
+		default title.</p><p>When the field name is used to create the column title, field names that end in 
+		<code>NO</code>
+        are replaced with the # character, so <code>ITEMNO</code> becomes Item#,and 
+		<code>CUSTNO</code>
+        becomes Cust#. </p><p>To print no column heading, this segment should contain a single blank
+ character.</p><p>The title for repeating fields will include the index in square 
+		brackets, as in <code>SELECTCODE[3]</code>.</p><p>When using the <code>[ALL]</code> option with a field that has 12 elements, you
+ may specify a title in <code>DISP$</code> of <code>Mth</code> to use the three letter month
+ abbreviations, or <code>Month</code> to use the full name months in the title.</p><p>
+		Note when printing to a file, which can be opened with a spreadsheet, 
+		the default title is the field name and not the title from the 
+		template/data dictionary.&#160; This is done so that the first row of 
+		data in the file contains valid field names.&#160; You may override the 
+		data in the first row by specifying a title in Segment 2.</p></td></tr><tr><td>Segment 3<br />        Mask</td><td>Only needed when you want to override the default mask.&#160; Mask apply
+ to numeric fields, dates, times, and strings.&#160; Note that CDS038
+ assumes a date field whenever the word DATE is found somewhere in the
+ field name.&#160; See the options segment below for another way to
+ designate a DATE type of field.&#160; The mask can be in the N7.2 format
+ as well to provide a floating decimal point.&#160; String variables can
+ be truncated using a mask such as XXXXXX which would only print the
+ first 6 characters of a string field.
+        <p>The default mask is derived from either the data dictionary or the
+ template 'omask' user field in the template.</p><p>Numeric masks can be typical masks such as <code>###,###.00CR</code>, 
+		<code>-#,###,##0</code>
+        or floating decimal masks in the format <code>N7.2</code> which will assume a field
+ width of 7 characters with up to 2 decimal positions.</p><p><MadCap:keyword term="BBx" />Date and time masks can be any format supported by the BBx <code>DATE()</code>
+        function such as <code>"%Dl, %Ml %D, %Yl"</code> or <code>"%Mz/%Dz/%Yl"</code>
+        or <code>"%hz:%mz %p".</code>&#160; Note that CDS038 assumes that a
+ field is a date if it is a numeric field in U(3) or N(7) format, and the
+ field name contains the word DATE.&#160; You may also notify CDS038 that
+ a field is a date by using the d option in Segment 5.&#160; CDS038
+ assumes a field contains a time in the same format has the BBx <code>TIM</code>
+        system variable, if the template field is type B, and the field name
+ contains the word TIME.&#160; You may also notify CDS038 that a field is
+ a time by using the t option in Segment 5.</p><p>String Masks are similar to those used in the <code>STR()</code> BBx function, but
+ can also be used to truncate the field to print only the first X
+ characters.&#160; For example, a mask of <code>XXXX</code> will only print the first
+ four characters of the field.</p><p>CDS038 will not stop the report with an error if a field does not fit
+ in its mask.&#160; Instead, it will attempt to place the data unmasked
+ into the space available for the field.&#160; If this cannot be done
+ then the field will appear as all asterisk (*) symbols.</p><p>For string 
+		variables, segment 3 can also be used for a sub-string expression, 
+		instead of a mask.&#160; For example, the mask segment could contain
+		<code>(1,10)</code> or <code>(5,10)</code> or <code>(5)</code>.</p></td></tr><tr><td>Segment 4<br />        Position</td><td>Normally CDS038 places each field to the right of the previous field
+ with a single space separator.&#160; When the line fills up, it will
+ continue placing fields on the next line.&#160; You can override this
+ behavior by including positioning information in this optional segment.
+        <p>If you want to place a field at a particular column and row, then you
+ can specify <code>COLUMN,ROW</code> in segment 4.&#160; The leftmost column is 0, and
+ the top row is 0.&#160; For example, a <code>DISP$</code> of <code>"DESC1\Description\50,0"</code>
+        will cause the <code>ITEMNO</code> field to be displayed at column 50 on the top line
+ of output.&#160; Note, then when you use the positioning segment, be
+ careful not to print multiple fields in the same place on the report.</p><p>You may specify a row with a null column such as <code>",2"</code> to 
+		indicate the current column at row 2.</p><p>You may also specify a field name instead of the column, which is
+ used to place one field below another, as in <code>"DESC2\ \\DESC1,1"</code>.&#160; This will place <code>DESC2</code> on the second line below the
+ field named <code>DESC1</code>.&#160; The field name may optionally include the file
+ name or external routine name, and the array index.&#160; <code>DESC1,
+ DIS123.LSTRECDAT, PRICE[5],</code> and <code>DIS123.PRICE[5]</code> are all valid field
+ names to determine print column.</p><p>CDS038 processes <code>DISP$</code> in order, so the sequence that the fields
+ appear in <code>DISP$</code> are significant.&#160; If <code>DISP$</code> contains
+        <code>"ITEMNO|DESC1\Description|DESC2\ \\DESC1,1|QTY|COST"</code> then 
+		<code>QTY</code> and <code>COST</code> will appear to
+ the right of <code>DESC1</code> on the first line.&#160; Fields without positioning
+ expressions will be placed after the last field placed on the same line.&#160;
+ You can override this behavior and have fields without positioning
+ expressions placed after the current field by using a negative indicator
+ before the <code>ROW</code>.&#160; For example if <code>DISP$</code> contains
+        <code>"ITEMNO|DESC1\Description|DESC2\ \\DESC1,-1|QTY|COST"</code> then 
+		<code>QTY</code> and <code>COST</code> will be on
+ the second line to the right of <code>DESC2</code>.</p><p>Note that whether the position option is used or not, any detail line
+ that is completely blank will not be printed.&#160; This means that if
+        <code>DESC2</code> is printed on a line by itself below <code>DESC1</code>, and 
+		<code>DESC2</code> is null or
+ all blank, the blank line will not be printed.</p></td></tr><tr><td>Segment 5<br />        Options</td><td>This segment can contain one or more of the codes described below in any sequence.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table5" class="lev3"><tr><th style="text-align: center;">Code</th><th style="text-align: center;">Use</th><th>Description</th></tr><tr><td align="center">T</td><td align="center">Total</td><td>If the Option segment contains a T, and the field is 
+				numeric, and output is not to a file, then this field will be 
+				totaled. Subtotals may also be printed when using a <code>SORTBY</code> clause.&#160; If the field is too large for
+ the mask, then as many digits of the unmasked total will print as fit.
+ If no mask is specified, as in an N5 format, then the total field will
+ be all * symbols, if the total does not fit in the column.</td></tr><tr><td align="center">S</td><td align="center">Sub-Total</td><td>Print sub-totals, but not totals.&#160; This may be needed 
+				when there is already a summary section of the data that 
+				includes totals.</td></tr><tr><td align="center">B</td><td align="center">Blank Field</td><td>Indicates that this field should not be printed if it
+ the same as the record previously printed on the same page.&#160; For
+ example, on a listing of sales orders by customer, you may want to
+ suppress the customer name on all but the first order for the customer.&#160;
+ Note that CDS038 will reprint fields coded with a B on the first line of
+ each page.</td></tr><tr><td align="center">O<br />				(Letter)</td><td align="center">Omit</td><td>This column will not print, but can used and totaled for 
+				_GM, _GM%, _CHG% and _%PCT calculations.&#160; Be sure to 
+				include the T option as well so that the column can be totaled 
+				for use in the calculations.</td></tr><tr><td align="center">d</td><td align="center">Date Field</td><td><MadCap:keyword term="Julian date" />Indicates that this is a date field and should be
+ converted to a julian date and presented using a <code>DATE()</code> mask. The mask
+ of MM/DD/YY will be used if not specified. This option is assumed if
+ the field name includes the word DATE and the template field is either
+ U(3) or N(7).&#160; The date may be in any format supported by
+        <a href="CDS055.htm">
+        CDS055</a><MadCap:keyword term="Microsoft Excel format" /> including MM/DD/YY, YYMMDD, julian in N(7) or U(3) format, or
+ Microsoft Excel format, etc.</td></tr><tr><td align="center">t</td><td align="center">Time Field</td><td>Indicates that this is a time field in the hour and
+ fractional hour format like the BBx <code>TIM</code> system variable, and should be
+ presented using a mask provided with the <code>DATE()</code> function mask. The mask
+ of <code>HH:MM xM</code> will be used if not specified. This option is assumed if
+ the field name includes the word TIME and the template field is type B.&#160; 
+				Time fields require a range of 0 (12:00am) to 23.99999 
+				(11:59pm).&#160; Elapsed time that exceeds 24 hours is indicated 
+				by a mask such as <code>%HH:%mz, %HHH:%mz, %HHHH:%mz</code> where the number 
+				of H's indicate the number of digits in the hour to display.</td></tr><tr><td align="center">b</td><td align="center">Blank Column</td><td>Indicates the blank column that follows this
+ field should be suppressed, and the next field printed immediately to
+ the right of the previous field. This is useful when combining multiple
+ codes to reduce the columns needed for the report.</td></tr><tr><td align="center">z</td><td align="center">Zero</td><td>Use for numeric fields to show as blank if the field is zero.</td></tr><tr><td align="center">s</td><td align="center">Skip</td><td>Indicates that the primary record should be skipped 
+		when there are no secondary records meeting the conditions specified by 
+		the <code>WHERE</code> clause in segment 6.&#160; If the option letter s is not 
+		present, and there are no secondary records meeting the <code>WHERE</code> clause 
+		conditions, then the primary record will print and all fields in the 
+		secondary record will be left blank.</td></tr><tr><td align="center">0<br />					(Number)</td><td align="center">Bypass Sub-Total Text</td><td>Normally the fields that the Sub-Total are based on will 
+					be re-printed on the Subtotal line.&#160; For example, if 
+					subtotaling by customer#, the customer# will print on the 
+					subtotal line.&#160; Placing a 0 (zero) in the options 
+					section of the customer# field will suppress the printing of 
+					the customer# on the subtotal line.</td></tr><tr><td align="center">1-9</td><td align="center">Print Sub-Total Text</td><td>In some cases it is desirable to print additional text 
+					on the subtotal line.&#160; For example, when printing 
+					subtotals by customer#, the customer# will print on the 
+					subtotal line.&#160; To print the customer name on the 
+					subtotal line, include the subtotal level number in the 
+					options segment.&#160; The first subtotal level is 1.</td></tr></table></td></tr><tr><td>Segment 6<br /><code>WHERE</code></td><td>The contents of segment 6 depend on the field type in segment 1.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table4" class="lev3"><tr><th>Segment 1</th><th>Usage</th></tr><tr><td>File name</td><td>This segment is used when there are multiple records from a related
+ file to be printed.&#160; It should contain the <code>WHERE</code> clause used by the
+        		<code>SELECT</code> verb to retrieve related records.&#160; If more than one
+ field is to be retrieved from the same file, only the first field in
+				<code>DISP$</code> for
+ that related file needs this segment.&#160; Any data provided in
+ subsequent fields for the same file will be ignored.&#160; For example, to include all warehouse records for an item and show
+ the warehouse code and quantity on hand,<code><br />				FILENAME$="XXIM01", DISP$="ITEMNO|DESC1|XXUM21.WHS\\\\\XXUM21.ITEMNO$=IM01.ITEMNO$|XXUM21.QOH".<br /><br /></code>Versions of CDS038 prior to 9/20/03 require you to use 
+				<code>REC.</code> to refer
+ to the fields in the main file, and <code>EXT.</code> to refer to fields in the
+ related file as in:<br /><code>DISP$= "ITEMNO|DESC1|XXUM21.WHS\\\\\EXT.ITEMNO$=REC.ITEMNO$|XXUM21.QOH"<br /><br /></code>Although CDS038 continues to support the <code>REC.</code> and 
+				<code>EXT.</code> format, the
+ program is more readable when using the actual string field names.
+ You may have multiple related files with <code>WHERE</code> clauses in the same
+				<code>DISP$</code> string.&#160; But refer to each of them with the same 
+				<code>EXT.</code> prefix.
+		Use option letter s described above to skip the primary record when 
+		there are no records that meet the conditions of this <code>WHERE</code> clause.</td></tr><tr><td>Program name</td><td>When using externally called programs, normally the primary 
+				record is passed as input to the called routine.&#160; This 
+				segment can be used to instruct CDS038 to pass one of the 
+				related file records to the called routine instead.&#160; Place 
+				the file name of the record to be passed in this field, i.e., 
+				XXUM21 or UM21.</td></tr></table></td></tr><tr><td>Segment 7<br /><code>SORTBY</code></td><td>Segment 7 can contain a <code>SORTBY</code> expression for external 
+		file <code>SELECT</code> for segment 6.&#160; This sortby expression has
+ the same characteristics as the main <code>SORTBY$</code> expression, except that no
+ subtotal <code>/S</code> option may be used.
+        </td></tr><tr><td>Segment 8<br /><code>MODE</code></td><td>Segment 8 can contain a <code>MODE</code> expression for the 
+		external file <code>SELECT</code> for segments 6 and 7.&#160; The mode 
+		expression has the same characteristics as the main <code>MODE$</code> 
+		parameter described below.&#160; The most popular use is the <code>
+		debug=tmp/selectinfo.txt</code> option to determine if bbx is using an 
+		optimized <code>KNUM</code> or reading through the entire external data 
+		file.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="WHERE$"></a>WHERE$</code>
+                </td>
+                <td>
+                    <p>Use of a <code>WHERE$, SORTBY$,</code> or <code>MODE$</code> causes CDS038 to use the 
+	<code>SELECT</code>
+    verb to open <code>FILENAME$</code>.&#160; The <code>WHERE$</code> clause can only refer to fields
+ contained within the record.&#160; For example, to include records in file
+ XXCM01 where the <code>SLSMANNO$</code> field is <code>"123" WHERE$</code> should be set to <code>
+    "CM01.SLSMANNO$=""123"""</code>.&#160; Note that the 
+	<code>REC.</code> format required
+ earlier is still supported, i.e., <code>WHERE$="REC.SLSMANNO$=""123"""</code><MadCap:keyword term="Program Editor" />.&#160;
+ Note the need for the pair of quotation marks, when assigning the where
+ clause to a string variable.&#160; Since the program editor can paste field
+ names, the preferred format is <code>CM01.</code> instead of <code>REC.</code></p>
+                    <p>
+	When a field in the WHERE$ clause refers to a U(), I(), or fixed length N() 
+	field within the primary record, use the string representation of the field 
+	for best performance.&#160; For example, use <code>"AP23.PMTNO$=AP22.PMTNO$"</code> 
+	instead of <code>"AP23.PMTNO=AP22.PMTNO"</code>.&#160; As dates are 
+	typically stored in U(3) fields, <code>"REC.DATE$&gt;BIN(JUL(2009,10,17),3)"</code> 
+	will produce much faster results than <code>"REC.DATE&gt;2455112"</code> if the 
+	DATE field is contained with a key segment that will enable bbx to process a 
+	part of the file instead of the entire file.&#160; </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="SORTBY$"></a>SORTBY$</code>
+                </td>
+                <td>Passing a <code>SORTBY$</code> clause to CDS038 will cause CDS038 to use the 
+	<code>SELECT</code>
+    verb to open <code>FILENAME$</code>.&#160; The <code>SORTBY$</code> clause will sort the data before
+ printing on the report.&#160; You can specify a single field as in
+    <code>CM01.ALPHASORT$</code> or a combination of fields as in
+    <code>CM01.SLSMANNO$+CM01.ALPHASORT$.</code><p>If a field is variable length, then use <code>FILL()</code> with BBx, or 
+	<code>PAD()</code><MadCap:keyword term="BBj" /> with BBj to extend the field to its maximum size.&#160; For example 
+	<code>CM01.NAME$+FILL(30-LEN(CM01.NAME$))</code>.</p><p>To sort numeric data, use the <code><MadCap:keyword term="ADJN" />ADJN()</code> function as in <code>ADJN(SO60.SALES)</code>.&#160;
+ To sort numeric data highest to lowest, negate the numeric field as in <code>ADJN(-SO60.SALES)</code>.</p><p><code>SORTBY$</code> also permits sorting by
+ fields not contained within the primary file <code>FILENAME$</code>.&#160; For example,
+ you are printing customer contact information from file CM03, but want to
+ sort alphabetically using the alpha sort field contained in the customer
+ master file CM01.&#160; Pass <code>FILENAME$="XXCM03"</code>,
+	<code>DISP$="CUSTNO|XXCM01.NAME|NAME"</code>
+    and <code>SORTBY$="CM01.ALPHASORT"</code>.</p><p>The <code>SORTBY$</code> clause is also used to control subtotals.&#160; Subtotals are
+ requested by placing a <code>/S</code> after each segment of the key where subtotals are
+ desired.&#160; For example, to subtotal by customer within salesman <code>SORTBY$</code>
+    could contain <code>"REC.SLSMANNO$/S+REC.CUSTNO$/S+REC.SONO$"</code>&#160; Any numeric
+ field that is marked with a <code>T</code> in the options segment of <code>DISP$</code> will be subtotaled (and totaled).&#160;</p><p>A blank line is printed after subtotals are printed. You can have the
+ blank line printed even if no subtotals are required by coding the <code>SORTBY$</code>
+    clause with the appropriate <code>/S</code> indicator, but not specifying a 
+	<code>T</code> in the
+ "Options" segment of any of the fields in the <code>DISP$</code> clause.</p><p>You can also request a new page after printing subtotals by including a 
+	<code>P</code>
+    after the <code>/S</code> subtotal indicator as in: <code>REC.SLSMANNO$/SP+ADJN(REC.SALES)</code></p><p>There are some circumstances where you only want sub-totals to print when
+ there are more than 1 line item in the group. You enable this option using a
+ 1 after the <code>/S</code>. With this option, the subtotal and blank line that follows
+ is eliminated when there is only one line item in the group.</p><p>Note that subtotals are not yet supported once a function such as <code>NOT()</code>
+    or <code>FILL()</code> or <code>ADJN()</code> or any other supported function is encountered in the
+	<code>SORTBY</code> expression.</p></td>
+            </tr>
+            <tr>
+                <td><code><a name="MODE$"></a>MODE$</code>
+                </td>
+                <td><code>MODE$</code> is passed to the <code>SELECT</code> verb.&#160; The most popular use is for creating a log file describing the optimization logic used by 
+	<code>SELECT</code>.&#160; To enable this option, pass <code>MODE$</code> as 
+	<code>"debug=tmp/cds038.txt"</code>, and a text file will be created with optimization data.&#160; 
+		You can review the optimization data to determine how BBx chooses the 
+		bests <code>KNUM</code> to use.&#160; You have some options to override the default 
+		behavior of BBx by passing <code>"opt=nowhere", "opt=nosort"</code>, or 
+	<code>"opt=none"</code>.&#160; 
+		Refer to the BBx documentation for the <code>SELECT</code> verb for additional 
+		details.</td>
+            </tr>
+            <tr>
+                <td><code><a name="LIMIT"></a>LIMIT</code>
+                </td>
+                <td>If you only want to include a part of the record set, then pass <code>LIMIT</code><MadCap:keyword term="RANK" /> to
+ the number of records desired.&#160; This can be useful in a test
+ environment, or in ranking reports when something like the top 100 customer
+ or items are desired and not the entire list.</td>
+            </tr>
+            <tr>
+                <td><a name="SUBHEAD$"></a><code>SUBHEAD$</code>
+                </td>
+                <td>an optional heading line that will print at the left margin in bold with
+ one blank line following. This option is useful when multiple CDS038 calls
+ are used to print different details on the same page, and some separator
+ heading is desired.</td>
+            </tr>
+        </table>
+        <p>CDS038 also supports <a name="special field names"></a>special field names.&#160; These special field names always begin with an underscore (_).&#160; These special
+fields may be printed on a report, but are excluded when the output to file
+parameter, <code>S038.WORKFILE$="Y"</code>.&#160; They are excluded since there is no true unique
+field name for these special fields.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS038 Special Field Names used in DISP$</th>
+            </tr>
+            <tr>
+                <td><code>_RANK</code>
+                </td>
+                <td>will print the current record number, starting with 1.&#160; It does not reset
+ at subtotals.</td>
+            </tr>
+            <tr>
+                <td><code>_FILL</code>
+                </td>
+                <td>a special field name, most often used to print underlines on a report
+ for handwritten entries.&#160; The size and character to be used are specified
+ using parentheses in the field name in the format: <code>_FILL(size,char)</code> where
+ size is the number of characters, and char is the character to fill with.&#160; For example, to print 10 underlines, the field name would be 
+	<code>_FILL(10,_)</code>, or
+ to print 6 asterisks would be <code>_FILL(6,*)</code>.&#160; The column title should be
+ specified in <code>DISP$</code> when using <code>_FILL</code> since there is no template to retrieve
+ the column title from.</td>
+            </tr>
+            <tr>
+                <td><code>_GM%</code>
+                </td>
+                <td>can be used to compute gross margin percentage give sales and cost.&#160;
+ If no parameters following <code>_GM%</code> are provided, then CDS038 will assume the
+ sales and cost fields used for the calculation immediately precede the <code>_GM%</code>
+    column.&#160;To override this behavior, you may specify the sales and cost fields using _GM%(SALESFLD,COSTFLD) where SALESFLD and COSTFLD refer to the sales and cost field numbers as referenced within DISP$.  The first field listed in DISP$ is field number 1, the second 2, etc. Using our example fields SALESFLD  as field 1 and COSTFLD as field 2 this field would be _GM%(1,2).  Note that both the sales and cost fields must be to the left of the _GM% field in DISP$.  Omitted fields (contain an O in the options segment of DISP$) are counted and can be used in the calculation.<p>The default mask for <code>_GM%</code> is <code>-##.0%</code> if not passed in 
+	<code>DISP$</code>.</p><p>The default column heading will be GM% if not passed in <code>DISP$</code>.</p><p><code>_GM%</code> can be totaled and subtotaled which causes the calculation to be
+ performed on the appropriate sales and cost amounts, as opposed to adding up
+ the gross margin percentages as would be done with a typical numeric total.</p></td>
+            </tr>
+            <tr>
+                <td><code>_GM</code>
+                </td>
+                <td>
+                    <p>used to compute Gross Margin (Sales minus Cost).&#160;If no 
+	parameters following <code>_GM</code> are provided, then CDS038 will assume the sales and 
+	cost fields used for the calculation immediately precede the <code>_GM</code> column.&#160; 
+To override this behavior, you may specify the sales and cost fields using _GM(SALESFLD,COSTFLD) where SALESFLD and COSTFLD refer to the sales and cost field numbers as referenced within DISP$.  The first field listed in DISP$ is field number 1, the second 2, etc. Using our example fields SALESFLD  as field 1 and COSTFLD as field 2 this field would be _GM(1,2).  Note that both the sales and cost fields must be to the left of the _GM field in DISP$.  Omitted fields (contain an O in the options segment of DISP$) are counted and can be used in the calculation.</p>
+                    <p>The default mask for <code>_GM</code> is <code>-#,###,###.00</code> if not passed in 
+	<code>DISP$</code>.</p>
+                    <p>The default column heading will be Margin if not passed in <code>DISP$</code>.</p>
+                    <p><code>_GM</code> can be totaled and subtotaled.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>_CHG%</code>
+                </td>
+                <td>
+                    <p>can be used to compute the percent change of two amounts.&#160; If no
+ parameters are provided, the <code>TOVAL</code> and <code>FROMVAL</code> will be assumed to be the two
+ columns immediately to the left of the <code>_CHG%</code>.&#160; To override 
+	this behavior, specify the values used using <code>_CHG%(TOVAL,FROMVAL)</code> where
+	<code>TOVAL</code> is
+ the more recent value, and <code>FROMVAL</code> is the previous value to which the
+ percent change will be calculated.&#160; The first field listed in <code>DISP$</code> is
+ field number 1, the second 2, etc.&#160; Note that both the <code>TOVAL</code> and
+    <code>FROMVAL</code> fields must be to the left of the <code>_CHG%</code> field in
+	<code>DISP$</code>.&#160;
+ Omitted fields (contain an O in the options segment of <code>DISP$</code>) 
+	are counted and can be used in the calculation.</p>
+                    <p>The default mask for <code>_CHG%</code> is <code>-###.0%</code> if not passed in 
+	<code>DISP$</code>.</p>
+                    <p>The default column heading will be %Chg if not passed in <code>DISP$</code>.</p>
+                    <p><code>_CHG%</code> can be totaled and subtotaled which causes the calculation to be
+ performed on the appropriate to and from values, as opposed to adding up the
+ percent changes as would be done with a typical numeric total.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>_PCT%</code>
+                </td>
+                <td>
+                    <p>can be used to compute the percentage of one number to another.&#160; If no
+ parameters are provided, the <code>BIGNO</code> and <code>SMALLNO</code> will be assumed to be the two
+ columns immediately to the left of the <code>_PCT%</code>.&#160; To override this
+ behavior, specify the values used using <code>_PCT%(BIGNO,SMALLNO)</code> where
+	<code>BIGNO</code> is
+ the 100% value, and <code>SMALLNO</code> is the value of the percentage to be computed.&#160; 
+	<code>PCT%=100*SMALLNO/BIGNO</code>.&#160; The first field listed in <code>DISP$</code> is
+ field number 1, the second 2, etc.&#160; Note that both the <code>BIGNO</code> and
+    <code>SMALLNO</code> fields must be to the left of the <code>_PCT%</code> field in
+	<code>DISP$</code>.&#160; Omitted fields (contain an O in the options 
+	segment of <code>DISP$</code>) are counted and can be used in the 
+	calculation.</p>
+                    <p>The default mask for <code>_PCT%</code> is <code>-###.0%</code> if not passed in 
+	<code>DISP$</code>.</p>
+                    <p>The default column heading will be % if not passed in <code>DISP$</code>.</p>
+                    <p><code>_PCT%</code> can be totaled and subtotaled which causes the calculation to be
+ performed on the appropriate to and from values, as opposed to adding up the
+ percent changes as would be done with a typical numeric total.</p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table1" class="example">
+            <tr>
+                <td><a name="Example_of_use_of_S038.AUTODUP$"></a>Example of use of 
+		S038.AUTODUP$</td>
+            </tr>
+            <tr>
+                <td>The presence of a "B" in the DISP$ options segment normally prevents 
+		the printing of a field if is the same as the previous line printed.&#160; 
+		In the following example, the item number and description is only 
+		printed once and not repeated for each record.&#160; In this example, 
+		both the Item# and the Description have a "B" in the DISP$ options 
+		segment.<p><code><u>Item#&#160;&#160;&#160;&#160; Description&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		TransDate&#160; Qty</u><br />		SH40310&#160;&#160; Foreign Car Horn&#160;&#160; 11/01/04&#160;&#160;&#160;&#160; 
+		1<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		11/15/04&#160;&#160;&#160; 15<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		12/01/04&#160;&#160;&#160;&#160; 6</code></p></td>
+            </tr>
+            <tr>
+                <td>The current version of CDS038 will ignore the "B" option and print 
+		the field, even if it is the same, when any field already processed in 
+		DISP$ with a "B" option differs.&#160; In this example, the Item# 
+		changed, so the Description prints even though it is the same as the 
+		previous item.<p><code><u>Item#&#160;&#160;&#160;&#160; Description&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		TransDate&#160; Qty</u><br />		SH40310&#160;&#160; Foreign Car Horn&#160;&#160; 11/01/04&#160;&#160;&#160;&#160; 
+		1<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		11/15/04&#160;&#160;&#160; 15<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		12/01/04&#160;&#160;&#160;&#160; 6<br />		SH40320&#160;&#160; Foreign Car Horn&#160;&#160; 10/15/04&#160;&#160;&#160;&#160; 
+		2<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		12/10/04&#160;&#160;&#160;&#160; 4</code></p></td>
+            </tr>
+            <tr>
+                <td>Should you require the original logic, that strictly follows the "B" 
+		option where a field will not print if it is the same as the previous 
+		record, then set S038.AUTODUP$="N".<p><code><u>Item#&#160;&#160;&#160;&#160; 
+		Description&#160;&#160;&#160;&#160;&#160;&#160;&#160; TransDate&#160; 
+		Qty</u><br />		SH40310&#160;&#160; Foreign Car Horn&#160;&#160; 11/01/04&#160;&#160;&#160;&#160; 
+		1<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		11/15/04&#160;&#160;&#160; 15<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		12/01/04&#160;&#160;&#160;&#160; 6<br />		SH40320&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		10/15/04&#160;&#160;&#160;&#160; 2<br />&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 
+		12/10/04&#160;&#160;&#160;&#160; 4</code></p></td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table6" class="example">
+            <tr>
+                <td>Example using Called Program<br />		The B in the Options slot after IM521.PCT and IM521.DESC suppresses the 
+		re-printing of the same information, except at the top of a new page.</td>
+            </tr>
+            <tr>
+                <td><code>0100 <span style="color: #FFFF00;">REM "IM520 - 01/31/08 Product Class Listing</span><br />		0110 SETERR 8000; SETESC 8000<br />		0120 LET FILENAME$="XXUM27"<br />		0130 LET DISP$="IM521.PCT\\\\B|IM521.DESC\\\\B|PCL|DESC|PCLRENT|PCLUSED"<br />		0140 CALL "CDS038",Y$,Y5$,Y5A$,Y6$,Y6,L,P,S038$,FILENAME$,KNO, 
+		KEYBEGIN$,KEYEND$,DISP$,WHERE$,SORTBY$,MODE$,LIMITVAL,SUBHEAD$<br />		0150 GOTO EOJ</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Program IM521 is used to obtain the Product Category record.&#160; 
+		The template for IM521$ is the same as that of the Product Category 
+		record UK26$.</td>
+            </tr>
+            <tr>
+                <td><code>0100 <span style="color: #FFFF00;">REM "IM521 - 01/31/08 Return 
+ Product Category Record</span><br />		0110 SETESC 8000; SETERR 8000<br />		0120 ENTER Y$,UM27$,IM521$<br />		0130 CALL "SW001","XXUK26",0,UM27.PCL$(1,1),IM521$,SW001$<br />		0140 EXIT</code>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="reports/IM520.pdf">Click</a> for example output</td>
+            </tr>
+        </table>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Example creating a tab delimited spreadsheet file</td>
+            </tr>
+            <tr>
+                <td><code>0100 <span style="color: #FFFF00;">REM "Example</span></code>
+                    <p><code>0110 
+ CALL "CDS041","CDS084",S084$,"YY"; <span style="color: #FFFF00;">REM "Get template 
+ for CDS084 parameters</span><br />    0120 LET S084.MODE$="N",S084.NAME$="PFIL"; <span style="color: #FFFF00;">REM "No 
+ entries, output to text file</span><br />    0130 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$; <span style="color: #FFFF00;">REM "Define 
+ output file</span><br />    0140 CALL "CDS038",Y$,Y5$,Y5A$,Y6$,Y6,L,P,S038$,"CDSM01",0,"","","LOGINID|NAME";
+    <span style="color: #FFFF00;">REM "Send tab delimited data to file</span><br />    0150 CALL "CDS094",Y6$,"E"; <span style="color: #FFFF00;">REM "Close the print 
+ channel/spreadsheet file and open spreadsheet application (if possible)</span></code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Same as above example, but run from Dynaweb</td>
+            </tr>
+            <tr>
+                <td><code>0100 <span style="color: #FFFF00;">REM "Example</span></code>
+                    <p><code>0110 
+ CALL "CDS041","CDS084",S084$,"YY"; <span style="color: #FFFF00;">REM "Get template 
+ for CDS084 parameters</span><br />    0120 LET S084.MODE$="N",S084.NAME$="PFIL"; <span style="color: #FFFF00;">REM "No 
+ entries, output to text file</span><br />    0130 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$; <span style="color: #FFFF00;">REM "Define 
+ output file</span></code>
+                    </p>
+                    <p><code>0140 CALL "CDS041","CDS038",S038$,"YY"; <span style="color: #FFFF00;">REM 
+ "Get template for CDS038</span></code>
+                    </p>
+                    <p><code>0150 LET S038.KEEPOPEN$="Y"; <span style="color: #FFFF00;">REM "Need to 
+ keep printer channel open so that Y6.FILEOUT contains the .xls file name</span><br />    0160 CALL "CDS038",Y$,Y5$,Y5A$,Y6$,Y6,L,P,S038$,"CDSM01",0,"","","LOGINID|NAME";
+    <span style="color: #FFFF00;">REM "Send tab delimited data to file</span></code>
+                    </p>
+                    <p><code>0170 LET TMP$="",TMP$=STBL("$bodyopt",ERR=0180);
+    <span style="color: #FFFF00;">REM "Retrieve existing body tag options (if any)</span><br />    0180 LET TMP$=STBL("$bodyopt",TMP$+" onload=""window.open('"+Y6.FILEOUT$(POS("/<br />    tmp/"=Y6.FILEOUT$))+"','','location=no,menubar=no,resizable=no,status=no,<br />    height=100,width=500,titlebar=no,toolbar=no')"""); <span style="color: #FFFF00;">REM 
+ "Download or Open the spreadsheet file when the next page is sent to the 
+ browser</span><br />    0190 CALL "CDS094",Y6$,"e";<span style="color: #FFFF00;"> REM "Close the print 
+ channel/spreadsheet file, but do not launch application</span></code>
+                    </p>
+                    <p><code>0200 LET HTML$="Requested spreadsheet has been generated.";<span style="color: #FFFF00;"> 
+    REM "This could be a menu or whatever page you want to display after the 
+ spreadsheet file has been created.</span></code>
+                    </p>
+                    <p><code>0210 RUN "CDW999"; <span style="color: #FFFF00;">REM "Send HTML$ to browser</span></code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Notes<ol><li>This requires that the tmp folder below the web server's Document Root 
+ folder be linked to the Dynamo Tools tmp folder.<br />      Example to create this <code>link: ln -s /u/CDI/tmp /var/www/html/tmp</code></li><li>If using security enhanced linux (SElinux), the security context of 
+ the tmp folder should be set to <code>httpd_sys_content_t.&#160; </code>
+      Example:<br /><code>semanage fcontext -f -d -a -t httpd_sys_content_t /u/CDI/tmp<br />      restorecon -v /u/CDI/tmp</code></li><li>Some browsers block pop-up windows by default, but can typically be 
+ configured to allow pop-ups from selected web sites.</li><li>Although the spreadsheet file can be downloaded to the workstation, 
+ the process varies somewhat by broswer.&#160; In some cases the 
+ spreadsheet file is automatically downloaded.&#160; Other browsers ask to 
+ Open or Save.&#160; Other browsers open an empty window with a 
+ notification that the file has been downloaded.</li></ol></td>
+            </tr>
+        </table>
+    </body>
+</html>

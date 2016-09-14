@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="1616" MadCap:lastWidth="1151">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Scripts &amp;&#160;Special Files</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="ip" />runtime components</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="System Management Software" />Scripts &amp; Special Files</p>
+                </td>
+                <td align="right">Last Revised: 03/28/16</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="System Management Software" />
+            <MadCap:keyword term="TERM" />Dynamo Tools includes several Unix scripts that are used to start the Dynamo Tools menu processor from a terminal or PC, or as a standalone 'background' task.&#160; Various backup and printer backend scripts are also provided.</p>
+        <p>These files are located in the <code>$SMSDIR/bin</code> directory.&#160; Most of the files only apply to Unix and not to Windows installation.<br /> </p>
+        <table>
+            <tr>
+                <th>File name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="S99cdi" />S99cdi</td>
+                <td>
+                    <MadCap:keyword term="etc/rc.d" />Script to be executed at boot time to execute the bin/startup file.&#160; This file is normally copied to the /etc/rc.d directory.&#160; Using S99cdi is the preferred method of executing the startup script as opposed to adding an entry in the /etc/inittab file, since this file can be replace during an SMS upgrade easier than modifying /etc/inittab.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="AIX" />
+                    <MadCap:keyword term="Aix.sample" />aix.sample</td>
+                <td>
+                    <MadCap:keyword term="etc/security/login.cfg file on AIX" />Contains sample text that can be added to the /etc/security/login.cfg file on AIX systems to change the login message.</td>
+            </tr>
+            <tr>
+                <td><a href="background.htm">background</a>
+                </td>
+                <td>Script to start a background task with the SMS environment established with the same local and global variables as a program started from the menu.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Backup.aix" />backup.aix</td>
+                <td>Script to backup all files except those in an exclude list using the AIX backup command.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Backup.aix.boot" />backup.aix.boot</td>
+                <td>
+                    <MadCap:keyword term="Bootable AIX" />Script to create a bootable AIX backup including all files in the root volume group.&#160; Preferred backup method on AIX systems when there is only one volume group.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="cpio" />
+                    <MadCap:keyword term="Backup.cpio" />backup.cpio</td>
+                <td>Script to create a complete backup using cpio.&#160; Script re-reads tape after backing up and counts files on tape.&#160; Sends email with backup status so operator is informed of backup success or failure.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Backup.tar" />backup.tar</td>
+                <td>Script to create a backup using tar.&#160; This is an obsolete script which has been replaced by backup.cpio.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Backup.exclude" />backup.exclude</td>
+                <td>Another variation of backup.aix.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="catslv" />catslv</td>
+                <td>
+                    <MadCap:keyword term="termcoe" />
+                    <MadCap:keyword term="Ansicoe" />
+                    <MadCap:keyword term="termmono" />
+                    <MadCap:keyword term="Ansi" />
+                    <MadCap:keyword term="Ansimono" />
+                    <MadCap:keyword term="Facetwin" />Prints a text file to slave printer on terminal or PC that has a terminal environment variable $TERM of wy60, wy160, ansi, ansimono, ansicoe, vt100, termmono, termcoe, or facetwin.</td>
+            </tr>
+            <tr>
+                <td>cdi.fwk</td>
+                <td>
+                    <MadCap:keyword term="Ctrl+PageDn" />
+                    <MadCap:keyword term="Ctrl+PageUp" />A facetwin keyboard mapping file that enables Ctrl+PageUp and Ctrl+PageDn.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="cdikeys.cmd" />cdikeys.cmd</td>
+                <td>A keyboard mapping for use with Century Software terminal emulators.</td>
+            </tr>
+            <tr>
+                <td>exlogo.ico</td>
+                <td>A Windows icon file, used as the default icon when installing Dynamo Tools.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Config.sample" />config.sample</td>
+                <td>
+                    <MadCap:keyword term="BBx" />
+                    <MadCap:keyword term="Config.bbx" />Samples with explanation of typical entries in the BBx configuration file config.bbx.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="cmpdel" />cmpdel</td>
+                <td>Script that compare files in two directories and deletes all files in one directory that are the same in both.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="ctty" />ctty</td>
+                <td>
+                    <MadCap:keyword term="Remote Asynchronous Node" />Used in place of stty for serial terminals connected to the 16 port Remote Asynchronous Node (RAN box) on AIX systems.</td>
+            </tr>
+            <tr>
+                <td>dalzr126.prs</td>
+                <td>Wordperfect printer definition file for a laser printer compatible with VSIFAX.</td>
+            </tr>
+            <tr>
+                <td>dialcvt.example</td>
+                <td>An example of a bbx based routine to perform telephone number conversion including long distance prefix and suffix needed for VSIFAX.</td>
+            </tr>
+            <tr>
+                <td>dt_lst</td>
+                <td>
+                    <p>This script lists compiled bbx and bbj programs and performs indenting of IF/THEN/ELSE&#160;commands. It also inserts blank lines before line labels and REM&#160;statements. The output file is compatible with pro5cpl and bbjcpl making dt_lst suitable for use with source code control scripts. Both pro5 and bbj must be installed on the server. This functionality is equivalent to running the Program Utility (SMU) Convert Programs to Text option.<br /><code>Usage:&#160;/u/CDI/bin/dt_lst PGMFIL DIROUT</code><br /><code>PGMFIL</code>&#160;is a single tokenized/compiled program.</p>
+                    <p><code>DIROUT</code> is the directory where the listed program will be placed.</p>
+                </td>
+            </tr>
+            <tr>
+                <td>faxascii.prs</td>
+                <td>Wordperfect printer definition file for an ascii printer compatible with VSIFAX.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="faxrnotify" />faxrnotify</td>
+                <td>Receive notify script used by VSIFAX to format inbound faxed images for use with the broadcast fax options of the Dynamo application software.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="faxtnotify" />faxtnotify</td>
+                <td>
+                    <MadCap:keyword term="Fax Log" />Transmit notify script used by VSIFAX to populate the Fax Log &amp; Options (PFM) and to send a message to a user in case of an unsuccessful fax.</td>
+            </tr>
+            <tr>
+                <td>ip.sh</td>
+                <td>Script used at login to determine the ip address of the login device. Formerly named <code>ip</code> but renamed to avoid conflict with linux <code>ip</code> command.</td>
+            </tr>
+            <tr>
+                <td>l</td>
+                <td>Shortcut for the unix command: ls -l.</td>
+            </tr>
+            <tr>
+                <td>lphp</td>
+                <td>
+                    <MadCap:keyword term="Hewlett Packard" />Script for use in AIX systems to print text file to a Hewlett Packard or other printer that requires insertion of carriage returns.</td>
+            </tr>
+            <tr>
+                <td>magic</td>
+                <td>
+                    <MadCap:keyword term="etc/magic file" />Text file used to modify the /etc/magic file so that the unix file command can identify bbx programs and data files.</td>
+            </tr>
+            <tr>
+                <td>mas90</td>
+                <td>Script to start the MAS90 application.</td>
+            </tr>
+            <tr>
+                <td>mods</td>
+                <td>
+                    <MadCap:keyword term="Date" />Script to display programs with specific naming convention in date modified sequence in operator specified directory.</td>
+            </tr>
+            <tr>
+                <td>p</td>
+                <td>Shortcut to the unix more command.</td>
+            </tr>
+            <tr>
+                <td>profile</td>
+                <td>
+                    <MadCap:keyword term="profuser" />
+                    <MadCap:keyword term="profroot" />Script that is copied to .profile in the home directory of each user created with Add/Maintain Operator Information (SMC).&#160; This script runs either profuser, profroot, or profcdisc.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="profcdiisc" />profcdiisc</td>
+                <td>
+                    <MadCap:keyword term="cdiisc login" />Script that is used by the cdiisc login id used for unattended file transfer using Inter System Communications.</td>
+            </tr>
+            <tr>
+                <td>profroot</td>
+                <td>Script run by profile for the root user.&#160; Provides a root option menu for popular options run as root.</td>
+            </tr>
+            <tr>
+                <td>profuser</td>
+                <td>Script run by profile for normal users.&#160;</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="prt1" />prt1</td>
+                <td>Simple printer backend script that incorporates bbx lock file logic to permit simultaneous direct printing and spooling.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="prt1.sco" />prt1.sco</td>
+                <td>Modified SCO printer backend script suitable for serial printers.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="prt1.scofct" />prt1.scofct</td>
+                <td>Same as above without locking mechanism suitable for printers attached to PC's running facetwin.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="RestartBLM.sh" />restartBLM.sh</td>
+                <td>
+                    <MadCap:keyword term="cron" />Script to restart the Basis license manager so license log files do not grow indefinitely.&#160; Typically executed by root's cron weekly.</td>
+            </tr>
+            <tr>
+                <td>recoverall.sh</td>
+                <td>Script for linux servers to run the Basis mkrecover utility on all eligible files in and below a specified directory. Will spawn multiple sessions, 10 by default, and processes the largest files first to reduce total elapsed time.</td>
+            </tr>
+            <tr>
+                <td>savefiles</td>
+                <td>Script to bundle certain key files into a tar bundle.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="setiscport" />setiscport</td>
+                <td>Script to maintain serial port settings for printing to serial ports on SCO systems.</td>
+            </tr>
+            <tr>
+                <td>startup.sample</td>
+                <td>Example startup script executed at boot time to execute setiscport, start command processor, etc.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="Termcap" />termcap</td>
+                <td>
+                    <MadCap:keyword term="IBM3151" />Modification of the Basis terminal definition file with significant enhancements for terminal types: wy60, wy160, facetwin, termcoe, ansicoe, and ibm3151.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="terminfo.cdi" />
+                    <MadCap:keyword term="terminfo" />terminfo.cdi</td>
+                <td>Source file for terminfo definitions.&#160; Used during SMS installation to update terminfo definitions used by vi and other unix programs.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="termset" />termset</td>
+                <td>Script used during normal login to determine terminal type.</td>
+            </tr>
+            <tr>
+                <td>
+                    <MadCap:keyword term="termset.txt" />termset.txt</td>
+                <td>Text file used by termset containing list of popular terminal types.</td>
+            </tr>
+            <tr>
+                <td>vsifax.config.txt</td>
+                <td>Sample text for VSIFAX configuration files.</td>
+            </tr>
+            <tr>
+                <td>wordperf50</td>
+                <td>
+                    <MadCap:keyword term="OSP menu" />Script to start the Unix version of WordPerfect 5.0.&#160; Normally executed from OSP menu.</td>
+            </tr>
+            <tr>
+                <td>wordperf51</td>
+                <td>Script to start the Unix version of WordPerfect 5.1.</td>
+            </tr>
+            <tr>
+                <td>wordperf8</td>
+                <td>Script to start the Unix version of WordPerfect 8.</td>
+            </tr>
+            <tr>
+                <td>wp.fwk</td>
+                <td>
+                    <MadCap:keyword term="Ctrl+RightArrow" />
+                    <MadCap:keyword term="Ctrl+End" />
+                    <MadCap:keyword term="Ctrl+Backspace" />
+                    <MadCap:keyword term="Ctrl+LeftArrow" />
+                    <MadCap:keyword term="Ctrl+Enter" />Facetwin keyboard mapping to enable WordPerfect 5.0 for Unix keys including Ctrl+End, Ctrl+LeftArrow, Ctrl+RightArrow, Ctrl+Enter, Ctrl+Backspace, Ctrl+PageDn, Shift+Tab, F11, and F12.</td>
+            </tr>
+            <tr>
+                <td>wp2.fwk</td>
+                <td>Same as above for WordPerfect 5.1.</td>
+            </tr>
+            <tr>
+                <td>wpkeys.cmd</td>
+                <td>Keyboard mapping file for Century Software terminal emulation to enable WordPerfect keys.</td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS350 - DOS Diskette Functions</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS350" />CDS350</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="DOS" />
+                        <MadCap:keyword term="DOS Diskette Functions" />DOS Diskette Functions</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS350">Last Revised: 11/05/03</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can:</p>
+        <ol>
+            <li>Copy files from DOS diskette to hard drive</li>
+            <li>Copy files from hard drive to DOS diskette</li>
+            <li>Format a DOS diskette</li>
+        </ol>
+        <p>
+            <MadCap:keyword term="SMU menu" />It may be run (from the SMU menu) or called.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS350",ERR=NOGO,Y$,PAR$,FILIN$,FILOUT$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS350</th>
+            </tr>
+            <tr>
+                <td>NOGO</td>
+                <td>the line number to branch to if unable to perform the requested operation</td>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the standard terminal control variable</td>
+            </tr>
+            <tr>
+                <td>
+                    <p>PAR$(1,1)</p>
+                </td>
+                <td>
+                    <p>the action code</p>
+                    <table class="lev2">
+                        <tr>
+                            <td>1</td>
+                            <td>copy from diskette</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>copy to diskette</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>format diskette</td>
+                        </tr>
+                        <tr>
+                            <td>blank</td>
+                            <td>prompt operator for action</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>FILIN$</td>
+                <td>the input file name, if blank the operator may select from the files in the PRT/ directory</td>
+            </tr>
+            <tr>
+                <td>FILOUT$</td>
+                <td>the output file name, if blank, then the output file will be the same as the input file</td>
+            </tr>
+        </table>
+        <h5>Notes:</h5>
+        <ul>
+            <li>
+                <p>
+                    <MadCap:keyword term="AIX" />This program is only available on AIX systems at this time. If you could use this program on SCO Unix , DOS, or Windows systems please notify Len Krause.</p>
+            </li>
+            <li>
+                <p>Copying from diskette: All output files are stored in the "import" directory unless a file name is passed to CDS350.</p>
+            </li>
+            <li>
+                <p>If output file exists, the operator will be warned prior to copy.</p>
+            </li>
+            <li>
+                <p>Copying to diskette: Input file must be selected from PRT/ directory unless file name is passed to CDS350.</p>
+            </li>
+            <li>
+                <p>Output files that exist are replaced without warning.</p>
+            </li>
+            <li>
+                <p>All output files must be in the root diskette directory.</p>
+            </li>
+            <li>
+                <p>Input file cannot exceed formatted diskette capacity 1.44Mb.</p>
+            </li>
+            <li>
+                <p>Input file cannot be zero characters.</p>
+            </li>
+            <li>
+                <p>Input file cannot be a directory.</p>
+            </li>
+            <li>
+                <p>Wild cards are not supported.</p>
+            </li>
+        </ul>
+        <h5>Formatting:</h5>
+        <ul>
+            <li>
+                <p>Only 1.44Mb diskettes are supported.</p>
+            </li>
+            <li>
+                <p>AIX does not have a way to suppress prompts and output.</p>
+            </li>
+            <li>
+                <p>Operator must answer N to format another.</p>
+            </li>
+        </ul>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

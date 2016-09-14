@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="539" MadCap:lastWidth="1012">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title> CDS192 - Set/Clear Caps Lock/Num Lock</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS192</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Set/Clear Caps Lock/Num Lock</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS192">Last Revised: 
+		09/17/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to Set or Clear the Caps Lock and/or Num Lock setting when using Dynastart.</p>
+        <p>If not using Dynastart, no action nor error will occur.</p>
+        <p>&#160;</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS192", { CAPSLCK, NUMLCK }</code>
+        </p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <td class="nowrapcode">CAPSLCK</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">0</td>
+                                <td style="text-align: left;">Set CapsLock Off</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: left;">Set CapsLock On</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">any other value</td>
+                                <td style="text-align: left;">Do not change CapsLock</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">NUMLCK</td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">0</td>
+                                <td>Set NumLock Off</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td>Set NumLock On</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">any other value</td>
+                                <td>Do not change NumLock</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

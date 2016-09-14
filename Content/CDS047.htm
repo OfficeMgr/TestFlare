@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="700" MadCap:lastWidth="798">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS047 - Enter Operator ID (File Maintenance)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS047" />CDS047</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Enter Operator/Login ID</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS047">Last Revised: 04/26/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This X type routine can be called whenever an operator ID 
+is to be entered, displayed, or formatted.&#160; The operator ID's maintained with Operator Information Maintenance 
+(SMC) will be valid entries. The operator name can be displayed to the right of 
+the ID.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS047", <a href="#Z1">Z1</a>, <a href="#Z2">Z2</a>,
+<a href="#Z5">Z5</a>, <a href="#Z6">Z6</a>, <a href="#Z0$">Z0$</a>, <a href="#Z">
+Z</a>, <a href="#Z$">Z$</a>, <a href="#Y">Y</a>, <a href="#Z8$">Z8$</a>,
+<a href="#FMT$[">FMT$[ALL]</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS047</th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <MadCap:keyword term="Input Variables" />Input Variables</th>
+            </tr>
+            <tr>
+                <td><a name="Z1"></a><code>Z1</code>
+                </td>
+                <td>0 - any entry is valid<br />    1 - entry must be in operator file<br />    -1 - blank entry permitted</td>
+            </tr>
+            <tr>
+                <td><a name="Z2"></a><code>Z2</code>
+                </td>
+                <td>not used</td>
+            </tr>
+            <tr>
+                <td><a name="Z5"></a><code>Z5</code>
+                </td>
+                <td>horizontal screen position (col)</td>
+            </tr>
+            <tr>
+                <td><a name="Z6"></a><code>Z6</code>
+                </td>
+                <td>vertical screen position (row)</td>
+            </tr>
+            <tr>
+                <td><a name="Z0$"></a><code>Z0$</code>
+                </td>
+                <td>operator message</td>
+            </tr>
+            <tr>
+                <td><a name="Z"></a><code>Z</code>
+                </td>
+                <td>passed as zero; set to length of Z$</td>
+            </tr>
+            <tr>
+                <td><a name="Z8$"></a><code>Z8$</code>
+                </td>
+                <td>DIS - display operator ID and name @(z5,z6)<br />    FMT - formatting only, no entry. return operator ID &amp; name in FMT$[1] based 
+ on ID specified in Z$<br /><MadCap:keyword term="Enter Operator ID" />
+	ENT or null - enter operator ID<br />	XY where <br />	X = use 
+ prompt window Y/N<br />	Y = display name<br />	R=right of ID<br />	B=below ID<br />	COL,ROW at 
+ column specified</td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Variables</th>
+            </tr>
+            <tr>
+                <td><a name="Z$"></a><code>Z$</code>
+                </td>
+                <td>operator ID</td>
+            </tr>
+            <tr>
+                <td><a name="FMT$["></a><code>FMT$[</code><code>1]</code>
+                </td>
+                <td>when Z8$="FMT" then<br />    FMT$[1] will contain operator ID (from Z$) followed by a space and the 
+ operator name</td>
+            </tr>
+            <tr>
+                <td><a name="Y"></a><code>Y</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CTL" />CTL of operator entry</td>
+            </tr>
+            <tr>
+                <td><a name="STBL"></a><code>STBL</code><code>("SMS_CDS069_DIS")</code>
+                </td>
+                <td>name of operator as displayed</td>
+            </tr>
+        </table>
+    </body>
+</html>

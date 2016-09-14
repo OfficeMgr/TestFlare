@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS062 - Select Printer (OBSOLETE)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS062" />CDS062</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Select Printer" />Select Printer (OBSOLETE)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS062">Last Revised: 11/10/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="CDS084" />This program should no longer be used. It is provided for 
+compatibility with earlier versions. Use CDS084 for printer selection.</p>
+        <p>Purpose: To OPEN a printer, define a spool file, or direct output to the 
+terminal screen. The operator will choose from a list of printers authorized for 
+use from that terminal based on information in terminal control maintenance.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS062", ERR=NNNN, Z, X1$, X2$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS062</th>
+            </tr>
+            <tr>
+                <td><code>NNNN</code>
+                </td>
+                <td>line label/number to branch to if no printer is selected</td>
+            </tr>
+            <tr>
+                <td><code>Z</code>
+                </td>
+                <td>the channel number that the printer should be opened to</td>
+            </tr>
+            <tr>
+                <td><code>X1$</code>
+                </td>
+                <td>Optional - if the report does not print more than 80 characters per 
+ line, then pass as "N". If this variable is not passed, or is passed 
+ anything other that "N", the report about to be printed will be assumed to 
+ require 132 columns to print.</td>
+            </tr>
+            <tr>
+                <td><code>X2$</code>
+                </td>
+                <td>Optional - is passed only if you want to force output to a particular 
+ printer. When X2$ is passed to CDS062, no operator entries are required.</td>
+            </tr>
+        </table>
+        <h5>Examples</h5>
+        <p><code>0150 CALL "CDS062",ERR=9000,6 or 0150 CALL "CDS062",ERR=9000,6,"W"</code>
+        </p>
+        <p>This example prompts the operator to select a particular printer, then if 
+spooling is desired, and then the horizontal and vertical pitch selection (if 
+any). Since the variable X1$ was not passed, (or passed as "W" in the second 
+example), the report is assumed to use all 132 print positions.</p>
+        <p><code>0150 CALL "CDS062",ERR=9000,6,"N"</code>
+        </p>
+        <p>Same as the example above but the report to be printed will only use 80 print 
+positions and therefore will fit on narrow carriage printers even when using 
+normal pitch selection (10 characters per inch).</p>
+        <p><code>0150 CALL "CDS062",ERR=9000,6,"N","T3"</code>
+        </p>
+        <p>Opens the printer attached to terminal port T3 to device 6. No operator 
+prompting takes place.</p>
+    </body>
+</html>

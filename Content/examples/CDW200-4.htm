@@ -1,0 +1,35 @@
+﻿
+<!DOCTYPE HTML SYSTEM>
+<html>
+<head>
+<title>Dynaweb Chart</title>
+<link rel=stylesheet type='text/css' href='http://www.excellware.com/docs/tools/tools.css'>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>google.load('visualization', '1', {packages:['corechart']});</script>
+<script>
+google.setOnLoadCallback(drawChart1);
+function drawChart1() {
+var data1 = google.visualization.arrayToDataTable([
+['Quarter','Azalea','Daffodil','Forsythia'],
+['Jan-Mar',10,20,30],['Apr-Jun',20,30,40],['Jul-Sep',15,40,60],['Oct-Dec',15,25,45]
+]);
+var options1 = {
+'title':'Flower Sales by Quarter',
+'width':'900px',
+'height':'500px'
+}
+var chart1 = new google.visualization.ColumnChart(document.getElementById('chart_div1'));
+chart1.draw(data1, options1);
+}
+</script>
+</head>
+<body>
+<div align='center'>
+<img src='http://www.excellware.com/docs/tools/images/banner.gif' alt='logo' style='margin-bottom:10px'>
+<p style='font-size:14pt;font-weight:bold'>Dynamo Tools by Excellware, Inc.</p>
+<p style='font-size:14pt;'>Example Column Chart</p>
+<div id='chart_div1' style='width:900px;height:500px;'></div>
+</div>
+</body>
+</html>
+

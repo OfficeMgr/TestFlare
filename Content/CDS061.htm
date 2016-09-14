@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="6626" MadCap:lastWidth="798">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS061 - Dynamo Message Processing</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS061" />CDS061</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Dynamo Message Processing</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS061">Last Revised: 10/11/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">Dynamo provides the ability to send messages to one or 
+	more Dynamo users.&#160; The Dynamo Tools data entry routine notifies the 
+	user that they have received a message, and provide the option to read, 
+	reply, forward, delete, etc.&#160; CDS061 is called for all Dynamo message and memo processing functions.&#160; 
+	It can also be called by an application program to send a Dynamo message.&#160; 
+	It supports both interactive mode, where the user is prompted for 
+	information, and non-interactive mode, where the calling program provides 
+	all information required to send a message.</p>
+        <p>The frequency of message checks is fixed at every 60 seconds.</p>
+        <p>
+            <MadCap:keyword term="Hotkey" />Messages are sent using the M option at any Dynamo menu or by hotkey.</p>
+        <p>
+            <MadCap:keyword term="System Management Software" />
+            <MadCap:keyword term="SM20" />
+            <MadCap:keyword term="SM21" />The message files SM20 and SM21 are opened by CDS061 and left open to improve performance.&#160; To prevent channel number conflict, CDS061 uses channel numbers 32704 and 32705.&#160; These channel numbers may not be used in any other application program.&#160; All channel numbers above 32700 are reserved for use by Dynamo Tools.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS061" { , PAR$ , SM20$ , MSG$ , BCAST$ }</code>
+        </p>
+        <p>If no parameters are passed, CDS061 displays the Dynamo Message options 
+	list.&#160; See example.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS061</th>
+            </tr>
+            <tr>
+                <td><code>PAR$ &amp; BCAST$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td align="center"><code>PAR$(1,1)</code>
+                            </td>
+                            <td nowrap="" align="center">Mode</td>
+                            <td>Action</td>
+                            <td><code>BCAST$</code> - Broadcast parameter</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"C"</code>
+                            </td>
+                            <td nowrap="" align="center">interactive</td>
+                            <td>Check for new (unread) messages and advise user if they have any 
+			new messages, quietly exit if they do not.</td>
+                            <td>not applicable</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"S"</code>
+                            </td>
+                            <td nowrap="" align="center">interactive</td>
+                            <td>Send new message from workstation.&#160; User will be prompted 
+			for message parameters and contents.</td>
+                            <td>not applicable</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"B"</code>
+                            </td>
+                            <td nowrap="" align="center">non-interactive</td>
+                            <td>Send message to single user.</td>
+                            <td>not applicable</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"U"</code>
+                            </td>
+                            <td nowrap="" align="center">non-interactive</td>
+                            <td>Send message to multiple users.</td>
+                            <td>comma separated list of login ID's the message will be sent to, 
+			i.e., <code>"len,craig,darren,steve"</code></td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"L"</code>
+                            </td>
+                            <td nowrap="" align="center">non-interactive</td>
+                            <td>Send message to users on one or more saved distribution lists.</td>
+                            <td>comma separated list of distribution lists, i.e., <code>"whs,sales,accounting"</code></td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"E"</code>
+                            </td>
+                            <td nowrap="" align="center">non-interactive</td>
+                            <td>Send message to every user.</td>
+                            <td>not applicable</td>
+                        </tr>
+                        <tr>
+                            <td align="center"><code>"A"</code>
+                            </td>
+                            <td nowrap="" align="center">non-interactive</td>
+                            <td>Send message to all users currently logged in.&#160; Can be 
+			limited to one or more company codes.</td>
+                            <td>comma separated list of company codes, i.e., <code>"EX,PY"</code> 
+			or null to send to all users</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>SM20$</code>
+                </td>
+                <td>Used when sending messages in non-interactive mode.&#160; This data structure includes 
+		parameters such as the login ID of the user the message is to be sent 
+		to.&#160; Use CDS041 to retrieve the template, then populate the fields 
+		desired.&#160; See example.&#160; Note that many fields will be 
+		populated by CDS061 and returned to the calling program.&#160; This 
+		means that you may need to clear SM20$ if called multiple times.<table border="1" id="table3" class="lev2"><tr><th colspan="2">SM20 fields</th></tr><tr><td><code>MESSAGENO</code></td><td>Do not specify.&#160; CDS061 will determine a unique <code>
+			MESSAGENO</code>.</td></tr><tr><td><code>SENTBY</code></td><td>10 character Dynamo login ID for user sending message.&#160; 
+			Will use login ID of user currently logged in if passed as blank.</td></tr><tr><td><code>SENTTO</code></td><td>10 character Dynamo login ID for user the message is being sent 
+			to.&#160; Leave blank when sending to multiple users.</td></tr><tr><td><code>SENTDATE</code></td><td>Do not specify.&#160; CDS061 will set <code>SENTDATE</code> as 
+			the date the message was sent.</td></tr><tr><td><code>SENTTIME</code></td><td>Do not specify.&#160; CDS061 will set the <code>SENTTIME</code> 
+			as the time the message was sent.</td></tr><tr><td><code>FROMNAME</code></td><td>Name of user sending message.&#160; Optional.</td></tr><tr><td><code>FROMCOMP</code></td><td>Company name of user sending message.&#160; Optional.</td></tr><tr><td><code>FROMPHONE[3]</code></td><td>Up to 3 telephone numbers of the sender</td></tr><tr><td><code>FROMEXT[3]</code></td><td>The telephone extension for each of the 3 telephone numbers.</td></tr><tr><td><code>FROMTYPE[3]</code></td><td>The telephone number type for each of the 3 telephone numbers.<table border="1" id="table4" class="lev3"><tr><td align="center"><code>F</code></td><td>Fax#</td></tr><tr><td align="center"><code>A</code></td><td>Alternate#</td></tr><tr><td align="center"><code>H</code></td><td>Home#</td></tr><tr><td align="center"><code>W</code></td><td>Work#</td></tr><tr><td align="center"><code>D</code></td><td>Day#</td></tr><tr><td align="center"><code>N</code></td><td>Nite#</td></tr><tr><td align="center"><code>C</code></td><td>Car#</td></tr><tr><td align="center"><code>S</code></td><td>Cell#</td></tr><tr><td align="center"><code>M</code></td><td>Modem#</td></tr><tr><td align="center"><code>P</code></td><td>Pager#</td></tr></table></td></tr><tr><td><code>SUBJECT</code></td><td>Always pass the message subject here.</td></tr><tr><td><code>SCHDDATE</code></td><td>Pass as zero to schedule message to be delivered immediately, or 
+			a date to schedule this message for delivery on a future date.</td></tr><tr><td><code>SCHDTIME</code></td><td>Pass as zero to schedule message to be delivered immediately.</td></tr><tr><td><code>RECDDATE</code></td><td>Do not specify.&#160; Will be set by CDS061 when the message has 
+			been received.</td></tr><tr><td><code>RECDTIME</code></td><td>Do not specify.&#160; Will be set by CDS061 when the message has 
+			been received.</td></tr><tr><td><code>STATUS</code></td><td>Do not specify.&#160; Managed by CDS061.</td></tr><tr><td><code>PRIVATE</code></td><td>Pass as <code>"Y"</code> indicating that the message is to be private, and 
+			cannot be read by any user other than the recipient, or a user that 
+			is authorized to read private messages.&#160; User authorization is 
+			maintained in Operator Information Maintenance (SMC).&#160; </td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>MSG$</code>
+                </td>
+                <td>Used when sending messages.&#160; This is the text or body of the 
+		message being sent.&#160; It can be null or not passed.&#160; It can contain text and 
+		the mnemonics shown below.&#160; The message after formatting, can be up 
+		to 32,768 characters.&#160; There is no limit to the number of display 
+		lines that the message will require.&#160; See example.<table border="1" id="table5" class="lev2"><tr><th colspan="2" style="text-align: center;"><p style="text-align: left;">supported mnemonics</p></th></tr><tr><td align="center"><code>'LF'</code></td><td>Line Feed - column zero of next row</td></tr><tr><td align="center"><code>'SB'</code></td><td>Dim intensity (Start background) - Default state</td></tr><tr><td align="center"><code>'SF'</code></td><td>Bold intensity (Start foreground)</td></tr><tr><td align="center"><code>@(COL)</code></td><td>Place text that follows at COL column number of current row 
+			(zero based)</td></tr><tr><td align="center"><code>@(COL,ROW)</code></td><td>Place text that follows at COL column number and ROW row number 
+			specified (zero based)</td></tr><tr><td align="center"><code>'BB'</code></td><td>Make text that follows blink</td></tr><tr><td align="center"><code>'EB'</code></td><td>End blinking text</td></tr><tr><td align="center"><code>'BR'</code></td><td>Make text that follows reverse video</td></tr><tr><td align="center"><code>'ER'</code></td><td>End reverse video</td></tr><tr><td align="center"><code>'BU'</code></td><td>Underline text that follows</td></tr><tr><td align="center"><code>'EU'</code></td><td>End underlined text</td></tr><tr><td align="center"><code>'ATTR'()</code></td><td>Attribute mnemonic that can set/clear all attributes.&#160; 
+			Pass argument within parentheses.<table border="1" id="table6" class="lev3"><tr><th style="text-align: center;" colspan="5">Graphics mode off</th><th style="text-align: center;" rowspan="18">&#160;</th><th style="text-align: center;" colspan="5">Graphics mode on</th></tr><tr><th style="text-align: center;">Argument</th><th style="text-align: center;">Dim/Bold</th><th style="text-align: center;">Reverse</th><th style="text-align: center;">Underline</th><th style="text-align: center;">Blink</th><th style="text-align: center;">Argument</th><th style="text-align: center;">Dim/Bold</th><th style="text-align: center;">Reverse</th><th style="text-align: center;">Underline</th><th style="text-align: center;">Blink</th></tr><tr><td align="center">$00$</td><td align="center">Dim</td><td align="center">off</td><td align="center">off</td><td align="center">off</td><td align="center">$20$</td><td align="center">Dim</td><td align="center">off</td><td align="center">off</td><td align="center">off</td></tr><tr><td align="center">$01$</td><td align="center">Bold</td><td align="center">off</td><td align="center">off</td><td align="center">off</td><td align="center">$21$</td><td align="center">Bold</td><td align="center">off</td><td align="center">off</td><td align="center">off</td></tr><tr><td align="center">$02$</td><td align="center">Dim</td><td align="center">on</td><td align="center">off</td><td align="center">off</td><td align="center">$22$</td><td align="center">Dim</td><td align="center">on</td><td align="center">off</td><td align="center">off</td></tr><tr><td align="center">$03$</td><td align="center">Bold</td><td align="center">on</td><td align="center">off</td><td align="center">off</td><td align="center">$23$</td><td align="center">Bold</td><td align="center">on</td><td align="center">off</td><td align="center">off</td></tr><tr><td align="center">$04$</td><td align="center">Dim</td><td align="center">off</td><td align="center">on</td><td align="center">off</td><td align="center">$24$</td><td align="center">Dim</td><td align="center">off</td><td align="center">on</td><td align="center">off</td></tr><tr><td align="center">$05$</td><td align="center">Bold</td><td align="center">off</td><td align="center">on</td><td align="center">off</td><td align="center">$25$</td><td align="center">Bold</td><td align="center">off</td><td align="center">on</td><td align="center">off</td></tr><tr><td align="center">$06$</td><td align="center">Dim</td><td align="center">on</td><td align="center">on</td><td align="center">off</td><td align="center">$26$</td><td align="center">Dim</td><td align="center">on</td><td align="center">on</td><td align="center">off</td></tr><tr><td align="center">$07$</td><td align="center">Bold</td><td align="center">on</td><td align="center">on</td><td align="center">off</td><td align="center">$27$</td><td align="center">Bold</td><td align="center">on</td><td align="center">on</td><td align="center">off</td></tr><tr><td align="center">$08$</td><td align="center">Dim</td><td align="center">off</td><td align="center">off</td><td align="center">on</td><td align="center">$28$</td><td align="center">Dim</td><td align="center">off</td><td align="center">off</td><td align="center">on</td></tr><tr><td align="center">$09$</td><td align="center">Bold</td><td align="center">off</td><td align="center">off</td><td align="center">on</td><td align="center">$29$</td><td align="center">Bold</td><td align="center">off</td><td align="center">off</td><td align="center">on</td></tr><tr><td align="center">$0A$</td><td align="center">Dim</td><td align="center">on</td><td align="center">off</td><td align="center">on</td><td align="center">$2A$</td><td align="center">Dim</td><td align="center">on</td><td align="center">off</td><td align="center">on</td></tr><tr><td align="center">$0B$</td><td align="center">Bold</td><td align="center">on</td><td align="center">off</td><td align="center">on</td><td align="center">$2B$</td><td align="center">Bold</td><td align="center">on</td><td align="center">off</td><td align="center">on</td></tr><tr><td align="center">$0C$</td><td align="center">Dim</td><td align="center">off</td><td align="center">on</td><td align="center">on</td><td align="center">$2C$</td><td align="center">Dim</td><td align="center">off</td><td align="center">on</td><td align="center">on</td></tr><tr><td align="center">$0D$</td><td align="center">Bold</td><td align="center">off</td><td align="center">on</td><td align="center">on</td><td align="center">$2D$</td><td align="center">Bold</td><td align="center">off</td><td align="center">on</td><td align="center">on</td></tr><tr><td align="center">$0E$</td><td align="center">Dim</td><td align="center">on</td><td align="center">on</td><td align="center">on</td><td align="center">$2E$</td><td align="center">Dim</td><td align="center">on</td><td align="center">on</td><td align="center">on</td></tr><tr><td align="center">$0F$</td><td align="center">Bold</td><td align="center">on</td><td align="center">on</td><td align="center">on</td><td align="center">$2F$</td><td align="center">Bold</td><td align="center">on</td><td align="center">on</td><td align="center">on</td></tr></table><table border="1" id="table7" class="lev3"><tr><th colspan="2" style="text-align: center;">Line Drawing Graphics Characters</th></tr><tr><th align="center">message character</th><th align="center">displays as</th></tr><tr><td align="center">0</td><td align="center">─</td></tr><tr><td align="center">1</td><td align="center">│</td></tr><tr><td align="center">2</td><td align="center">┌</td></tr><tr><td align="center">3</td><td align="center">┐</td></tr><tr><td align="center">4</td><td align="center">└</td></tr><tr><td align="center">5</td><td align="center">┘</td></tr><tr><td align="center">6</td><td align="center">├</td></tr><tr><td align="center">7</td><td align="center">┤</td></tr><tr><td align="center">8</td><td align="center">┴</td></tr><tr><td align="center">9</td><td align="center">┬</td></tr><tr><td align="center">:</td><td align="center">┼</td></tr></table></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>BCAST$</code>
+                </td>
+                <td>Broadcast parameter - used in non-interactive mode when sending a 
+		message to multiple users.&#160; See <code>PAR$</code> above for 
+		complete description.</td>
+            </tr>
+        </table>
+        <p>Note that when sending messages in non-interactive mode, messages will not 
+	be sent to any Login ID that is not found in the Operator file.&#160; 
+	No error messages are generated in non-interactive mode.</p>
+        <h5>
+            <MadCap:keyword term="Memo Writing" />Memo Writing</h5>
+        <p>Memo are like messages except they are printed or faxed instead of delivered electronically.</p>
+        <h5>Including your logo on faxed memos:</h5>
+        <p>
+            <MadCap:keyword term="Faxing" />If using VSIFAX version 2, then the memo sender will search for a file called logo.fax in a graphics subdirectory of the current company code. For example, DI/graphics/logo.fax. This file must be in fax format. These files are created by faxing your logo to the fax modem. Refer to the VSIFAX documentation manual for additional details.</p>
+        <p>If using VSIFAX Gold (version 3), then the memo sender will search for a file called XXlogo.tif in the $VSIFAX/lib/images directory, where XX is the current company code. If not found, it will try simply logo.tif without the company code. This permits a system with multiple companies to share the same logo without having to switch to a specific company to locate the logo. Note that VSIFAX Gold requires image files in TIFF format, and not fax image format. These files can be created with any scanner or drawing software.</p>
+        <h5>Note</h5>
+        <p>
+            <MadCap:keyword term="tif file" />With version 3, simply placing the tif file in the proper directory is not enough. You also need to execute the command: vupload image logo.tif. Refer to the VSIFAX Administrator's Guide for complete details.</p>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example: Called with no arguments, CDS061 displays Dynamo Message 
+		Options list</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS061"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0612.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table8" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send fax failure message</td>
+            </tr>
+            <tr>
+                <td><code>1600 SENDMSG:<br />		1610 DEF FNM(HEAD$,TXT$)<br />		1620 IF POS(" "&lt;&gt;TXT$) THEN LET MSG$=MSG$+'LF'+'SB'+" 
+		"+HEAD$+FILL(16-LEN(HEAD$),".")+": "+'SF'+CVS(TXT$,3)<br />		1630 RETURN 0<br />		1640 FNEND</code>
+                    <p><code><br />		1650 CALL "CDS095",SM20,"SM20","YUY",SM20$<br />		1660 LET SM20.SENTBY$=SM90.OPERID$<br />		1670 LET SM20.SENTTO$=SM90.OPERID$<br />		1680 LET SM20.FROMNAME$="Faxing Module"<br />		1690 LET SM20.FROMCOMP$="Dynamo System Mgmt Software"<br />		1700 LET SM20.SUBJECT$="Failed fax transmission"<br />		1710 LET SM20.PRIVATE$="N"<br />		1720 LET MSG$=""<br />		1721 LET Z=FNM("Fax initiated on",DATE(SM90.QDATE,SM90.QTIME:"%Ds %Mz/%Dz/%Yz 
+		at %hz:%mz %p"))<br />		1725 LET Z=FNM("Job Title",SM90.JOBTITLE$)<br />		1730 LET Z=FNM("To",SM90.TONAME$)<br />		1740 LET Z=FNM("To Company",SM90.TOCOMP$)<br />		1750 LET Z=FNM("To Fax#",SM90.FAXNO$)<br />		1760 LET Z=FNM("Subject",SM90.SUBJECT$)<br />		1762 LET Z=FNM("Status",SM91.STATUS$)<br />		1765 IF POS(" "&lt;&gt;FNF$("err")) THEN LET Z=FNM("Error Message",FNF$("err"))<br />		1770 CALL "CDS061","B",SM20$,MSG$<br />		1780 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0613.jpg" />
+                    <p>
+                        <img border="0" src="images/CDS0614.jpg" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table9" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send a message with only a 
+			subject to a list of users.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDSM20",SM20$; REM "Obtain template for 
+			SM20$<br />			SM20.SUBJECT$="Report Due"<br />			CALL "CDS061","U",SM20$,"","sharon,jimo"</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table10" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send a message to all users in 
+			pre-defined user lists, 'warehouse staff' and 'office staff'.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDSM20",SM20$; REM "Obtain template for 
+			SM20$<br />			SM20.SUBJECT$="Inventory"</code>
+                    <p><code>MSG$="Note: the warehouse 
+			will be closed for physical inventory on Saturday September 20, 
+			2008"<br />			CALL "CDS061","L",SM20$,MSG$,"warehouse staff,office staff"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table11" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send a multi-line message with 
+			attributes to all users.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDSM20",SM20$; REM "Obtain template for 
+			SM20$<br />			SM20.SUBJECT$="Holiday Closing"</code>
+                    <p><code>MSG$='BU'+"Holiday 
+			Closing Schedule"+'EU'+'LF'+"January 1"+'LF'+"Memorial 
+			Day"+'LF'+"July 4"+'LF'+"Labor 
+			Day"+'LF'+"Thanksgiving"+'LF'+"Christmas"<br />			CALL "CDS061","E",SM20$,MSG$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS06111.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table12" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send a message to all users 
+			currently logged in on company PY.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDSM20",SM20$; REM "Obtain template for 
+			SM20$<br />			SM20.SUBJECT$="Order Arrived"<br />			MSG$="Note web order number 2121 has been printed on the Sales Order 
+			Printer"<br />			CALL "CDS061","A",SM20$,MSG$,"PY"</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table13" class="example">
+            <tr>
+                <td>Example: Non-interactive mode to send a message to all users 
+			currently logged in.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDSM20",SM20$; REM "Obtain template for 
+			SM20$<br />			SM20.SUBJECT$="Log off"<br />			MSG$='BB'+"Please log off as soon as 
+			possible"+'EB'+'LF'+'LF'+"Server to be powered off for maintenance"<br />			CALL "CDS061","A",SM20$,MSG$</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

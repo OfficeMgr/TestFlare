@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="797" MadCap:lastWidth="965">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS250 - Display Open File Information</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS250" />CDS250</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Open File Information" />Display Open File Information</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS250">Last Revised: 03/09/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The purpose of this routine is to display information about one or all files/devices currently open.&#160; 
+	It is typically called from console mode.&#160; The user can highlight and 
+	select an open channel to invoke the File Utility on that file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS250" {, CHAN, OUTCHAN }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS250</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CHAN</td>
+                <td>If <code>CHAN</code> is passed, then the file information is displayed for the file opened to 
+		<code>CHAN</code> only</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">OUTCHAN</td>
+                <td>
+        If <code>OUTCHAN</code> is passed, then the file information will be printed to the output device previously opened to 
+		<code>OUTCHAN</code><p>When <code>OUTCHAN</code> is not passed, or passed as 0, then CDS250 will display the output in a full screen window, and pop it upon exit.</p></td>
+            </tr>
+        </table>
+        <table border="1" id="table1" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS250"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        <img src="images/cds250.png" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

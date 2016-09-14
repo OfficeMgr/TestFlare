@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS265 - Get Month and Week Names</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS265" />CDS265</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Get Month" />Get Month and Week Names</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS265">Last Revised: 02/26/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Templated" />This program will return a templated string variable containing:</p>
+        <ul>
+            <li>
+                <MadCap:keyword term="Date" />
+                <MadCap:keyword term="Date:mask" />Default date format mask</li>
+            <li>Month names in short and long format (Jan &amp; January)</li>
+            <li>Day names in short and long format (Sun &amp; Sunday)</li>
+        </ul>
+        <p>Calling format:</p>
+        <p><code>CALL "CDS265",S265$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS265</th>
+            </tr>
+            <tr>
+                <td><code>FORMAT</code>
+                </td>
+                <td>default mask for the DATE() function</td>
+                <td>%Mz/%Dz/%Yz</td>
+            </tr>
+            <tr>
+                <td><code>MTHS[12]</code>
+                </td>
+                <td>month names - short</td>
+                <td>Jan - Dec</td>
+            </tr>
+            <tr>
+                <td><code>MTHL[12]</code>
+                </td>
+                <td>month names - long</td>
+                <td>January - December</td>
+            </tr>
+            <tr>
+                <td><code>DAYS[7]</code>
+                </td>
+                <td>days of the week - short</td>
+                <td>Sun - Sat</td>
+            </tr>
+            <tr>
+                <td><code>DAYS[7]</code>
+                </td>
+                <td>days of the week - long</td>
+                <td>Sunday - Saturday</td>
+            </tr>
+        </table>
+        <p>
+            <br />
+  This data is retrieved from the default global string !DATE.&#160; Using 
+	CDS265 instead of hard coded month and day names is preferred, since 
+	changing the !DATE global and using CDS265 provides the ability to change 
+	the language, i.e., English vs, German, etc. without changing the 
+	application.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><pre><img border="0" src="images/CDS26513.jpg" /></pre>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

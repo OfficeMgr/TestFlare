@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="946" MadCap:lastWidth="941">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Background Script</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Scripts &amp; Special Files" />Scripts &amp; Special Files</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">background script</p>
+                </td>
+                <td align="right">Last Revised: 10/26/13</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This script may be used whenever it is necessary to start 
+a background task with the same environment as a user who logs into a linux/Unix 
+system.&#160; It is typically executed during system boot, or by <code><MadCap:keyword term="cron" />cron</code>, 
+<code>at</code><MadCap:keyword term="BBx" />, or within a BBx application using <code><MadCap:keyword term="SCALL" />CDS081, SCALL()</code> or
+<a target="_blank" href="CDS180.htm">CDS180</a>.</p>
+        <p align="left">Arguments: <code>background <a href="#PGM">PGM</a> <a href="#CC">CC</a> <a href="#TITLE">TITLE</a> { <a href="#USR">USR</a> <a href="#MODE">MODE</a> <a href="#LOGFILE">LOGFILE</a> <a href="#EMAIL">EMAIL</a> }</code></p>
+        <table>
+            <tr>
+                <th colspan="2">background</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="PGM"></a>PGM</td>
+                <td>This is the business basic program to be run.&#160; Refer to the
+    <a href="environment.htm">SMS Environment</a><MadCap:keyword term="Running" /> for the local and global 
+ variables that are set prior to running basic_pgm.&#160; PGM should 
+ terminate with <code><MadCap:keyword term="CDS001" />RUN "CDS001"</code> to insure the information in the Display 
+ Terminal Status is updated.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="CC"></a>CC</td>
+                <td>Pass the two character company code, which will determine what 
+    <code>Y.COMPCODE$</code> and other fields dependent on <code>Y.COMPCODE$</code> will be set to.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="TITLE"></a>TITLE</td>
+                <td>This is a descriptive field, up to 40 characters in length, that will be 
+	displayed in Display System Status in the Dynaweb and Background Task section.&#160; It can also be seen using the 
+operating system <code>ps -ef</code> command.&#160; Note the <code>TITLE</code> cannot contain any blanks, so 
+ use the underscore character in place of blanks.&#160; They will be replaced 
+ with blanks automatically.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="USR"></a>USR</td>
+                <td>This is an optional argument for additional user information that will be passed to the <code>PGM</code> and referred to as 
+	<code><MadCap:keyword term="ARGV" />ARGV(4)</code>.&#160; If spaces are required, then 
+ enclose <code>USR</code> in quotes.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="MODE"></a>MODE</td>
+                <td>The mode is an optional argument that is used to specify the executable 
+ to use and file open method.
+						<table><tr><td>pro5, null, or not passed</td><td>pro5 with 4000 memory pages (1Mb)</td></tr><tr><td>numeric value</td><td>pro5 with the numeric value number of memory pages, minimum of 4000 is recommended to prevent out-of-memory errors</td></tr><tr><td>bbj</td><td>bbj and use bbj for file access</td></tr><tr><td>bbjds</td><td>bbj, but use the local pro5 dataserver on the 
+ default port for all file opens. (<span class="Code">/&lt;localhost,port=1100&gt;</span>)</td></tr><tr><td><code>/&lt;servername,port=portnumber&gt;</code></td><td>bbj to run <code>PGM</code>, but use a data server for file 
+ opens using the server name and port number specified.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="LOGFILE"></a>LOGFILE</td>
+                <td>
+                    <p>This optional argument is used to override the default log file of <code>$SMSDIR/log/bkg</code>. &#160;Note that the original default log file of <code>$SMSDIR/TEMP/BKGOUT</code> is no longer used. On linux systems you can enable automated rotation of the log file by placing placing a file to the <code>/etc/logrotate.d</code> folder. The default log rotation file is shown below. This example log rotation configuration file is also available at <code>$SMSDIR/bin/exa/dt_bkg</code>.</p>
+                    <p>&#160;</p>
+                    <p><span class="Code">/u/CDI/tmp/log/dt_bkg {</span>
+                        <br /><span class="IndentedCode">monthly</span>
+                        <br style="mc-tag-and-class: span;" /><span class="IndentedCode">create 0666 cdi cdi</span>
+                        <br style="mc-tag-and-class: span;" /><span class="IndentedCode">dateext</span>
+                        <br style="mc-tag-and-class: span;" /><span class="IndentedCode">missingok</span>
+                        <br /><span class="Code">}</span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="EMAIL"></a>EMAIL</td>
+                <td>This optional argument is used to override the default email address of support@excellware.com. An email is sent by the background script when it is unable to start pro5 or bbj.</td>
+            </tr>
+        </table>
+        <p>The background task may use <code>PRINT</code> statements to log debugging or tracking 
+information.&#160; Any data printed will be appended to the logfile.&#160; 
+This file should be rotated using the appropriate operating system log rotation tools.&#160; Do not use any mnemonics or 
+cursor positioning expressions on any <code>PRINT</code> statement within the background 
+task.</p>
+        <p>When using this script, you do not need to <code>CALL "<a target="_blank" href="CDS011.htm">CDS011</a>"</code> within your <code>PGM</code> as it will be run automatically prior to running your <code>PGM</code>.</p>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Typical crontab entry that launches this background script with no <code>USR</code> field, using the default mode and logfile</td>
+                </tr>
+                <tr>
+                    <td class="code">0 17 25 * *  /u/CDI/bin/background SW080 DS Download_Ohio_Sales_Tax</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

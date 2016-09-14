@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS263 - Fax Dial String Processor</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS263" />CDS263</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Fax Dial String Processor" />Fax Dial String Processor</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS263">Last Revised: 04/09/97</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="dialcvt" />This program is used by the VSI*FAX fax scheduler to modify the dial string when the "dialcvt" program provided with VSI*FAX does not provide sufficient conversion.</p>
+        <p>It is typically needed when there is a authorization code required on long distance calls that follows the telephone number.</p>
+        <p>This program is not typically called from within an application program. Instead, it works like dialcvt using stdin and stdout.</p>
+        <p>This program is run by a script provided in the CDI/bin directory named dialcvt.example. Copy this script to CDI/bin/dialcvt. Then edit this script to specify the environment variables used:</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS263</th>
+            </tr>
+            <tr>
+                <td>OUTSIDE</td>
+                <td>the numbers dialed to obtain an outside line</td>
+            </tr>
+            <tr>
+                <td>LDPFX</td>
+                <td>the numbers dialed prior to dialing a long distance number</td>
+            </tr>
+            <tr>
+                <td>LDSFX</td>
+                <td>the numbers dialed after dialing a long distance number</td>
+            </tr>
+        </table>
+        <p>
+            <br />
+  If the LDPFX or LDSFX is not required, then you can leave the assignment line in the file with nothing to the right of the equal sign as in: LDSFX=</p>
+        <p>Comma's may be inserted as required to indicate a pause.</p>
+        <p>Note that the LDPFX and LDSFX codes will not be used for 1-800 and 1-888 no charge long distance calls.</p>
+        <p>
+            <MadCap:keyword term="V-Systems" />
+            <MadCap:keyword term="FXDIALER" />Then edit the CDI/bin/faxenv file to specify the name of the dial conversion program. To use the standard dialcvt provided by V-Systems, use: FXDIALER=dialcvt</p>
+        <p>To use this dial conversion program provided with Dynamo, use: FXDIALER=$SMSDIR/bin/dialcvt</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

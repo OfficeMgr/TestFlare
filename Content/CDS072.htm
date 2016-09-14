@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS072 - Display / Toggle / Clear Options</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS072" />CDS072</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Display / Toggle" />Display / Toggle / Clear Options</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS072">Last Revised: 05/16/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This public routine is used to display certain options to the operator and display current option.</p>
+        <p>The format of the display is shown in the example below.</p>
+        <p><code>#. HEADING LINE</code>
+        </p>
+        <p><code>===============</code>
+        </p>
+        <p><code>OPTION 1</code>
+        </p>
+        <p><code>OPTION 2</code>
+        </p>
+        <p><code>OPTION 3</code>
+        </p>
+        <p>The routine will support more than the 3 options shown here. The maximum number is limited only by the position on the screen where the options are displayed. The routine will display the current option selected in foreground (brighter screen intensity), and all other options in background (lighter screen intensity).</p>
+        <p>The first time you call this routine, the routine simply displays the heading line and options on the screen, with the default option in foreground.</p>
+        <p>Calling format:</p>
+        <p><code>CALL J3$=""; CALL "CDS072", J1$, J2$, J3$</code>
+        </p>
+        <p>where <code>J1$(1,1)</code></p>
+        <p>After the initial call, subsequent calls will cause the option to toggle. That means that the current option is cancelled, and the next option is displayed in foreground.</p>
+        <p>One additional feature is that the routine can clear the data from the screen. This may be needed when some previous operator selection causes this option not to apply.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="567" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS556 - Clear View Manager Globals</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS556</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Clear/Save/Restore View Manager Global Variables</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS556">Last Revised: 
+05/26/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The Dynamo Tools View Manager CDS550 and Key Segment Entry program CDS552 use global variable to improve performance of File Maintenance and other applications that use these tools.&#160; This routine is called during Data Dictionary Maintenance (FMS) so that any changes made 
+to the data dictionary will become effective without needing to log out or enter XX at a menu.&#160; This routine can be called or run by other applications when it is desirable to clear these globals.&#160; 
+CDS556 can also be called to save and later restore global variables used by the 
+Application Menu Processor (SW100) and the View Manager (CDS550) when a T type 
+external routine calls a routine that ultimately calls SW100 or CDS550 again.</p>
+        <p>Note that CDS037 calls CDS556 with the PUSH and POP options, so an 
+application program only needs to call CDS556 when not using CDS037.</p>
+        <p>Calling Formats:</p>
+        <table border="1" style="border-collapse: collapse;" width="100%">
+            <tr>
+                <td><code>CALL "CDS556" or RUN "CDS556"</code>
+                </td>
+                <td>Clears View Manager Global variables when changes have been made to the 
+ Data Dictionary.&#160; The View Manager will rebuild these global variables 
+ from the revised Data Dictionary the next time CDS550 is called.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS556::PUSH"</code>
+                </td>
+                <td>Pushes certain global variables onto a stack, and clears them to prevent 
+ problems with recursion.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS556::POP"</code>
+                </td>
+                <td>Pops the global variables previously pushed onto a stack, restoring 
+ their values.</td>
+            </tr>
+        </table>
+        <table border="1" style="border-collapse: collapse;" width="100%" class="example">
+            <tr>
+                <td>Example: This code is within a T Type External Routine, which calls the 
+ Application Menu Processor (SW100) or the View Manager (CDS550) directly, or 
+ indirectly.</td>
+            </tr>
+            <tr>
+                <td><code>1540 CALL "CDS556::PUSH"</code>
+                    <p><code>1550 CALL 
+ "SW100",Y$,Y5$,SO40$,CW04$,CW04ALL$,SW100$</code>
+                    </p>
+                    <p><code>1560 CALL "CDS556::POP"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

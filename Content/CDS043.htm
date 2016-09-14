@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="338" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS043 - Enter Program Name</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS043" />CDS043</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Enter Program Name" />Enter Program Name</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS043">Last Revised: 02/22/08</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This X type called routine is used to enter a program name.&#160; 
+	The program description is displayed to the right of the program name.&#160; 
+	Note that the rest of the display line is cleared, so no other fields should 
+	be placed to the right of the entry column.</p>
+        <p>Refer to text <a href="CDX040.htm">CDX040</a> for call/enter list used for X type variables.</p>
+        <p>The Z8$ parameter may be passed with file verification options if desired.</p>
+        <h5>Examples</h5>
+        <p><code>CALL "CDS043", MinSiz, MaxSiz, Col, Row, "+Program Name+", Z, PROG$, 
+	Y, Z8$, FMT[ALL]</code>
+        </p>
+        <p><code>CALL "CDS043", 1, 6, col, row, "+Program Name+", Z, PROG$, Y, "{XXCWO4,-}", FMT[ALL]</code>
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

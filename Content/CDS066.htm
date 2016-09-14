@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="451" MadCap:lastWidth="834">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS066 - Print Terminal Image</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS066" />CDS066</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Print Terminal Image" />Print Terminal Image</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS066">Last Revised: 04/18/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Hotkey" />
+            <MadCap:keyword term="Print Terminal Screen Hotkey" />This program can be used to print the current contents of the display to a printer.</p>
+        <p>CDS066 will print standard alphanumeric characters as well as the line drawing characters used for windows borders. It will also print any text underlined on the display, as underlined on the printer.</p>
+        <p>Note that the entire display is printed, including any visible windows and their borders. Both 80 column and 132 column display widths are supported.</p>
+        <p>Calling Format:</p>
+        <p>
+            <MadCap:keyword term="Copies" /><code>CALL "CDS066",CHAN,COPIES,Y6$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS066</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CHAN</td>
+                <td>The device number to use for the printer. CDS066 will use an available channel if not passed or passed as zero.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">COPIES</td>
+                <td>The number of copies to be printed. Set to 1 if not passed.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">Y6$</td>
+                <td>
+                    <MadCap:keyword term="CDS084" />
+                    <MadCap:keyword term="Date" />The standard printer control variable provided by CDS084. If you pass <code>Y6$</code> to CDS066, then you have previously opened the printer. In this case, the message that indicates the operator ID, date and time printed does not appear on the printed page. In addition trailing blank lines are not printed. <code>Y6.L</code> is decremented to indicate the number of lines left to be printed on the page. &#160;The printer channel is not closed in this case so that the calling application can print additional data to the same channel.</td>
+            </tr>
+        </table>
+        <p>There is another option to include documentation notes below the printed display image. This option is enabled by setting the global variable <code>SMS_CDS066.PAR</code>. This global consists of two Y or N characters. The first determines if the date and time message should print. The second determines if the documentation note should print. If set to Y, then the operator will be prompted for the text ID, which is stored in the XXSK57 Help Text File. The operator can maintain the text if desired, then it will be printed below the display image.</p>
+    </body>
+</html>

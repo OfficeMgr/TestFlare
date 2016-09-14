@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="3273" MadCap:lastWidth="999">
+    <head><title>Dynamo Tools Environment</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Menu Processor" />Menu Processor</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Environment</p>
+                </td>
+                <td align="right">Last Revised: 11/14/15</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">Programs started from the Dynamo Menu Processor, using the background script, 
+	or by calling <a target="_blank" href="CDS011.htm">CDS011</a> use the following local and global variables.</p>
+        <table>
+            <tr>
+                <th>Local/Global</th>
+                <th>Variable Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode"><a href="#Y$">Y$</a>
+                </td>
+                <td>
+                    <MadCap:keyword term="Task Control Variable" />Templated Task Control Variable.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode">Y5$</td>
+                <td>Job title passed from menu processor.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode">XXXX</td>
+                <td>
+                    <MadCap:keyword term="FIN" />Numeric channel number for files opened by Menu Processor.&#160; The variable name is the last 4 characters of the file name.&#160; For example, a file named XXCM01 opened to channel 2 by the Menu would define the numeric variable CM01 with a value of 2.&#160; This enables all disc I/O commands to use CM01 as the channel number.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode">XXXX$</td>
+                <td>String variable initialized with template of file opened by Menu.&#160; Using example from above, 
+		<code>CM01$</code> would contain the template for the file (if one exists).&#160; This enables all disc readrecord/writerecord commands to use 
+		<code>CM01$</code> for the template variable.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode">XXXXK$</td>
+                <td>
+                    <MadCap:keyword term="BBx" />String variable initialized to the key generation string used in the BBx 
+		<code>KGEN()</code> function.&#160; Using the example from above, <code>CM01K$</code> would contain the key generation string for the file opened to channel CM01.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode"><a href="CDS084.htm#S084$">S084$</a>
+                </td>
+                <td>Templated Printer Selection variable if the menu processor opened a 
+		printer.&#160; This is useful should the application want to close and 
+		re-open the printer using the same options as the initial open 
+		suppressing some or all operator entries.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode"><a href="CDS084.htm#Y6$">Y6$</a>
+                </td>
+                <td>Templated Printer Control variable if the menu processor opened a 
+		printer.</td>
+            </tr>
+            <tr>
+                <td align="center">Local</td>
+                <td class="nowrapcode">Y6</td>
+                <td>Same as <code>Y6.MAXL</code>.&#160; Deprecated but still set for compatibility.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">
+                    <MadCap:keyword term="BBXDIR" />BBXDIR</td>
+                <td>
+                    <MadCap:keyword term="Config.bbx" />Contains the directory where the pro5 or bbj executable config.bbx is located.&#160; 
+&#160; It 
+		includes a trailing slash, i.e., <code>/u/basis/pro5/</code>.		On Unix systems, it is specified in the <code>/usr/cdi/.config file</code>. When using Visual Pro5, the Windows shortcut should contain the complete path the vpro5.exe.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">CDSM00</td>
+                <td>Contains the record maintained using Dynamo Configuration Maintenance 
+		(SMC).</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMSAPP</td>
+                <td>Contains the base path to Dynamo Tools on the Application Server. If running in a single tier environment, then <code>SMSAPP</code>&#160;will be the same as <code>SMSDIR</code>. &#160;<code>SMSAPP</code>&#160;cannot have a data server prefix.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMSBIN</td>
+                <td>Contains the directory where profiles, termcap, and ip and termset scripts are defined. It is typically the same as <code>SMSDIR/bin</code>, except when <code>SMSDIR</code> is across a data server in which case <code>SMSBIN</code>&#160;is local to the interpreter.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">
+                    <MadCap:keyword term="SMSDIR" />SMSDIR</td>
+                <td>
+                    <MadCap:keyword term="System Management Software" />Contains the directory where the run-time components of Dynamo Tools are installed, as specified in the SMS configuration file: <code>/usr/cdi/.config</code> 
+		on Unix systems.&#160; This will be the current directory.&#160; It 
+		includes a trailing slash, i.e., <code>/u/CDI/</code>. On a multi-tier environment, <code>SMSDIR</code> will include a data server prefix, i.e., <code>/&lt;bbds&gt;/u/CDI/</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMSLOG</td>
+                <td>Contains the directory where all Dynamo Tool log files are created. The default value is <code>SMSAPP/log/</code>. <code>SMSLOG</code> cannot include a data server prefix.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMSTMP</td>
+                <td>Contains the directory where temporary files are defined. Note that this should also be linked to the Web Server Document Root folder. The default value is <code>SMSAPP/tmp/</code>. <code>SMSTMP</code> cannot include a data server prefix. Dynamo Tools defines all temporary files in this folder.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_SM01</td>
+                <td>Contains the SM01 operator information record.&#160; Retrieve using template: <code>DIM SM01$:STBL("TPL_CD/CDSM01"); SM01$=STBL("SMS_SM01").</code></td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">
+                    <MadCap:keyword term="SM08" />SMS_SM08</td>
+                <td>Contains the SM08 task control record.&#160; Retrieve using <code>CALL "CDS091",Y$,Y5$,SM08$.</code></td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_SERVER</td>
+                <td>
+                    <MadCap:keyword term="AIX" />For Linux, Unix and AIX servers, the hostname of the server is set to 
+		this global.&#160; The server name may be a simple host name such as 
+		'server' or a fully qualified host name such as 'linuxserver.excellware.com' 
+		based on the /etc/hosts file or the name service configuration.&#160; 
+		Not set when using CDS011 unless <code>INFO(3,4)</code> is available.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_SERVERIP</td>
+                <td>For Linux, Unix and AIX servers, the IP address of the first ethernet 
+		adapter of the server.&#160; This global will not be normalized with 
+		leading zeros, so a typical value might be 192.168.254.2.&#160; Not set 
+		when using CDS011 for maximum performance.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_SYSCTL</td>
+                <td>
+                    <MadCap:keyword term="System Control Maintenance" />
+                    <MadCap:keyword term="System Control Record" />
+                    <MadCap:keyword term="System Control" />
+                    <MadCap:keyword term="SMC menu" />Contains the System Control Record as maintained using System Control Maintenance on SMC menu.&#160; Retrieve using template: <code>DIM SYSCTL$:STBL("TPL_CDSYSCTL"); SYSCTL$=STBL("SMS_SYSCTL").&#160;</code> Note that this variable is scheduled to be replaced with SM00 in a future release.&#160;</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_CLEARTO</td>
+                <td>This global is set by the menu processor as a placeholder, used to 
+		indicate that any global variable set after this variable, can be 
+		cleared when changing companies.&#160; Note you can also clear 
+		application global variables by changing to the current company, which 
+		can be done by entering XX at any menu.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_COLOR</td>
+                <td>Set to color values for the current operator and company code based on 
+		the colors specified in Operator Preference Maintenance.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_FILES</td>
+                <td>Set to a list of channel numbers and file names opened by 
+		<a target="_blank" href="CDS095.htm">CDS095</a>.&#160; 
+		Used by CDS095 to know what file a channel is currently opened to.&#160; 
+		Cleared by menu processor upon returning to a menu from an application.&#160; 
+		View variable contents using <code>?STBL("SMS_FILES")</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_MINCHAN</td>
+                <td>Set to the lowest channel number (11 to 30000) that Dynamo Tools will use. Can be set within CONFIG.BBX or programmatically to reduce chance of conflict with applications that use hard-coded channel numbers.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_MSGTIM</td>
+                <td>Used by Dynamo Message Processor to keep track of when to check next 
+		for a Dynamo message.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_PFX</td>
+                <td>Optional.&#160; Set by the menu processor to any project or other 
+		temporary prefix entered by the user using the menu P option.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_PRE</td>
+                <td>Optional.&#160; Used by <a target="_blank" href="CDS095.htm">CDS095</a> 
+		when opening a data file and typically contains the pro5 data server 
+		prefix such as <code>"/&lt;servername,port=1100&gt;"</code> which is used as a 
+		prefix to the file name.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_TITLE</td>
+                <td>Optional. Displayed in title of window when running BBj thin client or VPro5. Defaults to "Dynamo" if not set.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_ALTEK</td>
+                <td>Optional.&#160; Used only when you are not able to use the standard Dynamo 
+editing key assignments such as when Dynamo Tools are used in an environment 
+with other application software that use different editing key values than 
+Dynamo.&#160; The editing keys include the Insert, Delete, Home, End, PgUp, PgDn, 
+and 4 arrow keys.&#160; Set this global within the config.bbx file being used as 
+		shown in the example below.<br /><code>SET SMS_ALTEK=D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5<br /></code>This global must be exactly 40 characters long, and represent the hexadecimal 
+values for the 10 un-shifted editing keys, followed by the 10 shifted editing 
+keys.&#160; The keys are in the following order: ArrowLeft, ArrowRight, ArrowUp, 
+		ArrowDown, Home, End, PageUp, PageDown, Insert, Delete.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_EXTDSK</td>
+                <td>In most cases, the Dynamo Tools profile file is executed upon user login which will launch the Dynamo Tools menu. In some cases it is preferred to launch a user application instead, in which case program <code>/u/CDI/CD/CDS000</code> or <code>/u/CDI/CD/bbj/CDS000</code> should be called once during the login process. The <code>SMS_EXTDSK</code> global is set by <code>CDS000</code> to the current disk drive letter on Windows systems at the time <code>CDS000</code> is called to establish the Dynamo Tools Environment. See <code>SMS_EXTDIR</code> and <code>SMS_EXTPFX</code> below.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_EXTDIR</td>
+                <td>Similar to <code>SMS_EXTDSK</code> above, the <code>SMS_EXTDIR</code>&#160;global is used to store the default home directory when establishing the Dynamo Tools environment at the time <code>CDS000</code> is called by an external program. This applies to both Windows and Unix systems.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">SMS_EXTPFX</td>
+                <td>Similar to <code>SMS_EXTDIR</code> above, the <code>SMS_EXTPFX</code> global is set by <code>CDS000</code> to the <code>PFX</code> value that exists <i>before</i> adding any prefix segments required by Dynamo Tools. In most cases, the user application need not be concerned with this global variable. However, if the application ever changes the <code>PFX</code>, it should make the identical change to <code>SMS_EXTPFX</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">TPL_&lt;Path_Name&gt;</td>
+                <td>Global set when file is opened and contains the template for the data file 
+		or program.&#160; Note that the SMxx files in the main SMSDIR directory 
+		are stored in company code CD, so this global includes CD.&#160; 
+		Examples: TPL_DS/DSCM01, TPL_CD/CDSM01, TPL_CD/CDS187.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">VSIFAX</td>
+                <td>Contains the folder where Esker VSI*FAX software has been installed.&#160; Used by printer selection routine 
+		<a target="_blank" href="CDS084.htm"><MadCap:keyword term="CDS084" />CDS084</a>.&#160; It includes a trailing slash.</td>
+            </tr>
+            <tr>
+                <td align="center">Global</td>
+                <td class="nowrapcode">XXDD00</td>
+                <td>
+                    <MadCap:keyword term="Company Information Maintenance" />This global contains the Company Control record for company code XX.&#160; 
+		It is maintained using Company Information Maintenance (SMC).&#160; It 
+		is set by the menu processor upon login and when changing companies.</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th><a name="Y$"></a><code>Y$</code>
+                </th>
+                <th>Task Control Variable</th>
+            </tr>
+            <tr>
+                <td><code>Y.COMPCODE$</code>
+                </td>
+                <td>Two character company code</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="Date" />Y.DATE$</code>
+                </td>
+                <td>Menu date in MM/DD/YY format</td>
+            </tr>
+            <tr>
+                <td><code>Y.DOCCTLNO$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Documentation Control Number" />Documentation Control Number - menu selections since main menu as in 1.2.7.3 or SMU.5</td>
+            </tr>
+            <tr>
+                <td><code>Y.SELTYPE$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Menu Maintenance" />Selection Type from Menu Maintenance</td>
+            </tr>
+            <tr>
+                <td><code>Y.ERRSTS</code>
+                </td>
+                <td>Error status - set by error routine 
+		<a target="_blank" href="CDS063.htm"><MadCap:keyword term="CDS063" />CDS063</a> and used by application to control branching upon return from call to error routine</td>
+            </tr>
+            <tr>
+                <td><code>Y.ESCALLOW$</code>
+                </td>
+                <td>Escapes allowed as specified in Menu Maintenance, Y or blank</td>
+            </tr>
+            <tr>
+                <td><code>Y.PASSPARM$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Pass Parameter" />Pass Parameter - as specified in Menu Maintenance</td>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="TERM" />Y.TERMID$</code>
+                </td>
+                <td>4 character normalized terminal ID, i.e., T012</td>
+            </tr>
+            <tr>
+                <td><code>Y.JDATE</code>
+                </td>
+                <td>Menu date in julian format</td>
+            </tr>
+            <tr>
+                <td><code>Y.HQBRN$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Headquarters/Branch" />Headquarters/Branch indicator (H/Q/N) as specified in Dynamo 
+		Configuration Maintenance on SMC menu.</td>
+            </tr>
+            <tr>
+                <td><code>Y.ATCTR</code>
+                </td>
+                <td>Set by printer selection routine <a target="_blank" href="CDS084.htm">CDS084</a><MadCap:keyword term="Printing" /> as column number to use when printing
+		<code>Y.COMPNAME$</code> in the center of the printed line</td>
+            </tr>
+            <tr>
+                <td><code>Y.REVVID$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Type Maintenance" />
+                    <MadCap:keyword term="Terminal Type" />
+                    <MadCap:keyword term="Reverse Video" />Reverse Video support (Y/N) - from Terminal Type Maintenance (SMC)</td>
+            </tr>
+            <tr>
+                <td><code>Y.ROWS</code>
+                </td>
+                <td>Maximum number of physical rows of display - from FIN()</td>
+            </tr>
+            <tr>
+                <td><code>Y.CP$</code>
+                </td>
+                <td>Compresses print support (Y/N) - from Terminal Type Maintenance (SMC)</td>
+            </tr>
+            <tr>
+                <td><code>Y.MONOCOL$</code>
+                </td>
+                <td>Monochrome/Color indicator (M/C) - from Terminal Type Maintenance (SMC)</td>
+            </tr>
+            <tr>
+                <td><code>Y.SECLEV</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Menu Control Maintenance" />Security level of the user for the active application. See SM08.APPSEVLEV for the security level of application as set in Menu Control Maintenance (SMC).</td>
+            </tr>
+            <tr>
+                <td><code>Y.TERMTYPE$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="BBj" />Terminal Type from Terminal Type Maintenance (SMC). It is derived from the $TERM environment variable on Unix/Linux systems. Set to "S" for SYSWINDOW and bbj thin client.</td>
+            </tr>
+            <tr>
+                <td><code>Y.OPERID$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Operator Info Maintenance" />Operator ID based on operating system login or operator entered login, from Operator Information Maintenance (SMC)</td>
+            </tr>
+            <tr>
+                <td><code>Y.AUTOLOGIN$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Autologin Y/N" />
+                    <MadCap:keyword term="Dynamo login ID" />
+                    <MadCap:keyword term="Dynamo login" />
+                    <MadCap:keyword term="Login ID" />Autologin Y/N - indicates if operating system login ID was same as Dynamo login ID and Dynamo login was bypassed</td>
+            </tr>
+            <tr>
+                <td><code>Y.SYSCLASS$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="DOS/Windows" />
+                    <MadCap:keyword term="System Class" />
+                    <MadCap:keyword term="Business Basic Port" />
+        System Class based on Business Basic Port#.&#160; Numeric system classes are Unix/Linux, Alpha are DOS/Windows&#160;
+
+        <table class="lev2"><tr><th>System Class</th><th>Port#</th><th>System</th></tr><tr><td align="center">0</td><td align="center">1005</td><td>SCO Xenix 386</td></tr><tr><td align="center">0</td><td align="center">1007</td><td>SCO Unixware</td></tr><tr><td align="center">0</td><td align="center">1027</td><td>Dell Unixware</td></tr><tr><td align="center">0</td><td align="center">1076</td><td>SCO Unixware 7</td></tr><tr><td align="center">0</td><td align="center">2176</td><td><MadCap:keyword term="Caldera Unix" />Caldera Unix (BBj)</td></tr><tr><td align="center">1</td><td align="center">1004</td><td>SCO OpenServer 5</td></tr><tr><td align="center">1</td><td align="center">1006</td><td>SCO Unix</td></tr><tr><td align="center">2</td><td align="center">1013</td><td><MadCap:keyword term="AIX 3.2.5" />AIX 3.2.5</td></tr><tr><td align="center">3</td><td align="center">1014</td><td><MadCap:keyword term="AIX on PowerPC 601" />AIX on PowerPC 601, 603</td></tr><tr><td align="center">3</td><td align="center">1024</td><td><MadCap:keyword term="AIX on PowerPC 604" />AIX on PowerPC 604</td></tr><tr><td align="center">3</td><td align="center">1074</td><td>AIX on PowerPC 601, 603</td></tr><tr><td align="center">3</td><td align="center">1084</td><td>AIX on PowerPC 604</td></tr><tr><td align="center">3</td><td align="center">2184</td><td>AIX (BBj)</td></tr><tr><td align="center">4</td><td align="center">1045</td><td>Linux</td></tr><tr><td align="center">4</td><td align="center">1085</td><td>Linux (libc 5.4.33)</td></tr><tr><td align="center">4</td><td align="center">2145</td><td>Linux (BBj)</td></tr><tr><td align="center">5</td><td align="center">1012</td><td>HP-UX</td></tr><tr><td align="center">5</td><td align="center">1072</td><td>HP-UX</td></tr><tr><td align="center">5</td><td align="center">2172</td><td>HP-UX (BBj)</td></tr><tr><td align="center">6</td><td align="center">1059</td><td>SUN Solaris Sparc</td></tr><tr><td align="center">6</td><td align="center">1069</td><td>SUN Solaris Intel</td></tr><tr><td align="center">6</td><td align="center">1079</td><td>SUN Solaris Sparc</td></tr><tr><td align="center">6</td><td align="center">2169</td><td>SUN Solaris Intel (BBj)</td></tr><tr><td align="center">6</td><td align="center">2179</td><td>SUN Solaris Sparc (BBj)</td></tr><tr><td align="center">A</td><td align="center">1051</td><td>MS DOS 386 Single User</td></tr><tr><td align="center">B</td><td align="center">1052</td><td>MS DOS 386 Multi-User</td></tr><tr><td align="center">C</td><td align="center">1053</td><td>MS DOS - Netware</td></tr><tr><td align="center">D</td><td align="center">1065</td><td>MS Windows - Netware</td></tr><tr><td align="center">D</td><td align="center">1066</td><td>MS Windows</td></tr><tr><td align="center">D</td><td align="center">2166</td><td>MS Windows (BBj)</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>Y.APPID$</code>
+                </td>
+                <td>Application ID - from Menu Maintenance (SMU)</td>
+            </tr>
+            <tr>
+                <td><code>Y.VDTSFX$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="FMS" />Video Display Terminal Suffix - from Menu Maintenance (SMU) and VDT Format Maintenance (FMS)</td>
+            </tr>
+            <tr>
+                <td><code>Y.DATEINDEX</code>
+                </td>
+                <td>Date Index from Menu Maintenance (SMU) - Index 0 indicates system date.&#160; A date index of 1 through 9 can be used for module dates which can be maintained by including a menu selection that runs 
+		<a target="_blank" href="CDS900.htm"><MadCap:keyword term="CDS900" />CDS900</a> on the menu with the non-zero index.</td>
+            </tr>
+            <tr>
+                <td><code>Y.AT80</code>
+                </td>
+                <td>Cursor position to center <code>Y.COMPNAME$</code> over 80 columns</td>
+            </tr>
+            <tr>
+                <td><code>Y.AT66</code>
+                </td>
+                <td>Cursor position to center <code>Y.COMPNAME$</code> over 66 columns - used when printing double wide characters over 132 columns</td>
+            </tr>
+            <tr>
+                <td><code>Y.AT132</code>
+                </td>
+                <td>Cursor position to center <code>Y.COMPNAME$</code> over 132 columns</td>
+            </tr>
+            <tr>
+                <td><code>Y.COMPNAME$</code>
+                </td>
+                <td>Company or Organization name as maintained with Company Information Maintenance (SMC)</td>
+            </tr>
+        </table>
+    </body>
+</html>

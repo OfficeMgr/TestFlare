@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS079 - File Verified Entry (OBSOLETE)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS079" />CDS079</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">File Verified Entry (OBSOLETE)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS079">Last Revised: 05/16/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS079 is a called input routine to be used instead of <a href="CDS069.htm">CDS069</a> when the keyboard entry is for a key to a masterfile such as a customer, item, or vendor number. In addition, this routine permits selection of the masterfile key via an auxiliary sort file.</p>
+        <p>For example, this routine permits the operator to enter either a customer number if known or part of the alpha sort name for the customer. The routine will display the second field of the masterfile (customer name for this example) on the screen and allow the operator to accept that customer or scroll on to the next customer on file with the same alpha sort that was entered.</p>
+        <p>&#160;</p>
+        <p>NOTE: This program is obsolete and should not be used for new code. It is provided for compatibility with older systems. The same functions provided by CDS079 are included in the file verified options of <a href="CDS069.htm">CDS069</a>.</p>
+        <p>The variables passed to CDS079 are very similar to <a href="CDS069.htm">CDS069</a>.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS079", <a href="#Z1">Z1</a>, <a href="#Z2">Z2</a>, <a href="#Z5">Z5</a>, <a href="#Z6">Z6</a>, <a href="#Z0$">Z0$</a>, <a href="#Z1$">Z1$</a>, <a href="#Z">Z</a>, <a href="#Z$">Z$</a>, <a href="#Z2$">Z2$</a>,</code> <a href="#Z3$"><code>Z3$</code></a></p>
+        <p>This routine applies only to string variables.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS079</th>
+            </tr>
+            <tr>
+                <td><a name="Z1"></a>Z1</td>
+                <td>minimum length of acceptable entries</td>
+            </tr>
+            <tr>
+                <td><a name="Z2"></a>Z2</td>
+                <td>maximum length of acceptable entries</td>
+            </tr>
+            <tr>
+                <td><a name="Z5"></a>Z5</td>
+                <td>screen position for input</td>
+            </tr>
+            <tr>
+                <td><a name="Z6"></a>Z6</td>
+                <td>screen position for input</td>
+            </tr>
+            <tr>
+                <td><a name="Z0$"></a>Z0$</td>
+                <td>
+        the prompt message with two minor differences.
+
+        <p><MadCap:keyword term="CTL" />The calling program should not include the word ENTER or the + symbol. If CTL IV is a valid response, then prefix Z0$ with a 4, i.e., Z0$="4CUSTOMER NUMBER".</p></td>
+            </tr>
+            <tr>
+                <td><a name="Z1$"></a>Z1$</td>
+                <td>the entry type excluding numeric masks</td>
+            </tr>
+            <tr>
+                <td><a name="Z"></a>Z</td>
+                <td>will return the length of the entry</td>
+            </tr>
+            <tr>
+                <td><a name="Z$"></a>Z$</td>
+                <td>will return the string variable</td>
+            </tr>
+            <tr>
+                <td>Z2$</td>
+                <td>
+                    <p><a name="Z2$"></a>Z2$ contains a number of data elements which identify the characteristics of the auxiliary sort files:</p>
+                    <p>Byte</p>
+                    <p>(1,1) - Device number of masterfile, opened by calling program</p>
+                    <p>(2,2) - Horizontal screen position for display of 2nd field in masterfile, such as the customer name</p>
+                    <p>(4,2) - Vertical position</p>
+                    <p>(6,1) - Device to be used for the auxiliary sort file<br />
+        &#160; a) if opened by calling program to the auxiliary sort file then the routine will use and leave the file open<br />
+        &#160; b) if opened by calling program to some other file, the routine will close the specified device, open as the auxiliary sort file, then close and reopen the original file<br />
+        &#160; c) if the device number was not in use, the routine will use the specified device for the auxiliary sort file, then closes the device</p>
+                    <p>(7,2) - The length of the auxiliary sort entry such as the alpha sort name</p>
+                    <p>
+                        <MadCap:keyword term="Auxiliary Sort File Name" />(9,6) - Auxiliary Sort File Name which may have XX as the first two characters (15) - The prompt for the auxiliary sort data element such as ALPHABETIC SORT NAME (this variable may be any length, within the confines of the message line)</p>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="Z3$"></a>Z3$</td>
+                <td>the prefix to the auxiliary sort file, if any</td>
+            </tr>
+        </table>
+        <h5>Example</h5>
+        <p><code>0290 CALL "CDS079",1,6,17,2,"4CUSTOMER NO, 'D' TO CHANGE DATE ","R",0,A$,"102037 0290:08XXUS10ALPHA SORT NAME",""</code>
+        </p>
+        <p>This example would generate the prompt:</p>
+        <p><code>ENTER CUSTOMER NO, 'D' TO CHANGE DATE, 'CR' TO ENTER ALPHA SORT NAME OR CTL IV</code>
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

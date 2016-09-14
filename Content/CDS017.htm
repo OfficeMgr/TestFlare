@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="155" MadCap:lastWidth="1479">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS017 - Remove Inactive Records from Session Control File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS017</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Remove Inactive Records from Session Control File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS017">Last Revised: 01/29/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called by the Display System Status program and the background Command Processor to remove records from the 
+	CDSM08 System Status File when either the process or device name no longer exists.&#160; It is not normally called from application programs.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS017"</code>
+        </p>
+        <p>There are no arguments passed to this routine.&#160; The System Status File 
+	CDSM08 is opened and closed within CDS017.&#160; When called from a non-background task, an activity message is displayed and cleared.</p>
+    </body>
+</html>

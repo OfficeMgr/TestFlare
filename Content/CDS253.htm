@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS253 - Return Displayable Field Definition</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS253" />CDS253</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Return Displayable Field Definition" />Return Displayable Field Definition</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS253">Last Revised: 03/26/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to return the field definition string for a template field.</p>
+        <p><code>CALL "CDS253", DIMTPL$, FLDNAME$, FLDINFO$, PAR$, FATTR$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS253</th>
+            </tr>
+            <tr>
+                <th>Variable</th>
+                <th style="text-align: center;">To/From</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$</code>
+                </td>
+                <td align="center">To</td>
+                <td>a dimensioned template variable</td>
+            </tr>
+            <tr>
+                <td><code>FLDNAME$</code>
+                </td>
+                <td align="center">To</td>
+                <td>the name of a field within the template</td>
+            </tr>
+            <tr>
+                <td><code>FLDINFO$</code>
+                </td>
+                <td align="center">From</td>
+                <td>output from CDS253 and will contain the field name and field definition information. See examples.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$(1,1)</code>
+                </td>
+                <td align="center">To</td>
+                <td>Y indicates that the variable length indicator * and *= should be included in 
+		<code>FLDINFO$</code>. Default is Y.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$(2,1)</code>
+                </td>
+                <td align="center">To</td>
+                <td>Y indicates that a $ should be included in <code>FLDINFO$</code> if the field is a string. Default is N.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$(3,1)</code>
+                </td>
+                <td align="center">To</td>
+                <td>Y indicates that the output <code>FLDINFO$</code> should also include the user defined section of the template. Default is N.</td>
+            </tr>
+            <tr>
+                <td><code>FATTR$</code>
+                </td>
+                <td align="center">
+        From</td>
+                <td>
+                    <MadCap:keyword term="Templated" />
+        output from CDS253 and is a templated definition of the field attributes
+
+        <p>The template for <code>FATTR$</code> is:<br /><code>TYPE:U(1)<br />
+        FLAG:C(1)<br /><MadCap:keyword term="TERM" />
+        TERM:U(1)<br />
+        RPT:U(2)<br />
+        FLDNUM:U(2)<br />
+        OFFSET:I(2)<br />
+        LGTH:U(2)<br />
+        USR:C(1*=)</code></p><p>Refer to <code><a target="_blank" href="http://www.basis.com/onlinedocs/documentation/commands/fattr_function.htm">
+		FATTR()</a></code><MadCap:keyword term="BBx" /> in the BBx documentation for additional information.</p></td>
+            </tr>
+        </table>
+        <h5>Examples</h5>
+        <p>Assuming a template: <code>DIM DIMTPL$:"NAME:C(30),SALES[12]:B,CODES:C(5*)"</code></p>
+        <table class="example">
+            <tr>
+                <td><code>Call "CDS253"...</code>
+                </td>
+                <td>FLDINFO$</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"NAME",FLDINFO$,"",""</code>
+                </td>
+                <td>NAME:C(30)</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"NAME",FLDINFO$,"NY",""</code>
+                </td>
+                <td>NAME$:C(30)</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"SALES",FLDINFO$,"",""</code>
+                </td>
+                <td>SALES[12]:B</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"CODES",FLDINFO$,"NN",""</code>
+                </td>
+                <td>CODES:C(5)</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"CODES",FLDINFO$,"YN",""</code>
+                </td>
+                <td>CODES:C(5*)</td>
+            </tr>
+            <tr>
+                <td><code>DIMTPL$,"CODES",FLDINFO$,"YY",""</code>
+                </td>
+                <td>CODES$:C(5*)</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

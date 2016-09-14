@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS073 - Enter Hexadecimal Data</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS073" />CDS073</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Enter Hexadecimal Data" />Enter Hexadecimal Data</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS073">Last Revised: 11/06/08</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is a program segment that can be used with file maintenance as a custom called variable, type 'C'.</p>
+        <p>It performs the same as an input routine but places additional restrictions on the entered data. Specifically, the length must be zero or a multiple of 2 characters. The data can contain only valid hex characters, i.e., the digits from 0 to 9, and the letters from A to F.</p>
+        <h5>Examples of valid data</h5>
+        <p>'<code>null string' B1B2B3B4 A0 1B1C</code></p>
+        <h5>Examples of invalid data</h5>
+        <p><code>A0A (cannot be an odd number of characters)<br />
+  AG (cannot contain 'G')</code>
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="3163" MadCap:lastWidth="1057">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS237 - Convert Templated String to JSON String</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS237</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert Templated String to JSON string</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS237">Last Revised: 01/14/16</a>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p class="SectionDesc">This routine can be called to convert a templated string to a JSON string.&#160; It supports simple (text only) numeric and character fields, repeating fields, 
+and dates. Nested JSON&#160;fields are supported. JSON stands for JavaScript Object Notation and  is a lightweight data-interchange format that is easy for humans to read and write and easy for computers to parse and generate.</p>
+        <p>Note: CDS237 does not use, nor require use of the Dynamo Tools Data 
+Dictionary.&#160; For fastest performance, all information required is obtained 
+directly from the template.&#160; Since templates are stored in global memory, 
+CDS237 requires no disc access to complete its task.&#160; However, the Data 
+Dictionary should be used to describe the JSON&#160;fields.&#160; CDS237 does call CDS041 to obtain all templates, which 
+it will obtain from either global memory, or the data dictionary.</p>
+        <p>CDS237 includes all fields in the template,&#160;including repeating fields. It does not exclude 
+optional fields.</p>
+        <table>
+            <col style="width: 76px;" />
+            <col />
+            <tr>
+                <th colspan="2">Supported Field Types</th>
+            </tr>
+            <tr>
+                <td>numeric</td>
+                <td>All numeric field types are supported, fixed and variable length, i.e., <code>
+N(5), N(10*), U(4), I(3), B,</code> etc.</td>
+            </tr>
+            <tr>
+                <td>string</td>
+                <td>Character fields <code>C()</code> will have leading and trailing spaces 
+removed unless <code>S237.TRIM$="N"</code>. Special characters including backspace, new line, carriage return, form feed, and tab are escaped with a backslash character. Embedded quotes and backslash characters are also escaped per json specifications. Any remaining non-ASCII characters are replaced with their UNICODE equivalent. See <a href="SW002.htm">SW002</a> for additional details regarding JSON&#160;encoding.</td>
+            </tr>
+            <tr>
+                <td>dates</td>
+                <td>
+                    <p>Dates (numeric or string are always exported in YYYY-MM-DD format).&#160; 
+Note: Since CDS237 does not require the Data Dictionary, it determines if a 
+field is a date by looking for date type components (<code>%M, %D, %Y</code>) in 
+the mask.&#160; If the JSON dates are not appearing in YYYY-MM-DD format, then 
+change the data dictionary to add a mask suitable for a date.&#160; If the 
+template is being created locally, not using the data dictionary, then include 
+the omask user defined field, i.e., <code>DATE:C(8):omask=%Mz/%Dz/%Yz:.</code></p>
+                </td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS237", ERR=XXXX, REC$, JSON$, S237$</code>
+        </p>
+        <table>
+            <col />
+            <col />
+            <col style="width: 797px;" />
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS237 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if an error occurs, and the operator selected the option to abort.&#160; See Error Descriptions below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <p>Templated string variable.&#160; The field names in <code>REC$</code> are used by default as the JSON&#160;field names. You can override the default field name by setting the user defined template field 'title' which will be used as the JSON field name if present. You can set the title in the Data Dictionary field properties.</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>JSON$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Returned JSON data</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.ERRCNT</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Counter set by CDS237 for each error encountered.&#160; See Error Descriptions below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.ERRMSG$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td align="center">blank</td>
+                            <td>Report error message to operator, and prompt to display record, ignore error, or abort application</td>
+                        </tr>
+                        <tr>
+                            <td align="center">N</td>
+                            <td>Do not prompt operator with any error messages.&#160; Note if <code>S237.ERRMSG$</code> is passed as a blank, and an error occurs, and the operator selected the option to ignore errors, then <code>S237.ERRMSG$</code> will be set to <code>"N"</code> by CDS237.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.SKIPBLANK$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table style="width: 100%;">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">blank</td>
+                                <td>All string fields in <code>REC$</code> are included in <code>JSON$</code></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">Y</td>
+                                <td>String fields in <code>REC$</code> that are null or all blank are excluded from <code>JSON$</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.SKIPZERO$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table style="width: 100%;">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">blank</td>
+                                <td>All numeric fields in <code>REC$</code> are included in <code>JSON$</code></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">Y</td>
+                                <td>Numeric fields in <code>REC$</code> that have zero value are excluded from <code>JSON$</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.FLDNAMESLC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <p>This parameter only applies to template fields that do not have the 'title' attribute.</p>
+                    <table style="width: 100%;">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">blank</td>
+                                <td>JSON&#160;field names derived from template field names will be upper case</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">Y</td>
+                                <td>JSON&#160;field names derived from template field names will be lower case</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S237.TRIM$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>This parameter is used to control whether or not CDS237 trims leading and trailing spaces from string fields. Note that this parameter applies to all fields in the record. If any fields in the record should not be trimmed, then pass this parameter as <code>"N"</code> and manually trim any other input field before calling CDS237.<table style="width: 100%;"><col /><col /><tbody><tr><td style="text-align: center;">blank or Y</td><td>JSON text fields will have leading and trailing space characters removed</td></tr><tr><td style="text-align: center;">N</td><td>JSON text fields will include leading and trailing spaces if present in the input field</td></tr></tbody></table></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th>Error Descriptions</th>
+            </tr>
+            <tr>
+                <th>Message to operator if <code>S237.ERRMSG$&lt;&gt;"N"</code></th>
+            </tr>
+            <tr>
+                <td>Data does not match template at Field Name NNNNN</td>
+            </tr>
+            <tr>
+                <td>Non-numeric data of 'value' at Field Name NNNN</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code> variable must be templated.</td>
+            </tr>
+        </table>
+        <p>See examples below.</p>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>1300 TEST:</code>
+                        <br /><code>1310 BEGIN<br /></code><code>1320 LET TPL$="ORDNO:N(8):title=Order_Number:"</code>
+                    </p>
+                    <p><code>1330 LET TPL$=TPL$+",ORDDATE:C(8):title=Order_Date omask=%Mz/%Dz/%Yz:"</code>
+                    </p>
+                    <p><code>1340 LET TPL$=TPL$+",ITEMNO:C(10*=1):title=Item_Number:"</code>
+                    </p>
+                    <p><code>1350 LET TPL$=TPL$+",DESC:C(10*=1):title=Description:"<br /></code><code>1360 LET TPL$=TPL$+",CODE[3]:C(1*)"<br />1370 LET TPL$=TPL$+",TOTAL:N(10*):title=Order_Total:"<br />1380 LET TPL$=TPL$+",ADDRESS:C(80*)"<br />1390 DIM ORDER$:TPL$<br />1400 LET ORDER.ORDNO=12345<br />1410 LET ORDER.ORDDATE$="10/15/02"<br />1420 LET ORDER.ITEMNO$="14HN"<br />1430 LET ORDER.DESC$="12 "" Pliers"<br />1440 LET ORDER.CODE$[1]="A",ORDER.CODE$[2]="B",ORDER.CODE$[3]="C"<br />1450 LET ORDER.TOTAL=1234.56<br />1460 DIM ATPL$:"ADDRESS1:C(30*),CITY:C(28*),STATE:C(2*),ZIP:C(10*)"<br />1470 LET ATPL.ADDRESS1$="6680 Queens Way"<br />1480 LET ATPL.CITY$="North Royalton"<br />1490 LET ATPL.STATE$="OH"<br />1500 LET ATPL.ZIP$="44133"<br />1510 CALL "CDS237",ATPL$,JSON$,S237$</code>
+                    </p><code>1520 LET ORDER.ADDRESS$=JSON$<br /></code><code>1530 CALL "CDS237",ORDER$,JSON$,S237$</code><code><br />1540 PRINT 'CS',JSON$</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>{"Order_Number":12345,"Order_Date":"2002-10-15","Item_Number":"14HN",<br />"Description":"12 \" Pliers","CODE":["A","B","C"],"Order_Total":1234.56,<br />"ADDRESS":{"ADDRESS1":"6680 Queens Way","CITY":"North Royalton","STATE":"OH","ZIP":"44133"}}</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Example creating a nested RESULT object</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><code>rem "Build result template</code>
+                        </p>
+                        <p><code>dim RESULT$:"SYS:C(1*),REV:C(1*),BUILD:C(1*)"</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>rem "Populate RESULT fields</code>
+                        </p>
+                        <p><code>RESULT.SYS$=SYS</code>
+                        </p>
+                        <p><code>RESULT.REV$=REV</code>
+                        </p>
+                        <p><code>RESULT.BUILD$=INFO(0,4)</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>rem "Convert RESULT templated string to json</code>
+                        </p>
+                        <p><code>call "CDS237",RESULT$,JSON_RESULT$</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>rem "Display RESULT json</code>
+                        </p>
+                        <p><code>?"Result json:",'lf',JSON_RESULT$,'lf'</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>rem "Create envelope for RESULT json</code>
+                        </p>
+                        <p><code>dim X$:"RESULT:C(1*=0)"</code>
+                        </p>
+                        <p><code>X.RESULT$=JSON_RESULT$</code>
+                        </p>
+                        <p><code>&#160;</code>
+                        </p>
+                        <p><code>rem "Convert Envelope to json</code>
+                        </p>
+                        <p><code>call "CDS237",X$,JSON$<br /></code>
+                        </p>
+                        <p>&#160;</p>
+                        <p><code>rem "Display Envelope json</code>
+                        </p>
+                        <p><code>?"Envelope json:",'lf',JSON$,'lf'</code>
+                        </p>
+                        <p><code>&#160;</code>
+                        </p>
+                        <p><code>rem "Convert JSON back to string template</code>
+                        </p>
+                        <p><code>CALL&#160;"CDS238",JSON$,S238$,RESULT$</code>
+                        </p>
+                        <p><code>&#160;</code>
+                        </p>
+                        <p><code>rem "Display RESULT$</code>
+                        </p>
+                        <p><code>CALL&#160;"CDS279",RESULT$</code>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><code>Result json:<br />{"SYS":"LEVEL 6","REV":"REV 15.10","BUILD":"Build: 10/29/2015 10:34"}<br /><br />Envelope json:<br />{"RESULT":{"SYS":"LEVEL 6","REV":"REV 15.10","BUILD":"Build: 10/29/2015 10:34"}}</code>
+                        </p>
+                        <p>&#160;</p>
+                        <p>
+                            <img src="images/CDS237-2.png" />
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

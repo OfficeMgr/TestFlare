@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="6180" MadCap:lastWidth="1222">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS550 - Display/Maintain View</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS550</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Display/Maintain/Print View</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS550">Last Revised: 
+		02/25/14</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS550 is a view manager that can be called to display, maintain, 
+	or print a standard view.&#160; A standard view is a logical grouping of fields 
+	contained within a single string template.&#160; The view fields are now specified using the Views option within Data Dictionary Maintenance (FMS).&#160; 
+	A standard view contains one or more fields arranged in a single column.&#160; 
+	Each row of the view includes the field description, the field values, and 
+	any information related to the field such as field verification related 
+	fields.</p>
+        <p>Note that CDS550 manages the display and entry of data.&#160; It performs no disc read or write operations other than to access the data dictionary.</p>
+        <p>During the initial call to CDS550, the data dictionary is read to obtain all information about the view.&#160; This data is stored in a global variable that begins with "SMS_S550:" in order to improve performance on subsequent calls to CDS550.&#160; This means that a user may need to logout to clear this global variable should changes be made to either the data dictionary, 
+	view fields, or data file itself.&#160; See <code>S550.GLOBAL$</code> 
+	parameter to disable storing the setup data in a global variable.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS550", <a href="#ERR=XXXX_">ERR=XXXX</a>, <a href="#Y$">Y$</a>, REC$, <a href="#S553$">S550$</a> {, RECMAIN$, 
+	Y5$, Y6$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS550 Arguments</th>
+            </tr>
+            <tr>
+                <td><code><a name="ERR=XXXX_"></a>ERR=XXXX</code>
+                </td>
+                <td>
+        Branch to XXXX for various critical problems such as:
+
+        <ul><li>View specified is not on file</li><li>Data Dictionary for view is not on file</li><li>View contains fields that are no longer present in data dictionary</li></ul></td>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>Standard task control variable.<table><tr><td><code>Y.COMPCODE$</code></td><td>Used for <code>S550.CC$</code> when <code>S550.CC$</code> is 
+			blank</td></tr><tr><td><code>Y.PASSPARM$</code></td><td>Indicates Inquiry Only mode.&#160; No field line numbers will be 
+			displayed.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td>Passed to CDS550 as the templated data structure to be displayed or maintained.</td>
+            </tr>
+            <tr>
+                <td><code><a name="S553$"></a>S550$</code>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><code>S550.CC$</code>
+                            </td>
+                            <td>Company Code for Data Dictionary.&#160; Only required when not using the current company 
+			<code>Y.COMPCODE$</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.FILNAM$</code>
+                            </td>
+                            <td>The file name to be used to access the View.&#160; Note that this typically excludes the company code.&#160; Required.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.VIEW$</code>
+                            </td>
+                            <td>The view code used to access the view.&#160; Typically A for the first logical view of the record, B for the second, etc.&#160; Required.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.WINDOW</code>
+                            </td>
+                            <td>
+              Used to control window for view.
+
+              <table><tr><td>0</td><td>CDS550 does not use 'WINDOW' and 'POP' mnemonics.&#160; View is displayed beginning at 
+					<code>S550.ROW</code> on the window currently active</td></tr><tr><td>1</td><td>CDS550 prints a 'WINDOW' with a full width display, with a 
+					yellow border visible only at the top at <code>S550.ROW</code>, and does 
+					not 'POP' window upon exit.</td></tr><tr><td>2</td><td>CDS550 prints a 'WINDOW' as in option #1, and 'POP's 
+					window upon exit.</td></tr></table></td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.COL</code>
+                            </td>
+                            <td>Normally not assigned by calling program, but can be passed to CDS550 to cause the field names to be displayed at column 
+			<code>S550.COL</code> instead of the leftmost position.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.ROW</code>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>S550.WINDOW=0</td>
+                                        <td>Top row of view will be displayed at this display row.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>S550.WINDOW&gt;0</td>
+                                        <td>Pass as zero to have CDS550 use the highest display row 
+					that the view can be displayed on.<br />					Pass as non-zero to have the window displayed at the row 
+					specified.</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.BKG</code>
+                            </td>
+                            <td>
+              Display screen background
+
+              <table><tr><td>0</td><td>Do not display screen background with field names for view.</td></tr><tr><td>1</td><td>Display screen background of field names.&#160; This is the default value when 
+					<code>S550.WINDOW</code> is passed as 1.</td></tr></table></td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.DISP</code>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td align="center">0</td>
+                                        <td>Do not display data fields defined in view for REC$.</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">1</td>
+                                        <td>Display data fields specified in view for REC$.</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.MAINT</code>
+                            </td>
+                            <td>Maintain option<table><tr><td align="center">Value</td><td>If <code>S550.ENTER$</code> is blank</td><td>If <code>S550.ENTER$</code> is non-blank</td></tr><tr><td align="center">0</td><td colspan="2">No maintenance option or prompts</td></tr><tr><td align="center">1</td><td>No maintenance option, i.e., no fields in the view can be 
+					changed.&#160; User will be prompted to either: "Enter=Continue" 
+					or "D=Delete Record, Enter=Continue" depending on 
+					<code>S550.DELETE</code> parameter.</td><td>"Enter=My Text, F4=End" or "D=Delete Record, Enter=My 
+					Text, F4=End" depending on <code>S550.DELETE</code> 
+					parameter.</td></tr><tr><td align="center">2</td><td colspan="2">Enter all fields.&#160; Prompts user for each field in 
+					view as 
+					would be done on a new record.&#160; Note that fields marked 
+					in View Maintenance with a Maintenance Option Code of S are skipped.&#160; 
+					After all fields have been entered, user may select field# 
+					for additional maintenance as with option 3 below.</td></tr><tr><td align="center">3</td><td>Maintain user selected fields.&#160; Prompts user to enter 
+					field# to maintain.&#160; Prompt will read: "Enter field# 
+					(1-NN), F2=Display, F4=End"</td><td>Prompt will read: "Enter field# (1-NN), F2=Display, 
+					Enter=My Text, F4=End"</td></tr></table></td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.ENTER$</code>
+                            </td>
+                            <td>Pass as a non-blank value to change the prompt to read <code>
+			"Enter=My Text, F4=End"</code>.&#160; This enables the calling 
+			application to check whether the user touched Enter or F4.&#160;
+			<code>"My Text"</code> is the text passed in <code>S550.ENTER$</code>.&#160; 
+			See chart in <code>MAINT</code> section above.&#160; You can also 
+ offer function key options following the Enter.&#160; Simply include 
+ the function key followed by the equal symbol, i.e., <code>
+            S550.ENTER$="Process, F5=Rush, F6=Postpone"</code>.&#160; If the 
+ user touches Enter then CTL=0.&#160; I they touch F5, then CTL=105, 
+ and if F6, CTL=106.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.F4</code>
+                            </td>
+                            <td>This option only applies when <code>S550.MAINT=2</code>.&#160; If passed to 
+			CDS550 as 1, then the operator will be permitted to touch the F4 key 
+			on the first field which will cause CDS550 to exit.&#160; If the 
+			operator exits using F4 at the first field, then CDS550 with set 
+			<code>S550.F4</code> to 4 to inform the calling program that no entries were 
+			made.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.NO</code>
+                            </td>
+                            <td>If passed as zero, then no field numbers will be included on the 
+			display background, often used for inquiry only views.&#160; If 
+			passed as non-zero, then non-inquiry fields will be numbered on the 
+			display background beginning with this number.&#160; Typically 
+			passed as 1 when the view is to be used for file maintenance.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.LEFT$</code>
+                            </td>
+                            <td>Fields will be left-justified in view unless <code>LEFT$="N"</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.MAXTITLE</code>
+                            </td>
+                            <td>Pass to CDS550 when it is desired to override the column position where the data will be displayed/entered.&#160; Normally this column is computed based on the longest description of the fields included in the view.&#160; Pass S550.MAXTITLE as the size of the longest description previously displayed.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.KEYSEGS</code>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td align="center">0</td>
+                                        <td>The view should contain only the fields specified in View 
+					Maintenance.</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">1</td>
+                                        <td>The view should include the key segment descriptions in 
+					background text only as un-numbered fields, in addition to 
+					the fields specified in View Maintenance.&#160; This option 
+					is used by File Maintenance so that the display background 
+					includes rows for the entry of the key segments.</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">2+</td>
+                                        <td>Same as 1 but indicates that the key segments should be 
+					based on KNUM 1 or higher.&#160; Pass S550.KEYSEGS as 
+					KNUM+1.</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.DELETE</code>
+                            </td>
+                            <td>Pass as 1 when maintaining the view to include 'D to delete' option.&#160; This field is returned as zero by CDS550 under normal maintenance, and set to 1 when the user selects the delete option so that the calling routine can perform the necessary delete logic.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.COLENT</code>
+                            </td>
+                            <td>Set by CDS550 to the column to be used for entering data.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.KEYSEGSDISP</code>
+                            </td>
+                            <td>Set by CDS550 to the number of key segment fields.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.GLOBAL$</code>
+                            </td>
+                            <td>Pass as N to disable storing the setup information in a global 
+			variable.&#160; Each call to CDS550 will access the data dictionary 
+			to obtain the setup information.&#160; This would be needed when the 
+			screen background or omitted fields in the view change dynamically.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.TITLE$</code>
+                            </td>
+                            <td>Used to indicate what prints on printer before view is printed.&#160; 
+			Only applies when printing view, i.e., <code>Y6$</code> is passed to 
+			CDS550.<table><tr><td align="center">blank</td><td>Print <code>DD20.TITLE$</code></td></tr><tr><td align="center">N</td><td>Do not print any title</td></tr><tr><td align="center">5</td><td>Print <code>Y5$</code></td></tr></table></td>
+                        </tr>
+                        <tr>
+                            <td><code>S550.WIDE</code>
+                            </td>
+                            <td>Set by CDS550 to 1 when the view requires more than 80 columns.&#160; 
+			The calling application should pop the 132 column window and return 
+			to 80 columns after the last call to CDS550.&#160; <code>IF 
+			S550.WIDE THEN PRINT 'POP','SP',</code></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="RECK$"></a>RECMAIN$</code>
+                </td>
+                <td>Pass to CDS550 to bypass the display/entry of field segments that are already known.&#160; CDS550 will derive the values of any key-segment fields with the same field name from 
+		<code>RECMAIN$</code> instead of prompting the operator.</td>
+            </tr>
+            <tr>
+                <td><code>Y5$</code>
+                </td>
+                <td>Pass to CDS550 only when printing a view.&#160; <code>Y5$</code> is printed 
+		centered below the company name when printing requires starting a new 
+		page.&#160; Note that when printing a view, all <code>S550$</code> fields are not 
+		applicable other than the <code>S550.FILNAM$</code> and <code>S550.VIEW$</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Y6$</code>
+                </td>
+                <td>Pass to CDS550 only when printing a view.&#160; This is the standard 
+		printer control variable returned from the printer selection routine
+		<a href="CDS084.htm">CDS084</a>.</td>
+            </tr>
+        </table>
+        <p><b>View Validation</b>
+        </p>
+        <p>Note that when exiting CDS550 for maintaining a view, CDS550 will call the 
+ View Validation program specified in View Maintenance.&#160; This program can be used to validate the view to provide any record level logic that cannot be used at the field level.&#160; For example, after maintaining a view containing an address, the address can be validated which includes multiple fields.&#160; If the called routine exits with an error, i.e.,
+  <code>EXIT 99</code>, then this signals CDS550 to return to maintenance mode to allow the user to make changes before exiting to the calling program.</p>
+        <p><b>Global Variables</b>
+        </p>
+        <p>CDS550 sets a global variable named <code>SMS_CDS550_FLD</code> to <code>"0"</code> when stepping 
+	through fields automatically, or to the field number being entered when the 
+	operator enters a specific field to modify on an existing view.&#160; It may 
+	be useful for an external routine to check this global when it is necessary 
+	to know whether the record being maintained is a new or existing record.</p>
+        <p>CDS550 also sets a global variable named <code>SMS_CDS550_MAINT</code> which contains 
+	the Maintenance Option field for each numbered field in the View.&#160; The nth position in this 
+	global will contain the Maintenance Option Code for the current field as specified in View Maintenance.&#160; 
+	The values include blank (entry), S (skip), Q (display only), and B (skip if 
+	non-blank/non-zero).&#160; When CDS550 is called with <code>S550.MAINT=2</code> 
+	to 'Enter All Fields', 
+	CDS550 will skip any field with a maintenance option of S, and skip any 
+	field that currently has a non-blank or non-zero value if the Maintenance 
+	Option is B.&#160; The Maintenance Option for each field is maintained using 
+	View Maintenance (FMS).&#160; The application can alter this global to 
+	change the fields that are entered.&#160; For example, the customer name and 
+	address may be skipped during a new entry of a sales order when the customer 
+	is a regular customer, but not skipped for a miscellaneous customer.&#160; 
+	In this example, the routine that is used to enter the customer# would 
+	change this global, setting the positions that pertain to the name and 
+	address to blank or S depending on whether the customer# is one used for 
+	not-on-file customers.&#160; Call program <a href="CDS557.htm">CDS557</a> to 
+	change a character in this global string.</p>
+        <p>When CDS550 is called recursively, there can be a global variable conflict.&#160; 
+ Program <a href="CDS556.htm">CDS556</a> should be used to save the current 
+ global variables, and later restore them to help prevent global variable 
+ problems.</p>
+        <table class="example">
+            <tr>
+                <td>Example taken from Printer Administration (PFM)</td>
+            </tr>
+            <tr>
+                <td><code>0130 CALL "CDS041","CDS550",S550$<br />        0140 LET 
+		S550.CC$="CD",S550.FILNAM$="S220.",S550.VIEW$="A",S550.WINDOW=1,S550.ROW=2,S550.BKG=1,S550.DISP=1,S550.MAINT=0</code>
+                    <p><code>0150 CALL "CDS550",ERR=EOJ,Y$,S220$,S550$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>This example is used to maintain the spooled printer fields that 
+		control whether the print queue should accept jobs, and whether the 
+		print queue is enabled or not.&#160; The data structure being maintained 
+		is actually a temporary work file populated by the current spooled 
+		printer status.&#160; This example simply prints a window, displays 
+		un-numbered fields background and data, then exits.&#160; The next part 
+		of the application prompts the operator for certain options and 'POP's 
+		the window when completed.</td>
+            </tr>
+        </table>
+        <p>
+            <img border="0" src="images\CDS5501.jpg" alt="" width="968" height="566" />
+        </p>
+        <table class="example">
+            <tr>
+                <td>Example taken from Fax Administration (PFM)</td>
+            </tr>
+            <tr>
+                <td><code>0210 CALL "CDS041",ERR=EOJ,"CDS550",S550$,"YY"<br />        0220 LET S550.CC$="CD",S550.FILNAM$="S310",S550.VIEW$="A",S550.ROW=2</code>
+                    <p><code>0230 LET S550.BKG=1,S550.DISP=5</code>
+                        <br />        .<br />        . logic to populate the S310$ data structure<br />        .<br /><code>0470 CALL "CDS550",ERR=EOJ,Y$,S310$,S550$</code></p>
+                </td>
+            </tr>
+            <tr>
+                <td>This example is used to display the fax scheduler status information.&#160; No data is maintained on this view.&#160; CDS550 is called simply to display the background and data.&#160; The field descriptions are retrieved from the data dictionary so this application simply needs to populate S310$ and call CDS550 to display the view.</td>
+            </tr>
+        </table>
+        <p>
+            <img border="0" src="images\CDS5502.jpg" alt="" width="968" height="566" />
+        </p>
+        <table class="example">
+            <tr>
+                <td>Another Example taken from Fax Administration (PFM)</td>
+            </tr>
+            <tr>
+                <td><code>0210 CALL "CDS041",ERR=EOJ,"CDS550",S550$,"YY"<br />        0230 DIM S550W$:FATTR(S550$)<br />        0240 LET S550W.CC$="CD",S550W.FILNAM$="S310W.",S550W.VIEW$="A",S550W.ROW=2<br />        0250 LET S550W.BKG=1,S550W.DISP=2,S550W.WINDOW=1,S550W.NO=1,S550W.KEYSEGS=0</code>
+                    <p>.<br />        . logic to populate the S310W$ work file.&#160; Operator selects fax modem using CDS037 which returns S310W$ record.<br />        .<br /><code>1610 CALL "CDS550",Y$,S310W$,S550W$</code></p>
+                </td>
+            </tr>
+            <tr>
+                <td>This example is used to display and allow the user to maintain certain fields related to a specific fax modem.&#160; This view uses a routine that is called by CDS550 at when exiting the view to execute any fax commands necessary to reflect the entries made by the operator.</td>
+            </tr>
+        </table>
+        <p>
+            <img border="0" src="images\CDS5503.jpg" alt="" width="968" height="566" />
+        </p>
+    </body>
+</html>

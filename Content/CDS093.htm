@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="713" MadCap:lastWidth="744">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS093 - Obtain Program Statement</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS093" />CDS093</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Obtain Program Statement" />Obtain Program Statement</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS093">Last Revised: 10/10/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="System Management Programs" />This routine is called by certain Dynamo Tools programs such as the Program Utility, to obtain a program statement in listed format. It would not normally be called by an application program.</p>
+        <p>Calling Format:</p>
+        <p><code>1010 U5=-1<br />1020 CALL "CDS093", ERR=XXXX, Y$, CHAN, PROG$, BUF$, VBTBL$, STMT$, ERRNO, LINEREF$, LINETYP, CPLSTMT$, CVS</code>
+        </p>
+        <p><code>. . .</code>
+        </p>
+        <p><code>10XX GOTO 1020</code>
+        </p>
+        <table>
+            <col />
+            <col />
+            <tr>
+                <th colspan="2">CDS093</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />standard terminal control variable</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CHAN</td>
+                <td>Channel number to be used by CDS093 for accessing program</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">PROG$</td>
+                <td>name of program to access</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">BUF$</td>
+                <td>used as a disc buffer variable by CDS093. You must pass a variable name, not "", which you do not use in the calling program.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">VBTBL$</td>
+                <td>used to hold variable tables (if any). Like <code>BUF$</code>, you must pass a variable name, not "", which you do not use in the calling program.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">STMT$</td>
+                <td>program statement, or "END"</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ERRNO</td>
+                <td>set to -1_by calling program before calling the first time. Set by CDS093 to 0 or to the error number if the program statement has an imbedded error.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">LINEREF$</td>
+                <td>Set to "Y" by CDS093, when running bbx, for bbx programs only, program statement may contain a reference to a line number or label</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">LINETYP</td>
+                <td>Set when running bbx, for bbx programs only<br /><table><tbody><tr><td>0</td><td>Other statement</td></tr><tr><td>1</td><td>REM or Line Label</td></tr><tr><td>2</td><td>TABLE, IOLIST, DEF, SETERR, SETESC</td></tr></tbody></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CPLSTMT$</td>
+                <td>Set to compiled program statement when running bbx, for bbx programs only</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CVS</td>
+                <td>May be passed to CDS093 to adjust <code>STMT$</code> using <code>CVS(STMT$,CVS)</code>. For example, pass as 4 to return <code>STMT$</code> in all upper case letters.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

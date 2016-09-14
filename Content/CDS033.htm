@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS033 - Convert Key Structure from DD12$ to FIN format</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS033</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert Key Structure from DD12$ to FIN format</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS033">Last Revised: 10/29/04</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is not normally called by application programs. It is used by CDS034 to convert the key structure in the data dictionary to the format required to define a multi-keyed file.</p>
+        <p>All input variables normally are from <a href="CDS181.htm">CDS181 </a>call.</p>
+        <p><code>CALL "CDS033", TPL$, KNCNT, KNTPL$, KN$[ALL], DD12$, KFIN$, ERRMSG$</code>
+        </p>
+        <table>
+            <tr>
+                <td>TPL$</td>
+                <td align="center">in</td>
+                <td>Template for data file, normally from CDS081 call.</td>
+            </tr>
+            <tr>
+                <td>KNCNT</td>
+                <td align="center">in</td>
+                <td>Number of KNUM's (not highest KNUM)</td>
+            </tr>
+            <tr>
+                <td>KNTPL$</td>
+                <td align="center">in</td>
+                <td>
+        Dimensioned variable with template that applies to each KN$[] element.
+
+        <table><tr><th>Field Name</th><th>Description</th><th>Example</th></tr><tr><td>.DISPLAY$</td><td>Description of key using field names</td><td>FOREIGN+ZIP(1,5)+ALPHASORT+VENDNO</td></tr><tr><td>.DRIVER$</td><td>Description of key using field titles, used by driver for end-user to select key</td><td>FOREIGN + ZIP(1,5) + Alpha Sort Name + Vendor#</td></tr><tr><td>.SORTBY$</td><td>Sortby expression using REC. that can be used with SELECT, CDS037, CDS038, etc.</td><td>REC.FOREIGN$+REC.ZIP$(1,5)+REC.ALPHASORT$+REC.VENDNO$</td></tr><tr><td>.KEYEXP$</td><td>Key expression that can be used within an application, as in K$=SEVAL(KNTPL.KEYEXP$) to determine if a control break has been taken.</td><td>VM01.FOREIGN$+VM01.ZIP$(1,5)+VM01.ALPHASORT$+VM01.VENDNO$</td></tr><tr><td>.FLDS$</td><td>String of field numbers in 4 digit masks where field number refers to element in field array from CDS181.</td><td>&#160;7 8 9 1</td></tr><tr><td>.DD12$</td><td>Concatenation of all DD12$ records that make up each KNUM.</td><td>Refer to DD12$ template.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>KN$[ALL]</td>
+                <td align="center">in</td>
+                <td>Array of key definitions from 1:KNCNT.&#160; Each element of the array uses the KNTPL$ template.</td>
+            </tr>
+            <tr>
+                <td>DD12$</td>
+                <td align="center">in</td>
+                <td>Dimensioned variable with template that applies to each slot in KNTPL.DD12$.</td>
+            </tr>
+            <tr>
+                <td>KFIN$</td>
+                <td align="center">out</td>
+                <td>FIN structure of MKY files.</td>
+            </tr>
+            <tr>
+                <td>ERRMSG$</td>
+                <td align="center">out</td>
+                <td>Error message created by CDS033.&#160; Note that CDS033 does not exit with an error.&#160; The calling program should test the length of the ERRMSG$ variable to determine if an error occurred.</td>
+            </tr>
+        </table>
+    </body>
+</html>

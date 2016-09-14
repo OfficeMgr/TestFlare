@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS179 - Send 'SP'/'CP' or SYSWINDOW equivalent</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS179</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Send 'SP'/'CP' or SYSWINDOW equivalent</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS179">Last Revised: 05/30/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine should be used whenever it is necessary to switch between standard format (80 columns) and wide format (132 or more columns).&#160; By using CDS179 instead of simply printing 'SP' or 'CP', your application will also work using BBj thin client SYSWINDOW display.</p>
+        <p>When run from a BBj SYSWINDOW session, CDS179 will use a compatible font installed on the workstation, and for standard mode (80 columns), select the largest font, up to a font size of 30, that will fit on the display.&#160; The user can override the default font, and select a smaller font size, using My Profile &amp; Preferences on the SMS menu.</p>
+        <p>For BBj SYSWINDOW sessions, the wide format will use all available space on the display, setting the largest font that can display 132 columns and 25 rows.&#160; But the actual rows and columns will be increased to use all available display space.&#160; This could result in a display with 150 columns and 50 rows, for example.&#160; The font used will be either the default font selected by CDS179, or the font specified in My Profile &amp; Preferences, if installed on the current workstation.&#160; The font size and window dimensions cannot by overridden from the computed values.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS179", Y$, XP$ {, MAXWIN, SM08$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS179 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>XP$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table1">
+                        <tr>
+                            <td><code>'CP'</code>
+                            </td>
+                            <td>Switch to wide format (132 or more columns)</td>
+                        </tr>
+                        <tr>
+                            <td><code>'SP'</code>
+                            </td>
+                            <td>Switch to standard format (80 columns)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>MAXWIN</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Pass as 1 to have CDS179 print a <code>'WINDOW'</code> of maximum rows and columns after switching to new display format</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SM08$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Optionally passed if known to eliminate need to obtain using CDS091.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example: Change display to wide format</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS179",Y$,'CP'</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Change display back to standard (80 column) format</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS179",Y$,'SP'</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Example: Change display to wide format, and display full size window</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS179",Y$,'CP',1</code>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

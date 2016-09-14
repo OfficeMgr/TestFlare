@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="442" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS370 - Purge Fax and Email Log Files</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS370</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Purge Fax &amp;&#160;Email Logs</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS370">Last Revised: 10/30/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This application can be run from the PFM&#160;menu, but can also be called or run by a background task to periodically purge the Dynamo Tools Fax and Email log files.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS370", DAYS</code>
+        </p>
+        <p>Typical cron task entry which purges the log files at 3:00 AM on the first of each month. The 60 argument represents DAYS.</p>
+        <p><code>0 3 1 * * /u/CDI/bin/background CDS370 CD Purge_Dynamo_Tools_Log_Files 60</code>
+        </p>
+        <table>
+            <col style="width: 58px;" />
+            <col />
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">DAYS</td>
+                <td>Purge transactions older that this number of DAYS.</td>
+            </tr>
+        </table>
+        <p>This program will remove records from the Dynamo Tools Log files listed below. Note that file CDSM96, the Outgoing Email Summary Log file is not purged as it typically only contains one record per day.</p>
+        <p>If running on a Unix/Linux/AIX server, and vsifax is installed, then this program will also purge the vsifax log files. Note that this option requires that the Dynamo Tools Command Processor be running, unless run by 'root', as would be the case if root's crontab was used to schedule this task.</p>
+        <table>
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>File Name</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>CDSM90</td>
+                    <td>Fax Modem Log (vsifax)</td>
+                </tr>
+                <tr>
+                    <td>CDSM91</td>
+                    <td>Fax Modem Attempt History (vsifax)</td>
+                </tr>
+                <tr>
+                    <td>CDSM92</td>
+                    <td>Dynafax Log</td>
+                </tr>
+                <tr>
+                    <td>CDSM95</td>
+                    <td>Email Log</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

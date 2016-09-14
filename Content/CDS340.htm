@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS340 - ftp &amp; sftp file transfer</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS340</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">FTP &amp; SFTP File Transfer</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS340">
+    Last Revised: 02/27/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used on Unix/Linux systems to 
+communicate using ftp (File Transfer Protocol) or sftp (Secure File Transfer 
+Protocol).&#160; It supports most popular ftp commands.&#160; The ftp server can 
+be either Unix/Linux or Windows.&#160; CDS340 also supports the pubnet Value 
+Added Network (VAN) which is similar to ftp.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS340", ERR=XXXX, CHAN, CMD${, MSG$, DEBUG}</code>
+        </p>
+        <p>{Braces indicate optional parameters}.</p>
+        <table>
+            <tr>
+                <td><code>ERR=</code>
+                </td>
+                <td>CDS340 exits with an error whenever the requested command fails.&#160; 
+ This would include reasons such as unable to login, requested file to get is 
+ not found, unable to perform a directory command, etc., or if the command 
+ timed out with no reply from the remote ftp server.&#160; The <code>MSG$</code> 
+    will contain the last ftp status message which may help determine the 
+ problem.</td>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td>Used as the channel for the connection to the ftp command, assigned by 
+ CDS340 during the initial call to Open the ftp channel.&#160; The channel is 
+ closed by CDS340 upon receipt of the Q command.</td>
+            </tr>
+            <tr>
+                <td><code>CMD$</code>
+                </td>
+                <td>Command&#160; and arguments passed to CDS340.&#160; The first character 
+ of <code>CMD$</code> is the command type.&#160; Any additional characters 
+ are arguments.&#160; Multiple arguments are separated by commas.&#160; 
+ Commas cannot be used in any arguments.<table><tr><th align="center">Type</th><th>Description</th><th>Arguments</th><th>Note</th></tr><tr><td align="center">O</td><td>Open ftp connection</td><td>URL or IP, LoginID, Password</td><td>This must be the first call to CDS340.&#160; The URL may optionally 
+ include a port number using a colon separator as in: <code>
+        ftp.excellware.com:9022</code></td></tr><tr><td align="center">S</td><td>Open sftp connection</td><td>URL or IP, LoginID, PrivateKeyFile</td><td>The Note above for ftp connections, also applies to sftp 
+ connections.<p>Note that sftp does not support the ability to pass a 
+ password to the sftp server.&#160; The options are either to enter the 
+ password when prompted or to store a pubic key file on the sftp server 
+ which eliminates the password prompt.&#160; The PrivateKeyFile is 
+ optional.&#160; If not passed then the default key file of <code>~/.ssh/rsa_id</code> 
+        key file will be used where <code>~</code> represents the current user's 
+ home directory.&#160; If the PrivateKeyFile is shared among multiple 
+ users, then you can specify the path to the PrivateKeyFile such as <code>
+        /u/CDI/bin/rsa_id</code>.&#160; See the Creating Key Files section below 
+ for steps to create the private and public key files.</p></td></tr><tr><td align="center">U</td><td>User login</td><td>LoginID, Password</td><td>Only needed when a second login and password is required.&#160; 
+ Applies to ftp only.</td></tr><tr><td align="center">C</td><td>Change directory</td><td>Directory</td><td>&#160;</td></tr><tr><td align="center">M</td><td>Make (define) directory</td><td>Directory</td><td>May not contain the / character when using ftp.</td></tr><tr><td align="center">R</td><td>Remove (delete) directory</td><td>Directory</td><td>May not contain the / character when using ftp.</td></tr><tr><td align="center">L</td><td>Change local directory</td><td>Directory</td><td>&#160;</td></tr><tr><td align="center">G</td><td>Get (retrieve) file</td><td>RemoteName{,LocalName}</td><td rowspan="3">File names cannot contain the / character when using 
+ ftp.&#160; Use the C and/or L commands to change directory before 
+ sending/receiving/deleting data files.</td></tr><tr><td align="center">P</td><td>Put (send) file</td><td>LocalName{,RemoteName}</td></tr><tr><td align="center">X</td><td>Delete (erase) file</td><td>Filename</td></tr><tr><td align="center">D</td><td>Directory List</td><td>{Pattern,Sequence}<br />
+&#160;<p>Examples:</p><p><code>D</code></p><p><code>D*.TXT</code></p><p><code>D,d</code></p><p><code>D*.TXT,s</code></p></td><td><table><tr><th colspan="2">Pattern</th></tr><tr><td align="center">null</td><td>Include all files in directory</td></tr><tr><td align="center">pattern</td><td>Include file names that match pattern only, i.e., <code>*.TXT</code> 
+            or <code>master*</code></td></tr><tr><th colspan="2">Sequence<span style="font-weight: 400;"> (ignored 
+ except on linux/unix ftp servers)</span></th></tr><tr><td align="center">null</td><td>Files will be returned in ascending File Name sequence</td></tr><tr><td align="center">D</td><td>Date Sequence (oldest first)</td></tr><tr><td align="center">d</td><td>Date Sequence (newest first)</td></tr><tr><td align="center">S</td><td>Size Sequence (smallest first)</td></tr><tr><td align="center">s</td><td>Size Sequence (largest first)</td></tr></table></td></tr><tr><td align="center">B</td><td>Set File Transfer mode to binary</td><td>None</td><td>Send this command before sending or receiving files that contain 
+ non-ASCII characters.&#160; The command remains in effect until the "A" 
+ command is used.&#160; </td></tr><tr><td align="center">A</td><td>Set File Transfer mode to ascii</td><td>None</td><td>Send this command before sending or receiving files that only 
+ contain ASCII characters.&#160; The command remains in effect until the 
+ "B" command is used.&#160; Silently ignored when using sftp as all sftp 
+ file transfers are binary.</td></tr><tr><td align="center">Q</td><td>Quits the ftp session</td><td>None</td><td>Also closes the channel CHAN.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>MSG$</code>
+                </td>
+                <td>Returned from CDS340.&#160; In most cases, <code>MSG$</code> will 
+ contain the last ftp status message.&#160; In the case of the D command for 
+ directory list, <code>MSG$</code> will be templated.&#160; If no 
+ non-directory files match the pattern then <code>MSG$</code> will contain 
+ only the <code>CNT</code> field and <code>MSG.CNT</code> will be zero.&#160; 
+ If there are non-directory files that match the pattern specified, then
+    <code>MSG$</code> will contain the fields listed below.<table><tr><td><code>CNT</code></td><td>The number of non-directory files matching the pattern specified.</td></tr><tr><td><code>MAXFIL</code></td><td>The length of the longest file name returned</td></tr><tr><td><code>NAMES$[CNT]</code></td><td>An array of file names within the directory.&#160; Each will be
+        <code>MAXFIL</code> characters long.</td></tr><tr><td><code>ENTRY$</code></td><td>A string that can be used with CDS069 to prompt the user to select a 
+ file from the list</td></tr><tr><td><code>DISP$</code></td><td>The string of file names followed by a 12 character date string in 
+ the same format as provided by the ftp command, and an 11 character file 
+ size masked with commas.&#160; See example below.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>DEBUG</code>
+                </td>
+                <td>This optional parameter can be passed as 1 to request that CDS340 
+ display all ftp status messages and prompt before exiting.&#160; Pass as a 2 
+ to disable prompting the operator with an error message.&#160; This is the 
+ default for background tasks.</td>
+            </tr>
+        </table>
+        <p><b>Creating key files</b>
+        </p>
+        <p>The secure ftp protocol does not allow passing the password to the remote 
+server.&#160; Although sftp will allow the user to enter the password, this is 
+not very convenient when it is desired to automate some sftp process.&#160; 
+Instead, you can generate key files, and save the public key on the remote 
+server.&#160; When these key files are in place, then sftp will function without 
+the need to manually enter the password.</p>
+        <p>Use the following command on linux servers to create both the public and 
+private key files.&#160; The command may differ on other operating systems.</p>
+        <p><code>ssh-keygen -t rsa</code>
+        </p>
+        <p>You will be prompted for a passphrase.&#160; Although it is not a recommended 
+practice to bypass the passphrase entry, it is frequently done in order to allow 
+a server to reboot without needing to manually enter the passphrase.</p>
+        <p>The files created will be:</p>
+        <p><code>~/.ssh/rsa_id<br />
+~/.ssh/rsa_id.pub</code>
+        </p>
+        <p>The first file is the private key.&#160; The permissions must be <code>
+r--r--r--</code> or <code>rw-------</code>.&#160; In the default location, the 
+private key can only be used by the user that created the file.&#160; This is 
+because the permissions of the <code>.ssh</code> directory is <code>rwx------</code> 
+which prevents others from accessing the private key.&#160; To share this 
+private key among multiple users, move the private key file to a directory 
+accessible by all users and insure the file permissions enable reading but not 
+writing.</p>
+        <p>The second file with the <code>.pub</code> extension is the public key.&#160; 
+This file needs to be copied to the remote server, and then appended to the
+<code>~/.ssh/authorized_keys</code> file.&#160; In some cases, you can sftp or 
+scp the public key file to the remote server yourself.&#160; In other cases, you 
+will need to email the public key to the remote server administrator who will 
+append the contents of your public key file to the <code>~/.ssh/authorized_keys</code> 
+file.&#160; The permissions of the <code>.ssh</code> directory need to be <code>
+rwx------</code> and the permissions of the <code>authorized_keys</code> file 
+must be <code>rw-------</code> in order to use sftp without manual password 
+entry.</p>
+        <p>&#160;</p>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS340",ERR=FAIL,CHAN,"Oftp.excellware.com,username,password",MSG$<br />
+    CALL "CDS340",ERR=FAIL,CHAN,"Cupload",MSG$<br />
+    CALL "CDS340",ERR=FAIL,CHAN,"Cdocs",MSG$<br />
+    CALL "CDS340",ERR=FAIL,CHAN,"D",MSG$<br />
+    CLOSE (CHAN)<br />
+    IF MSG.CNT THEN CALL "CDS069",1,MSG.MAXFIL,0,0,"+file 
+ name+",MSG.ENTRY$+MSG.DISP$,0,FILNAM$<br /><br /></code>CDS069 display will look like this:<p>&#160;</p><p><img border="0" src="images/CDS3401.jpg" width="648" height="399" />&#160;</p></td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

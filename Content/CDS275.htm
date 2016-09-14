@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1130" MadCap:lastWidth="647">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS275 - Enter Email Address</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS275" />CDS275</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Email" />Enter/Validate Email Address</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS275">Last Revised: 04/14/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">X type called program to enter and/or validate email addresses.</p>
+        <p>CDS275 can be used to enter and validate, or just validate an email 
+	address.&#160; The validation steps include:</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table2">
+            <tr>
+                <th>Error Message</th>
+            </tr>
+            <tr>
+                <td>Missing @ between name and domain</td>
+            </tr>
+            <tr>
+                <td>Only one @ permitted</td>
+            </tr>
+            <tr>
+                <td>@ cannot go at beginning or end of address</td>
+            </tr>
+            <tr>
+                <td>Blank spaces are not permitted</td>
+            </tr>
+            <tr>
+                <td>&lt; symbol not permitted</td>
+            </tr>
+            <tr>
+                <td>&gt; symbol not permitted</td>
+            </tr>
+            <tr>
+                <td>| symbol not permitted</td>
+            </tr>
+            <tr>
+                <td>( symbol not permitted</td>
+            </tr>
+            <tr>
+                <td>) symbol not permitted</td>
+            </tr>
+            <tr>
+                <td>Domain portion of address must contain one or more periods</td>
+            </tr>
+            <tr>
+                <td>Domain does not accept email</td>
+            </tr>
+        </table>
+        <p>For entry &amp; validation:</p>
+        <p><code>CALL "CDS275", ERR=XXXX, MINV, MAXV, COL, ROW, PROMPT$, 
+	LGTH, EMAIL$, { CTLVAL, MODE$, FMT$[ALL] }</code>
+        </p>
+        <p>Arguments within { } may be omitted.</p>
+        <p>"In" indicates fields passed to CDS275.<br />	"Out" indicates fields set by CDS275 and passed back to calling application.<br />	"In/Out" indicates fields passed to CDS275, changed by CDS275, and passed 
+	back to calling application.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3">
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">In/Out</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ERR=XXXX</td>
+                <td align="center">&#160;</td>
+                <td>Branch to XXXX if <code>MODE$</code> contains an E and operator uses Ctrl+C to abort</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">MINV</td>
+                <td align="center">In</td>
+                <td>Minimum number of characters in email address, typically zero.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">MAXV</td>
+                <td align="center">In</td>
+                <td>Maximum number of characters in email address, typically 40 or 
+			50.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">COL</td>
+                <td align="center">In</td>
+                <td>Entry column</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">ROW</td>
+                <td align="center">In</td>
+                <td>Entry row.&#160; If <code>COL</code> and <code>ROW</code> are 
+			zero, then entry will take place at end of prompt on bottom of 
+			screen.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">PROMPT$</td>
+                <td align="center">In</td>
+                <td>Entry prompt such as "</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">LGTH</td>
+                <td align="center">Out</td>
+                <td>Returned as the length of the entry</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">EMAIL$</td>
+                <td align="center">In/Out</td>
+                <td>Prior value (if any) and entered email address</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">CTLVAL</td>
+                <td align="center">Out</td>
+                <td>Returned as the CTL value</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">MODE$</td>
+                <td align="center">
+			In</td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table4" class="lev2">
+                        <tr>
+                            <td>null</td>
+                            <td>Normal entry</td>
+                        </tr>
+                        <tr>
+                            <td>DIS</td>
+                            <td>Display email address @(COL,ROW)</td>
+                        </tr>
+                        <tr>
+                            <td>FMT</td>
+                            <td>Return email address in FMT$[0]</td>
+                        </tr>
+                        <tr>
+                            <td>contains a P</td>
+                            <td>Use <a href="CDS069.htm">CDS069</a> Prompt Window Option</td>
+                        </tr>
+                        <tr>
+                            <td>contains a Q</td>
+                            <td>Query/Display Mode, no entry, same as DIS.</td>
+                        </tr>
+                        <tr>
+                            <td>contains an E</td>
+                            <td>Enable Ctrl+C to abort entry and exit with ERR=99</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">FMT$[ALL]</td>
+                <td align="center">Out</td>
+                <td>FMT$[0] will contain email address when MODE$ is "DIS" or "FMT"</td>
+            </tr>
+        </table>
+        <p>For validation only:</p>
+        <p><code>CALL "CDS275::VALIDATE", EMAIL$, MSG$</code>
+        </p>
+        <p>Note that CDS275 does not prompt the operator when called in validation 
+	mode.&#160; Rather, the error message is returned in <code>MSG$</code> so that CDS275 can 
+	be used in web applications.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table5">
+            <tr>
+                <td class="nowrapcode">EMAIL$</td>
+                <td>Email address to be validated</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">MSG$</td>
+                <td>Will be returned null if email is valid, or validation message if invalid.</td>
+            </tr>
+        </table>
+    </body>
+</html>

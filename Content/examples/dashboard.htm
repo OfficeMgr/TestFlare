@@ -1,0 +1,287 @@
+﻿<!DOCTYPE HTML SYSTEM>
+<html>
+<head>
+<title>Dynamo Dashboard</title>
+<link rel=stylesheet type='text/css' href='dashboard.css'>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>google.load('visualization', '1', {packages:['corechart']});</script>
+<script>
+google.setOnLoadCallback(drawChart1);
+function drawChart1() {
+var data1 = google.visualization.arrayToDataTable([
+['Date','Connect','Users'],
+['8:58',1631,1115],['8:59',1637,1119],['9:00',1645,1123],['9:01',1645,1124],['9:02',1653,1130],['9:03',1660,1133],['9:04',1677,1140],['9:05',1681,1142],['9:06',1689,1146],['9:07',1689,1148],['9:08',1693,1149],['9:09',1699,1150],['9:10',1703,1154],['9:11',1703,1156],['9:12',1705,1156],['9:13',1706,1159],['9:14',1719,1162],['9:15',1727,1165],['9:16',1725,1166],['9:17',1727,1168],['9:18',1728,1169],['9:19',1737,1173],['9:20',1738,1176],['9:21',1749,1182],['9:22',1752,1185],['9:23',1753,1187],['9:24',1754,1189],['9:25',1763,1190],['9:26',1762,1190],['9:27',1758,1191],['9:28',1758,1188],['9:29',1761,1191],['9:30',1762,1192],['9:31',1761,1192],['9:32',1768,1193],['9:33',1770,1195],['9:34',1771,1195],['9:35',1770,1199],['9:36',1772,1198],['9:37',1774,1200],['9:38',1774,1203],['9:39',1776,1202],['9:40',1784,1206],['9:41',1779,1206],['9:42',1775,1205],['9:43',1777,1208],['9:44',1778,1208],['9:45',1780,1207],['9:46',1779,1208],['9:47',1782,1209],['9:48',1783,1211],['9:49',1784,1210],['9:50',1785,1211],['9:51',1782,1213],['9:52',1783,1215],['9:53',1790,1216],['9:54',1788,1216],['9:55',1787,1218],['9:56',1797,1219],['9:57',1794,1219],['9:58',1801,1222]
+]);
+var options1 = {
+'title':'Last Hour',
+'width':'400px',
+'height':'200px',
+'chartArea':{left:60,width:250,height:110}
+}
+var chart1 = new google.visualization.LineChart(document.getElementById('chart_div1'));
+chart1.draw(data1, options1);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart2);
+function drawChart2() {
+var data2 = google.visualization.arrayToDataTable([
+['Date','Connect','Users'],
+['Sun 9 am',82,58],['Sun 10 am',88,63],['Sun 10 am',93,65],['Sun 11 am',87,64],['Sun 11 am',94,69],['Sun 12 pm',100,74],['Sun 12 pm',106,77],['Sun 1 pm',108,77],['Sun 1 pm',113,82],['Sun 2 pm',113,81],['Sun 2 pm',107,78],['Sun 3 pm',114,82],['Sun 3 pm',112,81],['Sun 4 pm',120,89],['Sun 4 pm',122,93],['Sun 5 pm',114,86],['Sun 5 pm',119,91],['Sun 6 pm',129,95],['Sun 6 pm',136,101],['Sun 7 pm',136,101],['Sun 7 pm',136,103],['Sun 8 pm',134,100],['Sun 8 pm',137,104],['Sun 9 pm',133,102],['Sun 9 pm',136,104],['Sun 10 pm',139,107],['Sun 10 pm',82,64],['Sun 11 pm',81,63],['Sun 11 pm',81,65],['Mon 12 am',76,58],['Mon 12 am',76,56],['Mon 1 am',70,49],['Mon 1 am',62,42],['Mon 2 am',61,40],['Mon 2 am',59,39],['Mon 3 am',56,32],['Mon 3 am',52,31],['Mon 4 am',53,30],['Mon 4 am',49,27],['Mon 5 am',48,25],['Mon 5 am',49,27],['Mon 6 am',74,40],['Mon 6 am',162,109],['Mon 7 am',306,205],['Mon 7 am',559,384],['Mon 8 am',919,632],['Mon 8 am',1346,918],['Mon 9 am',1555,1057],['Mon 9 am',1672,1131],['Mon 10 am',1728,1173],['Mon 10 am',1745,1188],['Mon 11 am',1827,1230],['Mon 11 am',1857,1251],['Mon 12 pm',1857,1250],['Mon 12 pm',1846,1251],['Mon 1 pm',1872,1263],['Mon 1 pm',1896,1283],['Mon 2 pm',1855,1243],['Mon 2 pm',1833,1226],['Mon 3 pm',1780,1198],['Mon 3 pm',1731,1161],['Mon 4 pm',1617,1087],['Mon 4 pm',1359,916],['Mon 5 pm',1114,765],['Mon 5 pm',1021,726],['Mon 6 pm',928,669],['Mon 6 pm',840,614],['Mon 7 pm',785,582],['Mon 7 pm',725,545],['Mon 8 pm',686,521],['Mon 8 pm',628,486],['Mon 9 pm',610,467],['Mon 9 pm',586,451],['Mon 10 pm',579,441],['Mon 10 pm',368,303],['Mon 11 pm',356,292],['Mon 11 pm',332,283],['Tue 12 am',305,257],['Tue 12 am',302,255],['Tue 1 am',141,112],['Tue 1 am',62,38],['Tue 2 am',61,35],['Tue 2 am',60,36],['Tue 3 am',56,33],['Tue 3 am',52,32],['Tue 4 am',53,32],['Tue 4 am',51,31],['Tue 5 am',51,29],['Tue 5 am',51,30],['Tue 6 am',67,40],['Tue 6 am',214,144],['Tue 7 am',384,252],['Tue 7 am',627,437],['Tue 8 am',1023,699],['Tue 8 am',1448,1004],['Tue 9 am',1645,1123],['Tue 9 am',1762,1192]
+]);
+var options2 = {
+'title':'Last 2 Days',
+'width':'650px',
+'height':'200px',
+'chartArea':{left:60,width:490,height:110}
+}
+var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+chart2.draw(data2, options2);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart3);
+function drawChart3() {
+var data3 = google.visualization.arrayToDataTable([
+['CPU Utilization','Percent'],
+['Idle',96.48],['User',2.28],['System',1.16]
+]);
+var options3 = {
+'title':'CPU Utilization',
+'width':'230px',
+'height':'200px',
+'colors':['green','blue','red'],
+'chartArea':{left:10,width:210,height:130}
+}
+var chart3 = new google.visualization.PieChart(document.getElementById('chart_div3'));
+chart3.draw(data3, options3);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart4);
+function drawChart4() {
+var data4 = google.visualization.arrayToDataTable([
+['Date','Idle','User','System','Load Avg'],
+['8:58',95.99,3.03,.97,2.33],['8:59',96.07,2.56,1.36,2.5],['9:00',96.95,2.16,.89,2.29],['9:01',95.24,2.89,1.85,2.66],['9:02',95.59,2.77,1.61,2.49],['9:03',93.57,4.65,1.76,2.35],['9:04',96.78,2.17,1.03,2.3],['9:05',94.81,3.41,1.71,2.38],['9:06',96.13,2.49,1.36,2.58],['9:07',96.82,2.12,1.04,2.78],['9:08',96.58,2.27,1.13,2.62],['9:09',94.16,4.86,.97,2.37],['9:10',96.22,2.39,1.37,2.27],['9:11',94.73,3.82,1.44,2.27],['9:12',95.91,2.61,1.49,2.27],['9:13',94.47,4.54,.99,2.37],['9:14',95.44,3.08,1.46,2.11],['9:15',96.64,2.23,1.12,2.29],['9:16',95.21,3.27,1.49,2.11],['9:17',95.09,3.61,1.28,2.17],['9:18',96.12,2.51,1.36,2.25],['9:19',95.99,2.57,1.38,2.26],['9:20',95.89,2.49,1.62,2.09],['9:21',94.51,3.89,1.57,2.41],['9:22',95.43,3.48,1.08,2.52],['9:23',96.17,2.46,1.37,2.62],['9:24',95.14,3.57,1.27,2.46],['9:25',95.3,3.67,1.02,2.35],['9:26',94.76,3.9,1.33,2.48],['9:27',95.39,3.46,1.16,2.76],['9:28',94.73,3.72,1.52,2.56],['9:29',96.25,2.44,1.28,2.4],['9:30',96.42,2.35,1.21,2.65],['9:31',95.11,3.59,1.28,3.07],['9:32',94.79,3.68,1.48,2.87],['9:33',94.67,3.96,1.34,2.43],['9:34',96.14,2.65,1.2,2.71],['9:35',96.85,2.08,1.03,2.44],['9:36',96.59,2.26,1.13,2.5],['9:37',97.13,2.07,.79,2.4],['9:38',95.03,3.54,1.37,2.36],['9:39',96.85,2.14,.95,2.25],['9:40',95.9,2.55,1.48,2.29],['9:41',96.46,2.44,1.07,2.08],['9:42',95.6,2.39,2,3.8],['9:43',95.52,2.92,1.54,3.08],['9:44',95.95,2.57,1.46,4.88],['9:45',96.17,2.44,1.37,7.64],['9:46',92.65,5.97,1.37,4.74],['9:47',94.61,4.43,.94,3.27],['9:48',95.37,3.21,1.38,2.73],['9:49',96.15,2.5,1.34,2.53],['9:50',97.34,1.93,.71,2.53],['9:51',93.81,4.9,1.28,2.56],['9:52',95.61,2.69,1.57,2.58],['9:53',95.8,2.9,1.27,2.56],['9:54',96.11,2.62,1.24,4.99],['9:55',95.36,2.84,1.76,3.18],['9:56',93.61,5.4,.98,2.8],['9:57',96.28,2.42,1.27,2.59],['9:58',96.48,2.28,1.16,2.5]
+]);
+var options4 = {
+'title':'Last Hour',
+'width':'400px',
+'height':'200px',
+'colors':['green','blue','red','orange'],
+'chartArea':{left:60,width:250,height:110}
+}
+var chart4 = new google.visualization.LineChart(document.getElementById('chart_div4'));
+chart4.draw(data4, options4);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart5);
+function drawChart5() {
+var data5 = google.visualization.arrayToDataTable([
+['Date','Idle','User','System','Load Avg'],
+['Sun 9 am',98.52,1.34,.14,2.61],['Sun 10 am',98.49,1.36,.15,4.51],['Sun 10 am',97.69,1.63,.69,3.04],['Sun 11 am',97.98,1.64,.36,2.51],['Sun 11 am',98.56,1.3,.14,2.75],['Sun 12 pm',98.36,1.45,.19,2.67],['Sun 12 pm',94.75,4.22,.95,6.32],['Sun 1 pm',95.56,3.82,.43,3.74],['Sun 1 pm',96.93,2.68,.33,2.91],['Sun 2 pm',97.15,2.42,.43,3.35],['Sun 2 pm',97.1,2.26,.64,5.06],['Sun 3 pm',96.81,2.51,.68,6.1],['Sun 3 pm',98.45,1.36,.19,2.8],['Sun 4 pm',98.1,1.5,.39,4.21],['Sun 4 pm',98.49,1.35,.16,2.34],['Sun 5 pm',82.76,17.08,.16,3.85],['Sun 5 pm',98.59,1.29,.13,2.82],['Sun 6 pm',98.4,1.41,.19,2.26],['Sun 6 pm',92.43,5.64,1.82,5.45],['Sun 7 pm',95.93,3.51,.51,4.13],['Sun 7 pm',97.32,2.42,.21,2.32],['Sun 8 pm',96.28,2.62,1.08,3.59],['Sun 8 pm',97.1,2.35,.54,3.54],['Sun 9 pm',97.31,2.24,.44,3.45],['Sun 9 pm',97.25,2.22,.5,3.8],['Sun 10 pm',98.3,1.48,.23,2.28],['Sun 10 pm',98.61,1.3,.09,2.59],['Sun 11 pm',96.61,3.25,.14,2.53],['Sun 11 pm',97.33,2.38,.24,2.8],['Mon 12 am',97.14,2.56,.26,1.75],['Mon 12 am',92.41,5.53,1.94,5.07],['Mon 1 am',95.04,4.02,.74,3.07],['Mon 1 am',98.32,1.45,.23,2.14],['Mon 2 am',97.07,2.37,.55,3.31],['Mon 2 am',95.88,3.58,.54,2.56],['Mon 3 am',95.73,3.7,.58,2.65],['Mon 3 am',95.29,4.51,.2,1.99],['Mon 4 am',97.15,2.65,.2,2.13],['Mon 4 am',97.16,2.63,.21,2.02],['Mon 5 am',97.03,2.74,.23,1.77],['Mon 5 am',97.07,2.65,.28,2.24],['Mon 6 am',97.27,2.59,.14,1.89],['Mon 6 am',95.84,3.2,.89,2.8],['Mon 7 am',95.13,3.62,1.22,4.11],['Mon 7 am',96.15,2.66,1.1,2.15],['Mon 8 am',97.1,2.02,.87,2.34],['Mon 8 am',96.76,1.45,1.76,1.6],['Mon 9 am',96.92,1.47,1.55,1.24],['Mon 9 am',97.09,1.32,1.57,1.34],['Mon 10 am',97.12,1.34,1.52,1.65],['Mon 10 am',97.92,.97,1.09,1.58],['Mon 11 am',97.49,.98,1.52,1.42],['Mon 11 am',97.19,1.21,1.6,1.89],['Mon 12 pm',96.93,.99,2.05,1.21],['Mon 12 pm',93.15,5.24,1.52,4.52],['Mon 1 pm',93.12,4.77,1.98,5.26],['Mon 1 pm',95.48,2.75,1.71,3.39],['Mon 2 pm',98.22,.84,.9,1.17],['Mon 2 pm',97.25,1.71,1.04,2.4],['Mon 3 pm',96.78,2.01,1.18,2.12],['Mon 3 pm',96.95,1.82,1.21,2.36],['Mon 4 pm',95.65,2.6,1.71,2.43],['Mon 4 pm',96.43,1.88,1.62,2.46],['Mon 5 pm',97.8,1.03,1.12,1.69],['Mon 5 pm',97.71,.98,1.3,1.66],['Mon 6 pm',98.27,.85,.88,1.63],['Mon 6 pm',93.67,4.95,1.34,4.81],['Mon 7 pm',96.48,2.78,.7,3.44],['Mon 7 pm',97.44,1.64,.85,2.68],['Mon 8 pm',96.13,2.62,1.21,3.15],['Mon 8 pm',96.46,2.09,1.43,2.27],['Mon 9 pm',98.86,.59,.55,1.22],['Mon 9 pm',97.31,1.73,.93,2.09],['Mon 10 pm',97.02,1.78,1.16,4.11],['Mon 10 pm',97.87,.94,1.17,1.66],['Mon 11 pm',99.06,.44,.49,1.23],['Mon 11 pm',97.24,1.84,.85,1.98],['Tue 12 am',97.63,1.7,.59,2.19],['Tue 12 am',93.73,4.38,1.86,5.37],['Tue 1 am',96.7,2.61,.65,6.23],['Tue 1 am',97.96,1.6,.43,1.95],['Tue 2 am',96.93,2.46,.6,2.78],['Tue 2 am',94.99,4.13,.85,2.92],['Tue 3 am',96.65,2.92,.41,1.64],['Tue 3 am',95.86,3.7,.41,2.83],['Tue 4 am',94.78,3.46,1.68,6.75],['Tue 4 am',94.86,4.84,.3,3.52],['Tue 5 am',97.27,2.58,.15,2.73],['Tue 5 am',97.36,2.57,.08,2.28],['Tue 6 am',97.02,2.72,.25,3.98],['Tue 6 am',95.2,3.53,1.17,2.61],['Tue 7 am',96.17,2.93,.77,2.44],['Tue 7 am',96.76,2.21,.99,2.18],['Tue 8 am',96.27,2.44,1.28,2.16],['Tue 8 am',95.17,3.07,1.75,3.13],['Tue 9 am',96.95,2.16,.89,2.29],['Tue 9 am',96.42,2.35,1.21,2.65]
+]);
+var options5 = {
+'title':'Last 2 Days',
+'width':'650px',
+'height':'200px',
+'colors':['green','blue','red','orange'],
+'chartArea':{left:60,width:490,height:110}
+}
+var chart5 = new google.visualization.LineChart(document.getElementById('chart_div5'));
+chart5.draw(data5, options5);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart6);
+function drawChart6() {
+var data6 = google.visualization.arrayToDataTable([
+['Date','FILETRAN','To CARDS'],
+['8:55',128577,67982],['9:00',159636,70794],['9:05',179741,76488],['9:10',181692,87599],['9:15',178814,89289],['9:20',177333,99184],['9:25',180855,111070],['9:30',215413,115072],['9:35',235066,118465],['9:40',259162,125114],['9:45',281781,129322],['9:50',297071,138965],['9:55',306844,154458]
+]);
+var options6 = {
+'title':'Last Hour',
+'width':'400px',
+'height':'200px',
+'chartArea':{left:60,width:250,height:110}
+}
+var chart6 = new google.visualization.LineChart(document.getElementById('chart_div6'));
+chart6.draw(data6, options6);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart7);
+function drawChart7() {
+var data7 = google.visualization.arrayToDataTable([
+['Date','FILETRAN','To CARDS'],
+['Sun 9 am',1602,3986],['Sun 10 am',1877,5320],['Sun 10 am',2331,2385],['Sun 11 am',2258,4280],['Sun 11 am',1874,5721],['Sun 12 pm',2500,7362],['Sun 12 pm',4941,4149],['Sun 1 pm',6236,8677],['Sun 1 pm',5782,14001],['Sun 2 pm',1822,19608],['Sun 2 pm',3164,1877],['Sun 3 pm',1953,3785],['Sun 3 pm',2194,6262],['Sun 4 pm',2505,8225],['Sun 4 pm',2050,1885],['Sun 5 pm',3176,3844],['Sun 5 pm',1727,6680],['Sun 6 pm',1941,8263],['Sun 6 pm',8917,3368],['Sun 7 pm',2918,8930],['Sun 7 pm',11598,16769],['Sun 8 pm',3038,25744],['Sun 8 pm',1808,2584],['Sun 9 pm',5306,4689],['Sun 9 pm',2746,8516],['Sun 10 pm',2404,12387],['Sun 10 pm',1776,3550],['Sun 11 pm',5062,6110],['Sun 11 pm',8142,12636],['Mon 12 am',9275,23012],['Mon 12 am',8476,12000],['Mon 1 am',11126,24133],['Mon 1 am',1571,33228],['Mon 2 am',3441,35905],['Mon 2 am',2006,4837],['Mon 3 am',2818,7218],['Mon 3 am',2205,10587],['Mon 4 am',1764,12186],['Mon 4 am',1705,479],['Mon 5 am',1707,782],['Mon 5 am',2962,1210],['Mon 6 am',1588,1836],['Mon 6 am',9965,9698],['Mon 7 am',9985,19506],['Mon 7 am',24378,32313],['Mon 8 am',12134,53126],['Mon 8 am',38946,25877],['Mon 9 am',18065,63344],['Mon 9 am',19861,103340],['Mon 10 am',87394,138367],['Mon 10 am',85678,54206],['Mon 11 am',34464,105405],['Mon 11 am',119143,133885],['Mon 12 pm',284666,168751],['Mon 12 pm',303460,46296],['Mon 1 pm',317087,66807],['Mon 1 pm',300256,135063],['Mon 2 pm',93073,217410],['Mon 2 pm',106456,32318],['Mon 3 pm',17645,83005],['Mon 3 pm',22460,116604],['Mon 4 pm',68010,140472],['Mon 4 pm',95723,35135],['Mon 5 pm',97212,60277],['Mon 5 pm',82750,90006],['Mon 6 pm',119820,111862],['Mon 6 pm',74514,26538],['Mon 7 pm',58960,57567],['Mon 7 pm',57732,81543],['Mon 8 pm',73359,106458],['Mon 8 pm',88970,31580],['Mon 9 pm',99526,53858],['Mon 9 pm',76973,85882],['Mon 10 pm',34748,102330],['Mon 10 pm',20654,22739],['Mon 11 pm',9696,41313],['Mon 11 pm',25621,58488],['Tue 12 am',31191,80081],['Tue 12 am',83525,25366],['Tue 1 am',119884,53613],['Tue 1 am',138243,72083],['Tue 2 am',140339,105431],['Tue 2 am',104458,31936],['Tue 3 am',20359,48851],['Tue 3 am',2542,58965],['Tue 4 am',2476,57092],['Tue 4 am',2602,2056],['Tue 5 am',2911,4662],['Tue 5 am',1819,6796],['Tue 6 am',2363,8831],['Tue 6 am',102730,43190],['Tue 7 am',64351,82879],['Tue 7 am',69637,109292],['Tue 8 am',80534,140458],['Tue 8 am',150227,37868],['Tue 9 am',159636,70794],['Tue 9 am',215413,115072]
+]);
+var options7 = {
+'title':'Last 2 Days',
+'width':'650px',
+'height':'200px',
+'chartArea':{left:60,width:490,height:110}
+}
+var chart7 = new google.visualization.LineChart(document.getElementById('chart_div7'));
+chart7.draw(data7, options7);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart8);
+function drawChart8() {
+var data8 = google.visualization.arrayToDataTable([
+['Date','Appr Insp','To VW','To FNMA'],
+['8:55',100,31,540],['9:00',105,246,580],['9:05',146,47,642],['9:10',179,174,40],['9:15',222,53,88],['9:20',262,159,99],['9:25',301,33,110],['9:30',371,232,118],['9:35',345,31,131],['9:40',316,200,142],['9:45',302,47,153],['9:50',306,182,176],['9:55',255,33,193]
+]);
+var options8 = {
+'title':'Last Hour',
+'width':'400px',
+'height':'200px',
+'chartArea':{left:60,width:250,height:110}
+}
+var chart8 = new google.visualization.LineChart(document.getElementById('chart_div8'));
+chart8.draw(data8, options8);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart9);
+function drawChart9() {
+var data9 = google.visualization.arrayToDataTable([
+['Date','Appr Insp','VW','FNMA'],
+['Sun 9 am',8,18,266],['Sun 10 am',1,22,270],['Sun 10 am',0,18,273],['Sun 11 am',0,25,277],['Sun 11 am',0,26,279],['Sun 12 pm',0,30,280],['Sun 12 pm',66,26,281],['Sun 1 pm',64,31,288],['Sun 1 pm',510,29,291],['Sun 2 pm',0,14,296],['Sun 2 pm',0,17,301],['Sun 3 pm',0,36,304],['Sun 3 pm',0,25,309],['Sun 4 pm',0,19,314],['Sun 4 pm',0,21,320],['Sun 5 pm',0,24,325],['Sun 5 pm',0,24,330],['Sun 6 pm',0,35,332],['Sun 6 pm',91,17,338],['Sun 7 pm',111,37,347],['Sun 7 pm',144,27,355],['Sun 8 pm',0,27,363],['Sun 8 pm',0,25,364],['Sun 9 pm',3,27,366],['Sun 9 pm',2,20,369],['Sun 10 pm',2,43,379],['Sun 10 pm',0,30,389],['Sun 11 pm',0,34,396],['Sun 11 pm',87,45,407],['Mon 12 am',17,44,418],['Mon 12 am',350,36,434],['Mon 1 am',243,31,442],['Mon 1 am',0,333,447],['Mon 2 am',0,637,448],['Mon 2 am',0,893,448],['Mon 3 am',0,1105,449],['Mon 3 am',0,1264,452],['Mon 4 am',0,1407,455],['Mon 4 am',0,1521,455],['Mon 5 am',0,1649,456],['Mon 5 am',0,1790,456],['Mon 6 am',0,1868,456],['Mon 6 am',15,22,464],['Mon 7 am',25,28,494],['Mon 7 am',79,71,525],['Mon 8 am',94,115,638],['Mon 8 am',130,265,963],['Mon 9 am',123,198,1314],['Mon 9 am',58,259,1954],['Mon 10 am',53,254,2670],['Mon 10 am',43,242,3241],['Mon 11 am',300,179,3425],['Mon 11 am',105,386,3894],['Mon 12 pm',72,209,3949],['Mon 12 pm',479,238,4009],['Mon 1 pm',342,189,4083],['Mon 1 pm',856,197,4191],['Mon 2 pm',516,205,4317],['Mon 2 pm',131,156,4392],['Mon 3 pm',84,197,4462],['Mon 3 pm',105,201,4540],['Mon 4 pm',152,219,4592],['Mon 4 pm',75,252,4785],['Mon 5 pm',17,100,3201],['Mon 5 pm',9,142,45],['Mon 6 pm',37,146,105],['Mon 6 pm',207,154,150],['Mon 7 pm',1049,160,213],['Mon 7 pm',1368,161,61],['Mon 8 pm',2242,133,169],['Mon 8 pm',2433,107,225],['Mon 9 pm',907,119,295],['Mon 9 pm',35,116,37],['Mon 10 pm',58,173,71],['Mon 10 pm',30,137,129],['Mon 11 pm',18,148,168],['Mon 11 pm',727,128,34],['Tue 12 am',1558,121,72],['Tue 12 am',2447,107,94],['Tue 1 am',3397,62,126],['Tue 1 am',2152,505,8],['Tue 2 am',0,837,14],['Tue 2 am',0,2304,17],['Tue 3 am',0,2652,18],['Tue 3 am',0,2867,1],['Tue 4 am',0,3076,1],['Tue 4 am',0,3183,2],['Tue 5 am',0,3306,2],['Tue 5 am',0,3439,0],['Tue 6 am',0,3566,4],['Tue 6 am',163,1073,45],['Tue 7 am',106,100,458],['Tue 7 am',24,75,63],['Tue 8 am',103,128,116],['Tue 8 am',160,217,258],['Tue 9 am',105,246,580],['Tue 9 am',371,232,118]
+]);
+var options9 = {
+'title':'Last 2 Days',
+'width':'650px',
+'height':'200px',
+'chartArea':{left:60,width:490,height:110}
+}
+var chart9 = new google.visualization.LineChart(document.getElementById('chart_div9'));
+chart9.draw(data9, options9);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart10);
+function drawChart10() {
+var data10 = google.visualization.arrayToDataTable([
+['Date','Web Svc'],
+['8:55',1313],['9:00',1181],['9:05',1325],['9:10',1260],['9:15',1349],['9:20',1376],['9:25',3055],['9:30',1776],['9:35',1498],['9:40',1869],['9:45',1825],['9:50',2316],['9:55',2356]
+]);
+var options10 = {
+'title':'Last Hour',
+'width':'400px',
+'height':'200px',
+'chartArea':{left:60,width:250,height:110}
+}
+var chart10 = new google.visualization.LineChart(document.getElementById('chart_div10'));
+chart10.draw(data10, options10);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart11);
+function drawChart11() {
+var data11 = google.visualization.arrayToDataTable([
+['Date','Web Svc'],
+['Sun 9 am',395],['Sun 10 am',408],['Sun 10 am',133],['Sun 11 am',1377],['Sun 11 am',507],['Sun 12 pm',470],['Sun 12 pm',230],['Sun 1 pm',801],['Sun 1 pm',468],['Sun 2 pm',216],['Sun 2 pm',465],['Sun 3 pm',367],['Sun 3 pm',529],['Sun 4 pm',460],['Sun 4 pm',370],['Sun 5 pm',309],['Sun 5 pm',389],['Sun 6 pm',467],['Sun 6 pm',398],['Sun 7 pm',460],['Sun 7 pm',594],['Sun 8 pm',618],['Sun 8 pm',411],['Sun 9 pm',520],['Sun 9 pm',369],['Sun 10 pm',810],['Sun 10 pm',651],['Sun 11 pm',870],['Sun 11 pm',809],['Mon 12 am',836],['Mon 12 am',590],['Mon 1 am',448],['Mon 1 am',444],['Mon 2 am',248],['Mon 2 am',366],['Mon 3 am',412],['Mon 3 am',460],['Mon 4 am',376],['Mon 4 am',193],['Mon 5 am',289],['Mon 5 am',209],['Mon 6 am',76],['Mon 6 am',235],['Mon 7 am',335],['Mon 7 am',358],['Mon 8 am',1193],['Mon 8 am',1335],['Mon 9 am',1544],['Mon 9 am',2111],['Mon 10 am',2010],['Mon 10 am',1843],['Mon 11 am',2020],['Mon 11 am',1910],['Mon 12 pm',2038],['Mon 12 pm',1922],['Mon 1 pm',1741],['Mon 1 pm',1919],['Mon 2 pm',1650],['Mon 2 pm',1901],['Mon 3 pm',2113],['Mon 3 pm',1842],['Mon 4 pm',1970],['Mon 4 pm',2285],['Mon 5 pm',1820],['Mon 5 pm',1888],['Mon 6 pm',1716],['Mon 6 pm',1352],['Mon 7 pm',1849],['Mon 7 pm',1677],['Mon 8 pm',1697],['Mon 8 pm',1279],['Mon 9 pm',1869],['Mon 9 pm',1653],['Mon 10 pm',1477],['Mon 10 pm',2264],['Mon 11 pm',1418],['Mon 11 pm',1447],['Tue 12 am',1356],['Tue 12 am',1441],['Tue 1 am',706],['Tue 1 am',1031],['Tue 2 am',979],['Tue 2 am',496],['Tue 3 am',828],['Tue 3 am',476],['Tue 4 am',574],['Tue 4 am',739],['Tue 5 am',157],['Tue 5 am',460],['Tue 6 am',154],['Tue 6 am',328],['Tue 7 am',314],['Tue 7 am',578],['Tue 8 am',602],['Tue 8 am',1196],['Tue 9 am',1181],['Tue 9 am',1776]
+]);
+var options11 = {
+'title':'Last 2 Days',
+'width':'650px',
+'height':'200px',
+'chartArea':{left:60,width:490,height:110}
+}
+var chart11 = new google.visualization.LineChart(document.getElementById('chart_div11'));
+chart11.draw(data11, options11);
+}
+</script>
+</head>
+<body>
+<div align='center'>
+<img src='http://www.excellware.com/docs/tools/images/banner.gif' alt='logo' style='margin-bottom:10px'>
+<h1>Dynamo Dashboard</h1>
+
+<table class='plain'>
+ <tr>
+  <td rowspan='4' style='border:0;vertical-align:top;padding:0'>
+<table>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>Transaction Queues</th>
+ </tr>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>As of Tue 04/02/13 09:55 am</th>
+ </tr>
+ <tr class='rowodd'>
+  <td>FILETRAN</td>
+  <td style='text-align:center'>306,844</td>
+ </tr>
+ <tr class='roweven'>
+  <td>To CARDS</td>
+  <td style='text-align:center'>154,458</td>
+ </tr>
+ <tr class='rowodd'>
+  <td>Approved Inspections</td>
+  <td style='text-align:center'>255</td>
+ </tr>
+ <tr class='roweven'>
+  <td>To Vendor Web</td>
+  <td style='text-align:center'>33</td>
+ </tr>
+ <tr class='rowodd'>
+  <td>To Fannie Mae</td>
+  <td style='text-align:center'>193</td>
+ </tr>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>Transaction Counts</th>
+ </tr>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>As of Tue 04/02/13 09:55 am</th>
+ </tr>
+ <tr class='rowodd'>
+  <td>Web Service Requests</td>
+  <td style='text-align:center'>2,356</td>
+ </tr>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>System Metrics</th>
+ </tr>
+ <tr class='roweven'>
+  <th colspan='2' style='text-align:center'>As of Tue 04/02/13 09:58 am</th>
+ </tr>
+ <tr class='rowodd'>
+  <td>Connections</td>
+  <td style='text-align:center'>1,801</td>
+ </tr>
+ <tr class='roweven'>
+  <td>Users</td>
+  <td style='text-align:center'>1,222</td>
+ </tr>
+ <tr class='rowodd'>
+  <td>CPU Load Average</td>
+  <td style='text-align:center'>2.50</td>
+ </tr>
+</table>
+</td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div8' style='width:400px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div9' style='width:650px;height:200px;'></div></td>
+ </tr>
+ <tr>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div6' style='width:400px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div7' style='width:650px;height:200px;'></div></td>
+ </tr>
+ <tr>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div10' style='width:400px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div11' style='width:650px;height:200px;'></div></td>
+ </tr>
+ <tr>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div1' style='width:400px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div2' style='width:650px;height:200px;'></div></td>
+ </tr>
+ <tr>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div3' style='width:230px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div4' style='width:400px;height:200px;'></div></td>
+  <td style='border:1 solid #e0e0e0'><div id='chart_div5' style='width:650px;height:200px;'></div></td>
+ </tr>
+</table>
+</body>
+</html>
+

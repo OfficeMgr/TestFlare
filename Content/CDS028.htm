@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="7008" MadCap:lastWidth="1030">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS028 - File Maintenance</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS028</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">File Maintenance</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS028">Last Revised: 
+		02/02/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be run or called to provide file maintenance for files described in the Data Dictionary.&#160; File Maintenance applications provide the ability for users to add, modify, delete, and view records from data files. Each File Maintenance includes at least one Standard View, but frequently also includes additional Views.&#160; The data file must be defined using <a href="http://excellware.com/docs/dynamo/FMS/cdf130.htm">Data Dictionary Maintenance</a> (FMS).&#160; The Views must be defined using the <a href="http://excellware.com/docs/dynamo/FMS/xxdd20.htm">Views</a> Option of Data Dictionary Maintenance (FMS). The Views to be included in the File Maintenance are specified in the <a href="http://excellware.com/docs/dynamo/FMS/xxdd22.htm">File Maintenance</a> Option of Data Dictionary Maintenance (FMS).	CDS028 can also be used in 'inquiry only mode' where records can be 
+	displayed but not modified, added, nor deleted.&#160; Inquiry only mode is 
+	also enabled when the user does not have write permissions to the primary 
+	data file.</p>
+        <p> CDS028 is typically RUN from the menu; however, applications can also RUN or CALL CDS028 as needed.&#160; 
+</p>
+        <p>When CDS028 is run, the following variables are used.&#160; All other variables are cleared.&#160; The Data Dictionary company code and Data Dictionary File Name are derived from <code>Y.APPID$</code>.&#160; <code>Y.VDTSFX$</code> is used for the File Maintenance VDT Suffix.&#160; When the user exits, the Dynamo menu CDS001 will be run.</p>
+        <p>CDS028 is also run from the Dynamo menu when the menu selection type is 
+	set to "F" for File Maintenance.&#160; In most cases, the data file to be 
+	maintained can be determined by the Application ID.&#160; When the data file 
+	name does not match the data dictionary file name, you can specify the data 
+	file name as File 1 in <a href="http://www.excellware.com/docs/dynamo/SMU/CDS880.htm">Menu Maintenance</a>.</p>
+        <p>Effective with CDS028 dated 02/24/14 or later, if the record has changed, it will be written to disc on multiple-view maintenance whenever the user selects a view option. This ensures that any routine that reads the record from disc will always have the latest version of the record.</p>
+        <table>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Session Control Variable.&#160; Optional.<table><tr><td><code>Y.APPID$</code></td><td>Used to determine <code>FILENAME$</code> when <code>FILENAME$</code> 
+			is not provided.</td></tr><tr><td><code>Y.APPID$(1,2)</code></td><td>Used to determine Data Dictionary Code (<code>S028.DDCC$</code>)</td></tr><tr><td><code>Y.APPID$(3)</code></td><td>Used to determine Data Dictionary File Name (<code>S028.DDFN$</code>)</td></tr><tr><td><code>Y.VDTSFX$</code></td><td>Used to determine File Maintenance suffix code (<code>S028.VDT$</code>)</td></tr><tr><td><code>Y.PASSPARM$</code></td><td><code>"Q"</code> indicates inquiry only mode</td></tr><tr><td><code>Y.SECLEV</code></td><td>Operator's security level which can limit which views the 
+			operator can access based on the security level specified in View 
+			Maintenance.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>FILENAME$</code>
+                </td>
+                <td>The data file name to be maintained, including a company code if applicable.&#160; Required.&#160; May begin with XX indicating the current company code.</td>
+            </tr>
+        </table>
+        <p>The following variables are used when CDS028 is called.</p>
+        <p><code>CALL "CDS028", Y$, S028$ {, RECMAIN$ }</code>
+        </p>
+        <table>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Session Control Variable.&#160; Optional.</td>
+            </tr>
+            <tr>
+                <td><code>S028$</code>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><code>S028.DDCC$</code>
+                            </td>
+                            <td>Company Code for Data Dictionary.&#160; Optional.&#160; If blank or XX, then <code>Y.COMPCODE$</code> will be used.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.DDFN$</code>
+                            </td>
+                            <td>Data Dictionary File Name.&#160; Required.&#160; This is the key to the Data Dictionary which excludes any company code if applicable.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.VDT$</code>
+                            </td>
+                            <td>File Maintenance suffix code as specified in File Maintenance Configuration.&#160; Required.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.FILENAME$</code>
+                            </td>
+                            <td>The data file name to be maintained, including a company code if applicable.&#160; Required.&#160; May begin with XX indicating the current company code.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.KEYPFX$</code>
+                            </td>
+                            <td>Only used when CDS028 is CALLed, as in Subsidiary File Maintenance and represents the key of the primary record being maintained</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.PFXKNO</code>
+                            </td>
+                            <td>This field is no longer used. &#160;The <code>KNUM</code>&#160;must be specified using File Maintenance Configuration Maintenance. Previously only used when CDS028 was CALLed, as in Subsidiary File Maintenance and represents the 
+			<code>KNUM</code> of the Subsidiary File to be maintained.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.MAXDESC</code>
+                            </td>
+                            <td>Only used when CDS028 is CALLed, as in Subsidiary File Maintenance and is used to indicate the longest Description field on initial view of the primary file in order to pad out the field Descriptions to match the initial view.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S028.TOPROW</code>
+                            </td>
+                            <td>Used to indicate the top most display row to be used.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>RECMAIN$</code>
+                </td>
+                <td>
+                    <p>The templated string can be used to pass key segments of a specific record to be maintained to CDS028 eliminating the need for the operator to enter any key segments.</p>
+                    <p>It is also used with Subsidiary File Maintenance where  <code>RECMAIN$</code> is the templated record of the primary file being maintained.</p>
+                    <p>The key segments in the subsidiary file will be derived from <code>RECMAIN$</code> instead of operator entry.&#160; This mapping is based on common field names so be sure that the key segment fields of the data file being maintained match the type and size of the fields in <code>RECMAIN$.</code></p>
+                </td>
+            </tr>
+        </table>
+        <p>In most cases, the operator enters the various key segments that make up 
+	the key to the primary data file being maintained.&#160; CDS028 will provide 
+	default values and allow use of the ArrowUp and Down keys to step forward 
+	and backward through the file.</p>
+        <p>When multiple records already exist in the file, the user will also be 
+	presented with the option to 'Select existing record from list'.&#160; This 
+	option will call CDS037 to display the fields specified using File 
+	Maintenance Configuration (FMS).&#160; Search capabilities also exist to 
+	allow the user to select a record based on an entered search argument.</p>
+        <p>If the primary key to the data file only has a single value, then the key 
+	entry routines are not required.&#160; This is useful when creating File 
+	Maintenance for single records in control or parameter files.</p>
+        <table class="example">
+            <tr>
+                <td>RUN Example</td>
+            </tr>
+            <tr>
+                <td><code>0180 IF OPT=2 THEN LET Y.APPID$="XXDD00",Y.VDTSFX$="A",FILENAME$=""; RUN "CDS028"</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>CALL Example</td>
+            </tr>
+            <tr>
+                <td><code>4225 CALL "CDS041","CDS028",S028$,"YY"<br />      4226 LET S028.DDCC$="CD",S028.DDFN$="SM13",S028.VDT$="A",S028,FILENAME$="CDSM13"<br />      4227 LET S028.TOPROW=2<br />      4230 PRINT 'PUSH',@(0,2),'CE',<br />      4240 CALL "CDS028",Y$,S028$<br />      4250 PRINT 'CS','POP',</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Company Information Maintenance (SMC) is an example of File 
+			Maintenance with a single view.<br />			This example also does not have a 'key' field that is entered by the 
+			operator.&#160; The Key field is specified in the data dictionary 
+			with a single value of "DD".&#160; When there is only one choice for 
+			the valid value of a key field, the value is assumed and not entered 
+			by the operator.<br />			Note that field 3 is a T type external called routine that is used 
+			for the entry of the Zip Code, City, and State.<br />			Field 9 is also a T type external called routine used for the entry 
+			of prefix segments.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0281.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Location &amp; Device Maintenance (SMC) is an example of File 
+			Maintenance with two views.<br />			The first view is a Standard View that simply allows the user to 
+			maintain fields within the primary data file.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0282.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Upon exiting the primary view, the user is presented with a list 
+			of views that they are authorized to select.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0283.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>In this case, the first view 'Locations' is the primary view 
+			already accessed.&#160; The Devices View is a called program view, 
+			which allows the software developer to link any custom programming 
+			required to the File Maintenance application.&#160; In this example, 
+			the CDS352 Dynamo Tool was used to maintain an unordered list of 
+			devices.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0284.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>If the user selects a device and touches enter, the user can 
+			maintain any of the device properties.&#160; This is done using 
+			CDS550.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0285.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Item Maintenance is an example of File Maintenance with several 
+			views.<br />			The primary view is shown below.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0286.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>The list of views is displayed when exiting the primary view.<br />			Each view can be a:<p>a) standard view which allows the user to 
+			maintain fields specified in the view using View Maintenance (FML), 
+			or<br />			b) called program view which allows the software developer to write 
+			custom code interfaced as a view to File Maintenance, or<br />			c) subsidiary file maintenance which allows complete multi-record 
+			file maintenance to a subsidiary file with one or more key segment 
+			fields that are common with the primary data file.<br />			Refer to File Maintenance Configuration documentation for additional 
+			details.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0287.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>The Alternate Item Maintenance is an example of a standard view, 
+			although custom code was provided with a T type external routine for 
+			the Alternate Item#.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0288.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Vendor Part Numbers is a Called Program view, as the application 
+			designer preferred to display multiple vendor part numbers on the 
+			screen at the same time.&#160; This data is also stored in a 
+			subsidiary file.&#160; A subsidiary file maintenance view could also 
+			be used, with the limitation of only displaying one record on the 
+			display at a time.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0289.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Vendor Pricing is an example of a Subsidiary File Maintenance 
+			view.&#160; In this case the Vendor Prices are stored in a separate 
+			file which includes the ITEMNO in the key.&#160; The ITEMNO is the 
+			primary key to the Item file being maintained.&#160;&#160; The 
+			Pricing Start Date and Promo Pricing End Date are also key segments 
+			of the Vendor Pricing (subsidiary) file.&#160; Note the user did not 
+			need to re-enter the item# when maintaining the subsidiary file, as 
+			it was derived from the primary record.&#160; The user has the same 
+			options to enter key segments, select existing record from list, and 
+			search the subsidiary file as they have with the primary file.</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS02810.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Example calling CDS028 passing key segments using <code>RECMAIN$</code></td>
+                </tr>
+                <tr>
+                    <td><code>2000 BEGIN</code>
+                        <br style="mc-tag-and-class: code;" /><code>2010 CALL "CDS091",Y$</code>
+                        <br style="mc-tag-and-class: code;" /><code>2020 DIM RECMAIN$:"CUSTNO:C(6)"</code>
+                        <br style="mc-tag-and-class: code;" /><code>2030 LET RECMAIN.CUSTNO$="   100"</code>
+                        <br style="mc-tag-and-class: code;" /><code>2040 CALL "CDS041","CDS028",S028$,"YY"</code>
+                        <br style="mc-tag-and-class: code;" /><code>2050 LET S028.DDFN$="CM01",S028.VDT$="A",S028.TOPROW=2</code>
+                        <br style="mc-tag-and-class: code;" /><code>2060 CALL "CDS028",Y$,S028$,RECMAIN$</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="CDS028-1.png" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

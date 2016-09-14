@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW001 - HTML Help Set Up</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW001" />CDW001</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="HTML" />HTML Help Set up</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW001">Last Revised: 09/22/04</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program determines if help text is available for a given web application and formats the hypertext link to the help text if present.</p>
+        <p>The HTML source should include the reference [HELP] where the link is to be inserted. If there is no help text available for a given application the [HELP] will be cut from the HTML source.</p>
+        <p><code>CALL "CDW001", ENV$, HTML$, PROGID$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDW001</th>
+            </tr>
+            <tr>
+                <td>ENV$</td>
+                <td>
+                    <MadCap:keyword term="BBweb" />the BBweb environment variable</td>
+            </tr>
+            <tr>
+                <td>HTML$</td>
+                <td>the HTML page being built. This program will add a small javascript routine on the front of HTML$ which will enable the help window to have no controls.</td>
+            </tr>
+            <tr>
+                <td>PROGID$</td>
+                <td>the web application program ID. It is normally not passed to CDW001, since the PGM(-1) will be assumed.</td>
+            </tr>
+            <tr>
+                <td>data</td>
+                <td>info</td>
+            </tr>
+        </table>
+        <p>
+            <br />
+            <MadCap:keyword term="htdocs" />
+  The help text must reside in a directory named help immediately under the server_root (htdocs) directory of the web server. The help text must have a lower case name and use a .htm suffix.</p>
+        <p>It is assumed that the [HELP] reference will be contained in a list of links often found in the footer section of the page. A pipe (|) separator will be included before the actual link when help text is present.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

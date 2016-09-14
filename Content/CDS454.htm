@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS454 - Print PCL Grid</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS454</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Print PCL Grid</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS454">Last Revised: 
+		10/27/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to print boxes in a grid 
+	similar to a spreadsheet on PCL compatible printers.</p>
+        <p>CDS454 can print a grid of PCL cells (boxes) that:</p>
+        <ul>
+            <li>span multiple rows</li>
+            <li>span multiple columns</li>
+            <li>are shaded or unshaded</li>
+            <li>are empty (no text printed in box)</li>
+            <li>have text left justified, right justified, or centered</li>
+            <li>contain Notepad text</li>
+        </ul>
+        <p>See Also:<br /><a href="CDS254.htm">CDS254</a> - Print PCL Text, Line, Box, Overlay<br /><a href="CDS354.htm">CDS354</a> - Print 2 column PCL Box<br /><a href="CDS554.htm">CDS554</a> - Advanced PCL Grid</p>
+        <p>Calling Format:</p>
+        <p>CDS454 is called once with the SETUP option, then one or more times without it for each cell (box) to be printed.</p>
+        <p><code>CALL "CDS454::SETUP", ERR=XXXX, ATCOL, ATROW, COLS$, ROWS$, { LINEWIDTH }</code>
+        </p>
+        <p><code>CALL "CDS454", ERR=XXXX, Y6$, COLNO, ROWNO, { LCR$, TXT$, SHADE, BOXCOLS, BOXROWS, 
+	FONTSIZE, VERTADJ, FONTNO, COLOR$, NP$ }</code>
+        </p>
+        <p>In order to print the cell borders, you must call CDS454 for each cell in 
+	the grid, even if there is no text contained within the cell.</p>
+        <table>
+            <tr>
+                <th colspan="2">SETUP Call</th>
+            </tr>
+            <tr>
+                <td><code>ERR=</code>
+                </td>
+                <td>
+        Take error branch if:
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1" class="lev2"><tr><td><code>COLS$</code> was not specified on SETUP call, contains a 
+			column width greater than 65,535 dots, or has more than 255 columns.</td></tr><tr><td><code>ROWS$</code> was not specified on SETUP call, contains a 
+			row height greater than 65,535 dots, or has more than 255 rows.</td></tr><tr><td><code>LINEWIDTH</code> exceeds maximum of 255.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>ATCOL</code>
+                </td>
+                <td>Column position of upper left box in dots.&#160; There are 300 dots per inch.&#160; Zero is approximately 1/4" in from left of paper.</td>
+            </tr>
+            <tr>
+                <td><code>ATROW</code>
+                </td>
+                <td>Row position of upper left box in dots.&#160; Zero is approximately 1/4" from top of paper.</td>
+            </tr>
+            <tr>
+                <td><code>COLS$</code>
+                </td>
+                <td>A comma separated list indicating the width of each column.&#160; For example 
+		<code>"300,600,75"</code> would indicate 3 columns with widths of 300, 600, and 75 dots.&#160; 
+		A zero column width is supported as long as CDS454 is not called with 
+		data in that column.&#160; The maximum width of a column is 65,535 dots 
+		and the maximum number of columns is 255.&#160; Note that CDS454 adds 30 
+		dots to each column for margin, so <code>COLS$</code> 
+		should be based on the width of the text only (excluding the margin and 
+		line width).&#160; You can use <a target="_blank" href="CDS262.htm">
+		CDS262</a> to compute the width in dots for any text.&#160; Example:
+		<code>"1167,1167"</code> would allow for 2 equal columns with a 
+		total width of 2400 dots (8 inches), with 30 dot margin (15 dots left, 
+		and 15 dots right), and 2 dot line width, i.e., 
+		2+15+1167+15+2+15+1167+15+2=2400 dots.</td>
+            </tr>
+            <tr>
+                <td><code>ROWS$</code>
+                </td>
+                <td>A comma separated list indicating the height of each row.&#160; The 
+		maximum height of a row is 65,535 dots and the maximum number of rows is 255.&#160; 
+		Example: <code>"48,58,58,58"</code> would be appropriate for 1 standard 
+		heading row followed by 3 detail rows, each containing one row of text 
+		in the cell.&#160; If the last detail row contains two lines of text, 
+		then <code>"48,58,58,106"</code> would be appropriate.&#160;
+		<code>ROWS$</code> should exclude <code>LINEWIDTH</code> dots.<p>The 
+		overall row height in dots including the line height of the cell border 
+		line printed above the text, will be the <code>ROWS$</code> value plus 
+		the <code>LINEWIDTH</code>.&#160; With a default <code>LINEWIDTH</code> 
+		of 2 dots, the overall row height for the example will be 50, 60, 60, 
+		and 108 dots.</p><table border="1" id="table2"><tr><th colspan="4" style="text-align: center;">Recommended Row Height 
+			Formula</th></tr><tr><th style="text-align: center;">Heading/Shaded Row</th><th>Row Height Formula</th><th style="text-align: center;">Example: 1 row of text in cell</th><th style="text-align: center;">Example: 10 rows of text in cell</th></tr><tr><td align="center">Yes</td><td>8 + 40 times the number of lines of text printed in the cell</td><td align="center">48</td><td align="center">408</td></tr><tr><td align="center">No</td><td>10 + 48 times the number of lines of text printed in the cell</td><td align="center">58</td><td align="center">490</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>LINEWIDTH</code>
+                </td>
+                <td>Optional parameter that can be passed when you require a line width other than the 2 dots default.&#160; 
+		The maximum <code>LINEWIDTH</code> supported is 255.</td>
+            </tr>
+            <tr>
+                <th colspan="2">Cell Call (no ::SETUP)</th>
+            </tr>
+            <tr>
+                <td><code>ERR=</code>
+                </td>
+                <td>
+        Take error branch if:
+
+        <table><tr><td>CDS454 was not called with SETUP before first call without</td></tr><tr><td><code>COLNO</code> is less than 1 or greater than the number of columns specified in 
+			<code>COLS$</code></td></tr><tr><td><code>ROWNO</code> is less than 1 or greater than the number of rows specified in 
+			<code>ROW$</code></td></tr><tr><td>Width of <code>COLNO</code> is zero</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>Y6$</code>
+                </td>
+                <td>Standard Printer Control String as returned from CDS084</td>
+            </tr>
+            <tr>
+                <td><code>COLNO</code>
+                </td>
+                <td>The column number of the cell within the grid.&#160; The first column 
+		is 1, the second column is 2.&#160; The maximum number of columns is 
+		255.</td>
+            </tr>
+            <tr>
+                <td><code>ROWNO</code>
+                </td>
+                <td>The row number of the cell within the grid.&#160; The first row is 1, 
+		the second row is 2.&#160; The maximum number of rows is 255.</td>
+            </tr>
+            <tr>
+                <td><code>LCR$</code>
+                </td>
+                <td>
+        Optional indicator indicating alignment of cell contents
+
+        <table><tr><td align="center">L</td><td>Left Justified (default if not passed)</td></tr><tr><td align="center">C</td><td>Centered</td></tr><tr><td align="center">R</td><td>Right Justified</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>TXT$</code>
+                </td>
+                <td>The text to be printed inside of box.&#160; Can be null.&#160; Font will shrink to fit box size when necessary.&#160;
+		<code>TXT$</code> can also contain line feed characters ($0A$) in order 
+		to print multiple lines of text inside the same cell/box.</td>
+            </tr>
+            <tr>
+                <td><code>SHADE</code>
+                </td>
+                <td>
+        Optional indicator for shading
+
+        <table><tr><td align="center">0</td><td>No shading, text prints at 10 point</td></tr><tr><td align="center">1</td><td>Text prints in shaded box using 9 point bold type</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>BOXCOLS</code>
+                </td>
+                <td>Optional indicator used to indicate that a cell is to be joined with cells to the right of 
+		<code>COLNO</code>.&#160; <code>BOXCOLS</code> of 2 indicates two cells are joined.</td>
+            </tr>
+            <tr>
+                <td><code>BOXROWS</code>
+                </td>
+                <td>Optional indicator used to indicate that a cell is to be joined with cells below 
+		<code>ROWNO</code>.&#160; <code>BOXROWS</code> of 2 indicates two cells are joined.&#160; You may use both 
+		<code>BOXCOLS</code> and <code>BOXROWS</code> to create boxes that span both multiple rows and multiple columns.</td>
+            </tr>
+            <tr>
+                <td><code>FONTSIZE</code>
+                </td>
+                <td>Optional parameter to override the default point size of 10 for 
+		un-shaded cells, and 9 for shaded cells.&#160; When <code>FONTNO</code> 
+		is passed as 4099 for Courier Font, then <code>FONTSIZE</code> 
+		represents the characters per inch (pitch) and not the point size.</td>
+            </tr>
+            <tr>
+                <td><code>VERTADJ</code>
+                </td>
+                <td>Optional parameter to override the default vertical position of 
+		the text position within the cell.&#160; The default values are 39 dots 
+		for un-shaded cells, and 33 for shaded cells.</td>
+            </tr>
+            <tr>
+                <td><code>FONTNO</code>
+                </td>
+                <td>Optional parameter used to override the default font number of 4148.&#160; 
+		Typically passed as 4099 when it is necessary to print in a fixed width 
+		font such as Courier.&#160; Refer to <a href="CDS254.htm">CDS254</a> 
+		documentation or your printer's internal font list for a list of valid 
+		font numbers.</td>
+            </tr>
+            <tr>
+                <td><code>COLOR$</code>
+                </td>
+                <td>Optional parameter used to change the text color of the cell.&#160;
+		<code>COLOR$</code> can be a literal color such as 'red', 'green', or 
+		'blue', a hexadecimal RGB color such as FFAA22, or a decimal RGB color 
+		as in 128,64,32.&#160; Note that after this cell prints in the color 
+		specified, the default color is changed to black.&#160; Refer to
+		<a href="CDS254.htm">CDS254</a> for additional information about 
+		printing in color.</td>
+            </tr>
+            <tr>
+                <td><code>NP$</code>
+                </td>
+                <td>Optional parameter used to specify Notepad file name and Text ID 
+		separated by a comma, i.e., NotepadFileName,TextID.&#160; You can also 
+		specify a starting line and ending line line within the notepad text 
+		when it is necessary to print only a portion of the notepad, i.e., 
+		NotepadFileName,TextID,StartingLine,EndingLine.&#160; The notepad 
+		text will print below <code>TXT$</code> if present.&#160; There is no 
+		logic in CDS454 to insure that the notepad text will fit on the page.&#160; 
+		Use CDS554 when you require logic to insure the notepad fits on the 
+		page.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td><code>1000 GROUP1:</code>
+                    <p><code>1010 CALL "CDS454::SETUP",1415,300,"460,459","50,60"<br />
+        1020 CALL "CDS454",Y6$,1,1,"C","Date Printed",1<br />
+        1030 CALL "CDS454",Y6$,2,1,"C","Customer#",1<br />
+        1040 CALL "CDS454",Y6$,1,2,"C",DATE(0:"%Ds %Mz/%Dz/%Yz")<br />
+        1050 CALL "CDS454",Y6$,2,2,"C","123456"<br />
+        1060 RETURN</code>
+                    </p>
+                    <p><code>1100 GROUP2:<br />
+        1110 CALL "CDS454::SETUP",1415,500,"30,889","50,60,80,80"<br />
+        1120 CALL "CDS454",Y6$,1,1,"C","Mark Payment Method",2,2<br />
+        1130 LET ROW=2<br />
+        1140 CALL "CDS454",Y6$,1,ROW,""<br />
+        1150 CALL "CDS454",Y6$,2,ROW,"L","Payment Enclosed"<br />
+        1160 LET ROW=ROW+1<br />
+        1170 CALL "CDS454",Y6$,1,ROW,"","",0,1,2<br />
+        1180 CALL "CDS454",Y6$,2,ROW,"L","Credit Card#:"<br />
+        1190 LET ROW=ROW+1<br />
+        1200 CALL "CDS454",Y6$,2,ROW,"L","Expiration Date:"<br />
+        1210 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><a target="_blank" href="reports/CDS454.pdf">Click</a> for Example Output</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

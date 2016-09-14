@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="2471" MadCap:lastWidth="955">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS279 - Display Templated Strings</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS279" />CDS279</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Templated" />Display/Maintain/Compare Templated Strings</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS279">Last Revised 04/22/09</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be called to display each of the fields of one or two templated string variables.&#160; 
+	When passed a single string, CDS279 can also be used to modify the fields.</p>
+        <p><code>CALL "CDS279", REC1$ {, REC2$, PAR$ }</code>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table1">
+            <tr>
+                <td><code>REC1$</code>
+                </td>
+                <td>Templated variable - required</td>
+            </tr>
+            <tr>
+                <td><code>REC2$</code>
+                </td>
+                <td>Optional Templated variable with same template as <code>REC1$</code>.&#160; If 
+		provided then each field in <code>REC2$</code> will appear to the right of the same 
+		field in <code>REC1$</code> and if the contents differ, an asterisk will be displayed 
+		in the rightmost column.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$(1,1)</code>
+                </td>
+                <td>Mode - optional.&#160; Determines whether the user can Maintain or 
+		modify any template field, and whether to display field names or 
+		template field titles.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3" class="lev2"><tr><th align="center">&#160;</th><th>Display/Maintain</th><th>Field Names/Titles</th></tr><tr><td align="center">M (default)</td><td align="center">Maintain</td><td align="center">Field Names</td></tr><tr><td align="center">T</td><td align="center">Maintain</td><td align="center">Titles</td></tr><tr><td align="center">D</td><td align="center">Display</td><td align="center">Field Names</td></tr><tr><td align="center">d</td><td align="center">Display</td><td align="center">Titles</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>PAR$(2)</code>
+                </td>
+                <td>Optional.&#160; Displayed in window title if passed.</td>
+            </tr>
+        </table>
+        <h5>Limitations</h5>
+        <p>If both <code>REC1$</code> and <code>REC2$</code> are provided, their templates must be the same.</p>
+        <p>You may not be able to see all fields if the size of the field names plus the data exceed the display width.&#160; 
+	However, CDS279 will convert to 132 column mode when field sizes require it. </p>
+        <table border="1" id="table4" class="example">
+            <tr>
+                <td>Example: Single record</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2799.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table5" class="example">
+            <tr>
+                <td>Example: Comparing two records<p>The * indicates the field 
+			differs between the two records</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS27910.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table6" class="example">
+            <tr>
+                <td>Example using display only using field names</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS095",IM01,"DSIM01","",IM01$<br />		&gt;READRECORD (IM01)IM01$<br />		&gt;CALL "CDS279",IM01$,"","dItem Record"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2791.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table7" class="example">
+            <tr>
+                <td>Example using display only using field titles</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS095",IM01,"DSIM01","",IM01$<br />			&gt;READRECORD (IM01)IM01$<br />			&gt;CALL "CDS279",IM01$,"","DItem Record"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2792.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

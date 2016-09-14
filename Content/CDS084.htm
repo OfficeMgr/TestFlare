@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="13" MadCap:lastHeight="11192" MadCap:lastWidth="877">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS084 - Open Output Device</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS084" />CDS084</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Open Output Device" />Open Output Device</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS084">Last Revised: 
+		08/01/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Printing:Fax" />
+            <MadCap:keyword term="Email" />
+            <MadCap:keyword term="Internet email" />
+            <MadCap:keyword term="Printer" />This routine is used to open an output device that the application can print to.&#160; This includes a printer, the local display (terminal, PC, etc.), a fax modem, 
+	DynaFax (email to fax gateway), internet email, text files, spreadsheet files, Adobe Portable Document Format (pdf) 
+	files, and emailing PDF files as attachments.</p>
+        <p class="SectionDesc">
+            <MadCap:keyword term="TIM" />It also can automatically upload to DynaStore cloud-based storage all PDF and text/spreadsheet files for permanent, redundant, 
+	secure storage.&#160; You don't need to store the report in printed form, 
+	nor in electronic form on the server or your workstation.&#160; All archived 
+	reports are available at any time using the DynaStore Reports option located 
+	on the SMS menu. </p>
+        <p>CDS084 is called by the menu processor whenever a printer is to be opened.&#160; CDS084 can be used in an interactive mode, where the operator selects the printer and options desired, or in a non-interactive mode where the printer and all options are passed from the calling routine.&#160; Note that <a href="CDS062.htm">CDS062</a>, formerly used for printer selection, is obsolete and should not be used, although it still exists with limited capability for compatibility.</p>
+        <p>Calling format:</p>
+        <p><code>CALL "CDS084", <a href="#ERR">ERR=XXXX</a>, <a href="#Y$">Y$</a>, <a href="#Y5$">Y5$</a>, <a href="#U0">U0</a>, <a href="#S084$">S084$</a>, <a href="#Y6">Y6</a>, <a href="#Y6$">Y6$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS084</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="ERR"></a>ERR</td>
+                <td>branch to line XXXX if unable to open output device, or operator exits without selecting an output device.&#160; 
+		It is recommended that all calls to CDS084 include an <code>ERR=</code> option.&#160; 
+		Note that <code>Y6$</code> is null and has no template associated with it if CDS084 
+		exits with an error.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="Y$"></a>Y$</td>
+                <td>session control variable</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="Y5$"></a>Y5$</td>
+                <td>job description, usually from menu processor</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="U0"></a>U0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                <td>
+                    <MadCap:keyword term="Printing" />In most cases, the application does not care what channel will be used for printing, passes U0 as zero, and CDS084 will determine an unused channel number.&#160; If you pass a channel number to CDS084 using U0, any file or device opened to this channel will be closed, and the specified channel will be used for printing.&#160; Application software should always print to channel 
+		<code>Y6.CH</code> which is set by CDS084.&#160; 
+		Programs that print to a hard coded channel number such as <code>PRINT (6)</code> 
+		will not work properly when using the EPDF printer (emailing a PDF 
+		attachment) because channel 6 will be opened to the email channel, and 
+		channel <code>Y6.CH</code> will be opened to the PDF channel.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="S084$"></a>S084$</td>
+                <td>
+        Template based structure used to pass options to CDS084.&#160; If desired, 
+		<code>CALL "<a href="CDS041.htm">CDS041</a>","CDS084",S084$</code><MadCap:keyword term="Templated" /><MadCap:keyword term="File Utility" /><span class="Code">, "YY" </span>before calling CDS084 to obtain an empty template.&#160; Use the File Utility to display the template for CDS084 for field sizes.&#160; You may also call CDS084 just passing a non-templated literal with the parameters required.&#160;
+
+        <table><tr><th colspan="2"><code>S084$ Template Fields</code></th></tr><tr><td><code>RPTWIDTH</code></td><td><table><tr><td align="center">N</td><td>Narrow - application will only print 80 columns</td></tr><tr><td align="center">W</td><td>Wide (default) - application prints more than 80, but not more than 132 columns</td></tr><tr><td align="center">E</td><td><MadCap:keyword term="Extra Wide" />Extra Wide - the application prints more that 132 columns.&#160; 
+					Note that due to a bbx restriction the maximum number of 
+					columns is 255.</td></tr></table></td></tr><tr><td><code>MODE</code></td><td><table><tr><td align="center">F</td><td>Full screen (default), operator will be prompted for 
+					printer and printer options.</td></tr><tr><td align="center">S</td><td>Select default printer automatically, and then present 
+					operator with printer options.&#160; Default printer is 
+					determined using Printer Preferences or first printer in 
+					list if no preferences have been specified.&#160; Pass 
+					<code>S084.NAME$</code> as all blanks or <code>"LP&#160; "</code> with this option.</td></tr><tr><td align="center">N</td><td>No operator entries.&#160; Typically only used by 
+					background tasks where no operator interaction is possible.&#160; 
+					If the printer is successfully opened, but CDS084 encounters 
+					an error zero trying to print to the printer, it will keep 
+					trying indefinitely. </td></tr><tr><td align="center">E</td><td>No operator entries except for error messages.</td></tr><tr><td align="center">C</td><td>Choose printer but do not select any options and do not 
+					open printer.&#160; Used when an application needs to store 
+					a default printer in a data file.&#160; Printer selected 
+					will be returned in <code>Y6.PTRID$</code>.&#160; Other printer 
+					information from SM31 file such as <code><MadCap:keyword term="PCL" />Y6.PTRTYPE$, 
+					Y6.PTRTYPEDESC$, Y6.PCL,</code> etc. are also returned in 
+					<code>Y6$</code>.&#160; 
+					If the operator touches F4 and does not select a printer, 
+					then the <code>ERR=</code> branch will be taken on the <code>CALL</code> to CDS084, 
+					and <code>Y6$</code> will be returned as a non-templated null string.</td></tr><tr><td align="center">f</td><td>Bypass initial printer selection, but present options.&#160; 
+					You must specify <code>S084.NAME$</code><MadCap:keyword term="Faxing" /> when using this option.&#160; 
+					This is useful when emailing or faxing to eliminate the 
+					initial printer selection, yet still allow entry of printer 
+					options such as email address, fax#, etc.</td></tr><tr><td align="center">D</td><td>Same as F but excludes Dynamo Print Spooler option.</td></tr></table></td></tr><tr><td><code>NAME</code></td><td>
+              For <code>MODE</code>'s where the operator can choose the printer from the list, 
+				<code>S084.NAME$</code> will be the default printer, otherwise 
+				<code>S084.NAME$</code><MadCap:keyword term="Printer Control" /> should be set by the calling program as the Printer ID to be opened.&#160; The Printer ID's are defined in Printer Control Maintenance (SMC).&#160; If passed as blank or 
+				<code>"LP"</code>, the CDS084 will determine the default <code>NAME</code><MadCap:keyword term="Printer Preference Maintenance" /> based on any entries made using Printer Preference Maintenance (SMC).
+
+              <p>The following <code>NAME</code>s are reserved for the special application as noted.</p><table><tr><td align="center"><code><MadCap:keyword term="PFIL" />PFIL</code></td><td>text file output - also used for tab delimited files that 
+					can be opened with a spreadsheet application.</td></tr><tr><td align="center"><code><MadCap:keyword term="PFAX" />PFAX</code></td><td>fax modem via VSI*FAX third party software, if enabled in 
+					Dynamo Configuration Maintenance (SMC)</td></tr><tr><td align="center"><code>DFAX</code></td><td>* DynaFax is faxing via the internet without a local fax 
+					modem, fax phone line, or third party software.&#160; 
+					Requires participation in the Excellware Priority Support 
+					Plan or purchase of a faxing service contract.&#160; There are no per-fax costs for local or long distance 
+					fax delivery to the United States.</td></tr><tr><td align="center"><code>MAIL</code></td><td>internet email output, if enabled in Dynamo Configuration 
+					Maintenance (SMC)</td></tr><tr><td align="center"><code>APDF</code></td><td><MadCap:keyword term="Adobe pdf" />* Adobe PDF file output.</td></tr><tr><td align="center"><code>EPDF</code></td><td>* Email PDF attachment.</td></tr><tr><td align="center"><code>DISP</code></td><td>display on workstation</td></tr></table><p>* This printer requires a third party software product which 
+				creates PDF files.&#160; Contact Excellware for more 
+				information.</p><p>Note that for convenience you can pass <code>
+				S084.NAME$="PFAX"</code> or <code>"DFAX"</code> and CDS084 will 
+				change it based on the Print to Fax Option specified in Dynamo 
+				Configuration Maintenance (SMC).&#160; Applications could check 
+				for <code>Y6.METHOD$="X"</code> to indicate if either faxing 
+				option is being used.</p></td></tr><tr><td><code>METHOD</code></td><td><table><tr><td nowrap="" align="center">blank</td><td>preferred setting, used to indicate the method should come from the Printer Control Maintenance setting</td></tr><tr><td nowrap="" align="center">D</td><td>Print directly to printer, only applicable on printers connected to a serial or parallel port on the server.&#160; 
+					Note that "1" is also supported to maintain compatibility 
+					with existing programs.</td></tr><tr><td nowrap="" align="center">S</td><td><MadCap:keyword term="Dynamo spooler" />Use Dynamo spooler, regardless of Printer Control setting.&#160; 
+					Note that "2" and "C" is also supported to maintain 
+					compatibility with existing programs.</td></tr><tr><td nowrap="" align="center">O</td><td><MadCap:keyword term="Facetwin" />Use Operating System spooler, regardless of Printer Control setting.&#160; Required for printers connected directly to the network or to printers connected to a PC when using FacetWin.&#160; 
+					Note that "3" is also supported to maintain compatibility 
+					with existing programs.</td></tr></table></td></tr><tr><td><code>STYLE</code></td><td><table><tr><td align="center">1-9</td><td><MadCap:keyword term="Printer Type Maintenance" />printer style from Printer Type Maintenance</td></tr><tr><td align="center">S</td><td>Standard print quality (no longer used, but allowed for compatibility, same as 1)</td></tr><tr><td align="center">M</td><td>Memo print quality (no longer used, but allowed for compatibility, same as 2)</td></tr></table></td></tr><tr><td><code>HORZ</code></td><td><table><tr><td>10</td><td><MadCap:keyword term="Characters per inch" />10 characters per inch (default)</td></tr><tr><td>12</td><td>12 characters per inch</td></tr><tr><td>15</td><td>15 characters per inch</td></tr><tr><td>17</td><td>17 characters per inch</td></tr><tr><td>20</td><td>20 characters per inch</td></tr></table></td></tr><tr><td><code>VERT</code></td><td><table><tr><td>6</td><td>6 lines per inch (default)</td></tr><tr><td>8</td><td>8 lines per inch</td></tr></table></td></tr><tr><td><code>SIZE</code></td><td>
+              Initial page depth and orientation.&#160; Note that the 
+				orientation can be changed within the printed document, so that 
+				the document contains pages in both portrait and landscape 
+				orientation.<table><tr><td>1</td><td>11 inch paper depth (default) - portrait orientation on a 
+					laser printer</td></tr><tr><td>2</td><td>8.5 inch paper depth - landscape orientation on a laser 
+					printer</td></tr></table></td></tr><tr><td><code>PCL</code></td><td>The calling program should set <code>S084.PCL$="Y"</code> which indicates the application program is going to send PCL codes.&#160; This directs CDS084 to use a PCL based printer type and the PCL formatter when faxing.&#160; 
+			The application program often uses programs such as
+			<a href="CDS254.htm">CDS254</a> 
+			and <a href="CDS354.htm">CDS354</a> 
+			to send PCL codes to the printer.&#160; If this option is passed as 
+			"Y" and the user selects a printer that is not PCL compatible, then 
+			the user will be directed to select a different printer.&#160; </td></tr><tr><td><code>DYNASTORE</code></td><td>Controls whether the report should get archived in the DynaStore 
+			cloud storage.&#160; Only applies to reports printed as PDF or to 
+			file/spreadsheet.&#160; Requires DynaStore configuration parameters 
+			in Company Information Maintenance (SMC).<table border="1" id="table1"><tr><td align="center">blank</td><td><table border="1" id="table2"><tr><th style="text-align: center;">DynaStore Reports 
+							Parameter</th><th>Action</th></tr><tr><td align="center">Y</td><td>Archive Report</td></tr><tr><td align="center">N</td><td>Do Not Archive Report</td></tr></table></td></tr><tr><td align="center">Y</td><td>Archive Report</td></tr><tr><td align="center">N</td><td>Do Not Archive Report</td></tr></table></td></tr><tr><td><code>WEBBACK</code></td><td>When creating PDF files in Dynaweb,
+			<a target="_blank" href="CDW999.htm">CDW999</a> creates a new 
+			browser instance containing the PDF document.&#160; If <code>WEBBACK</code> 
+			is not set, or set to 1, then the page that launched the PDF window 
+			will be re-displayed.&#160; If that page is used to enter parameters 
+			to create the PDF document, you may wish to have the browser back up 
+			to the previous page where the specific application was selected.&#160; 
+			To do that, pass <code>WEBBACK</code> as 2.&#160; <code>WEBBACK</code> 
+			up to 9 can be used to 'backup' up to 9 pages.</td></tr><tr><td><code>SOURCE</code></td><td>1-6 indicates paper source, primarily for laser printers with multiple input trays, manual feed path, envelope feeders, etc. See Printer Type Maintenance.</td></tr><tr><td><code>DEST</code></td><td>1-2 indicates paper destination, also primarily for larger laser printers, with multiple output paper paths</td></tr><tr><td><code>DUPLEX</code></td><td><MadCap:keyword term="Duplexing" />
+              1-3 indicates duplexing option for printers that support printing 
+				on the back side of the page.&#160; Certain laser and ink-jet 
+				printers support this option.&#160;
+
+              <table><tr><td>1</td><td>simplex - print on one side only</td></tr><tr><td>2</td><td>duplex - binding edge on long side of page</td></tr><tr><td>3</td><td>duplex - binding edge on short side of page</td></tr></table></td></tr><tr><td><code><MadCap:keyword term="Copies" />COPIES</code></td><td>Number of copies to be printed.&#160; Applies only when using 
+			the Operating System (OS) spooler.</td></tr><tr><td><code>COMMENT</code></td><td>Additional description that is displayed using the Dynamo Print 
+			Spooler.&#160; This field is typically entered by the user but can 
+			also be passed to CDS084.</td></tr><tr><td><code>TONAME</code></td><td>Email &amp; fax option, to individual name</td></tr><tr><td><code>TOCOMP</code></td><td><MadCap:keyword term="Company Name" />Fax option, to company name</td></tr><tr><td><code>TOFAXNO</code></td><td>Fax option, fax telephone number</td></tr><tr><td><code>FROMNAME</code></td><td>Email &amp; Fax option, from individual name, if not passed, login operator name used</td></tr><tr><td><code>FROMCOMP</code></td><td>Fax option, from company name, if not passed, current company name used</td></tr><tr><td><code>FROMEMAIL</code></td><td>Applies when emailing only.&#160; Can be set by calling program 
+			to sender's email address.&#160; If blank, CDS084 will use email 
+			address specified in Operator Information Maintenance for sending 
+			user.&#160; If this is also blank, then a default email address of
+			<a href="mailto:customer@excellware.com">customer@excellware.com</a>
+			is used.&#160; This is done in order to provide a valid, resolvable 
+			domain name since anti-spam policies often reject email with a 
+			non-resolvable domain name on the senders email address.</td></tr><tr><td><code>FROMPHONENO</code></td><td>Fax option, voice telephone number, if not passed, telephone number in operator information maintenance used, if no operator information phone number, then the telephone number in company information maintenance is used</td></tr><tr><td><code>FROMFAXNO</code></td><td>Fax option, from fax number, same as above</td></tr><tr><td><code>SUBJECT</code></td><td>Applies to Email &amp; Fax option.<br /><br />CDS084 also supports tha ability to insert a special symbol to the front of the email subject. These symbols bring attention to your emails and typically appear in the list of messages as well as when viewing the message itself. This feature is enabled by setting the global variable <code>"SMS_CDS084.SYMBOL"</code> to the UTF-8 hexadecimal value for the symbol desired. This <a href="http://www.fileformat.info/info/unicode/char/search.htm" target="_blank">link</a> can be used to locate other symbols.<br /><table style=""><col /><col /><col /><tbody><tr><th>Description</th><th style="text-align: center;">SMS_CDS084.SYMBOL</th><th style="text-align: center;">Displayed as</th></tr><tr><td>Fire</td><td style="text-align: center;"><code>"F09F94A5"</code></td><td style="text-align: center;">🔥</td></tr><tr><td>Truck</td><td style="text-align: center;"><code>"F09F9A9A"</code></td><td style="text-align: center;">🚚</td></tr><tr><td>Church</td><td style="text-align: center;"><code>"E29BAA"</code></td><td style="text-align: center;">⛪</td></tr><tr><td>Flag in Hole</td><td style="text-align: center;"><code>"E29BB3"</code></td><td style="text-align: center;">⛳ </td></tr></tbody></table></td></tr><tr><td><code>RESOLUTION</code></td><td>
+              Fax option<table><tr><td>S</td><td>Standard</td></tr><tr><td>F</td><td>Fine</td></tr></table></td></tr><tr><td><code>PRIORITY</code></td><td>
+              Fax option - controls where the fax is placed in the outgoing fax 
+				queue.&#160; Higher priority faxes are sent before lower ones.<table><tr><td align="center">L</td><td>Low</td></tr><tr><td align="center">M</td><td>Medium (default)</td></tr><tr><td align="center">H</td><td>High</td></tr><tr><td align="center">U</td><td>Urgent</td></tr></table><p>Email Option - controls display of the message priority 
+				indicator on the recipient's email application.</p><table><col /><col /><tr><td align="center">L</td><td>Low</td></tr><tr><td align="center">M</td><td>Medium (Normal)</td></tr><tr><td align="center">H</td><td>High</td></tr></table></td></tr><tr><td><code><MadCap:keyword term="CRLF" />CRLF</code></td><td>This option is used when printing to a file to set end of line 
+			and end of page separators.<table><col /><col /><tr><td align="center">Y</td><td><MadCap:keyword term="DOS/Windows" />DOS/Windows line separator (carriage return and line 
+					feed), no page separator</td></tr><tr><td align="center">W</td><td>DOS/Windows line separator (carriage return and line 
+					feed), Microsoft Windows page separator.&#160; This option 
+					will leave the page breaks in the file, created by printing 
+					'FF', which will cause applications such as Microsoft Word 
+					to start a new page when opening the created file.</td></tr><tr><td align="center">N</td><td>Unix line separator (line feed only), no page separator</td></tr></table></td></tr><tr><td><code><MadCap:keyword term="Date" />FAXDATE</code></td><td>Date in JUL format to defer faxing until. Does not apply to Dynafax.</td></tr><tr><td><code>FAXTIME</code></td><td>Time in TIM format to defer faxing until.&#160; If not set, then 
+			the fax is scheduled for immediate delivery.&#160; Useful when 
+			sending broadcast faxes where you want to send at night. Does not apply to Dynafax.</td></tr><tr><td class="nowrapcode">FAXNOTIFY</td><td>Can be set by calling program to override the Company Default Dynafax Notification default setting specified using Company Information Maintenance. Effective with Dynamo Tools versions dated 12/5/14 or later.<br /><table><col /><col /><tbody><tr><td style="text-align: center;">F</td><td>Email sender only if fax fails</td></tr><tr><td style="text-align: center;">A</td><td>Email sender always</td></tr><tr><td style="text-align: center;">S</td><td>Email sender only if fax succeeds</td></tr></tbody></table></td></tr><tr><td><code><MadCap:keyword term="Coverpage" />COVERPAGE</code></td><td>When faxing, a coverpage is normally sent whenever the <code>TONAME, 
+			TOCOMP,</code> or <code>SUBJECT</code> fields are non-blank or if a Cover Sheet Memo is 
+			entered.&#160; You can disable the fax cover page by setting 
+			<code>S084.COVERPAGE$="N"</code>.</td></tr><tr><td><code>EMAILTYPE</code></td><td>
+
+              This parameter only applies when emailing or emailing a PDF 
+				attachment.<table><tr><td align="center">blank</td><td>Application will print text, mnemonics such as 'LF', and column positioning expressions such as @(NN), to printer channel <code>
+					Y6.CH</code>. You are limited to 255 characters per printed line, otherwise you will encounter an error 1.</td></tr><tr><td align="center">H</td><td><MadCap:keyword term="HTML" />Application will print text and html tags, but no mnemonics nor column positioning expressions, to printer channel <code>
+					Y6.CH</code>.&#160; CDS084 will print <code>&lt;HTML&gt;</code> tag 
+					and set appropriate Content-Type headers &amp; separators.&#160; 
+					Applications often use <a href="CDW000.htm">CDW000</a> and
+					<a href="CDW038.htm">CDW038</a> to create html tables and 
+					reports. You are not limited to printing 255 characters per line, so you should not encounter any error 1's. Use $0A$ instead of 'LF' when using this option.</td></tr></table></td></tr><tr><td><code>EMAILPDF</code></td><td>
+
+              This parameter only applies when emailing an attachment using the 
+				EPDF printer.<table><tr><td align="center">blank</td><td>Email body will contain 'PDF File Attached'</td></tr><tr><td align="center">N</td><td>Application will send text or html for email body by 
+					printing to channel <code>Y6.CHEM</code>.</td></tr></table></td></tr><tr><td><code><a name="REDIRECTEMAIL"></a>REDIRECTEMAIL</code></td><td>This parameter can be used to redirect an applications email to 
+			the user logged in on non-production servers where the Dynamo 
+			Configuration Maintenance Parameter Redirect Email is also set to
+			<code>"Y"</code>.&#160; If both parameters are <code>"Y"</code>, 
+			then in addition to the email being redirected, the email Subject is 
+			also modified to include the server name than initiated the email 
+			(using the <code>SMS_SERVER</code> global), and the body of the 
+			email includes the intended email address.&#160; Note that the user 
+			logged in must also have an email address specified in Operator Information 
+			Maintenance (SMC).<table><tr><td align="center">Y</td><td>Redirect email to the logged in user's email address</td></tr><tr><td align="center">Other</td><td>Email is sent to the <code>S084.TOEMAIL$</code> address</td></tr></table><p>Note that the Dynamo Configuration Parameter record is saved to a 
+			global variable upon login, so you will need to logout and back in 
+			after using Dynamo Configuration Maintenance to change the Redirect 
+			Email parameter.</p></td></tr><tr><td><code>FILEOUT</code></td><td>For file output options, the name of the file to be created can 
+			be optionally passed to CDS084.<table><tr><th>FILEOUT</th><th>Result</th></tr><tr><td>not specified</td><td>CDS084 will define a unique file in the tmp folder below 
+					the Dynamo Tools install directory.&#160; The file extension 
+					will be .pdf if CDS084 is creating an Adobe PDF file, 
+					otherwise the extension file be .txt.&#160; Actual file name 
+					used will be returned both in <code>S084.FILEOUT$</code> and
+					<code>Y6.FILEOUT$</code>.&#160; If the application returns 
+					to the Dynamo Tools menu (CDS001), then the temporary output 
+					file will be erased.&#160; Otherwise files in tmp/ are 
+					typically erased by a cron task once the file is 24 hours 
+					old.&#160; Refer to <a href="CDS064.htm"><MadCap:keyword term="CDS064" />CDS064</a> for 
+					additional details regarding defining files.</td></tr><tr><td>specified with a comma in file name</td><td>The comma indicates that a unique file name should be 
+					created by inserting a unique number before the comma.&#160; 
+					If the comma is at the end of the file name, it will be 
+					removed.&#160; If the comma is not at the end, it will be 
+					replaced with a period.&#160; Example: <code>
+					S084.FILEOUT$="TEMP/Report,txt"</code>.&#160; Unique file 
+					name such as <code>TEMP/Report123.txt</code>.&#160; If path 
+					to file name includes File will be erased upon return to 
+					CDS001.&#160; Refer to <a href="CDS064.htm">CDS064</a> for 
+					additional details regarding defining files.</td></tr><tr><td>specified without a comma in file name</td><td>If this file already exists, and if not running in a 
+					background task, and <code>S084.MODE$</code> is F or E, then 
+					operator will be notified that file File specified already 
+					exists, and if it is OK to erase and replace the file.&#160; 
+					If <code>S084.MODE$="N"</code> or if running in the 
+ background, then the existing file will be erased without 
+ prompt.<p>File specified will be defined.&#160; File will not be 
+					erased upon return to CDS001.</p></td></tr></table><p>Regardless of the option used, the name of the file used will be 
+			returned to the calling application in <code>Y6.FILEOUT$</code>. </p></td></tr><tr><td><code>TOEMAIL</code></td><td>Email address.&#160; Separate multiple addresses using a comma 
+			with no spaces.</td></tr><tr><td><code>EMAILCC</code></td><td><MadCap:keyword term="Carbon Copy Email" />Carbon Copy Email address(es)</td></tr><tr><td><code>EMAILBCC</code></td><td>Blind Carbon Copy Email address(es)</td></tr><tr><td><code>EMAILREPLYTO</code></td><td>This field can be used to specify the email address used if the 
+			recipient chooses to reply to this email.&#160; Only required when 
+			the <code>REPLYTO</code> address is different from the <code>FROMEMAIL</code> address.&#160; 
+			For example, the O address might be a corporate email 
+			address, where the <code>REPLYTO</code> address is a person or department 
+			address.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="Y6"></a>Y6</td>
+                <td>Obsolete.&#160; Use <code>Y6.MAXL</code> or <code>Y6.MAXLPG</code> instead.&#160; Lines 
+		available for printing.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><a name="Y6$"></a>Y6$</td>
+                <td>
+        Template based printer information returned to application program.&#160; 
+		Note, that if CDS084 exits with an error, <code>Y6$</code> will be null, and not have 
+		an associated template.&#160;
+
+        <table><tr><th colspan="2">Y6$ Template</th></tr><tr><td><code>CH</code></td><td>Channel number used for printing.&#160; Within an application program, 
+			<code>PRINT (Y6.CH)...</code></td></tr><tr><td><code>CHEM</code></td><td>Channel number used for the email body when using printer Name 
+			EPDF which attaches a PDF file to an email.&#160; The application 
+			can print text or html to this channel which will appear in the 
+			email body.&#160; See also <code>S084.EMAILTYPE</code> and <code>
+			S084.EMAILPDF</code>.</td></tr><tr><td><code>L</code></td><td>Number of lines left to print on the page.&#160; Application programs should decrement 
+			<code>Y6.L</code> for each line printed.&#160; 
+			The best practice is to use <code>Y6.L</code> and not L as the line counter.&#160; 
+			This allows you to call programs like <a href="CDS038.htm">CDS038</a> 
+			or <a href="CDS257.htm">CDS257</a> and pass the current page and 
+			line to (and back from) these routines via <code>Y6$</code>.</td></tr><tr><td><code>P</code></td><td><MadCap:keyword term="CDS094" />The current page number.&#160; Incremented by CDS094.&#160; Printed by applications as 
+			<code>"Page",Y6.P</code></td></tr><tr><td><code>MAXL</code></td><td>The maximum number of detail lines to print or display per page.&#160; Assumes 6 heading lines.&#160; So printing on 11" paper at 6 lines per inch, with 1/2" margin on top and bottom, has 
+			<code>Y6.MAXL=54</code>.&#160; CDS094 assigns <code>Y6.L</code> to 
+			<code>Y6.MAXL</code>.</td></tr><tr><td><code>MAXLPG</code></td><td>Similar to <code>MAXL</code> except that <code>MAXLPG</code> includes all lines to print on the page, with no allowance for heading lines. Programs that are not standard reports such as forms can set 
+			<code>Y6.MAXL=Y6.MAXLPG</code> at the beginning of the job to insure printing on as much of the page as possible.</td></tr><tr><td><code>FF$</code></td><td>Used by CDS094 to indicate when form feeds need to be printed.</td></tr><tr><td><code>RPTWIDTH$</code></td><td>Report width from <code>S084.RPTWIDTH$</code>.&#160; If calling
+			<a href="CDS038.htm">CDS038</a> multiple times within a group of 
+			reports, as might be done in a Customer, Item, or Vendor Inquiry 
+			hard copy, the application should set <code>Y6.RPTWIDTH$</code> to N or W before 
+			calling CDS038 so that each section of the report can be either 
+			standard width (80 columns) or compressed width (132 columns) are 
+			required for each section of the report.</td></tr><tr><td><code>RPTCOLS</code></td><td>
+              Number of columns the report requires.&#160; Typically 80 for 
+				Narrow (N) reports, 132 for Wide (W) reports, and 233 for Extra 
+				Wide (E) reports.&#160; However, this field is also assigned by
+				<a href="CDS038.htm">CDS038</a> to the actual number of columns 
+				when more than 132 columns are required.&#160; This is needed 
+				when printing to the Display (DISP) so that the window will be 
+				exactly the correct width and look best when scrolling right and 
+				left to view the report.
+            </td></tr><tr><td><code>METHOD$</code></td><td>
+              Print method selected&#160;
+
+              <table><col /><col /><tr><td style="text-align: center;">P</td><td>printing directly to printer</td></tr><tr><td style="text-align: center;">T</td><td>printing to terminal/display</td></tr><tr><td style="text-align: center;">S</td><td><MadCap:keyword term="Spooling" />spooling using operating system or Dynamo spooler</td></tr><tr><td style="text-align: center;">F</td><td>printing to file</td></tr><tr><td style="text-align: center;">X</td><td>faxing (both VSIFAX and DynaFax)</td></tr><tr><td style="text-align: center;">E</td><td>emailing</td></tr><tr><td style="text-align: center;">A</td><td>creating Adobe PDF file, or attaching a PDF to an email</td></tr></table></td></tr><tr><td><code>EMAILTYPE$</code></td><td>
+              Email type from <code>S084.EMAILTYPE$</code><table><tr><td align="center">blank</td><td>text only email</td></tr><tr><td align="center">H</td><td>HTML email</td></tr></table></td></tr><tr><td><code>DEVICE$</code></td><td>
+              The device name opened, typically <code>LPEX1</code> for the first printer 
+				opened by the application.</td></tr><tr><td><code>PTRID$</code></td><td>
+              The printer ID as specified in Printer Control Maintenance.&#160; 
+				Use this instead of <code>FID()</code> to base program logic on the 
+				particular printer opened.</td></tr><tr><td><code>PTRIDDESC$</code></td><td>
+              Printer description associated with the Printer ID as specified in 
+				Printer Control Maintenance.</td></tr><tr><td><code>PTRTYPE$</code></td><td>
+              Printer type as specified in Printer Control Maintenance.</td></tr><tr><td><code>PTRTYPEDESC$</code></td><td>
+              Printer type description (from Printer Type file SM31)</td></tr><tr><td><code>PTRWIDTH$</code></td><td>
+              Printer width (from SM31)<table><tr><td align="center">N</td><td>Narrow carriage (8")</td></tr><tr><td align="center">W</td><td>Wide carriage (13.2"+")</td></tr></table></td></tr><tr><td><code>LINEDRAW$</code></td><td>Indicates if the printer supports printing of box and line drawing 
+		graphics characters using high-order ASCII characters.&#160; From 
+		Printer Type record (SM31).</td></tr><tr><td><code>PCL</code></td><td>Indicates the printers support for PCL commands.&#160; From Printer 
+		Type record (SM31).&#160; Also used to indicate if the printer prints in 
+ color or just black ink.<table><tr><td>0</td><td>printer does not support PCL commands</td></tr><tr><td>1</td><td>printer supports PCL, but non-scalable fonts.&#160; Also 
+					indicates printing to a file and <code>S084.PCL$</code> was passed as "Y" 
+					indicating that the application will send PCL commands to 
+					printer channel.</td></tr><tr><td>2</td><td>printer supports PCL and scalable fonts</td></tr><tr><td>3</td><td>color printer with PCL, scalable fonts, simple colors only 
+ (8 colors)</td></tr><tr><td>4</td><td>color printer with PCL, scalable fonts, full color support 
+ including images</td></tr></table></td></tr><tr><td><code>EPWIDTH</code></td><td>Indicates the number of print positions used per character when using 
+		<code>Y6.DWON$</code> to print double-width characters.<p>Print method selected&#160;
+
+              </p><table><tr><td>1</td><td>double wide characters not supported, print as single 
+					width characters</td></tr><tr><td>2</td><td>double wide characters take 2 print positions</td></tr></table></td></tr><tr><td><code>SIZE</code></td><td>Indicates the paper depth or orientation selected.<table><tr><td>1</td><td>11 inch paper depth - portrait orientation on a 
+					laser printer</td></tr><tr><td>2</td><td>8.5 inch paper depth - landscape orientation on a laser 
+					printer</td></tr></table></td></tr><tr><td><code>DYNASTORE</code></td><td>Should report be archived in DynaStore when the output device is 
+		closed (Y/N)</td></tr><tr><td><code>SLAVE</code></td><td>Indicates if the printer is accessed by printing to the workstation 
+		device using slave on/off characters.<table><tr><td>0</td><td>printer selected is not a 'slave' printer</td></tr><tr><td>1</td><td>printer selected has the same device name as the 
+					workstation or /dev/tty</td></tr></table></td></tr><tr><td><code>FILEOUT</code></td><td>Name of file when printing to a file using printer name PFIL.</td></tr><tr><td><code>INITON$*</code></td><td>Initialization string upon printer open</td></tr><tr><td><code>INITOFF$*</code></td><td>Initialization string upon printer close</td></tr><tr><td><code>DWON$/DWOFF$*</code></td><td><MadCap:keyword term="Double Wide on/off" />Double Wide on/off</td></tr><tr><td><code>DHON$/DHOFF$*</code></td><td><MadCap:keyword term="Double High on/off" />Double High on/off</td></tr><tr><td><code>ULON$/ULOFF$*</code></td><td>Underline on/off</td></tr><tr><td><code>BLDON$/BLDOFF$*</code></td><td><MadCap:keyword term="Bold on/off" />Bold on/off</td></tr><tr><td><code>ITON$/ITOFF$*</code></td><td>Italics on/off</td></tr><tr><td><code>RVON$/RVOFF$*</code></td><td>Reverse printing (white letters on a black background) on/off</td></tr><tr><td><code>STLYENAME$[9]</code></td><td>Names of different print styles from Printer Type Maintenance</td></tr><tr><td><code>STYLE$[9]*</code></td><td>Codes to invoke each particular style</td></tr><tr><td><code><MadCap:keyword term="CP" />CPI10$*</code></td><td>10 characters per inch</td></tr><tr><td><code>CPI12$*</code></td><td>12 characters per inch</td></tr><tr><td><code>CPI15$*</code></td><td>15 characters per inch</td></tr><tr><td><code>CPI17$*</code></td><td>17 characters per inch</td></tr><tr><td><code>CPI20$*</code></td><td>20 characters per inch</td></tr><tr><td><code>LPI6$*</code></td><td>6 lines per inch</td></tr><tr><td><code>LPI8$*</code></td><td>8 lines per inch</td></tr><tr><td><code>DEPTH11$*</code></td><td>Page depth of 11 inches (portrait orientation for laser/ink-jet printers)</td></tr><tr><td><code>DEPTH85$*</code></td><td>Page depth of 8.5 inches (landscape orientation for laser/ink-jet printers)</td></tr><tr><td><code>SOURCENAME$[6]</code></td><td>Name of different paper sources</td></tr><tr><td><code>SOURCE$[6]*</code></td><td>Codes to invoke each paper source</td></tr><tr><td><code>DESTNAME$[2]</code></td><td>Name of different paper output destination</td></tr><tr><td><code>DEST$[2]*</code></td><td>Codes to invoke destination</td></tr><tr><td><code>DUPLEX$[3]*</code></td><td><MadCap:keyword term="Simplex/duplex" />Codes for each simplex/duplex printing mode (see above)</td></tr><tr><td><code>MODE$</code></td><td>The <code>MODE=</code> string used on the <code>OPEN</code> of the printer</td></tr><tr><td><code>MSG$</code></td><td>Display message such as Printing..., Spooling..., etc. including cursor positioning expression so that the application program need only 
+		<code>PRINT Y6.MSG$</code>,.<p>Note the old <code>PRINT Y6$(90)</code><MadCap:keyword term="Program Utility Search" />, is no longer supported.&#160; Use the Program Utility Search and Replace option with standard Search &amp; Replace arguments to replace this code.</p></td></tr></table></td>
+            </tr>
+        </table>
+        <p>* The fields in <code>Y6$</code> marked with * can be used to change printing 
+	characteristics within the application.&#160; For example, the <code>PRINT</code> 
+	statement to print double wide text, assuming the printer supports double 
+	wide printing, would be: <code>PRINT (Y6.CH)'BO', Y6.DWON$, DATA$, Y6.DWOFF$,' EO'.</code>&#160; 
+	It is recommended that you only have one <code>'BO'</code> and <code>'EO'</code> per 
+	<code>PRINT</code> statement, 
+	and that you do not include any positioning expressions <code>@()</code> or other 
+	mnemonics between the <code>'BO'</code> and <code>'EO'</code>.</p>
+        <p>CDS084 also sets <code>'SP'</code> and <code>'CP'</code> which should be used within an program 
+	that needs to change from narrow to wide and/or wide to narrow characters 
+	per inch within the application.</p>
+        <p>Note that application programs should not print the <code>'FF'</code> mnemonic, 
+	instead, use <a href="CDS094.htm">CDS094</a> for all new page and close 
+	printer logic.&#160; By using CDS094, the application will best support 
+	printing to the display.</p>
+        <p>Applications that need to close the printer channel prior to returning to 
+	the menu, should <code>CALL "CDS094",Y6$,"E"</code> and not use 
+	<code>CLOSE()</code>.</p>
+        <h5>Config.bbx</h5>
+        <p>CDS084 does not require an entry in the <code>config.bbx</code> file for each printer.&#160; 
+	Printers are included on the printer selection list using Printer Control 
+	Maintenance (SMC).&#160; The list of printers can be customized by 
+	workstation, user, or groups of users.&#160; Refer to Printer Preference 
+	Maintenance (SMC) for additional details.&#160; The only entries required in 
+	<code>config.bbx</code> are generic entries named LPEX1, LPEX2, LPEX3, LPEX4 and LPEX5.&#160; 
+	You do not need to add entries as printers are added.&#160; These entries 
+	will support up to 5 different printer channels open at one time per 
+	program.&#160; 
+	Should an application require more than 5 simultaneous printer channels open 
+	at the same time, then additional <code>config.bbx</code> entries can be made.&#160; Note 
+	that the <code>FID(Y6.CH)</code> will return <code>LPEXn</code> and not the printer ID.&#160; The 
+	actual printer ID can be accessed from <code>Y6.PTRID$</code>.</p>
+        <p>If there is an entry for a printer in the config.bbx file, then CDS084 
+	will use it instead of the generic LPEXn aliases.&#160; This should only be 
+	done when applications open the printer directly without using CDS084.</p>
+        <p>When using CDS084 within a bbj stored procedure or trigger, be sure to 
+	specify a config file for the stored procedure or trigger in the Basis 
+	Enterprise Manager.&#160; Dynamo Tools includes a configuration file that 
+	includes the required alias entries that can be used for this purpose.&#160; 
+	The file name is <code>$SMSDIR/bin/config.web</code>.&#160; Replace <code>$SMSDIR</code> 
+	with it's value such as <code>/u/CDI/bin/config.web</code> when entering the 
+	config file name in the Enterprise Manager.</p>
+        <h5>Cover Page Memo</h5>
+        <p>A cover page memo may be entered by the operator when faxing.</p>
+        <h5><b>Fax Cover Page Logo/Watermark</b>
+        </h5>
+        <p>A logo or watermark can be printed on the fax coverpage by defining a 
+	file named <code>XX/faxcover.prn</code>.&#160; <code>XX</code> represents the company code.&#160; This 
+	document can be created using a word processor.&#160; Email the document to
+	<a href="mailto:support@excellware.com">support@excellware.com</a> and we 
+	will convert it to the proper format.</p>
+        <h5>Example</h5>
+        <p><code>CALL "CDS084",ERR=EOJ,Y$,Y5$,0,"N",Y6,Y6$</code>
+        </p>
+        <p>This example will prompt the operator to select an output device to an available channel number.&#160; The <code>"N"</code> indicates that the program will not require more that 80 columns, so both narrow and wide carriage printers will be permitted using operator specified characters per inch, lines per inch, etc.</p>
+        <h5>Example</h5>
+        <p><code>CALL "CDS041","CDS084",S084$,"YY"<br />S084.NAME="PFIL"<br />S084.FILEOUT="/u/reports/REPORT001"<br />CALL "CDS084",ERR=EOJ,Y$,Y5$,0,S084$,Y6,Y6$</code>
+        </p>
+        <h5>Faxing</h5>
+        <p>You fax using CDS084 much the same way you print.&#160; You can populate 
+ fields in <code>S084$</code> to enable faxing with or without operator intervention.&#160; 
+ Refer to the fields in <code>S084$</code> described above.&#160; Use Fax Log &amp; Options (PFM) 
+ to see if the fax was successfully sent.&#160; By default, the fax software 
+ attempts to fax 5 times in 5 minute intervals.&#160; If the line is busy or 
+ does not answer each time, or the phone number provided is not a fax#, then 
+ the fax will be unsuccessful.&#160; You can schedule another 5 attempts, and 
+ change the fax# if desired, using the Fax Log &amp; Options program.&#160; 
+	When the fax is not successful, a Dynamo message is sent to the sender.</p>
+        <p><code>S084.NAME$</code> is <code>"PFAX"</code> for faxing using a fax 
+	modem and the third party VSIFAX software.&#160; <code>S084.NAME$</code>=<code>"DFAX"</code> 
+	for DynaFax which emails the fax as a PDF attachment then delivers to the 
+	fax machine.&#160; DynaFax requires a third party software product to create 
+	the PDF file.&#160; Contact Excellware for more information.</p>
+        <table class="example">
+            <tr>
+                <td>Faxing Example - no operator intervention</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS084",S084$,"YY"; <span style="color: #ffff00;">REM&#160;"Obtain empty template</span><br />S084.MODE$="E"; <span style="color: #ffff00;">REM&#160;"No operator entries other than error messages</span><br />S084.NAME$="DFAX"; <span style="color: #ffff00;">REM&#160;"Fax using DynaFax</span><br />S084.TONAME$="Jim Jones"<br />S084.TOCOMP$="Power Tool and Supply"<br />S084.TOFAXNO$="888-222-1234"<br />S084.SUBJECT$="Purchase Order# "+WM40.PONO$<br />S084.COVERPAGE$="N"<br />S084.PCL$="N"; <span style="color: #ffff00;">REM&#160;"Application only sends text, not PCL&#160;commands</span><br />CALL "CDS084",ERR=EOJ,Y$,Y5$,0,S084$,0,Y6$; <span style="color: #ffff00;">REM&#160;"Open printer channel</span><br />PRINT (Y6.CH)"Fax Example"<br />CALL "CDS094",Y6$,"E"; <span style="color: #ffff00;">REM&#160;"Close printer channel</span></code>
+                </td>
+            </tr>
+        </table>
+        <h5>Internet Emailing</h5>
+        <p>You can internet email using CDS084 much the same way you would print to 
+	a physical printer.&#160; You can populate fields in <code>S084$</code> to enable 
+	emailing with or without operator intervention.&#160; You can email regular 
+	reports in the message body.&#160; You can also attach one or more data files to an email 
+	using <a href="CDS184.htm">CDS184</a>.</p>
+        <table class="example">
+            <tr>
+                <td>Internet Email Example with file attachment - no operator intervention</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS084",S084$,"YY"; <span style="color: #ffff00;">REM&#160;"Obtain S084 template</span><br />S084.MODE$="E"; <span style="color: #ffff00;">REM "No operator entries except for errors</span><br />S084.NAME$="MAIL"; <span style="color: #ffff00;">REM&#160;"Internet Email</span><br />S084.TONAME$="Jim Jones"<br />S084.TOCOMP$="Power Tool and Supply"<br />S084.TOEMAIL$="jjones@powertool.com"<br />S084.EMAILCC$="support@excellware.com,manager@mycompany.com"; <span style="color: #ffff00;">REM&#160;"Separate with comma</span><br />S084.SUBJECT$="Purchase Order# "+WM40.PONO$<br />S084.PCL$="N"; <span style="color: #ffff00;">REM&#160;"Application program will send text, not PCL&#160;commands</span><br />CALL "CDS084",ERR=EOJ,Y$,Y5$,0,S084$,0,Y6$; <span style="color: #ffff00;">REM&#160;"Open printer channel</span><br />PRINT (Y6.CH)"Email Test"; <span style="color: #ffff00;">REM&#160;"This will appear in email body</span><br />CALL "CDS184",Y$,Y6$,"PRT/FILENAME.PDF","PONO12345"; <span style="color: #ffff00;">REM&#160;"Attach file to email</span><br />CALL "CDS094",Y6$,"E"; <span style="color: #ffff00;">REM&#160;"Close printer channel</span></code>
+                </td>
+            </tr>
+        </table>
+        <p>When faxing and emailing, a record of the attempt is logged.&#160; See 
+	the SMS menu for the fax and email logs.</p>
+        <p>You can disable the ability to fax and email by operator using Operator 
+	Information Maintenance (SMC).</p>
+        <table class="example">
+            <tr>
+                <td>CDX084A - Example of changing page orientation within document</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "CDX084A - 05/02/10 Example of portrait and 
+			landscape pages in same document<br />0110 SETESC 8000; SETERR 8000<br />0120 CALL "CDS084",ERR=EOJ,Y$,Y5$,U0,S084$,Y6,Y6$<br />0130 PRINT (Y6.CH)"This is plain text, on portrait page"<br />0140 CALL "CDS094",Y6$; REM "Finish page 1, start page 2<br />0150 PRINT (Y6.CH)<span style="color: #FFFF00;">'BO',Y6.DEPTH85$,'EO',</span>; 
+			REM "Page 2 in landscape orientation<br />0160 PRINT (Y6.CH)"This is plain text, on landscape page"<br />0170 CALL "CDS094",Y6$; REM "Finish page 2, start page 3<br />0180 PRINT (Y6.CH)<span style="color: #FFFF00;">'BO',Y6.DEPTH11$,'EO'</span>,; 
+			REM "Page 3 in portrait orientation<br />0190 PRINT (Y6.CH)"This is plain text, on portrait page"<br />0200 CALL "CDS094",Y6$,"E"; REM "Complete document and close printer 
+			channel<br />0210 GOTO EOJ<br /><br />8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY<br /><br />9000 EOJ:<br />9010 IF TCB(13) THEN EXIT<br />9020 RUN "CDS001"</code>
+                </td>
+            </tr>
+            <tr>
+                <td><a target="_blank" href="reports/CDX084A.pdf">Click</a> to view 
+			example output</td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="2654" MadCap:lastWidth="1124">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <title>CDW999 - Dynaweb Exit Routine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW999" />CDW999</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Exit Routine" />Dynaweb Exit Routine/Launch Browser</p>
+                </td>
+                <td align="right">
+                    <a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW999">Last Revised: 07/10/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Web Application" />All Dynaweb applications should exit by running or 
+	calling this program.&#160; 
+	You should also run or call CDW999 from an application run from a workstation 
+	running FacetWin or PowerTerm when you want to display a web page, a text 
+	file, or a PDF file.</p>
+        <p>Applications should either:</p>
+        <ol>
+            <li>set the <code><MadCap:keyword term="HTML" />HTML$</code>, and optionally the <code>Y5$</code> string variable, or</li>
+            <li>print a report to a text file (by calling CDS084 with printer name 
+		<code>PFIL</code>), or</li>
+            <li>print a report to a PDF file (by calling CDS084 with printer name 
+		<code>APDF</code>).</li>
+        </ol>
+        <p>and then in each case, <code>RUN</code> or <code>CALL</code><code>
+	"CDW999",HTML$,Y6$,TITLE$</code> when completed.&#160; In most cases you <code>RUN 
+	"CDW999"</code> which will display the document in a browser, then run the 
+	menu or release the session.&#160; If you need to display multiple 
+	documents, then you can <code>CALL "CDW999"</code> which will return control 
+	back to the calling program, which can then create the next report and 
+	either <code>CALL</code> or <code>RUN "CDW999"</code> again.&#160; </p>
+        <p>If CDS084 was used to create a text or PDF file, then CDW999 will launch 
+	the browser displaying the file, otherwise CDW999:</p>
+        <ul>
+            <li>Replaces any field names referenced from <a href="environment.htm#Y$"><code>Y$</code></a> 
+	such as <code>Y.COMPNAME$</code> and <code>Y.DATE$</code> stored in square brackets in 
+	<code>HTML$</code>, i.e. <code>[COMPNAME]</code> 
+	and <code>[DATE]</code> with the value from the task control variable
+	<a href="environment.htm#Y$"><code>Y$</code></a>.</li>
+            <li>Processes any expression contained within braces {} using the bbweb uthtmout.wbb 
+	program.</li>
+            <li>If <code>HTML$</code> includes a form with an input, and focus has not been set, either specifically, or using 
+	<code><MadCap:keyword term="Bodyopt" />$bodyopt</code>, then CDW999 will name the form, if necessary, and assign focus to the first input on the page.</li>
+            <li>If run from a browser:<br />CDW999 sets the <code>$title </code>global variable to <code>Y5$</code> if non-blank,<br />calls <code>utsend.wbb</code> sending <code>HTML$</code> to the browser,<br />then calls <code>utexit.wbb</code> using <code><MadCap:keyword term="Cgi" />CGI$</code>,<br />then runs CDS001 which will terminate the session.</li>
+            <li>If called or run from a nonbrowser,<br />	Adds <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code> tags to <code>HTML$</code> 
+	if not already present,<br />	Adds a style sheet link if specified in Dynaweb Control Maintenance,<p>saves 
+	<code>HTML$</code> in a temporary string file based in the tmp folder below 'Document Root',<br />	then launches a web browser pointing to the file,&#160; (Requires FacetWin 
+	or PowerTerm)<br />	then if run and not called, runs the Dynamo menu program CDS001 or the external menu program.<br />	This option requires that the Dynaweb Control Maintenance include the Http 
+	Name or IP address and Web Server Document Root Folder.</p></li>
+        </ul>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example: Called from a FacetWin session</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>HTML$="Hello World"<br />		CALL "CDW999",HTML$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Browser will display:</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW9993.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Example run from a FacetWin session</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>1300 WEB:<br />		1310 BEGIN<br />		1320 CALL "CDW038",Y$,"Terms Code Listing","",HTML$,W038$,"XXCW13<br />		1330 RUN "CDW999"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Browser opens and displays</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW9991.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>Example of displaying a PDF file from a workstation application</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>1400 PDFEXAMPLE:<br />		1410 BEGIN<br />		1420 CALL "CDS041","CDS084",S084$<br />		1430 LET S084.MODE$="E",S084.NAME$="APDF"<br />		1440 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$<br />		1450 PRINT (Y6.CH)"PDF Test"<br />		1460 FOR COL=0 TO 100 STEP 10<br />		1470 PRINT (Y6.CH)@(COL),"Column "+STR(COL)<br />		1480 NEXT COL<br />		1490 PRINT (Y6.CH)'BU',"Underlined Text",'EU'<br />		1500 RUN "CDW999"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Browser opens and displays</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW9992.jpg" />
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

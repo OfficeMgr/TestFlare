@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS257 - Read / Print / Convert Window Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS257" />CDS257</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Convert Window Text" />Read / Print / Convert Window Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS257">
+		Last Revised: 05/02/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The purpose of this routine is to read, print, or convert window text.&#160; 
+	Window text, also called Notepad by most applications, is created using 
+	CDS069 with a type of W.</p>
+        <p>
+            <MadCap:keyword term="STR" />Window text may be stored in an SKY or MKY file.&#160; The key structure is 
+	a text identifier followed by a U(1) record number starting at zero.&#160; 
+	The characters per record can be any convenient size, typically 128, 256, 
+	512, 1024, etc.&#160; Since only 256 records can be stored per text id, the 
+	characters per record determine the maximum notepad size.&#160; Note that 
+	the characters per record are not in any way related to the width of the 
+	entry window.</p>
+        <p>When this routine is called from application programs, it is usually used to print window text that has been previously entered.&#160; This routine will optionally print the window border as well as the text contained within the border.</p>
+        <p>See also <a href="CDS261.htm">CDS261</a> Return Window Text, and
+	<a href="CDS054.htm">CDS054</a> Window Text - Copy/Delete.</p>
+        <p>When used to print window text, the format is:</p>
+        <p><code>CALL "CDS257", <a href="#Y$">Y$</a>, <a href="#TEXTID$">TEXTID$</a>, <a href="#TITLE$">TITLE$</a>, 
+	<a href="#FILECHAN$">FILECHAN$</a>, <a href="#STS$">STS$</a>, <a href="#INDENT">INDENT</a>, 0, 0, 0, 
+	<a href="#Y6$">Y6$</a>, <a href="#Y5$">Y5$</a>, <a href="#Y5A$">Y5A$</a>,
+	<a href="#INDENT$_">INDENT$</a></code>
+        </p>
+        <p>In its most complete form, CDS257 is called using the following variables:</p>
+        <p><code>CALL "CDS257", <a href="#Y$">Y$</a>, <a href="#TEXTID$">TEXTID$</a>, <a href="#TITLE$">TITLE$</a>, 
+	<a href="#FILECHAN$">FILECHAN$</a>, <a href="#STS$">STS$</a>, 
+	<a href="#COLS">COLS</a>, <a href="#ROWS">ROWS</a>, <a href="#XPOS">XPOS</a>, <a href="#YPOS">YPOS</a>, <a href="#ATTRB$">ATTRB$</a>, <a href="#ATTRW$">ATTRW$</a>, <a href="#WT$">WT$</a>, <a href="#WA$">WA$</a>,
+	<a href="#IMPORT$">IMPORT$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS257</th>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td><a name="TEXTID$"></a><code>TEXTID$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Text ID, such as a customer#, vendor#, item#, etc.</td>
+            </tr>
+            <tr>
+                <td><a name="TITLE$"></a><code>TITLE$</code>
+                </td>
+                <td align="center">In</td>
+                <td>title string to be used if the window is to be printed</td>
+            </tr>
+            <tr>
+                <td><code><a name="FILECHAN$"></a>FILECHAN$</code>
+                </td>
+                <td align="center">In</td>
+                <td>text file name or <code>STR(channel#)</code> if pre-opened by calling routine</td>
+            </tr>
+            <tr>
+                <td><code><a name="STS$"></a>STS$(1,1)</code>
+                </td>
+                <td align="center">
+        In</td>
+                <td>
+        Action Code.&#160; Only Action Codes P, T and W are typically needed by 
+		application programs.<table class="lev2"><tr><td align="center">D</td><td>Display only (default value)</td></tr><tr><td align="center">d</td><td>Display only, but just exit and do not prompt operator if text 
+			is not on file</td></tr><tr><td align="center">H</td><td>Display Help text</td></tr><tr><td align="center">M</td><td>Maintain text</td></tr><tr><td align="center">P</td><td>Print to printer.&#160; See example.</td></tr><tr><td align="center">T</td><td>Read notepad text and return text only, no attributes in <code>
+			WT$</code>.&#160; Each line of text will be <code>COLS</code> characters long.&#160;
+			<code>WT$</code> will be returned as null, and there will be no 
+			operator prompt if text is not on file.&#160; See example below.</td></tr><tr><td align="center">S</td><td>Import text string, format, and write to disc</td></tr><tr><td align="center">W</td><td>Convert &amp; write notepad text to disc.&#160; See <code>IMPORT$</code> 
+			and example below.</td></tr><tr><td align="center">R</td><td>Read notepad text</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>STS$(2,1)</code>
+                </td>
+                <td align="center">
+        In</td>
+                <td>
+        Print window border.&#160; This applies only when <code>STS$(1,1)="P"</code> 
+		and the target printer supports standard box drawing characters.<table class="lev2"><tr><td align="center">W</td><td>print double line window border (default value)</td></tr><tr><td align="center">S</td><td>print single line window border</td></tr><tr><td align="center">N</td><td>do not print window border</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>STS$(3,1)</code>
+                </td>
+                <td align="center">
+        In</td>
+                <td>
+        Print headings on new page after page break.&#160; Only applies when
+		<code>STS$(1,1)="P"</code>.<table class="lev2" id="table5"><tr><td>Y (default value)</td><td><MadCap:keyword term="Documentation Control Number" />Print standard new page headings as required, including Company 
+			Name centered on top line, Documentation Control Number and <code>Y5$</code><MadCap:keyword term="Date" /> 
+			(centered) on second line, and Date, <code>Y5A$</code>, and Page number on third 
+			line.</td></tr><tr><td>N</td><td>Do not print headings at top of page</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>STS$(4,1)</code>
+                </td>
+                <td align="center">
+        In</td>
+                <td>
+        Print in 8 lines per inch.&#160; Only applies when <code>STS$(1,1)="P"</code>.<table class="lev2"><tr><td>Y </td><td><MadCap:keyword term="Printing" />Print notepad text using 8 lines per inch.&#160;&#160; This is 
+			preferred when printing the window border with a proportional font 
+			so that the vertical lines are continuous and do not have breaks 
+			between the vertical border or line drawing characters. </td></tr><tr><td>N (default value)</td><td>Print notepad text at the current lines per inch setting, 
+			typically 6.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="COLS"></a>COLS</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>window width (data only, not border).&#160; Defaults to 78 if passed 
+		as zero. When reading existing notepad text, and <code>COLS</code> is passed as 
+		non-zero, and <code>COLS</code> is passed as a value lower then when window text was 
+		originally saved, then <code>COLS</code> will be returned with the value used when 
+		the text was originally saved.</td>
+            </tr>
+            <tr>
+                <td><code><a name="ROWS"></a>ROWS</code>
+                </td>
+                <td align="center">In</td>
+                <td>window height (data only, not border).&#160; If passed as zero, <code>ROWS</code> 
+		will be computed to the maximum size possible, excluding top two lines 
+		of display.<p><br />
+		When <code>STS$(1,1)="T"</code>, <code>ROWS</code> determines the size 
+		of the output string <code>WT$</code>.&#160; To return the entire 
+		notepad text, even if it exceeds the window size, then pass <code>ROWS</code> 
+		as the total number of lines in the notepad text.&#160; The total number 
+		of lines can be determined using <a href="CDS261.htm">CDS261</a>.</p></td>
+            </tr>
+            <tr>
+                <td><a name="XPOS"></a><code>XPOS</code>
+                </td>
+                <td align="center">In</td>
+                <td>starting column position of the window.&#160; </td>
+            </tr>
+            <tr>
+                <td><a name="YPOS"></a><code>YPOS</code>
+                </td>
+                <td align="center">In</td>
+                <td>starting row position of the window</td>
+            </tr>
+            <tr>
+                <td><a name="ATTRB$"></a><code>ATTRB$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optional attributes containing mnemonics when displaying window 
+		border.&#160; Typically includes text and cell background colors such as 
+		<code>'SF+'CYAN'+'BACKGR'+'BLACK'</code>.&#160; Default value is a <code>'WHITE'</code> border on 
+		the current cell background color.</td>
+            </tr>
+            <tr>
+                <td><a name="ATTRW$"></a><code>ATTRW$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optional attributes containing mnemonics when displaying the window 
+		text such as <code>'YELLOW'+'BACKGR'+'RED'</code>.&#160; Default value is 
+		<code>'WHITE'</code> 
+		text on the current cell background color.</td>
+            </tr>
+            <tr>
+                <td><a name="WT$"></a><code>WT$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>Window text.&#160; Output when <code>STS$(1,1)="T"</code>.&#160; <code>
+		WT$</code> consists of <code>ROWS</code> rows of <code>COLS</code> characters per row.&#160; So if 
+		ROWS=3 and <code>COLS=60</code>, <code>WT$</code> will be 180 characters long, with 
+		line 1 at <code>WT$(1,60)</code>, line 2 at <code>WT$(61,60)</code> and 
+		line 3 at <code>WT$(121,60)</code>.</td>
+            </tr>
+            <tr>
+                <td><a name="WA$"></a><code>WA$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>Window text attributes.&#160; Same length as <code>WT$</code> with bbx 
+		attribute bits set for each character.&#160; Not typically needed by 
+		application software.</td>
+            </tr>
+            <tr>
+                <td><code><a name="IMPORT$"></a>IMPORT$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Used when converting text to window text when <code>STS$(1,1)="W"</code>.&#160;
+		<code>IMPORT$</code> can also contain the mnemonics <code>'LF'</code> to advance to 
+		the next line, <code>'BU'</code> &amp; <code>'EU'</code> to begin and end underlining, <code>'SF &amp; 'SB'</code> to 
+		make text bold and dim, <code>'BR' &amp; 'ER'</code> to begin and end reverse video, 
+		<code>'BB' 
+		&amp; 'EB'</code> to begin and end blinking text, column positioning expressions 
+		<code>@(COL)</code>, and combination attributes using <code>'ATTR'</code>.&#160; See example 
+		below.</td>
+            </tr>
+            <tr>
+                <td><a name="INDENT"></a><code>INDENT</code>
+                </td>
+                <td align="center">In</td>
+                <td>number of positions to indent window from left edge. If set to -1, then the window text will be centered on the page</td>
+            </tr>
+            <tr>
+                <td><code><a name="INDENT$_"></a>INDENT$</code>
+                </td>
+                <td align="center">
+        In</td>
+                <td>
+        When passing <code>INDENT</code> as a positive number, you may 
+		optionally pass <code>INDENT$</code> which will be printed at the left 
+		edge of the page.&#160; It can be up to <code>INDENT-1</code> characters 
+		long and will print on the first line of notepad text.&#160; It is 
+		typically used to print the notepad date or other segment in the notepad
+		<code>TEXTID$</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="Y6$"></a>Y6$</code>
+                </td>
+                <td align="center">
+        In/Out</td>
+                <td>
+        the printer control variable returned from printer selection routine
+		<a href="CDS084.htm"><MadCap:keyword term="CDS084" />CDS084</a>.<p>Note, that <code>Y6$</code> contains the current line counter 
+		<code>Y6.L</code> and the current page number <code>Y6.P</code>, and the maximum lines per page 
+		<code>Y6.MAXL</code>. <code>Y6.L</code> and <code>Y6.P</code> are modified by this program as data is printed.</p><p>Earlier versions of this program passed <code>L</code>, <code>P</code>, and 
+		<code>Y6</code> as arguments, 
+		which are no longer supported.</p></td>
+            </tr>
+            <tr>
+                <td><a name="Y5$"></a><code>Y5$</code>
+                </td>
+                <td align="center">In</td>
+                <td>
+                    <MadCap:keyword term="Company Name" />optional report heading to print centered under company name</td>
+            </tr>
+            <tr>
+                <td><a name="Y5A$"></a><code>Y5A$</code>
+                </td>
+                <td align="center">In</td>
+                <td>optional second line of report heading, printed under <code>Y5$</code></td>
+            </tr>
+        </table>
+        <p>When printing, note that CDS257 will not print anything if there is no text for the specified text ID.&#160; No error message will be displayed.&#160; This eliminates the need for the application program to test and see if there is any text on file before calling CDS257.&#160; Only the number of lines with actual text will be printed, i.e., any trailing blank lines in the window will not be printed.</p>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Printing example: used during Purchase Order printing to print 
+			the company Terms &amp; Conditions stored in file XXPO43 with a message 
+			ID of "STANDARD_NOTEPAD".&#160; PO00.STDNOTEPAD contains 
+			the total number of lines of notepad text.</td>
+            </tr>
+            <tr>
+                <td><code>1380 IF PO00.STDNOTEPAD THEN LET MSGID$="STANDARD_NOTEPAD",LINES=PO00.STDNOTEPAD, 
+			INDENT=0; GOSUB NOTEPAD</code>
+                    <p><code><br />
+			3500 NOTEPAD:<br />
+			3510 IF Y6.L&lt;LINES+2 THEN GOSUB NEWPAGE<br />
+			3520 CALL "CDS257",Y$,MSGID$,"","XXPO43","P",INDENT,0,0,0,Y6$<br />
+			3690 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="Importing" />When importing text, the user will be prompted when there are invalid 
+ characters in the text to be imported.&#160; Notepad text can contain ASCII 
+ characters, bbx mnemonics and cursor positioning expressions, carriage 
+ return, and line feed characters.&#160; Other characters including letters 
+ displayed with diacritical marks are considered invalid.&#160; Invalid 
+ characters are replaced with blanks.&#160; In these cases you may want to 
+ edit the notepad text using CDS069, replacing the invalid character that was 
+ replaced with a blank, with the plain letter.&#160; You can suppress the 
+ operator prompt warning about invalid characters by setting global variable
+    <code>"SMS_CDS258_MSG"</code> to <code>"N"</code>.&#160; Note that all 
+ invalid characters will be replaced with a blank, regardless of the prompt.</p>
+        <p>&#160;</p>
+        <table border="1" width="100%" id="table3" class="example">
+            <tr>
+                <td>Importing example: used to convert some plain text to notepad 
+			text</td>
+            </tr>
+            <tr>
+                <td><code>1000 EXAMPLE:<br />
+			1010 LET NPK$="EXAMPLE_TEXTID"<br />
+			1020 LET COLS=60; <span style="color: #00FF00;">REM "Could be left zero for 78 column text<br /></span>1030 CALL "CDS095",PO43,"XXPO43"; REM "Open notepad file<br />
+			1040 LET NP$="Line 1 will be dim (background)"+'LF'<br />
+			1050 LET NP$=NP$+'SF'+"Line 2 will be bold (foreground)"+'SB'+'LF'<br />
+			1060 LET NP$=NP$+'BU'+"Line 3 will be underlined"+'EU'+'LF'+'LF'<br />
+			1070 LET NP$=NP$+'BR'+"Line 5 will be in reverse video"+'ER'+'LF'<br />
+			1080 LET NP$=NP$+@(10)+"Line 6 will start at column 10 of the 
+			window"+'LF'<br />
+			1090 LET NP$=NP$+'BB'+"Line 7 will blink"+'EB'<br />
+			1100 CALL "CDS257",Y$,NPK$,"",STR(PO43),"W",COLS,0,0,0,"","","","",NP$<br />
+			1110 <span style="color: #00FF00;">REM "The above lines saved NP$ in the Window Text file 
+			XXPO43<br /></span>1120 <span style="color: #00FF00;">REM "The following line could be used to display &amp; modify the 
+			text<br /></span>1130 CALL "CDS069",COLS,0,0,0,"Example","W{XXPO43,EXAMPLE_TEXTID}"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2572.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table4" class="example">
+            <tr>
+                <td>Text example: used to retrieve notepad text excluding all 
+			attributes.</td>
+            </tr>
+            <tr>
+                <td><code>1200 EXAMPLE:</code>
+                    <p><code>1210 LET NPK$="EXAMPLE_TEXTID"<br />
+			1220 CALL "CDS261",Y$,"XXPO43",NPK$,"",LINES<br />
+			1230 CALL "CDS257",Y$,NPK$,"","XXPO43","T",COLS,LINES,0,0,"","",WT$<br />
+			1240 PRINT LEN(WT$),LEN(WT$)/COLS<br />
+			1250 FOR H=1 TO LEN(WT$) STEP COLS<br />
+			1260 PRINT WT$(H,COLS)<br />
+			1270 NEXT H</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2573.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

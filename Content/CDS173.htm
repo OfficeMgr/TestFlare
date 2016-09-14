@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="877" MadCap:lastWidth="1059">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS173 - Display Formatted DUMP</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS173</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">DUMP in html format</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS173">Last Revised: 05/26/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine performs a bbx DUMP and formats the output 
+	suitable for display in a web browser, email body, or email attachment.&#160; 
+	It is automatically invoked by the Dynamo Tools error routine
+	<a href="CDS063.htm">CDS063</a>, but can also be called to assist debugging 
+	any bbx application including background tasks and Dynaweb applications.</p>
+        <p>CDS173 lists the program called at each level, and then for each call 
+	level, lists variables alphabetically within type: Numeric Variables, Numeric Arrays, String Variables, String Arrays, 
+	and for bbj applications, object variables.&#160; String Variable that have an associated template are shown with the template structure.&#160; 
+	In order to minimize the output, numeric array elements that are zero, and 
+	string array elements that are null, are omitted from the output.&#160; 
+	CDS173 also lists all open files and pertinent file information.</p>
+        <p>Note that in order to limit the size of the output, the contents of string variables are truncated to approximately 4000 characters. </p>
+        <p>Global variables are also shown except those used to store templates and other Dynamo Tools global 
+	variables that begin with <code>"SMS_"</code>.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS173" { DUMPFILE$, HDR$, LOGMSG$ }</code>
+        </p>
+        <p>When debugging Dynaweb applications, simply add <code>CALL</code> <code>
+	"CDS173"</code> at the appropriate place within the program logic.&#160; A 
+	web page containing the formatted <code>DUMP</code> will be displayed. You can also do that from console mode while debugging a program.</p>
+        <table style="width: 100%;">
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>CDS173</th>
+                    <th style="text-align: center;">Direction</th>
+                    <th>Usage</th>
+                </tr>
+                <tr>
+                    <td class="nowrapcode">DUMPFILE$</td>
+                    <td style="text-align: center;">To/From</td>
+                    <td>Optional file name where formatted dump in html format will be stored. If not passed, the default file name of <code>tmp/dump-nnn.htm </code>will be used. Can be used to archive file for logging, emailing, etc.</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode">HDR$</td>
+                    <td style="text-align: center;">To </td>
+                    <td>Pass as a non-null html text to include this text in the heading of the dump file before the table containing the formatted dump. When used this way, CDS173 will not display the dump file contents in a browser window.</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode">LOGMSG$</td>
+                    <td style="text-align: center;">To</td>
+                    <td><code>LOGMSG$</code> is displayed to the user at the bottom of the screen during the dump process. Not applicable for background or Dynaweb sessions.</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>0100 LET A=5,B=10<br />        0110 DIM AMT[10]; LET AMT[1]=1,AMT[5]=5.555,AMT[9]=-1234.56<br />		0120 DIM STR$[5:8]; LET STR$[6]="Value for Element 6",STR$[8]="Element 
+		8"<br />        0130 LET ID$="This is a test"<br />        0140 CALL "CDS252",CHAN,FID$,FIN$<br />        0150 CALL "CDS095",SM03,"CDSM03","YNY",SM03$<br />		0160 READ RECORD (SM03)SM03$<br />        0170 ESCAPE</code>
+                    </p>
+                    <p><code>RUN</code>
+                    </p>
+                    <p><code>CALL "CDS173"</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        Click <a target="_blank" href="examples/CDS173ex1.htm">here</a> to display output</td>
+            </tr>
+            <tr>
+                <td>
+        Click <a target="_blank" href="examples/CDS173ex2.htm">here</a> for a more 
+		typical example that includes several layers of called programs.</td>
+            </tr>
+        </table>
+        <div>
+    &#160;</div>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="448" MadCap:lastWidth="1058">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS092 - Rename File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS092" />CDS092</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Rename File" />Rename File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS092">Last Revised: 02/16/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine should be used to rename a file or program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS092", ERR=XXXX, CHAN, NEWNAME$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS092</th>
+            </tr>
+            <tr>
+                <td class="nowrap"><code>ERR=</code>
+                </td>
+                <td>The line to branch to if the rename is unsuccessful.&#160; Possible error conditions include error 12, if file <code>NEWNAME$</code> already exists, or error 0 if the file opened to <code>CHAN </code>is not currently locked, and cannot be locked.</td>
+            </tr>
+            <tr>
+                <td class="nowrap"><code>CHAN</code>
+                </td>
+                <td>the channel of the file to be renamed, opened by the calling program.&#160; 
+		The file opened to <code>CHAN </code>will be closed by CDS092.&#160; So the 
+		application will need to re-open the file to the new name if necessary.</td>
+            </tr>
+            <tr>
+                <td class="nowrap"><code>NEWNAME$</code>
+                </td>
+                <td>
+        the new file name<br />		&#160;<p><MadCap:keyword term="Date" />Can also be passed as null, in which case CDS092 will rename the file using the standard naming convention for archived files.&#160; First a suffix of <code>.YYMMDD</code> is added, then alpha suffixes are added to the date when necessary to force a unique file name.&#160; 
+		<code>NEWNAME$</code> will be returned as the file name assigned.</p></td>
+            </tr>
+        </table>
+        <p>If <code>NEWNAME$</code> does not contain a slash, a backslash, or a colon, then CDS092 assumes you want to rename the open file to <code>NEWNAME$ </code>without changing the directory.</p>
+        <p>This means that if you want to rename a file from a subdirectory to the current directory, you must include <code>./</code> on the front of the new file name.</p>
+        <p>
+            <MadCap:keyword term="DOS" />If <code>NEWNAME$</code> does contain a slash or backslash, but does not start with a slash or backslash, or DOS drive letter, then CDS092 assumes the new name to be relative to the current directory.</p>
+    </body>
+</html>

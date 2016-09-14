@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="5084" MadCap:lastWidth="1414">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS034 - Define / Convert File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS034" />CDS034</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Define / Convert File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS034">Last Revised: 02/26/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Data Dictionary" />
+            <MadCap:keyword term="FMS menu" />This called routine will define or convert a file 
+based on information contained in the Data Dictionary and define or replace the 
+.tpl template file.&#160; The Data Dictionary is 
+maintained using the Data Dictionary Maintenance on the FMS menu.</p>
+        <h5>CDS034 provides the following functions:</h5>
+        <p>Defines permanent data files in the <code>XX/ </code>directory (or other directory 
+specified) if the data file does not 
+exist.</p>
+        <p>Defines or replaces the template file in the <code>XX/tpl/</code> directory (or in tpl 
+directory below data file) for permanent 
+data files if the data file does not exist.</p>
+        <p>Defines temporary data files in the <code>$SMSDIR/tmp</code> directory using a unique file 
+name and placing the template in global memory for use by applications.</p>
+        <p>Takes no action and exits quietly if the data dictionary field structure 
+(including mask and title fields) is the same as the <code>.tpl</code> template file, and the 
+data dictionary key structure matches that of the existing data file.</p>
+        <p>Analyzes the differences between the data dictionary and current file, 
+returns these differences to calling program, and converts the file (when 
+necessary) to match the data dictionary.</p>
+        <p>When file conversion takes place, CDS034 optionally archives the original 
+file with the standard <code>.YYMMDD</code> suffix when <code>S034.MODE$</code> is passed as <code>"Y"</code>.</p>
+        <p>Can convert files of one type to another, i.e., DIR to SKY or MKY, SKY to MKY.</p>
+        <p>Optionally performs analysis but does not perform any conversion.</p>
+        <p>Field conversion includes: adding fields, deleting fields, changing the 
+number of elements in an array, changing the field type, i.e., U(3) to B, or 
+N(7) to C(7), etc.</p>
+        <p>When file conversion is required, the converted data file will reside in the 
+same directory as the original, even if in an alternate directory such as in <code>
+XX/DAT/</code> instead of just in <code>XX/.</code></p>
+        <h5>Warning: In most cases you should not simply CALL "CDS034" from console 
+mode.&#160; It is much better to use the File Utility 'Compare to Data 
+Dictionary' option, since it will give you a 
+chance to review the changes to be made before deciding to convert.&#160; The 
+File Utility archives both the original file and template file so that you can 
+restore the archived copies when necessary.</h5>
+        <h5>Warning: CDS034 assumes that the data in the original file matches the 
+template.&#160; If there is ever any uncertainty, then run the File Utility 
+option 'Verify Data to Template' before converting the file.</h5>
+        <p>Calling Format:</p>
+        <p><code>Call "CDS034",</code> <code>FILNAM$, { S034$ }</code></p>
+        <table>
+            <tr>
+                <th colspan="2">CDS034</th>
+            </tr>
+            <tr>
+                <td><a name="FILNAM$"></a><code>FILNAM$</code>
+                </td>
+                <td>There are three options for the file name.<table><tr><td>Single File Name (more than two characters), with or without 
+			path to file.</td><td>Process file name specified.&#160; File name can optionally 
+			begin with XX to indicate current company.&#160; Examples: <code>"XXCM01", 
+			"DS/J/DSCM01", "TEST/DS/DSCM01".</code></td></tr><tr><td>Two character company code, with or without path to company 
+			directory.</td><td>Process all records in the data dictionary, ignoring all data 
+			dictionary entries for programs and work files (file name ends with 
+			a period).&#160; Examples: <code>"XX", "DS", "TEST/DS".</code></td></tr><tr><td class="code">"XXDD"</td><td>Revise the structure of the data dictionary files to match the 
+			master copies from company CD, then update the contents of the data 
+			dictionary reflecting any changes to the data dictionary files.&#160; 
+			The Data Dictionary files all begin with DD, so applications should 
+			not names files that begin with DD, since other dictionary files may 
+			be added in the future.&#160; Examples: <code>"XXDD", "DSDD", "TEST/DS/DSDD".</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="PAR$"></a>S034$</code>
+                </td>
+                <td>
+	This optional parameter may be passed as a literal, or as a variable with or 
+	without the template assigned.&#160; See examples.<table><tr><td class="nowrapcode">MODE$</td><td align="center">in</td><td class="nowrapcode">C(1)</td><td><table><tr><td>"N"</td><td>Converts file (if necessary), and erases original data 
+					file (if it exists).</td></tr><tr><td>"Y"</td><td>Converts file (if necessary), and archives original data 
+					file and template with a <code>.YYMMDDX</code> suffix.</td></tr><tr><td>blank</td><td>Converts file (if necessary), and archives original data 
+					file only if fields are deleted.</td></tr><tr><td>"T"</td><td>Tests to determine if file conversion is required and 
+					returns conversion data in other fields within <code>S034$</code>, but 
+					does not define or convert the file nor define or replace 
+					the template file.&#160; Valid only when passing a single 
+					file name in <code>FILNAM$</code>.</td></tr></table></td></tr><tr><td class="nowrapcode">LINE</td><td align="center">in</td><td class="nowrapcode">N(2)</td><td>If passed as non-zero, then the progress messages will be displayed at this display row, and will be incremented for each file processed. If zero, or not passed, then progress messages will display at the bottom of the display, and cleared when file definition/conversion is complete.</td></tr><tr><td class="nowrapcode">ARCFILNAM$</td><td align="center">out</td><td class="nowrapcode">C(15*)</td><td>Set to the file name that the original data file was archived as 
+			when <code>S034.MODE$="Y"</code></td></tr><tr><td class="nowrapcode">STATUS$</td><td align="center">out</td><td class="nowrapcode">C(15*)</td><td>Returns information about differences between data dictionary 
+			and existing file.&#160; These status fields are concatenated 
+			together into <code>S034.STATUS$</code>.&#160; This field only applies when 
+			CDS034 is called with a single file name.&#160; <code>STATUS$</code> will be null when the file exists and no changes are required. See the next field 
+			for additional details.<table><tr><td>F</td><td>Field changes, + indicates field added, - indicates 
+					field deleted, c indicates field changed, i.e., F-3+2c4 
+					means that 3 fields will be deleted. 2 added, and 4 changed.&#160; 
+					The deleted fields always appear first so that an 
+					application can test for the <code>POS("F-"=S034.STATUS)</code> 
+					to know if any fields will be deleted.</td></tr><tr><td>K</td><td>Key changes.&#160; For MKY files, the format is the same 
+					as for Field Changes described above.&#160; For SKY files K 
+					simply indicates a change in keysize.</td></tr><tr><td>R</td><td>R indicates a change in record size.</td></tr><tr><td>Tn</td><td>indicates n changes in the user defined template title 
+					field.</td></tr><tr><td>Mn</td><td>indicates n changes in the user defined template omask 
+					field.</td></tr><tr><td>U</td><td>indicates the file and/or .tpl template file is 
+					undefined.</td></tr><tr><td>E</td><td>indicates that CDS034 encountered an error trying to 
+					open the data file, .tpl template file, or access the data 
+					dictionary.</td></tr><tr><td>Y</td><td>indicates a change in file type, i.e, DIR to SKY.</td></tr><tr><td>P</td><td>indicates that no fields have changed type or size, but 
+					the fields are not in the same position within the record.</td></tr></table></td></tr><tr><td class="nowrapcode">MAXDETAIL</td><td align="center">out</td><td class="nowrapcode">N(2*)</td><td>Contains the length of the longest entry in <code>S034.DETAILS</code> field 
+			below.</td></tr><tr><td class="nowrapcode">DETAILS$</td><td align="center">out</td><td class="nowrapcode">C(50*=0)</td><td>A complete list of details related to the differences between 
+			the data dictionary and the existing file.&#160; There are line 
+			feeds (<code>$0A$</code>) between each comment line.&#160; This field only applies when 
+			CDS034 is called with a single file name.</td></tr></table></td>
+            </tr>
+        </table>
+        <p>Sometimes the template field type is changed.&#160; For example, an N(2) 
+field could be converted to a U(2) field, or an N(10*) field could be converted 
+to a B type field.&#160; CDS034 will attempt to convert all field types, even C 
+type fields to a numeric when possible.&#160; CDS034 will display an error 
+message and abort a file conversion should a field conversion not be possible, 
+or the data does not match the template.</p>
+        <p>We recommend that you avoid N type fields, especially when they are used in 
+key segments.&#160; BBx left justifies N type fields and is not consistent as 
+shown in the example below.&#160; Another reason to avoid N type fields in key 
+segments is that the BBx SELECT optimization logic used to choose the best KNUM 
+for the file, and to do a position READ within the file only works with C type 
+fields.</p>
+        <table class="example">
+            <tr>
+                <td>BBx N type field issues</td>
+                <td>Note</td>
+            </tr>
+            <tr>
+                <td><code>&gt;DIM REC$:"NO:N(6)"<br />		&gt;?REC.NO$<br />		000000</code>
+                </td>
+                <td>BBx zero fills N type fields upon a DIM.</td>
+            </tr>
+            <tr>
+                <td><code>&gt;REC.NO=0<br />		&gt;?REC.NO$<br />		0</code>
+                </td>
+                <td>BBx does not zero fill on a simple assignment.&#160; This can cause 
+		problems if the field is used in a key segment.</td>
+            </tr>
+            <tr>
+                <td><code>&gt;REC.NO=15<br />		&gt;?REC.NO$<br />		15</code>
+                </td>
+                <td>BBx left justifies N type fields within the field.</td>
+            </tr>
+            <tr>
+                <td><code>&gt;REC.NO$=STR(15:"######")<br />		&gt;?"'",REC.NO$,"'"<br />		'&#160;&#160; 15'</code>
+                </td>
+                <td>You can right justify N type fields by using STR() but then you have 
+		to be careful that every program does it.</td>
+            </tr>
+        </table>
+        <p>Special Field Conversion Notes</p>
+        <table>
+            <tr>
+                <td align="center">Current<br />		Field<br />		Type</td>
+                <td align="center">New	Field<br />Type</td>
+                <td>Notes</td>
+            </tr>
+            <tr>
+                <td align="center">C</td>
+                <td align="center">N</td>
+                <td>File conversion will abort if you cannot take NUM() of string field.&#160; 
+		When new field type is a fixed length such as N(2) not N(2*), and is the 
+		same length as the current field type, i.e., C(2), the field will be 
+		converted as a string instead of a numeric, so that a field containing " 		5" will remain " 5" and not "5 ".&#160; This is especially important 
+		when the field is used as a key segment.</td>
+            </tr>
+            <tr>
+                <td align="center">N</td>
+                <td align="center">C</td>
+                <td>This field conversion is similar to the C to N conversion described 
+		above, in that CDS034 will copy the field as a string retaining any 
+		leading spaces in the string version of the original field, when the new 
+		field type is a fixed length, and the field sizes are the same.</td>
+            </tr>
+            <tr>
+                <td align="center">U</td>
+                <td align="center">C</td>
+                <td>CDS034 converts the U type field to its numeric value, then pads the 
+		value with leading spaces, so that a U(2) field with a value of 10, will 
+		become "&#160; 10" if converted to a C(4) or C(4*) field.&#160; If the 
+		field sizes are the same, and you simply want a U(3) field to be copied 
+		as a string to a C(3) field, then you should edit the .tpl file, and not 
+		use CDS034.</td>
+            </tr>
+            <tr>
+                <td align="center">C</td>
+                <td align="center">U</td>
+                <td>This will work properly if the current field simply contains 
+		numbers, but if the C type field contains binary data, as a U type field 
+		does, then CDS034 will abort with an error message should it be unable 
+		to take the <code>NUM()</code> of the current C field.</td>
+            </tr>
+        </table>
+        <p>Examples:</p>
+        <p>This example will compare the current file structure to that in the data 
+dictionary and return the details in S034$.&#160; No file conversion will take 
+place.&#160; Note that the File Utility (SMU) 'Compare to Data Dictionary' also 
+performs this step and displays the results in a scrolling window.</p>
+        <table class="example">
+            <tr>
+                <th>Test only, no data conversion example</th>
+            </tr>
+            <tr>
+                <td><code>READY<br />		&gt;S034$="T"<br />		&gt;CALL "CDS034","DSVM01",S034$<br />		&gt;?S034.STATUS$<br />		RKc1F+2-27c3T36<br />		&gt;?S034.DETAILS$<br />		Status Codes: RKc1F-2+27c3T36<br />		Change record size from 512 to 472<br />		Change KNUM 2 from FOREIGN+ZIP(1,5)+ALPHASORT+VENDNO<br />		to FOREIGN+ZIP[2](1,5)+ALPHASORT+VENDNO<br />		Deleting FS1<br />		Deleting FS3<br />		Deleting FS5<br />		Deleting UNUSED_F6<br />		Deleting UNUSED_F7<br />		Deleting UNUSED_F8<br />		Deleting UNUSED_F9<br />		Deleting UNUSED_F10<br />		Deleting FS10<br />		Deleting UNUSED_F28<br />		Deleting FS11<br />		Deleting UNUSED_F12<br />		Deleting UNUSED_F13<br />		Deleting UNUSED_F14<br />		Deleting UNUSED_F15<br />		Deleting UNUSED_F16<br />		Deleting UNUSED_F17<br />		Deleting UNUSED_F18<br />		Deleting UNUSED_F19<br />		Deleting UNUSED_F20<br />		Deleting UNUSED_F21<br />		Deleting UNUSED_F22<br />		Deleting UNUSED_F23<br />		Deleting UNUSED_F24<br />		Deleting UNUSED_F25<br />		Deleting UNUSED_F26<br />		Deleting UNUSED_F27<br />		Set title on VENDNO to Vendor#<br />		Change NAME from C(30*) to C(30)<br />		Set title on NAME to Name<br />		Set title on ADDR1 to Address_#1<br />		Set title on ADDR2 to Address_#2<br />		Change ZIP from C(10) to [3]:C(10)<br />		Set title on ALPHASORT to Alpha_Sort<br />		Set title on PHONE to Telephone#<br />		Set title on ALTPHONE to Alt_Phone#<br />		Set title on BUYER to Buyer<br />		Set title on ADDR_VERIFY_DATE to PO_Chg_Date<br />		Set title on CARRIER_ROUTE to Carrier_rt<br />		Change CONTACTS from C(1*) to C(1)<br />		Set title on CONTACTS to Contacts...<br />		Set title on CHK_ADDR1 to Check_Addr1<br />		Set title on CHK_ADDR2 to Check_Addr2<br />		Set title on LOCATION to G/L_Loc'n<br />		Set title on TYPE to Vendor_Type<br />		Set title on MASTERVENDNO to Master_Vnd#<br />		Adding GL_LOC<br />		Set title on SHIPVIA to Ship_Code<br />		Set title on TERMS_CODE to Unused<br />		Set title on TERMSCODE to Terms_Code<br />		Set title on TEN99TYPE to 1099_Info<br />		Set title on TIN to TIN/SSNO<br />		Set title on UNUSED to G/L_Acct#<br />		Set title on PMTCYCLECODE to PmtCycleCod<br />		Set title on HOLD to Hold<br />		Set title on PMTMETH to Pmt_Method<br />		Adding BRANCHACCESS<br />		Set title on TAXABLE to Taxable<br />		Set title on FOB_POINT to F.O.B._Pt<br />		Set title on FREIGHT_CODE to Freight_Cd<br />		Set title on WGHT_MIN_ORD to WghtMin_Ord<br />		Set title on WGHT_MIN_FRT to Weight_Frt<br />		Set title on AMT_MIN_ORD to Amt_Min_Ord<br />		Set title on AMT_MIN_FRT to Amt_Min_Frt<br />		Set title on VOL_MIN_ORD to Vol_Min_Ord<br />		Set title on VOL_MIN_FRT to Vol_Min_Frt<br />		Set title on UNUSED_F11 to Unused<br />		Set title on CUSTNO to Customer#</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Define/Revise single file</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS034","DSCM01"</code>
+                </td>
+            </tr>
+        </table>
+        <p>Defines file DS/DSCM01 if it did not exist in any prefix.&#160; If it does 
+exist, the data structure including field names, field sizes, and key structure 
+are compared to that contained in the Data Dictionary.&#160; If a conversion is 
+required, then the file and template will be converted to match the 
+specification contained within the Data Dictionary.&#160; If the file exists, it 
+will remain in the same directory it was located in.&#160; For example if the 
+PFX includes PY/ PY/DAT and the file PY/DAT/PYUD10 exists, calling CDS034 with 
+PYUD10 will convert this file and the converted file will remain in 
+the PY/DAT directory.</p>
+        <p>Template files are typically created in a tpl directory immediately below the 
+data file directory.&#160; In this example, the template file should be PY/DAT/tpl/PYUD10.tpl.&#160; 
+Note that these template files are created by CDS034 and should not normally be 
+edited or altered.&#160; If the template is not found in the preferred location, 
+the tpl directory under the company code is used, i.e., PY/tpl/PYUD10.tpl.&#160; 
+See <a href="CDS041.htm">CDS041</a> for additional information about templates.</p>
+        <table class="example">
+            <tr>
+                <th>Archive original file</th>
+            </tr>
+            <tr>
+                <td><code>S034$="Y"<br />		CALL "CDS034","DSCM01",S034$<br />PRINT S034.ARCFILNAM$<br />DSCM01.041008</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Check/Convert all files in company</th>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS034","DS"</code>
+                </td>
+            </tr>
+        </table>
+        <p>Checks each data file contained within the Data Dictionary for company DS, and defines or 
+converts those required.</p>
+    </body>
+</html>

@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="9" MadCap:lastHeight="2021" MadCap:lastWidth="1012">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS555 - Enter/Display/Decode Data Dictionary Field</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS555</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Enter/Display/Decode/Validate Data Dictionary Field</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS555">Last Revised: 10/05/14</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used by an application to allow the 
+operator to enter a data field based on parameters that are stored in the Data 
+Dictionary.&#160; It is especially useful for string verified entries where the 
+list of valid choices are stored in the Data Dictionary instead of within the 
+application programs.&#160; CDS555 can also be used to display the data and 
+related verification fields, as well as to return the related text for a 
+verified field for printing to a printer or other output device.</p>
+        <p class="SectionDesc">CDS555 can also validate data without any display or entry for a single field or all fields in a templated string. This option will also modify the data performing left or right justification and conversion to upper case when specified in the data dictionary.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS555", <a href="#COL">COL</a>,
+<a href="#ROW">ROW</a>,
+<a href="#CCFILFLD$">CCFILFLD$</a>, <a href="#REC$">REC$</a>, { <a href="#DISP$">DISPF4$</a>, <a href="#REL$">REL$</a>, <a href="#VAL$">VAL$</a> }</code>
+        </p>
+        <table style="caption-side: top;">
+            <tr>
+                <th colspan="3">CDS555 Arguments</th>
+            </tr>
+            <tr>
+                <td><code><a name="COL"></a>COL</code>
+                </td>
+                <td align="center">In</td>
+                <td>Display column for entry or display</td>
+            </tr>
+            <tr>
+                <td><code><a name="ROW"></a>ROW</code>
+                </td>
+                <td align="center">In</td>
+                <td>Display row for entry or display</td>
+            </tr>
+            <tr>
+                <td><code><a name="CCFILFLD$"></a>CCFILFLD$</code>
+                </td>
+                <td align="center">
+    In</td>
+                <td>Data Dictionary File and Field Reference
+    <table><col /><col /><col /><tbody><tr><td>Company Code</td><td>Optional, but assumed to be present when the number of characters to the left of the period is 5 or more.</td><td><p>Can be XX, defaults to XX.</p></td></tr><tr><td>Data Dictionary Name</td><td>Required</td><td>&#160;</td></tr><tr><td>Period</td><td rowspan="2">Required for Entry &amp;&#160;Display Mode<br />Optional for Validation Mode</td><td rowspan="2">Validate all fields if not specified</td></tr><tr><td>Field Name</td></tr><tr><td>$</td><td>Optional</td><td>Ignored</td></tr><tr><td>[nnn]</td><td>Optional</td><td>If not provided, defaults to [1] for Entry/Display mode, and validates each element of repeating field in validate mode.</td></tr></tbody></table><table class="example"><col /><tbody><tr><td>Examples</td></tr><tr><td class="code">CM01.NAME</td></tr><tr><td class="code">XXIM01.ITEMNO</td></tr><tr><td class="code">PO40.SHPBILLCD$</td></tr><tr><td class="code">DSCW20.WEBLINK$[3]</td></tr><tr><td class="code">CM01</td></tr></tbody></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>Data Structure</td>
+            </tr>
+            <tr>
+                <td><code><a name="DISP$"></a>DISPF4$</code>
+                </td>
+                <td align="center">In</td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table5" class="lev2">
+                        <tr>
+                            <td align="center">blank or not passed</td>
+                            <td align="left">Entry Mode - Operator will be prompted to enter data field specified</td>
+                        </tr>
+                        <tr>
+                            <td align="center">Q</td>
+                            <td align="left">Query/Display Mode - data will be displayed, not 
+			entered.&#160; Related data will also be displayed if applicable. Pass <code>COL</code> and <code>ROW</code> as zero to obtain related field in <code>REL$</code> but not display.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">q</td>
+                            <td align="left">Similar to Q option but <code>REL$</code> will include cursor positioning expression for data, data field, cursor positioning expression for related fields, and related fields.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">+</td>
+                            <td align="left">Include <code>F4=End</code> option in prompt.</td>
+                        </tr>
+                        <tr>
+                            <td align="center">V (upper case)</td>
+                            <td align="left">Validate the field or entire record if no field is specified</td>
+                        </tr>
+                        <tr>
+                            <td align="center">v (lower case)</td>
+                            <td align="left">Same a upper case V, but do not call T type routine for additional custom validation.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="REL$"></a>REL$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>
+                    <p>Assigned by CDS555 as the related fields for string and file verified 
+	entries.&#160; This is useful on reports where you want to decode the data 
+	field.</p>
+                    <table style="width: 100%;">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;"><code>DISPF4$</code> value</td>
+                                <td><code>REL$</code> will contain</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;"><code>Q</code>
+                                </td>
+                                <td>Related field(s) only</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode" style="text-align: center;"><code>q</code>
+                                </td>
+                                <td>Cursor positioning expression for data, data field, cursor positioning expression for related fields, and related fields.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="VAL$"></a>VAL$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>
+                    <p>In validation mode, <code>VAL$</code>&#160;contains validation results. If all fields validate, <code>VAL$</code> will null, otherwise <code>VAL$</code> will contain a list of validation messages. Multiple messages will be separated by the new-line (<code>$0A$</code>) character.</p>
+                    <p>Examples:</p>
+                    <table>
+                        <col />
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <th>Field Type</th>
+                                <th>Validation Message</th>
+                                <th>Note</th>
+                            </tr>
+                            <tr>
+                                <td>All</td>
+                                <td>Data does not match template</td>
+                                <td>Error retrieving field from data</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>not in simple verification list</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>not in verification list</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>not on file &lt;FILENAME&gt;</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>Numeric</td>
+                                <td>does not fit in mask</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>more than nn digits</td>
+                                <td rowspan="2" valign="middle">N mask types, i.e., N9.3</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>more than ff fractional places</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>smaller than min of nnnn</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>larger than max of nnnn</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>String</td>
+                                <td>non-printable characters</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>shorter than min of nnnn</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>longer than max of nnnn</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>invalid date</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>date is before mm/dd/yy</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>data is after mm/dd/yy</td>
+                                <td>&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>T-Type</td>
+                                <td>&lt;external routine generated message&gt;</td>
+                                <td>Set <code>X100.OUT$</code> in T-Type routine</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>1010 CALL "CDS555",10,5,"XXPO40.SHPBILLCD$",PO40$<br />1020 CALL "CDS555",10,6,"DSPO40.SHPBILLCD$",PO40$,"Q"<br />1030 CALL "CDS555",0,0,"PO40.SHPBILLCD",PO40$,"Q",REL$<br />1040 CALL "CDS555",COL,ROW,"DSCW20.WEBLINK$[3]",CW20$,"Q"<br />1050 CALL "CDS555",3,ROW,"CDDD21.MODE",DD21$,"+"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Line 1010 is a normal entry of the <code>DSPO40.SHPBILLCD$</code> field with 
+		entered value returned in <code>PO40$</code>.<br />Line 1020 displays the data and the related text associated with the 
+		code, but does not do any data entry.<br />Line 1030 returns the related text in <code>REL$</code> with no display nor entry.<br />Line 1040 displays <code>CW20.WEBLINK$[3]</code> <code>@(COL,ROW)</code><br />Line 1050 will prompt operator to enter field <code>MODE</code> and include an F4 
+		option.</td>
+            </tr>
+        </table>
+    </body>
+</html>

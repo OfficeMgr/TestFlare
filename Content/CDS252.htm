@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1785" MadCap:lastWidth="1089">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS252 - Return FID and FIN Templates</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS252" />CDS252</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="FIN" />
+                        <MadCap:keyword term="FIN Templates" />
+                        <MadCap:keyword term="Return FID" />
+                        <MadCap:keyword term="FID" />Return FID and FIN Templates</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS252">Last Revised: 
+			08/26/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to returns information 
+	about an opened file or device.&#160; Best Practice is to use CDS252 and not
+	<code>FID()</code> and <code>FIN()</code> within your application, because 
+	CDS252 will be able to support alternate formats of these functions such as
+	<code>XFID()</code> and <code>XFIN()</code>.</p>
+        <p>Note: You can enter <code>FID.</code> and <code>FIN.</code> followed by 
+	F2 in the program editor to paste field names.</p>
+        <p><code>CALL "CDS252", CHAN, FID$ {, FIN$, S252$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS252</th>
+            </tr>
+            <tr>
+                <th>Variable</th>
+                <th style="text-align: center;">To/From</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td align="center">To</td>
+                <td>the channel number of the opened device or file</td>
+            </tr>
+            <tr>
+                <td><code>FID$</code>
+                </td>
+                <td align="center">From</td>
+                <td>Templated <code>FID(CHAN)</code><MadCap:keyword term="BBx" />.&#160; Refer to BBx documentation for 
+		explanation of fields<table border="1" id="table1"><tr><th>Data Files</th><th>&#160;</th></tr><tr><td><code>.TYPE</code></td><td>File type</td></tr><tr><td><code>.KEYSIZE</code></td><td>Keysize for single keyed files</td></tr><tr><td><code>.RECSMAX</code></td><td>Maximum records, typically zero for dynamic files that have no 
+			maximum</td></tr><tr><td><code>.CHAR_REC</code></td><td>Characters per record</td></tr><tr><td><code>.NAME$</code></td><td>File name</td></tr><tr><th>Devices</th><th>&#160;</th></tr><tr><td><code>.NAME$</code></td><td>Device name</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>FIN$</code>
+                </td>
+                <td align="center">From</td>
+                <td>Templated <code>FIN(CHAN)</code>.&#160; Refer to BBx documentation for 
+		explanation of fields.<table border="1" id="table2"><tr><th colspan="2">Devices</th></tr><tr><td><code>.PHYCOL</code></td><td>Current column cursor position</td></tr><tr><td><code>.PHYROW</code></td><td>Current row cursor position</td></tr><tr><td><code>.PHYCOLS</code></td><td>Number of columns in physical device</td></tr><tr><td><code>.PHYROWS</code></td><td>Number of rows in physical device</td></tr><tr><td><code>.OFFSETCOL</code></td><td>Column of top left corner of current window</td></tr><tr><td><code>.OFFSETROW</code></td><td>Row of top left corner of current window</td></tr><tr><td><code>.LOGCOLS</code></td><td>Number of columns in current window</td></tr><tr><td><code>.LOGROWS</code></td><td>Number of rows in current window</td></tr><tr><td><code>.WINNO</code></td><td>Current window number</td></tr><tr><td><code>.RESERVED1$</code></td><td>Not used</td></tr><tr><td><code>.CURMODE</code></td><td>Current mode (reflects </td></tr><tr><td><code>.CURCOLOR</code></td><td>Current color <code>'RGB'</code> value</td></tr><tr><td><code>.RESERVED2$</code></td><td>Not used</td></tr><tr><td><code>.DEFMODE</code></td><td>Default mode bits</td></tr><tr><td><code>.DEFCOLOR</code></td><td>Default color <code>'RGB'</code> value</td></tr><tr><td><code>.TYPE</code></td><td>Internal device types</td></tr><tr><td><code>.CIBFLAGS</code></td><td>Internal flags</td></tr><tr><td><code>.DEVFLAGS</code></td><td>Internal device flags</td></tr><tr><td><code>.RESERVED3$</code></td><td>Not used</td></tr><tr><td><code>.DEVNAME$</code></td><td>Device Name</td></tr><tr><td><code>.DEVTYPE$</code></td><td>Device Type (from config.bbx Alias)</td></tr><tr><td><code>.DEVMODES$</code></td><td>Device Modes (from config.bbx Alias)</td></tr><tr><th colspan="2">MKY Files</th></tr><tr><td><code>.SIZE</code></td><td>File size - only supports a maximum of 2^32-1 records 
+			(4,294,967,295).&#160; Use <a href="CDS187.htm">CDS187</a> to obtain 
+			file size for any size file.</td></tr><tr><td><code>.RESERVED1$</code></td><td>&#160;</td></tr><tr><td><code>.DATETIME</code></td><td>Date and Time in internal format.&#160; Use <a href="CDS187.htm">
+			CDS187</a> to return decoded date &amp; time</td></tr><tr><td><code>.RESERVED2$</code></td><td>&#160;</td></tr><tr><td><code>.RECSUSED</code></td><td>Number of active records - same limitations as SIZE.</td></tr><tr><td><code>.RESERVED3</code></td><td>&#160;</td></tr><tr><td><code>.KNUM</code></td><td>Active <code>KNUM</code> - CDS252 is typically called to return 
+			the default <code>KNUM</code> to bypass a <code>READ</code> to 
+			change the current <code>KNUM</code> when the desired <code>KNUM</code> 
+			is already active.</td></tr><tr><td><code>.KEYDEF$</code></td><td>Key definition</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>S252$</code>
+                </td>
+                <td align="center">From</td>
+                <td>
+                    <table border="1" id="table3">
+                        <tr>
+                            <th>Field</th>
+                            <th>Usage</th>
+                        </tr>
+                        <tr>
+                            <td><code>.COL$[1]</code>
+                            </td>
+                            <td>Can be printed to display to restore colors to default 
+				values</td>
+                        </tr>
+                        <tr>
+                            <td><code>.COL$[2]</code>
+                            </td>
+                            <td>Can be printed to display to change foreground color</td>
+                        </tr>
+                        <tr>
+                            <td><code>.PCOL</code>
+                            </td>
+                            <td>Column for prompt at bottom of active window. Typically 8 for full width windows, and zero for others.</td>
+                        </tr>
+                        <tr>
+                            <td><code>.PROW</code>
+                            </td>
+                            <td>Row for prompt at bottom of active window, located at 2nd to last row, i.e., 23 for a 25 row window.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table4" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS252",0,FID$,FIN$,S252$<br />		CALL "CDS279",FID$<br />		CALL "CDS279",FIN$<br />		?"Default Colors",'LF',S252.COL$[2],"Alternate 
+		Color",'LF',S252.COL$[1],"Default Colors"<br />		Default Colors<br /><span style="color: #FFFF00;">Alternate Color</span><br />		Default Colors<br />&#160;</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

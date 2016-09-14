@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="306" MadCap:lastWidth="986">
+    <head><title>Obtain list of processes that have a file open - bbj</title>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS394</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Obtain list of bbj session numbers that have a file open</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS394">Last Revised: 02/28/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called by <a href="CDS393.htm">CDS393</a> to include files opened by bbj services. </p>
+        <p>This program requires a BBj user and password to be specified in Dynamo Configuration Maintenance (SMC) that has both the Admin permissions and View Files options checked in the Enterprise Manager.</p>
+        <p>&#160;</p>
+        <p><code>CALL "CDS394", Y$, TOS394$, FROMS394$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS394</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">Y$</td>
+                <td>Standard Task Control Variable</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">TOS394.FILNAM$</td>
+                <td>The full path name of the file.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">FROMS394.BBJPIDS$</td>
+                <td>A string of 4 byte process bbj session numbers in <code>BIN(BBJPID,4)</code> format.</td>
+            </tr>
+        </table>
+        <p><code>S394$</code> will be returned as null if there is no BBj user or password in Dynamo Configuration Maintenance, or if the password is incorrect, or if the user does not have Admin and View Files permissions.</p>
+    </body>
+</html>

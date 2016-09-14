@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS393 - List of Processes using File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS393</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Obtain list of processes that have a file open</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS393">Last Revised: 01/29/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called by the error routine (CDS063) and the file open routine (CDS095) to obtain a list of process ID's that have a file open.&#160; This list is used in conjunction with a call to CDS037 to display session information for the processes in the list.</p>
+        <p><code>CALL "CDS393", Y$, FILNAM$, S393$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS393</th>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>Standard Task Control Variable</td>
+            </tr>
+            <tr>
+                <td>FILNAM$</td>
+                <td>The name of the file.&#160; Can use either the base name or full path name.&#160; Dataserver prefix is supported.</td>
+            </tr>
+            <tr>
+                <td>S393$</td>
+                <td>A string of 4 byte process ID's in BIN(PID,4) format.</td>
+            </tr>
+        </table>
+        <p>S393$ will be returned as null on Windows systems, and when the Command Processor is not running, and if FILNAM$ is passed as null.&#160; The command processor is not required on AIX systems.</p>
+    </body>
+</html>

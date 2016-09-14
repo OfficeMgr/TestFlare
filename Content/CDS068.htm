@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS068 - Input Routine Subscript Numbers (OBSOLETE)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS068" />CDS068</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Input Routine Subscript Numbers" />Input Routine Subscript Numbers (OBSOLETE)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS068">Last Revised: 12/01/82</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS068 is a small called routine to simplify the normal calling sequence to <a href="CDS069.htm"><MadCap:keyword term="CDS069" />CDS069</a> when using a numeric array. For example: the following calling sequence to <a href="CDS069.htm">CDS069</a>:</p>
+        <h5>NOTE</h5>
+        <p>This program is obsolete and is no longer provided. Upgrades from older MAI Basic Four installations require replacement of all calls to CDS068 with a call to CDS069.</p>
+        <p><code>Z=D(10); CALL "CDS069", 0, 9999, 67, L,"+COST", "#,###.00", Z, ""; D(10)=Z</code>
+        </p>
+        <p>can be replaced with a more simple sequence:</p>
+        <p><code>CALL "CDS068", 0, 9999, 67, L, "+COST", "#, ###.00", D(ALL), 10</code>
+        </p>
+        <p>The variables are the same for the two routines up to the numeric mask. After that CDS068 requires some numeric array. All elements must be sent to the routine using the ALL option. The next and last variable required is a numeric constant or expression indicating which element of the array is to be used.</p>
+        <p>CDS068 will save PSZ over CDS069 and in addition changing D(10) to D(11) will only require a single change to the calling sequence as opposed to two which would be required if CDS069 was used.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

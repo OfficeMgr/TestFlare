@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="4952" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS187 - Return File Information</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <base target="_blank" />
+    </head>
+    <body>
+        <p class="SectionName">CDS187</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return File Information</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS187">Last Revised: 
+		10/30/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called program is used to obtain information about 
+	an opened channel or file name, including data files, programs, <code>SELECT</code> channels, pipes, etc.</p>
+        <p>CDS187 replaces <a href="CDS087.htm">CDS087</a> and returns a template containing 
+	a comprehensive set of information about a file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS187", ERR=XXXX, <a href="#CH">CHAN</a>, <a href="#S187.TYPE$">S187$</a>, <a href="#KEYDEF$">KEYDEF$</a></code>
+        </p>
+        <p>or</p>
+        <p><code>CALL "CDS187", ERR=XXXX, <a href="#Y$">Y$</a>, <a href="#REC$">REC$</a>,
+	<a href="#S187.TYPE$">S187$</a></code>
+        </p>
+        <table>
+            <tr>
+                <td><code>ERR=XXXX</code>
+                </td>
+                <td>Branch to line <code>XXXX</code> if there is no file opened to channel 
+		<code>CHAN</code> or when using the second format, if CDS187 is unable to open the 
+		specified file.&#160; There is no user prompt except when the <code>FID()</code> 
+		function returns an error other than 14.</td>
+            </tr>
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td><a name="CH"></a><code>CHAN</code>
+                </td>
+                <td>
+                    <p>Channel/device number of file, program, or device currently opened.&#160;
+		<code>CHAN</code> and the <code>CDS187.MODE</code> global variable are 
+		used to indicate whether CDS187 should perform complete, or limited 
+		function.&#160; The <code>CDS187.MODE</code> global value is based on 
+		the 'Limit CDS187 output' parameter in Dynamo Configuration Maintenance 
+		(SMC).</p>
+                    <table border="1" id="table4">
+                        <tr>
+                            <th style="text-align: center;"><code>CDS187.MODE</code> global</th>
+                            <th><code>CHAN</code>
+                            </th>
+                            <th style="text-align: center;">CDS187 function</th>
+                        </tr>
+                        <tr>
+                            <td align="center" rowspan="2">not set</td>
+                            <td>positive</td>
+                            <td align="center">complete</td>
+                        </tr>
+                        <tr>
+                            <td>negative (Negate actual channel#)</td>
+                            <td align="center">partial</td>
+                        </tr>
+                        <tr>
+                            <td align="center" rowspan="3">set to <code>"part"</code></td>
+                            <td>positive and under 100,000 and <code>Y.APPID$(1,2)&lt;&gt;"CD"</code></td>
+                            <td align="center">partial</td>
+                        </tr>
+                        <tr>
+                            <td>negative (Negate actual channel#)</td>
+                            <td align="center">partial</td>
+                        </tr>
+                        <tr>
+                            <td>over 100,000 (Add 100,000 to actual channel#)</td>
+                            <td align="center">complete</td>
+                        </tr>
+                    </table>
+                    <p>The following output fields are not populated when CDS187 runs in 
+		'partial' mode (in order to save processing time, context switches, disc 
+		I/O, etc).</p>
+                    <ul>
+                        <li><code>COCODE, DDNAME, OWNER, GROUP, PERMISSIONS, 
+		READONLY, LINKNAME,</code> <code>DESC</code> and <code>LISTING</code>&#160;fields,</li>
+                        <li><code>RECSUSED</code> on IND files,</li>
+                        <li>All programs will return <code>TYPE</code> 
+		as PGM, regardless of level and encryption,</li>
+                        <li><code>FILESIZE</code> 
+		and <code>SIZE</code> will also not be accurate for files larger than 
+		4Gb.</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="Y$"></a>Y$</code>
+                </td>
+                <td>Session control variable.&#160; When using the second format, CDS187 
+		will add <code>Y.COMPCODE$</code> to the front of the file name from
+		<code>REC$</code>.</td>
+            </tr>
+            <tr>
+                <td><code><a name="REC$"></a>REC$</code>
+                </td>
+                <td>When using the second format, CDS187 will return information about a 
+		file name <code>REC.FILNAM$</code> or <code>REC.FILENAME$</code></td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Data Elements</th>
+            </tr>
+            <tr>
+                <td><a name="S187.TYPE$"></a><code>S187.TYPE$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td>DIR</td>
+                            <td>Direct Disc File</td>
+                        </tr>
+                        <tr>
+                            <td>EPG</td>
+                            <td>Encrypted Program (current BBx version)</td>
+                        </tr>
+                        <tr>
+                            <td>EP?</td>
+                            <td>Encrypted Program (? represents BBx version. 4=bbx progression 4, 5=pro5, 6=bbj)</td>
+                        </tr>
+                        <tr>
+                            <td>FTS</td>
+                            <td>Full Text Search</td>
+                        </tr>
+                        <tr>
+                            <td>IND</td>
+                            <td>Indexed Disc File</td>
+                        </tr>
+                        <tr>
+                            <td>SRT</td>
+                            <td>Sort Disc File</td>
+                        </tr>
+                        <tr>
+                            <td>SER</td>
+                            <td>Serial Disc File</td>
+                        </tr>
+                        <tr>
+                            <td>PGM</td>
+                            <td>Program (current BBx version)</td>
+                        </tr>
+                        <tr>
+                            <td>PG?</td>
+                            <td>Program (? represents BBx version, 4=bbx progression 4, 5=pro5, 6=bbj)</td>
+                        </tr>
+                        <tr>
+                            <td>DEV</td>
+                            <td>Device</td>
+                        </tr>
+                        <tr>
+                            <td>DRY</td>
+                            <td>Disc Directory</td>
+                        </tr>
+                        <tr>
+                            <td>PIP</td>
+                            <td>Pipe to operating system command</td>
+                        </tr>
+                        <tr>
+                            <td>SEL</td>
+                            <td>Data file opened using <code>SELECT</code> verb</td>
+                        </tr>
+                        <tr>
+                            <td>SCK</td>
+                            <td>Socket (SKT on versions before 07/02/2011)</td>
+                        </tr>
+                        <tr>
+                            <td>STR</td>
+                            <td>String File</td>
+                        </tr>
+                        <tr>
+                            <td>SKY</td>
+                            <td>BBx Multi-Keyed File (Single key version)</td>
+                        </tr>
+                        <tr>
+                            <td>SKX</td>
+                            <td>BBj Xkeyed File (Single key version)</td>
+                        </tr>
+                        <tr>
+                            <td>SKJ</td>
+                            <td>BBj Jkeyed File (Single key version)</td>
+                        </tr>
+                        <tr>
+                            <td>SKV</td>
+                            <td>BBj VKeyed File (Single key version)</td>
+                        </tr>
+                        <tr>
+                            <td>MKY</td>
+                            <td>BBx Multi-Keyed File (Multiple key version)</td>
+                        </tr>
+                        <tr>
+                            <td>MKX</td>
+                            <td>BBj Xkeyed File (Multiple key version)</td>
+                        </tr>
+                        <tr>
+                            <td>MKJ</td>
+                            <td>BBj Jkeyed File (Multiple key version)</td>
+                        </tr>
+                        <tr>
+                            <td>MKV</td>
+                            <td>BBj Vkeyed File (Multiple key version)</td>
+                        </tr>
+                        <tr>
+                            <td>???</td>
+                            <td>Other (unknown file type)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>S187.OPTS$</code>
+                </td>
+                <td>
+        File options including any of the following codes.<table class="lev2"><tr><td>H</td><td>Indicates file is in the BBx Highly Recoverable Format, recommended for all data files to improve file error recovery</td></tr><tr><td>L</td><td>Indicates file is defined with the Large BBx option indicating it can grow larger than 2Gb.&#160; Only recommended for such large files, since the pointers are 64 bits long, as opposed to 32 bits for regular files, which increases file size.</td></tr><tr><td>4</td><td>Indicates the older 4Gb BBx file size option, used in BBx version prior to 3.0</td></tr><tr><td>N</td><td>Indicates the BBj program does not have line numbers</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>S187.KEYSIZE</code>
+                </td>
+                <td>Returns the key size of DIR, SRT, SKx files, and on MKx files, the key size of the primary knum.</td>
+            </tr>
+            <tr>
+                <td><code>S187.RECSIZE</code>
+                </td>
+                <td>Returns the record size of DIR, SKx, IND and MKx files.&#160; Returns 0 for SRT files, and SKx files with zero characters per record.</td>
+            </tr>
+            <tr>
+                <td><code>S187.RECSMAX</code>
+                </td>
+                <td>Returns the maximum number of records for DIR and SRT files.&#160; Also may apply to IND, SKx and MKx files if number of records are limited.</td>
+            </tr>
+            <tr>
+                <td><code>S187.RECSUSED</code>
+                </td>
+                <td>Returns the number of records is use for DIR, SRT, SKx, and MKx files.&#160; For IND files, 
+		<code>RECSUSED</code> contains the actual number of records (if the file is dynamic), or the same as 
+		<code>RECSMAX</code> (if not dynamic).</td>
+            </tr>
+            <tr>
+                <td><code>S187.FILESIZE</code>
+                </td>
+                <td>The total number of characters in a disc file.&#160; For files over 
+		2Gb in size, this number may be inaccurate on Windows file systems or when 
+		CHAN is negative.</td>
+            </tr>
+            <tr>
+                <td><code>S187.SIZE$</code>
+                </td>
+                <td>The total file size formatted to take 7 characters.&#160; Mb 
+		represents 1,000,000 not 1,024,000.&#160; Gb represents 1,000,000,000 
+		not 1,024,000,000.<table border="1" id="table3" class="lev2"><tr><td>File size &lt; 1Mb</td><td>Actual File size ###,##0</td></tr><tr><td>File size &lt; 1Gb</td><td>###.0Mb</td></tr><tr><td>Larger</td><td>###.0Gb</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>S187.PCTFULL</code>
+                </td>
+                <td>For non-dynamic files, <code>PCTFULL</code> will indicate the percentage of records in use.</td>
+            </tr>
+            <tr>
+                <td><code>S187.MAXKNUM</code>
+                </td>
+                <td>For MKx files, this will indicate the maximum <code>KNUM</code> for 
+		the file.&#160; Dynamo Tools support files with up to 254 KNUM's which 
+		is less that the maximum supported by BBj.</td>
+            </tr>
+            <tr>
+                <td><code>S187.ACTKNUM</code>
+                </td>
+                <td>For MKx files, this will indicate the active <code>KNUM</code> for the 
+		file.</td>
+            </tr>
+            <tr>
+                <td><code>S187.ACTKEYSIZE</code>
+                </td>
+                <td>For MKx files, this will indicate the total number of characters in 
+		the active <code>KNUM</code> for the file.</td>
+            </tr>
+            <tr>
+                <td><code>S187.DATE</code>
+                </td>
+                <td>For programs and data files, <code>DATE</code> contains the BBx julian date when the file was last modified.&#160; 
+		Use the BBx <code>DATE()</code> function to format.</td>
+            </tr>
+            <tr>
+                <td><code>S187.TIME</code>
+                </td>
+                <td>For programs and data files, <code>TIME</code> contains the time when the file was last modified.&#160; 
+		It is in hours and fractions of an hour.&#160; Use the BBx <code>DATE()</code> 
+		function to format.</td>
+            </tr>
+            <tr>
+                <td><code>S187.LOCKED</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td>0</td>
+                            <td>File not currently locked</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>File currently locked</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>File cannot be locked (DRY type)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>S187.COCODE$</code>
+                </td>
+                <td><code>S187.COCODE$</code> indicates the Dynamo Tools two character 
+		company code, based on the file path name or current <code>PREFIX</code>.<p>
+		If the relative file name is located in a folder with a 2 character 
+		name, such as DY/, CD/, or a sub-folder below a 2 character folder name 
+		such as PY/PGM/ or RL/PROG/ then the company code is the two character 
+		folder name.</p><p>In other cases including files located in a temporary job folder such 
+		as J/12345/FILENAME, or across a data server with a file name such as 
+		/&lt;server,pro5srv&gt;/usr/data/FILENAME, or a folder on a different file 
+		system such as /usr8/data/FILENAME, the company code is derived by 
+		checking for the base file name located in any of the relative two 
+		character folders specified in the <code>PREFIX</code>, such as DS/ CD/ 
+		RL/ PY/ etc.&#160; If the base file name is located, then the company 
+		code will indicate this folder name.</p><p>If the file is not found in any of these locations, then the current 
+		company code is returned in <code>S187.COCODE$</code>.</p><p>For data files, <code>S187.COCODE$</code> is typically used to 
+		determine the company code for the data dictionary.&#160; For program 
+		files, <code>S187.COCODE$</code> is used to determine the company code 
+		for the DD90, DD91, and DD92 data dictionary files which are used to 
+		store called program arguments and program revision notes.&#160; Note 
+		that programs may also have a regular data dictionary entry, but in that 
+		case <code>S187.COCODE$</code> will reflect the DD90/DD91/DD92 company 
+		code and not the DD10 company code.</p></td>
+            </tr>
+            <tr>
+                <td><code>S187.BASENAME$</code>
+                </td>
+                <td>Contains the base name for disc files, which excludes all drive letters and path.</td>
+            </tr>
+            <tr>
+                <td><code>S187.RELNAME$</code>
+                </td>
+                <td>Contains the relative file name, relative to the SMSDIR base directory.&#160; If the file is not below the SMSDIR directory, then 
+		<code>S187.RELNAME</code> will be the same as <code>S187.FULLNAME</code>. When using the <code>!DSOPEN</code> global to access a bbj pro5 data server, <code>S187.RELNAME$</code> will not include the data server prefix.</td>
+            </tr>
+            <tr>
+                <td><code>S187.FULLNAME$</code>
+                </td>
+                <td>
+                    <p>Contains the full path name including drive letter on Windows systems.</p>
+                    <p>When using the pro5 <code>!DSOPEN</code> global, the data server prefix will not be included unless <code>STBL("!DSNOHIDEFID")="1".</code></p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>S187.DDNAME$</code>
+                </td>
+                <td>Contains the data dictionary name.&#160; It is similar to the <code>
+		BASENAME</code> but will exclude the company code when the data file 
+		name includes the company code.</td>
+            </tr>
+            <tr>
+                <td><code>S187.OWNER$</code>
+                </td>
+                <td>The owner of the file, if available on this operating system.</td>
+            </tr>
+            <tr>
+                <td><code>S187.GROUP$</code>
+                </td>
+                <td>The group of the file, typically only available on non-Windows operating systems.</td>
+            </tr>
+            <tr>
+                <td><code>S187.PERMISSIONS$</code>
+                </td>
+                <td>The file permissions, typically only available on non-Windows operating systems.&#160; In the format rwxrwxrwx where the first rwx applies to the file owner, the second to others in the same group, and the third to those in other groups.&#160; The r indicates read, the user can read the file.&#160; The w indicates write, the user has permission to write to the file.&#160; The x indicates execute, and applies to executable files (binary, not programs), and to directories.&#160; The x permission in a directory is required to enable accessing file in that directory.&#160; If permission is not granted, then the r, w, or x, are replaced with "-".</td>
+            </tr>
+            <tr>
+                <td><code>S187.READONLY</code>
+                </td>
+                <td>On Unix like systems, <code>S187.READONLY</code> will be 1 if the current user does not have write permissions to the opened file or device.&#160; This can be used by applications to enable a read-only mode and bypass any WRITE's that would cause a bbx error 13 or 18.</td>
+            </tr>
+            <tr>
+                <td><code>S187.LINKNAME$</code>
+                </td>
+                <td>
+        On Unix like systems, if the file is a symbolic link, then <code>		S187.LINKNAME$</code> will be the 'linked to' file name.</td>
+            </tr>
+            <tr>
+                <td><code>S187.DESC$</code>
+                </td>
+                <td><code>DESC$</code> contains file descriptive information that varies depending on the file type:
+
+        <table class="lev2"><tr><td>DIR, IND, SRT, SER, SKx, MKx</td><td>File description as obtained from Dynamo Data Dictionary</td></tr><tr><td>EPG, EP?</td><td>File description as obtained from the Called Program Data 
+			Dictionary (XXDD90) or "Encrypted Program"</td></tr><tr><td>PGM, PG?</td><td>First remark found in program, or "*** Uninitialized Program ***", or "*** No Remark ***", or "BBx Progression ?/ format program"</td></tr><tr><td>DEV</td><td>Device name from FIN()</td></tr><tr><td>DRY</td><td>empty</td></tr><tr><td>PIP</td><td>"Pipe"</td></tr><tr><td>SEL</td><td>empty</td></tr><tr><td>SCK</td><td>"Socket"</td></tr><tr><td>STR</td><td>For text files, <code>DESC$</code> will contain the first few characters of the file, excluding any line feeds.&#160; For binary files on Unix like systems,
+			<code>DESC$</code> will contain the information available using the "file" command.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">LISTING$</td>
+                <td>When running BBj, this variable will be set to the program statements separated by line feeds for all PG5 and PGM file types.</td>
+            </tr>
+            <tr>
+                <td><code><a name="KEYDEF$"></a>KEYDEF$</code>
+                </td>
+                <td><code>KEYDEF$</code> will contain the key definition data for MKx data files.&#160; 
+		<code>KEYDEF$</code> can be passed to CDS064 to specify the key structure when defining a file.&#160;
+		<code>KEYDEF$</code> is similar, but not exactly the same as the BBx
+		<code>FIN()</code> function.&#160; Note that all files use the 8 
+		character FIN() format, even bbj files that would require the 20 
+		character XFIN() format to describe the key structure for MKX, MKJ, and 
+		MKV files.&#160; This imposes some limits on possible key structures 
+		when used with Dynamo Tools, including a maximum of 256 KNUM's, maximum 
+		field# of 255, maximum field offset of 65,535, and a maximum key segment 
+		length of 255 characters.</td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table1" class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>1200 EXAMPLE:<br />			1210 CALL "CDS095",CM01,"DSCM01"; REM "Open data file<br />			1220 CALL "CDS187",CM01,S187$; REM "Request File information<br />			1230 CALL "CDS279",S187$; REM "Display data structure<br />&#160;</code>
+                    <p>
+                        <img border="0" src="images/CDS1871.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS1872.jpg" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table2" class="example">
+            <tr>
+                <td>Example demonstrating the difference between a positive and 
+			negative channel#</td>
+            </tr>
+            <tr>
+                <td><code>OPEN (1)"DSCM01"<br />			CALL "CDS187",1,S187$<br />			CALL "CDS187",-1,S187A$<br />			CALL "CDS279",S187$,S187A$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS1873.jpg" />
+                    <p>
+                        <img border="0" src="images/CDS1874.jpg" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS356 - Format &amp; Validate Credit Card Number</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p>&#160;&#160;&#160;</p>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS356" />CDS356</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Validate Credit Card Number" />Format &amp; Validate Credit Card Number</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS356">Last Revised: 10/22/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called after the entry of a credit card number to verify the card check digit and to normalize and format the card number.</p>
+        <p>This routine supports credit card numbers that are 13 or 16 digits long.&#160; This program scans the credit card number provided, excluding all non-numeric digits, computes and validates the check digit, and formats the credit card number using spaces to make it more readable.&#160; The last digit of a credit card number is a check digit that is based on the previous digits.</p>
+        <p><code>CALL "CDS356", ERR=<a name="INVALID" href="#INVALID"></a>INVALID, <a href="#CCNO$">CCNO$</a>, <a href="#PAR$">PAR$</a>, <a href="#MSG$">MSG$</a></code>
+        </p>
+        <table>
+            <tr>
+                <th nowrap="" colspan="2">CDS356</th>
+            </tr>
+            <tr>
+                <td />
+                <td>Line number to branch to if the credit card number is invalid.</td>
+            </tr>
+            <tr>
+                <td><a name="CCNO$"></a>CCNO$</td>
+                <td>Passed to CDS356 as an unformatted or formatted credit card number.&#160; Typically a 19 character string.&#160; Card numbers with 16 digits will be formatted with 4 segments of 4 digits each with spaces separating the segments.&#160; Card numbers with 13 digits will be formatted with an initial 4 digit segment followed by three segments of 3 digits each.</td>
+            </tr>
+            <tr>
+                <td><a name="PAR$"></a>PAR$</td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td>N</td>
+                            <td>Does not display an error message.&#160; Typically used when validating a credit card number from a web form.</td>
+                        </tr>
+                        <tr>
+                            <td>Other</td>
+                            <td>Will display a message to the operator if the card number is invalid.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="MSG$"></a>MSG$</td>
+                <td>
+        Error message set by CDS356<br />
+        &#160;
+
+        <table class="lev2"><tr><td>null</td><td>Card# has the proper number of digits and has a valid check digit.</td></tr><tr><td>Invalid number of digits in credit card#</td><td>This routine supports cards with 13 or 16 digits</td></tr><tr><td>Invalid credit card#</td><td>The check digit provided is not correct.&#160; This typically means that the credit card number was entered incorrectly.</td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th>Examples</th>
+            </tr>
+            <tr>
+                <td><code>&gt;CCNO$="1111222233334444"</code>
+                    <p><code>&gt;CALL "CDS356",CCNO$,"N",MSG$<br />
+        &gt;?CCNO$<br />
+        1111 2222 3333 4444<br />
+        &gt;?LEN(MSG$)<br />
+        0</code>
+                    </p>
+                    <p><code>&gt;CCNO$="4444333322221111"<br />
+        &gt;CALL "CDS356",CCNO$,"N",MSG$<br />
+        &gt;?CCNO$<br />
+        4444 3333 2222 1111<br />
+        &gt;?LEN(MSG$)<br />
+        0</code>
+                    </p>
+                    <p><code>&gt;CCNO$="1111-222-333-444"<br />
+        &gt;CALL "CDS356",CCNO$,"N",MSG$<br />
+        !ERROR=99<br />
+        &gt;?msg$<br />
+        Invalid Credit Card#</code>
+                    </p>
+                    <p><code>&gt;CCNO$="1111-222-333-449"<br />
+        &gt;CALL "CDS356",CCNO$,"N",MSG$<br />
+        &gt;?CCNO$<br />
+        1111 222 333 449</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

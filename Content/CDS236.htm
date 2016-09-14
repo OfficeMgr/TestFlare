@@ -1,0 +1,706 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS236 - Convert XML to Templated String</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS236</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert XML to Templated String</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS236">Last Revised: 08/11/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine converts text in XML format to a templated string variable.</p>
+        <p>This program uses bbx string template field names to represent the tag names, so tag names cannot be more than 32 characters long.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS236", ERR=XXXX, Y$, X$, S236$, XML$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS236 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:
+<p>required input <code>X$</code> is null</p><p>Unable to open xml data file (if file name is specified)</p><p>XML data does not begin with "&lt;"</p><p>Invalid xml format, missing "&gt;"</p><p>Invalid xml format, null tag name</p><p>Invalid xml format, / contained within tag name, but not in first or last position</p></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>X$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Pass either a string variable containing the XML markup, or a data file name containing the markup.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S236$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Set by CDS236 to the structure of the XML.
+<table border="1" id="table1"><tr><th>Field Name</th><th>Usage</th></tr><tr><td nowrap="nowrap"><code>FLDS</code></td><td>Total number of unique field names in <code>XML$</code>.&#160; There is a field name for each XML node.</td></tr><tr><td nowrap="nowrap"><code>ROOT</code></td><td>The root XML tag name.</td></tr><tr><td nowrap="nowrap"><code>TAG[FLDS]</code></td><td>Tag names with period separators, i.e., Contents.Owner.ID would be the ID element nested inside Owner, nested inside Contents.</td></tr><tr><td nowrap="nowrap"><code>FLDNAM[FLDS]</code></td><td>Field names used in <code>XML$</code>.&#160; The <code>FLDNAM</code> is 
+derived from the base tag name with the following exceptions.<ul><li>If the base tag name includes a colon as in <code>gsx:username</code>, 
+	then <code>FLDNAM</code> excludes everything up through the colon</li><li>If the base tag name appears in the XML with different parents, then the 
+	field number is appended to the field name, i.e., <code>NAME_2</code>.</li><li>If the <code>FLDNAM</code> is longer than the maximum bbx template field 
+	name of 32 characters, the <code>FLDNAM</code> is truncated and the field 
+	number is included as the trailing characters of <code>FLDNAM</code> in 
+	order to insure uniqueness.&#160; In this case, the un-truncated field name 
+	is stored in the template title field.</li></ul></td></tr><tr><td nowrap="nowrap"><code>REPEAT[FLDS]</code></td><td>Indicates the number of times the tag was found in the XML.&#160; Typically used as the upper limit of loop when extracting values.&#160; See example.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>XML$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Set by CDS236 as the XML values.&#160; The calling program can use the information in <code>S236$</code> to access the XML values contained in <code>XML$</code>.&#160; 
+Note that CDS236 does not remove line feeds ($0A$) from XML$ so that fields 
+containing text area fields with line breaks can be processed properly.&#160; 
+The calling program can simply refer to <code>FIELD(XML$,S236.FLDNAM$[FLD])</code> 
+to access the value of any field.&#160; See Example.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>3000 BEGIN<br />
+3005 PRINT 'CS',<br />
+3010 CALL "CDS236",Y$,"tmp/CDS700-050.xml",S236$,XML$<br />
+3020 FOR FLD=1 TO S236.FLDS<br />
+3030 IF S236.TAG$[FLD]="Contents.Key" THEN LET KEYFLD=FLD<br />
+3040 IF S236.TAG$[FLD]="Contents.Size" THEN LET SIZEFLD=FLD<br />
+3050 NEXT FLD<br />
+3060 FOR I=1 TO S236.REPEAT[KEYFLD]<br />
+3070 PRINT "Name: ",FIELD(XML$,S236.FLDNAM$[KEYFLD],I),<br />
+3080 PRINT @(34),"Size: ",FIELD(XML$,S236.FLDNAM$[SIZEFLD],I)<br />
+3090 NEXT I</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Input XML</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="line"><span class="Apple-style-span" style="font-family: monospace;font-size: 13px;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ListBucketResult<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">xmlns</span>="<span class="webkit-html-attribute-value">http://s3.amazonaws.com/doc/2006-03-01/</span>"</span>&gt;</span></code></span></span>
+                    </div>
+                    <div class="collapsible-content" style="margin-left: 1em;">
+                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Name&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">excellware-dnl</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Name&gt;</span></code></span>
+                        </div>
+                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Prefix/&gt;</span></code></span>
+                        </div>
+                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Marker/&gt;</span></code></span>
+                        </div>
+                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;MaxKeys&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">1000</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/MaxKeys&gt;</span></code></span>
+                        </div>
+                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;IsTruncated&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">false</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/IsTruncated&gt;</span></code></span>
+                        </div>
+                        <div class="collapsible" id="collapsible1">
+                            <div class="expanded">
+                                <div class="line">
+                                    <p style="word-spacing: 0px;text-indent: 0px;"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span></span></span>
+                                    </p>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">104551100.Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:39:53.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"fc1f3a06f48db05d10e9382ac842d12b"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">5701315</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible2">
+                                        <div class="expanded">
+                                            <div class="line"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible3">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible4">
+                            <div class="expanded">
+                                <div class="line"><span class="Apple-style-span" style="border-collapse: separate;color: rgb(0, 0, 0);font-family: 'Times New Roman';font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span></span></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">124551100.Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:40:32.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"e5227cdfd40232dd79af201cec68b72a"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">1741570</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible5">
+                                        <div class="expanded">
+                                            <div class="line"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="Apple-style-span" style="border-collapse: separate;color: rgb(0, 0, 0);font-family: 'Times New Roman';font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span></span></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible6">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible7">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">604551100.Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:40:56.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"de5c0600c7c45ccd94de59e477b4f3c9"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">6010581</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible8">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible9">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible10">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">624551100.Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:41:22.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"a7c2a1ddc16ef63fc8b4491472be06f8"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">1896079</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible11">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible12">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible13">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">BBj1101_06-16-2011_1631.jar</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:59:24.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"6d6d84a57585e9518a934fc18cc1a7c1-3"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">187711448</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible14">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible15">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible16">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">SMS</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-20T12:37:13.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"255e316707b926486a44d9b47be0d559"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">18350080</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible17">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible18">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible19">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">ZIP</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-21T13:43:00.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"7016815d5f4c9edea8ebfb4104aa7beb"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">5043200</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible20">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible21">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible22">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">jdk-6u26-linux-i586-rpm.bin</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:46:27.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"e9e08153c09d385cd5379b80b4b95661"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">80669688</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible23">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible24">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible" id="collapsible25">
+                            <div class="expanded">
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Contents&gt;</span></code></span>
+                                </div>
+                                <div class="collapsible-content" style="margin-left: 1em;">
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Key&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">jdk-6u26-linux-x64-rpm.bin</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Key&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;LastModified&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">2011-07-09T00:46:45.000Z</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/LastModified&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ETag&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">"74ad465c02a866d34179d21c6a73bb43"</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ETag&gt;</span></code></span>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Size&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">80895878</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Size&gt;</span></code></span>
+                                    </div>
+                                    <div class="collapsible" id="collapsible26">
+                                        <div class="expanded">
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;Owner&gt;</span></code></span>
+                                            </div>
+                                            <div class="collapsible-content" style="margin-left: 1em;">
+                                                <div class="collapsible" id="collapsible27">
+                                                    <div class="expanded">
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;ID&gt;</span></code></span>
+                                                        </div>
+                                                        <div class="collapsible-content" style="margin-left: 1em;"><span class="text"><code><span style="font-size: 13px;">44aa6fa5730cc252d3c3a534af1d678558563865a5662d8ec93ec9237b1b1516</span></code></span>
+                                                        </div>
+                                                        <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ID&gt;</span></code></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;DisplayName&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">len</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/DisplayName&gt;</span></code></span>
+                                                </div>
+                                            </div>
+                                            <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Owner&gt;</span></code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;StorageClass&gt;</span></code></span><code><span class="text"><span style="font-size: 13px;">STANDARD</span></span></code><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/StorageClass&gt;</span></code></span>
+                                    </div>
+                                </div>
+                                <div class="line"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/Contents&gt;</span></code></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line"><span class="Apple-style-span" style="border-collapse: separate;font-family: Times New Roman;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-border-horizontal-spacing: 0px;-webkit-border-vertical-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;font-size: medium;"><span class="webkit-html-tag"><code><span style="font-size: 13px;">&lt;/ListBucketResult&gt;</span></code></span></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><code>FATTR(S236$) = FLDS:N(2),ROOT:C(16*),TAG[14]:C(26*),FLDNAM[14]:C(32*),REPEAT[14]:N(3*)</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2361.jpg" alt="" />
+                    <p>
+                        <img border="0" src="images/CDS2362.jpg" alt="" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2363.jpg" alt="" />
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>FATTR(XML$) =</code>
+                    <p><code>NAME:C(14*),</code>
+                    </p>
+                    <p><code>PREFIX:C(1*),</code>
+                    </p>
+                    <p><code>MARKER:C(1*),</code>
+                    </p>
+                    <p><code>MAXKEYS:C(4*),</code>
+                    </p>
+                    <p><code>ISTRUNCATED:C(5*),</code>
+                    </p>
+                    <p><code>CONTENTS[9]:C(1*),</code>
+                    </p>
+                    <p><code>KEY[9]:C(27*),</code>
+                    </p>
+                    <p><code>LASTMODIFIED[9]:C(24*),</code>
+                    </p>
+                    <p><code>ETAG[9]:C(36*),</code>
+                    </p>
+                    <p><code>SIZE[9]:C(9*),</code>
+                    </p>
+                    <p><code>OWNER[9]:C(1*),</code>
+                    </p>
+                    <p><code>ID[9]:C(64*),</code>
+                    </p>
+                    <p><code>DISPLAYNAME[9]:C(3*),</code>
+                    </p>
+                    <p><code>STORAGECLASS[9]:C(8*)</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2364.jpg" alt="" />
+                    <p>
+                        <img border="0" src="images/CDS2365.jpg" alt="" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2366.jpg" alt="" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2367.jpg" alt="" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2368.jpg" alt="" />
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Output of example program</td>
+            </tr>
+            <tr>
+                <td><code>Name: 104551100.Z&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 5701315<br />
+Name: 124551100.Z&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 1741570<br />
+Name: 604551100.Z&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 6010581<br />
+Name: 624551100.Z&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 1896079<br />
+Name: BBj1101_06-16-2011_1631.jar Size: 187711448<br />
+Name: SMS&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 18350080<br />
+Name: ZIP&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Size: 5043200<br />
+Name: jdk-6u26-linux-i586-rpm.bin Size: 80669688<br />
+Name: jdk-6u26-linux-x64-rpm.bin&#160; Size: 80895878</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table2" class="example">
+            <tr>
+                <td>Example containing longer tag names</td>
+            </tr>
+            <tr>
+                <td><span class="Apple-style-span" style="font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="line"><span class="webkit-html-tag">&lt;entry<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">xmlns</span>="<span class="webkit-html-attribute-value">http://www.w3.org/2005/Atom</span>"<span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">xmlns:gsx</span>="<span class="webkit-html-attribute-value">http://schemas.google.com/spreadsheets/2006/extended</span>"</span>&gt;</span></div><span class="Apple-style-span" style="color: rgb(0, 0, 0);font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="collapsible-content" style="margin-left: 1em;"><div class="collapsible" id="collapsible28"><div class="expanded"><div class="line"><span class="button collapse-button" style="-webkit-user-select: none;cursor: pointer;display: inline-block;width: 10px;vertical-align: bottom;height: 10px;margin-left: -10px;background-image: url('http://dynaweb.excellware.com/tmp/-webkit-canvas(arrowDown)');background-repeat: no-repeat no-repeat;background-position: 0% 0%;">  <![CDATA[ ]]></span></div></div></div></div></span><span class="webkit-html-tag">&lt;id&gt;</span><div class="collapsible-content" style="margin-left: 1em;"><span class="text">https://spreadsheets.google.com/feeds/list/tblG6Ykhq586frYZwayEbnA/1/private/values/bctkt</span></div><div class="line"><span class="webkit-html-tag">&lt;/id&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;updated&gt;</span><span class="text">2011-08-11T00:30:17.466Z</span><span class="webkit-html-tag">&lt;/updated&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;category<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">scheme</span>="<span class="webkit-html-attribute-value">http://schemas.google.com/spreadsheets/2006</span>"<span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">term</span>="<span class="webkit-html-attribute-value">http://schemas.google.com/spreadsheets/2006#list</span>"</span>/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;title<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">type</span>="<span class="webkit-html-attribute-value">text</span>"</span>&gt;</span><span class="text">7/30/2011 
+				22:39:02</span><span class="webkit-html-tag">&lt;/title&gt;</span></div><div class="collapsible" id="collapsible29"><div class="expanded"><div class="line"><span class="button collapse-button" style="-webkit-user-select: none;cursor: pointer;display: inline-block;width: 10px;vertical-align: bottom;height: 10px;margin-left: -10px;background-image: url('http://dynaweb.excellware.com/tmp/-webkit-canvas(arrowDown)');background-repeat: no-repeat no-repeat;background-position: 0% 0%;">  <![CDATA[ ]]></span><span class="webkit-html-tag">&lt;content<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">type</span>="<span class="webkit-html-attribute-value">text</span>"</span>&gt;</span></div><div class="collapsible-content" style="margin-left: 1em;"><span class="text">username: len@excellware.com, 
+						customerlocation: EM Print Group, 
+						primaryinternetserviceproviderisp1: Time Warner, 
+						isp1connectiontype: Static IP, isp1subnetmask: 
+						255.255.255.248 (5 usable IP addresses), 
+						isp1staticipgateway: 70.61.230.177, 
+						isp1wanipaddressfirstusable: 70.61.230.178, 
+						isp1additionalwanipaddresses: 70.61.230.179 (www.printstat.com) 
+						70.61.230.180 (available) 70.61.230.181 (available) 
+						70.61.230.182 (available), isp1primarydns: 65.24.0.168, 
+						isp1secondarydns: 65.24.0.169, wanport1dynamicdnsname: 
+						envmart.dyndns.org, 
+						isthereabackupispanddoestheroutersupportasecondwanport: 
+						No, routermakemodel: Cisco SA520 / SA520W / SA540, 
+						routerconfigurationurl: https://envmart.dyndns.org, 
+						routerconfigurationloginid: cisco, 
+						routerconfigurationpassword: Dynamo2, routerlanipaddress: 
+						192.168.2.1, lansubnetmask: 255.255.255.0 (Class C), 
+						inboundportmapping: 70.61.230.178 - ftp (21) - 
+						192.168.2.250 Dynamo Server ftp (21) 70.61.230.178 - 
+						http (80) - 192.168.2.250 Dynamo Server Dynamo http (80) 
+						70.61.230.178 - facetwin (1390) - 192.168.2.250 Dynamo 
+						Server Facetwin (1390) 70.61.230.179 - http (80) - 
+						192.168.2.101 Mac Server www,printstat.com http (80), 
+						doesrouterincludeawirelessaccesspoint: No, 
+						excellwareipsecvpnkeyingmode: IKE, 
+						excellwareipsecvpnikepresharedkey: excellwaredynamo, 
+						branchofficeipsecvpnkeyingmode: None, 
+						sslvpnloginidspasswords: MS/dynamo4u wbc/EMpg09WBC 
+						carolyn/EM8pgStar brad/juggle8 jim/EMPG9web 
+						don/DS2010empg len/Dynamo4U</span></div><div class="line"><span class="webkit-html-tag">&lt;/content&gt;</span></div></div></div><div class="line"><span class="webkit-html-tag">&lt;link<span class="webkit-html-attribute"><span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">rel</span>="<span class="webkit-html-attribute-value">self</span>"<span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">type</span>="<span class="webkit-html-attribute-value">application/atom+xml</span>"<span class="Apple-converted-space">&#160;</span><span class="webkit-html-attribute-name">href</span>="<span class="webkit-html-attribute-value">https://spreadsheets.google.com/feeds/list/tblG6Ykhq586frYZwayEbnA/1/private/values/bctkt</span>"</span>/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:timestamp&gt;</span><span class="text">7/30/2011 
+				22:39:02</span><span class="webkit-html-tag">&lt;/gsx:timestamp&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:username&gt;</span><span class="text">len@excellware.com</span><span class="webkit-html-tag">&lt;/gsx:username&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:customerlocation&gt;</span><span class="text">EM 
+				Print Group</span><span class="webkit-html-tag">&lt;/gsx:customerlocation&gt;</span></div><div class="line"><span class="webkit-html-tag">
+				&lt;gsx:primaryinternetserviceproviderisp1&gt;</span><span class="text">Time 
+				Warner</span><span class="webkit-html-tag">&lt;/gsx:primaryinternetserviceproviderisp1&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1connectiontype&gt;</span><span class="text">Static 
+				IP</span><span class="webkit-html-tag">&lt;/gsx:isp1connectiontype&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1login/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1password/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1subnetmask&gt;</span><span class="text">255.255.255.248 
+				(5 usable IP addresses)</span><span class="webkit-html-tag">&lt;/gsx:isp1subnetmask&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1staticipgateway&gt;</span><span class="text">70.61.230.177</span><span class="webkit-html-tag">&lt;/gsx:isp1staticipgateway&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1wanipaddressfirstusable&gt;</span><span class="text">70.61.230.178</span><span class="webkit-html-tag">&lt;/gsx:isp1wanipaddressfirstusable&gt;</span></div><span class="Apple-style-span" style="color: rgb(0, 0, 0);font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="collapsible" id="collapsible30"><div class="expanded"><div class="line"><span class="button collapse-button" style="-webkit-user-select: none;cursor: pointer;display: inline-block;width: 10px;vertical-align: bottom;height: 10px;margin-left: -10px;background-image: url('http://dynaweb.excellware.com/tmp/-webkit-canvas(arrowDown)');background-repeat: no-repeat no-repeat;background-position: 0% 0%;">  <![CDATA[ ]]></span></div></div></div></span><span class="webkit-html-tag">
+						&lt;gsx:isp1additionalwanipaddresses&gt;</span><div class="collapsible-content" style="margin-left: 1em;"><span class="text">70.61.230.179 (www.printstat.com) 
+						70.61.230.180 (available) 70.61.230.181 (available) 
+						70.61.230.182 (available)</span></div><div class="line"><span class="webkit-html-tag">
+						&lt;/gsx:isp1additionalwanipaddresses&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1primarydns&gt;</span><span class="text">65.24.0.168</span><span class="webkit-html-tag">&lt;/gsx:isp1primarydns&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp1secondarydns&gt;</span><span class="text">65.24.0.169</span><span class="webkit-html-tag">&lt;/gsx:isp1secondarydns&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:wanport1dynamicdnsname&gt;</span><span class="text">envmart.dyndns.org</span><span class="webkit-html-tag">&lt;/gsx:wanport1dynamicdnsname&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isthereabackupispanddoestheroutersupportasecondwanport&gt;</span><span class="text">No</span><span class="webkit-html-tag">&lt;/gsx:isthereabackupispanddoestheroutersupportasecondwanport&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2login/&gt;</span></div><div class="line"><span class="webkit-html-tag">
+				&lt;gsx:backupinternetserviceproviderisp2/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2connectiontype/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2password/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2subnetmask/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2wanipaddressfirstusable/&gt;</span></div><div class="line"><span class="webkit-html-tag">
+				&lt;gsx:isp2additionalwanipaddresses/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2staticipgateway/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2primarydns/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:isp2secondarydns/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:wanport2dynamicdnsname/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routermakemodel&gt;</span><span class="text">Cisco 
+				SA520 / SA520W / SA540</span><span class="webkit-html-tag">&lt;/gsx:routermakemodel&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routerconfigurationurl&gt;</span><span class="text">https://envmart.dyndns.org</span><span class="webkit-html-tag">&lt;/gsx:routerconfigurationurl&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routerconfigurationloginid&gt;</span><span class="text">cisco</span><span class="webkit-html-tag">&lt;/gsx:routerconfigurationloginid&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routerconfigurationpassword&gt;</span><span class="text">Dynamo2</span><span class="webkit-html-tag">&lt;/gsx:routerconfigurationpassword&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routerlanipaddress&gt;</span><span class="text">192.168.2.1</span><span class="webkit-html-tag">&lt;/gsx:routerlanipaddress&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:lansubnetmask&gt;</span><span class="text">255.255.255.0 
+				(Class C)</span><span class="webkit-html-tag">&lt;/gsx:lansubnetmask&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routerwirelessssid/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:routersecurity/&gt;</span></div><span class="Apple-style-span" style="font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="collapsible" id="collapsible31"><div class="expanded"><div class="line"><span class="button collapse-button" style="-webkit-user-select: none;cursor: pointer;display: inline-block;width: 10px;vertical-align: bottom;height: 10px;margin-left: -10px;background-image: url('http://dynaweb.excellware.com/tmp/-webkit-canvas(arrowDown)');background-repeat: no-repeat no-repeat;background-position: 0% 0%;">  <![CDATA[ ]]></span><span class="webkit-html-tag">&lt;gsx:inboundportmapping&gt;</span></div><div class="collapsible-content" style="margin-left: 1em;"><span class="text">70.61.230.178 - ftp (21) - 
+						192.168.2.250 Dynamo Server ftp (21) 70.61.230.178 - 
+						http (80) - 192.168.2.250 Dynamo Server Dynamo http (80) 
+						70.61.230.178 - facetwin (1390) - 192.168.2.250 Dynamo 
+						Server Facetwin (1390) 70.61.230.179 - http (80) - 
+						192.168.2.101 Mac Server www,printstat.com http (80)</span></div><div class="line"><span class="webkit-html-tag">&lt;/gsx:inboundportmapping&gt;</span></div></div></div><div class="line"><span class="webkit-html-tag">&lt;gsx:enabledhcpserveronrouter/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:startingdhcpipaddress/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:endingdhcpipaddress/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:fixedipaddresses/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:shouldtherouterrestrictwebbrowsing/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:webbrowsingrestrictions/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:doesrouterincludeawirelessaccesspoint&gt;</span><span class="text">No</span><span class="webkit-html-tag">&lt;/gsx:doesrouterincludeawirelessaccesspoint&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:wirelesswpapassword/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:wirelesswepinformation/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:excellwareipsecvpnkeyingmode&gt;</span><span class="text">IKE</span><span class="webkit-html-tag">&lt;/gsx:excellwareipsecvpnkeyingmode&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:excellwareipsecvpnikepresharedkey&gt;</span><span class="text">excellwaredynamo</span><span class="webkit-html-tag">&lt;/gsx:excellwareipsecvpnikepresharedkey&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:excellwareipsecvpnmanualspi/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:branchofficeipsecvpnkeyingmode&gt;</span><span class="text">None</span><span class="webkit-html-tag">&lt;/gsx:branchofficeipsecvpnkeyingmode&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:branchofficeipsecvpnikepresharedkey/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:branchofficeipsecvpnmanualspi/&gt;</span></div><div class="line"><span class="webkit-html-tag">&lt;gsx:pptploginidsandpasswords/&gt;</span></div><span class="Apple-style-span" style="color: rgb(0, 0, 0);font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="collapsible" id="collapsible32"><div class="expanded"><div class="line"><span class="button collapse-button" style="-webkit-user-select: none;cursor: pointer;display: inline-block;width: 10px;vertical-align: bottom;height: 10px;margin-left: -10px;background-image: url('http://dynaweb.excellware.com/tmp/-webkit-canvas(arrowDown)');background-repeat: no-repeat no-repeat;background-position: 0% 0%;">  <![CDATA[ ]]></span></div></div></div></span><span class="webkit-html-tag">&lt;gsx:sslvpnloginidspasswords&gt;</span><div class="collapsible-content" style="margin-left: 1em;"><span class="text">MS/dynamo4u wbc/EMpg09WBC carolyn/EM8pgStar 
+						brad/juggle8 jim/EMPG9web don/DS2010empg len/Dynamo4U</span></div><div class="line"><span class="webkit-html-tag">&lt;/gsx:sslvpnloginidspasswords&gt;</span></div></span> <span class="Apple-style-span" style="font-family: monospace;font-size: 13px;font-style: normal;font-variant: normal;font-weight: normal;letter-spacing: normal;line-height: normal;orphans: 2;text-align: -webkit-auto;text-indent: 0px;text-transform: none;white-space: normal;widows: 2;word-spacing: 0px;-webkit-text-decorations-in-effect: none;-webkit-text-size-adjust: auto;-webkit-text-stroke-width: 0px;"><div class="line"><span class="webkit-html-tag">&lt;/entry&gt;</span></div></span></span>
+                </td>
+            </tr>
+            <tr>
+                <td><code>FATTR(S236$) = 
+		FLDS:N(2),ROOT:C(5*),TAG[56]:C(58*),FLDNAM[56]:C(32*),REPEAT[56]:N(3*)</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS2369.jpg" />
+                    <p>
+                        <img border="0" src="images/CDS2370.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2371.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2372.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2373.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2374.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2375.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2376.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS2377.jpg" />
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>XML$ output</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS23610.jpg" />
+                    <p>
+                        <img border="0" src="images/CDS23611.jpg" />
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS23612.jpg" />
+                    </p>
+                    <p>Note that the fields that are displayed in hex are because they 
+		contain line feed characters ($0A$) so that line breaks can be processed 
+		when present.</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Note FLDNAM contents when base tag name is longer than 32 characters</td>
+            </tr>
+            <tr>
+                <td><code>?S236.TAG$[8]<br />
+		gsx:primaryinternetserviceproviderisp1<br />
+&#160;</code>
+                    <p><code>?S236.FLDNAM$[8]<br />
+		primaryinternetserviceprovideri8<br />
+&#160;</code>
+                    </p>
+                    <p><code>?FATTR(XML$,S236.FLDNAM$[8],"title")<br />
+		primaryinternetserviceproviderisp1</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

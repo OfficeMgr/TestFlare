@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <style type="text/css">
+.none
+{
+	border: 1;
+}
+
+</style>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW022 - Validate Address</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW022</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Validate Address</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW022">Last Revised: 04/15/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to validate and correct an address.&#160; SW022 is typically specified as a Standard View Validation routine with File Maintenance applications, although it could be called by another Standard View Validation routine.&#160; SW022 calls CDS358 to perform the validation, and will display any fields changed by CDS358.&#160; Note that CDS358 requires the Dynamo Address Correction option to be enabled.&#160; If the Dynamo Address Correction option is enabled, then I for Information Menu Option will include DAC in the list of Licensed Options in the Application Software Information section.</p>
+        <p>SW022 submits the address for verification when either a) the name or 
+	address fields have changed, or b) there is a field named ADDRCORDATE within 
+	the record, and this date is more than 90 days ago, or ADDRCORDATE is zero.</p>
+        <p>SW022 will display any corrected address fields in yellow, or in white if the primary text color is yellow.&#160; Other optional fields such as the county code are also displayed if included in the View.</p>
+        <p>SW022 will use upper case for the address if there is a NAME field that 
+	is mostly upper case, otherwise proper (mixed) case will be used.</p>
+        <p>If an address cannot be validated or corrected, then the operator will have the option to revise the address manually, or to accept the address even though it may not be valid.</p>
+        <p><code>CALL "SW022", ERR=XXXX, Y$, REC$, RECA$, D1$, D2$, S039$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">SW022</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">In/Out</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>XXXX</code>
+                </td>
+                <td align="center">&#160;</td>
+                <td>Branch to line XXXX if the address was invalid, and the operator selected the option to manually correct the address.</td>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Standard Session Control Variable</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>
+        The templated data structure containing the address fields.&#160; Any fields changed will be replaced by their corrected values.&#160; Optional fields will also be assigned if present in the record.&#160; They will also be displayed if included in the View.
+
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table8" class="lev2"><tr><th>Field Name</th><th style="text-align: center;">Required</th><th style="text-align: center;">Size</th><th>Description</th></tr><tr><td><code>NAME</code></td><td align="center">No</td><td align="center">unlimited</td><td>Company or Individual Name field sometimes used during address validation.</td></tr><tr><td><code>ADDRESS</code></td><td align="center">No*</td><td align="center">unlimited</td><td>Single line address field</td></tr><tr><td><code>ADDR1 and ADDR2</code></td><td align="center">No*</td><td align="center">unlimited</td><td>Two line address field.&#160; ADDR2 will be used for address validation if non-blank, otherwise ADDR1 will be used.<br />
+            * Either the ADDRESS field or ADDR1 &amp; ADDR2 fields are required.</td></tr><tr><td><code>CITY</code></td><td align="center">Yes</td><td align="center">28</td><td>City</td></tr><tr><td><code>STATE</code></td><td align="center">Yes</td><td align="center">2</td><td>US State Code or Canadian province code.</td></tr><tr><td><code>ZIP</code></td><td align="center">Yes</td><td align="center">10</td><td>US Zip Code (XXXXX-XXXX) or Canadian Postal Code (ANA-NAN)</td></tr><tr><td><code>COUNTRY</code></td><td align="center">No</td><td align="center">2</td><td>Country Code</td></tr><tr><td><code>CRRT</code></td><td align="center">No</td><td align="center">4</td><td>Carrier Route Code</td></tr><tr><td><code>DPBC</code></td><td align="center">No</td><td align="center">3</td><td>Delivery Point Bar Code</td></tr><tr><td><code>COUNTYCODE</code></td><td align="center">No</td><td align="center">5</td><td>County Code that can be useful in determining the Sale Tax rate.</td></tr><tr><td><code>COUNTYNAME</code></td><td align="center">No</td><td align="center">26</td><td>County Name</td></tr><tr><td><code>ADDRCORDATE</code></td><td align="center">No</td><td align="center">N(7) or U(3)</td><td>Set to the current julian date and typically stored in the record to know when the last address change was done.&#160; Can also be used to bypass address validation when it was done recently.</td></tr><tr><td><code>ADDRCORCODE</code></td><td align="center">No</td><td align="center">1</td><td>Set to the address correction code passed back from the address validation routine CDS358.&#160; It indicates the reason that the address was invalid.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>RECA$</code>
+                </td>
+                <td align="center">In</td>
+                <td>This variable is passed by CDS550 and contains the data structure before any operator entries were made.&#160; SW022 does not use 
+		<code>RECA$</code>.</td>
+            </tr>
+            <tr>
+                <td><code>D1$</code>
+                </td>
+                <td align="center">In</td>
+                <td>This variable is passed by CDS550 and contains information about the View.&#160; The only field needed by SW022 is 
+		<code>D1.FLDS</code> which is the number of fields in the view.</td>
+            </tr>
+            <tr>
+                <td><code>D2$</code>
+                </td>
+                <td align="center">In</td>
+                <td>This variable is passed by CDS550 and contains information about each field in the view.&#160; Each field is a 
+		<code>S039$</code> template referenced as <code>D2.FLD$[I]</code>.&#160; See SW022 code for example.&#160; SW022 uses this information to know where on the display to display the corrected address.</td>
+            </tr>
+            <tr>
+                <td><code>S039$</code>
+                </td>
+                <td align="center">In</td>
+                <td>This variable is passed by CDS550 and is used only for its template, and not for its contents.&#160; See SW022 code.</td>
+            </tr>
+        </table>
+        <p>SW022 will validate one address in <code>REC$</code>.&#160; The address to be validated will be based on the first data element in the view that ends with 
+	<code>"CITY"</code>.&#160; In most cases, the fields in <code>REC$</code> are named CITY, STATE, ZIP, ADDRESS, etc.&#160; However, SW022 can also validate addresses with a prefix before the field names.&#160; For example, a check address could contain fields named CHKCITY, CHKSTATE, CHKZIP, CHKADDRESS, etc., and a Ship To address could contain fields named SHIP2CITY, SHIP2STATE, SHIP2ZIP, SHIP2ADDR1, SHIP2ADDR2, etc.</p>
+        <p>If multiple addresses are contained in the same record, then maintain each address in a separate view, so that each address can be validated by the view validation routine that is called by the View Manager when exiting the view.</p>
+    </body>
+</html>

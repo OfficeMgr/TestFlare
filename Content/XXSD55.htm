@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="11" MadCap:lastHeight="1563" MadCap:lastWidth="941">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>XXSD55 - File Maintenance Record Layout</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="XXSD55" />deprecated components</p>
+        <p class="SectionTitle">
+            <MadCap:keyword term="File Maintenance" />File Maintenance Record Layout</p>
+        <p class="SectionDesc">
+            <MadCap:keyword term="XXSD53" />Purpose: Generates VDT's in XXSD53 and lengths of all fields in File Maintenance.</p>
+        <p>Iolist: <code><a href="#F0">F0</a>, <a href="#N">N,</a> <a href="#M$">M$</a>, <a href="#D0$">D0$</a>, <a href="#D2$">D2$</a>, <a href="#D3$">D3$</a>, <a href="#D3$">D$</a>, <a href="#F$">F$</a>, <a href="#D1$">D1$</a>, <a href="#D5$">D5$</a>, <a href="#D6$">D6$</a>,</code> <a href="#D7$"><code>D7$</code></a></p>
+        <table>
+            <tr>
+                <th colspan="2">XXSD55</th>
+            </tr>
+            <tr>
+                <td><a name="F0"></a><code>F0</code>
+                </td>
+                <td>number of Data Elements in the key</td>
+            </tr>
+            <tr>
+                <td><a name="N"></a><code>N</code>
+                </td>
+                <td>number of Data Elements selected to be maintained (how many are displayed)</td>
+            </tr>
+            <tr>
+                <td><a name="M$"></a><code>M$</code>
+                </td>
+                <td>string of all masks that are needed</td>
+            </tr>
+            <tr>
+                <td><a name="D0$"></a><code>D0$</code>
+                </td>
+                <td>string of all descriptions, plus, minimum and maximum lengths of each Data Element</td>
+            </tr>
+            <tr>
+                <td><a name="D2$"></a><code>D2$</code>
+                </td>
+                <td>string of all Valid Strings</td>
+            </tr>
+            <tr>
+                <td><a name="D3$"></a><code>D3$</code>
+                </td>
+                <td>string of lengths of each field (3 bytes per field)</td>
+            </tr>
+            <tr>
+                <td><code>D$</code>
+                </td>
+                <td><a name="D$"></a>all information you need for each Data Element<br />        (27 Bytes per Data Element)
+
+        <table class="lev2"><tr><td>(1,1)</td><td>
+              field type
+
+              <table class="lev3"><tr><td><p>L</p></td><td><p>Left</p></td></tr><tr><td><p>A</p></td><td><p>alphanumeric</p></td></tr><tr><td><p>R</p></td><td><p>right</p></td></tr><tr><td><p>N</p></td><td><p>numberic</p></td></tr></table></td></tr><tr><td>(2,1)</td><td>length of maximum</td></tr><tr><td>(3,4)</td><td>X,Y position of the input (display) on the screen</td></tr><tr><td>(7,1)</td><td>number of fractional positions</td></tr><tr><td>(8,1)</td><td>
+              Maintenance Code (0-7 possible)
+
+              <table class="lev3"><tr><td><p>0</p></td><td><p>open to anything</p></td></tr><tr><td><p>1</p></td><td><p>must be zero to delete</p></td></tr><tr><td><p>2</p></td><td><p>no modifications allowed</p></td></tr><tr><td><p>3</p></td><td><p>no modifications allowed zero to delete</p></td></tr><tr><td><p>4</p></td><td><p>no adds of new records</p></td></tr><tr><td><p>5</p></td><td><p>no to add and zero to delete</p></td></tr><tr><td><p>6</p></td><td><p>no to add or modify</p></td></tr><tr><td><p>7</p></td><td><p>no add, modify and zero to delete</p></td></tr></table></td></tr><tr><td>(9,1)</td><td>unused</td></tr><tr><td>(10,1)</td><td>field number</td></tr><tr><td>(11,1)</td><td>length of substring<br />            (if part of a variable the number is how long that part is)</td></tr><tr><td>(12,3)</td><td>starting byte within the field</td></tr><tr><td>(15,3)</td><td>
+              for numeric its the starting position of the Mask in M$,
+
+              <p>for alpha-numeric its the starting position of the Valid String in D2$</p></td></tr><tr><td>(18,1)</td><td>length of Mask or length of Valid String</td></tr><tr><td>(19,3)</td><td>used by F/M its the starting position of this Data Element in the record</td></tr><tr><td>(22,3)</td><td>starting byte within D0$ of the description (minimum and maximum)</td></tr><tr><td>(25,1)</td><td>length of description</td></tr><tr><td>(26,1)</td><td>length of the minimum</td></tr><tr><td>(27,1)</td><td>actual length of this Data Element within the record<br />            (also adjusts when maintained)</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>F$(1,30)</code>
+                </td>
+                <td><a name="F$"></a>names of auxiliary files
+
+        <table class="lev2"><tr><td>(31,1)</td><td>audit (Y/N)</td></tr><tr><td>(32,1)</td><td>delete (Y/N)</td></tr><tr><td>(33,30)</td><td>deletion files</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>D1$</code>
+                </td>
+                <td><a name="D1$"></a>3 bytes for each variable that is a required key
+
+        <table class="lev2"><tr><td>(1,1)</td><td>what Data Element is in question</td></tr><tr><td>(2,1)</td><td>what file is it a required key in</td></tr><tr><td>(3,1)</td><td>what field to display</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>D5$</code>
+                </td>
+                <td>
+                    <table class="lev2">
+                        <tr>
+                            <td><a name="D5$"></a>(1,1)</td>
+                            <td>length of all Sort Keys</td>
+                        </tr>
+                        <tr>
+                            <td>(2,X)</td>
+                            <td>where X is the number of data elements that are part of auxiliary sort keys, times 3</td>
+                        </tr>
+                        <tr>
+                            <td>(3,4,5,6,7 shows as auxiliary 1-5 in FDD)</td>
+                            <td>
+                                <table class="lev3">
+                                    <tr>
+                                        <td>
+                                            <p>A.</p>
+                                        </td>
+                                        <td>
+                                            <p>what file number</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>B.</p>
+                                        </td>
+                                        <td>
+                                            <p>starting byte</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>C.</p>
+                                        </td>
+                                        <td>
+                                            <p>length</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="D6$"></a><code>D6$</code>
+                </td>
+                <td>fields that must be zero to delete</td>
+            </tr>
+            <tr>
+                <td><code>D7$</code>
+                </td>
+                <td><a name="D7$"></a>comparable to D1$ 3 bytes for each Data Element that is part of a Sort Key
+
+        <table class="lev2"><tr><td>(1,1)</td><td>what Data Element in question</td></tr><tr><td>(2,1)</td><td>starting bytes in the Sort Key field</td></tr><tr><td>(3,1)</td><td>length of the Data Element</td></tr></table></td>
+            </tr>
+        </table>
+    </body>
+</html>

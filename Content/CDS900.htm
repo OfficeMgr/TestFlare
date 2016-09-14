@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS900 - Change menu date</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS900</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Change menu date</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS900">Last Revised: 03/09/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The Dynamo Tools menu system supports 9 user-defined dates.&#160; CDS900 is used to change one of those dates.</p>
+        <p>The session control variable Y$ contains the following date related fields.</p>
+        <table border="1" id="table1">
+            <tr>
+                <th nowrap="nowrap">Date Fields</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>Y.DATE$</code>
+                </td>
+                <td>The user-defined date in MM/DD/YY format</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>Y.JDATE</code>
+                </td>
+                <td>The user-defined date in julian format</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap"><code>DATEINDEX</code>
+                </td>
+                <td>The user-defined date index.&#160; If zero, then the system date is used.&#160; Values of 1 to 9 indicate a user-defined date.&#160; The <code>DATEINDEX</code> fields is specified using Menu Maintenance (SMU) for each menu code.</td>
+            </tr>
+        </table>
+        <p>The dates are stored in <code>XXDD00.DATES[9]</code> Company Information file.</p>
+        <p>CDS900 may be RUN or CALLed.&#160; If RUN, it is typically attached to a Dynamo Tools menu.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS900", Y$, TITLE$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS900 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>TITLE$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Optional Description of date, i.e., Accounts Payable Period Ending Date, Accounts Receivable Deposit Date, etc.&#160; Only applicable when CDS900 is called.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

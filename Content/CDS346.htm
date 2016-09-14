@@ -1,0 +1,634 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS346 - Process First Data Transaction</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS346</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Process First Data Transaction</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS346">Last Revised: 06/20/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to process a credit card 
+transaction with First Data using their Global Gateway.&#160; This routine is 
+still supported but has been replaced by CDS347 which 
+is used with the First Data Global Gateway e4.</p>
+        <p>Currently, only credit card transactions are supported, although check approval transactions 
+may be supported in the future.</p>
+        <p>CDS346 requires java to be installed on the server and to be executable without including a complete path.&#160; It has been tested using java 1.6.0_23 and higher.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS346", ERR=XXXX, Y$, S346$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="8" nowrap="nowrap">CDS346 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" rowspan="2">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap" rowspan="2">Passed<br />
+To/From</th>
+                <th nowrap="nowrap" rowspan="2">Variable</th>
+                <th style="text-align: center;" rowspan="2">Length</th>
+                <th colspan="3" style="text-align: center;">
+                    <p style="text-align: center;">Transaction Type</p>
+                </th>
+                <th rowspan="2">Description</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;" height="22">sale, credit, preAuth,<br />
+ForceTicket</th>
+                <th style="text-align: center;" height="22">return,<br />
+postAuth</th>
+                <th height="22" style="text-align: center;">void</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td align="left" nowrap="nowrap">N/A</td>
+                <td align="center">N/A</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Error branch taken if:
+<ul><li>Store# contains any blanks</li><li>Unable to open First Data auth.txt file</li><li>auth.txt file does not contain the keyword: Password:</li><li>Unable to open First Data keystore password ks.pw.txt file</li></ul></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap">all</td>
+                <td align="center">N/A</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S346$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.STORENO$</code>
+                </td>
+                <td align="center">10</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>No blanks permitted</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.FOLDER$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Defaults to <code>$SMSDIR/bin/firstdata</code> if not provided.&#160; Indicates the folder where the First Data script, FirstDataWSClient.sh, and dependent jar files, as well as the sub-directory for each store are located.&#160; See complete list below.
+<p><code>FDGGWSApiOrderService-client.jar<br />
+FirstDataWSClient.class<br />
+FirstDataWSClient.sh<br />
+XmlSchema-1.4.3.jar<br />
+axiom-api-1.2.10.jar<br />
+axiom-impl-1.2.10.jar<br />
+axis2-adb-1.5.3.jar<br />
+axis2-kernel-1.5.3.jar<br />
+axis2-transport-http-1.5.3.jar<br />
+axis2-transport-local-1.5.3.jar<br />
+commons-codec-1.3.jar<br />
+commons-httpclient-3.1.jar<br />
+commons-logging-1.1.1.jar<br />
+httpcore-4.0.jar<br />
+mail-1.4.jar<br />
+neethi-2.0.4.jar<br />
+wsdl4j-1.6.2.jar</code></p><p>An optional sub-folder named 'test' contains versions of 3 files used for 'test' accounts.</p><p><code>test/FDGGWSApiOrderService-test-client.jar</code></p><p><code>test/FirstDataWSClient.class</code></p><p><code>test/FirstDataWSClient.sh</code></p><p>A sub-folder is required for each store, where the folder name is the store#.&#160; Example:</p><p><code>1909805627</code></p><p>The store sub-folder contains the following files:</p><p><code>ExcellwareTest<br />
+FDGGWS_Certificate_WS1909805627._.1.tar<br />
+WS1909805627._.1.auth.txt<br />
+WS1909805627._.1.key<br />
+WS1909805627._.1.key.pw.txt<br />
+WS1909805627._.1.ks<br />
+WS1909805627._.1.ks.pw.txt<br />
+WS1909805627._.1.p12<br />
+WS1909805627._.1.p12.pw.txt<br />
+WS1909805627._.1.pem</code></p><p>The ExcellwareTest file, is an optional empty file named to describe the store associated with this store#.&#160; The .tar file is downloaded from the First Data web site <a href="http://www.firstdata.com/ecommerce">http://www.firstdata.com/ecommerce</a> for 'live' information, or <a href="https://www.staging.yourpay.com">https://www.staging.yourpay.com</a> for 'test' accounts..&#160; Click on the Virtual Terminal link, then login.&#160; You will need the merchants First Data Store#, User ID, and Password to login.&#160; Click Support, Download Center, and under Store CERT Files, click Download Now.&#160; You will need merchant's Federal Taxpayer ID.&#160; Click the Download button next to web service.&#160; Save the downloaded .tar file in the store# sub-directory, and un-tar into the 8 files listed above.&#160;</p></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TEST$</code>
+                </td>
+                <td align="center">4+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass as 'test' when using a test account.&#160; This requires the test directory and 3 test files described above.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.KEYSTORE$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the complete path the keystore (.ks) file.&#160; Only required when the .ks file is not located in the folder as described above.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.KEYSTOREPASSWORD$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the keystore password.&#160; Only required when the ks.pw.txt file is not present in the store folder as described above.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.USERNAME$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Currently set by CDS346 to the default value based on the store#.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.PASSWORD$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the First Data password.&#160; Only required when the auth.txt file is not present in the store folder as described above.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TYPE$</code>
+                </td>
+                <td align="center">5+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Transaction Type
+<table border="1" id="table1"><tr><td>"cc"</td><td>Credit Card</td></tr><tr><td>"check"</td><td>Check Approval (Not currently implemented)</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TRANSTYPE$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>
+                    <table border="1" id="table2">
+                        <tr>
+                            <th colspan="2">For .TYPE$='cc'</th>
+                        </tr>
+                        <tr>
+                            <td>sale</td>
+                            <td>Regular Credit Card Sale</td>
+                        </tr>
+                        <tr>
+                            <td>preAuth</td>
+                            <td>Authorization only.&#160; Verifies that account is active and transaction will not exceed credit limit</td>
+                        </tr>
+                        <tr>
+                            <td>return</td>
+                            <td>Return of original sale</td>
+                        </tr>
+                        <tr>
+                            <td>credit</td>
+                            <td>Similar to a return, when the initial transaction was not processed using CDS346.</td>
+                        </tr>
+                        <tr>
+                            <td>forceTicket</td>
+                            <td>Used when initial authorization was obtained using a voice telephone call to First Data (not currently implemented)</td>
+                        </tr>
+                        <tr>
+                            <td>postAuth</td>
+                            <td>Similar to a Sale when a preAuth transaction was processed previously</td>
+                        </tr>
+                        <tr>
+                            <td>void</td>
+                            <td>Used to cancel a prior sale, credit, or postAuth transaction made in the same day.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ORIGIN$</code>
+                </td>
+                <td align="center">6</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>
+                    <table border="1" id="table6">
+                        <tr>
+                            <td>ECI</td>
+                            <td>Electronic Commerce</td>
+                        </tr>
+                        <tr>
+                            <td>MOTO</td>
+                            <td>Mail Order or Telephone Order</td>
+                        </tr>
+                        <tr>
+                            <td>RETAIL</td>
+                            <td>Face to Face</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TRACKDATA$</code>
+                </td>
+                <td align="center">100+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass data returned by card swipe device</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CARDNUMBER$</code>
+                </td>
+                <td align="center">16+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the credit card# with no spaces nor hyphens.&#160; Not required when <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EXPMONTH$</code>
+                </td>
+                <td align="center">2</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the 2 character card expiration month with leading zero when applicable.&#160; Not required when <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EXPYEAR$</code>
+                </td>
+                <td align="center">2</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the 2 character card expiration year with leading zero when applicable.&#160; Not required when <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CHARGETOTAL</code>
+                </td>
+                <td align="center">8+</td>
+                <td align="center">X</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td>Pass the amount to charge or credit.&#160; Not a signed field.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CARDCODEVALUE$</code>
+                </td>
+                <td align="center">4+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the 3 or 4 digit numeric card security code.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CARDCODEIND$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the reason the <code>CARDCODEVALUE$</code> was not provided.
+<table border="1" id="table3"><tr><td>PROVIDED</td><td>Indicates the <code>CARDCODEVALUE</code> is provided.</td></tr><tr><td>ILLEGIBLE</td><td>Security Code was not legible on card</td></tr><tr><td>NO_IMPRINT</td><td>Security Code was not present on card</td></tr><tr><td>NOT_PRESENT</td><td>The Credit Card was not present to obtain the Security Code</td></tr><tr><td>NOT_PROVIDED</td><td>Customer declined to provide Security Code</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.NAME$</code>
+                </td>
+                <td align="center">35+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the card holders name.&#160; Not required with <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ADDRESS1</code>
+                </td>
+                <td align="center">35+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the first line of the card holders billing address.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ADDRESS2</code>
+                </td>
+                <td align="center">35+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the second line of the card holders billing address when needed.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CITY$</code>
+                </td>
+                <td align="center">28+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the card holders billing city.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.STATE$</code>
+                </td>
+                <td align="center">2+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the card holders billing 2 character state code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ZIPCODE$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass the card holders billing zip code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CUSTOMERID$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass an optional customer identifier.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.INVOICENUMBER$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass an optional invoice number to identify the transaction.&#160; Appears on First Data reports to assist in reconciling transactions.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.ORDERID$</code>
+                </td>
+                <td align="center">50+</td>
+                <td align="center">From</td>
+                <td align="center">To</td>
+                <td align="center">To</td>
+                <td>Order ID generated by First Data to identify a transaction.
+<table border="1" id="table4"><tr><th>TransType</th><th>Use</th></tr><tr><td>sale</td><td>Returned to calling program.&#160; Required for 'return' or 'void' transactions.</td></tr><tr><td>return</td><td>Pass OrderID of original sale to CDS346.</td></tr><tr><td>void</td><td>Pass OrderID of original sale to CDS346.</td></tr><tr><td>preAuth</td><td>Returned to calling program.&#160; Required for 'postAuth' transactions.</td></tr><tr><td>postAuth</td><td>Pass OrderID of PreAuth transaction.</td></tr><tr><td>credit</td><td>Returned to calling program.&#160; Required for 'void' transactions.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.TDATE$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">To</td>
+                <td>Transaction Date in a unique FirstData format, that is used the same as the table above for <code>ORDERID</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CHECKNUMBER$</code>
+                </td>
+                <td align="center">10+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass Check# used for 'check' <code>TYPE</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ACCOUNTNUMBER$</code>
+                </td>
+                <td align="center">15+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass Bank account number for 'check' <code>TYPE</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.DRIVINGLICENSENO$</code>
+                </td>
+                <td align="center">15+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass Drivers License# for Check verification.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.DRIVINGLICENSEST$</code>
+                </td>
+                <td align="center">2+</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Pass 2 character state code indicating the state that issued the Driver's License.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.RESULT$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Transaction Result
+<table border="1" id="table5"><tr><td>APPROVED</td><td>Transaction was processed</td></tr><tr><td>DECLINED</td><td>Transaction was declined</td></tr><tr><td>FAILED</td><td>Transaction failed, typically because a required field was missing or invalid</td></tr><tr><td>FRAUD</td><td>Transaction was not processed due to possible fraud such as a stolen credit card.</td></tr><tr><td>DUPLICATE</td><td>Transaction was not processed as it appears to be a duplicate of a recent transaction.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.PROCESSORRESCODE$</code>
+                </td>
+                <td align="center">1+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>This code is set by First Data but not documented.&#160; Use with caution.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.PROCESSORREFNO$</code>
+                </td>
+                <td align="center">20+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Brief reference number set by First Data used when communication with First Data about a specific transaction.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.AVSRESPONSE$</code>
+                </td>
+                <td align="center">4+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Codes set by First Data to indicate if the Address and Zip Code provided match the bank's records for the cardholder.&#160; Refer <a href="https://www.firstdata.com/downloads/marketing-merchant/fd_globalgatewayconnect_usermanualnorthamerica.pdf">here</a> for details.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.XMLOUT$</code>
+                </td>
+                <td align="center">4</td>
+                <td align="center">X</td>
+                <td align="center">X</td>
+                <td align="center">X</td>
+                <td>Pass as "true" to request XML sent to First Data be returned in <code>XML$</code> 
+for testing purposes.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.XML$</code>
+                </td>
+                <td align="center">100+</td>
+                <td align="center">X</td>
+                <td align="center">X</td>
+                <td align="center">X</td>
+                <td>Returned as XML sent to First Data when <code>XMLOUT$="true"</code></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.ERRORMESSAGE$</code>
+                </td>
+                <td align="center">50+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Error message set by First Data when a transaction is processed, but not approved.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.ERROR$</code>
+                </td>
+                <td align="center">50+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Error message set by the Dynamo Tools java class when required parameters are missing, or the java class encounters an error.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.MSG$</code>
+                </td>
+                <td align="center">50+</td>
+                <td align="center">X</td>
+                <td align="center">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Set by CDS346 when the ERR= branch will be taken to further describe the situation causing the error.</td>
+            </tr>
+        </table>
+        <p>Note that CDS346 will create an error file named tmp/FirstDataError.txt and should a java error occur, append to this file the java stack trace that is useful when debugging the java code that CDS346 uses.</p>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>1230 CALL "CDS041","CDS346",S346$,"YY"<br />
+1240 LET S346.STORENO$=CW11.CCSTORENO$<br />
+1250 LET S346.CUSTOMERID$=SO40.CUSTNO$<br />
+1260 LET S346.INVOICENUMBER$=SO40.SONO$<br />
+&#160;</code>
+                    <p><code>1270 SWITCH POS(ENT$="CAV"); REM "ENT$=C Charge, A=Authorize Only, V=Void Prior Transaction<br />
+1280 CASE 1<br />
+1290 IF SO49A.CCSTATUS$="A"<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; THEN<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; LET S346.TRANSTYPE$="postAuth",S346.ORDERID$=SO49A.ORDERID$<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; ELSE<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; IF SO49A.AMT&gt;0<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; THEN<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; LET S346.TRANSTYPE$="sale"<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; ELSE<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; IF POS(" "&lt;&gt;SO49A.ORDERID$)<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; THEN<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; LET S346.TRANSTYPE$="return",S346.ORDERID$=</code>
+                    </p>
+                    <p><code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; SO49A.ORDERID$<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; ELSE<br />
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; LET S346.TRANSTYPE$="credit"<br />
+1300 BREAK<br />
+1310 CASE 2; LET S346.TRANSTYPE$="preAuth"; BREAK<br />
+1320 CASE 3; LET S346.TRANSTYPE$="void",S346.ORDERID$=SO49A.ORDERID$,S346.TDATE$=SO49A.TDATE$; BREAK<br />
+1330 SWEND<br /><br />
+1380 CALL "CDS346",Y$,S346$</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

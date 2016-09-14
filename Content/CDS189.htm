@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <body>
+        <p class="SectionName">CDS189</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Change template field name or type</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS189">Last Revised: 10/04/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used to rename a field or change the field type in a template file.&#160; Note that in most cases you should use the Data Dictionary Field Rename selection on the FMS menu to rename a field, and Data Dictionary Maintenance to change a field type.&#160; CDS189 is used when you have already changed the field name in the Data Dictionary, and you will be exporting the revised dictionary to another system and need to change the field name in the template file programmatically.&#160; Note that this routine only changes the template file.&#160; It does not change the data dictionary, and does not convert any data.&#160; This program should only be used when the new template file being created will still match the data.</p>
+        <p>Note that the length of the field and the repeat cannot be changed using this program.&#160; Make those changes in the data dictionary, then call <a href="CDS034.htm">CDS034</a> or use the File Utility (SMU) Compare to Data Dictionary option so that the data file will be converted.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS189", Y$, S189$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS189 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S189$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table1" class="lev2">
+                        <tr>
+                            <td nowrap="nowrap"><code>FILNAM$</code>
+                            </td>
+                            <td>The data file associated with the template file to be changed.&#160; Pass the file name including the company code when applicable.&#160; No error message is displayed if the file cannot be opened.</td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap"><code>FLDNAM$[10]</code>
+                            </td>
+                            <td>Specify up to 10 existing field names to be changed.&#160; No error message is displayed if any field name specified is not found in the template.</td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap"><code>FLDTYP$[10]</code>
+                            </td>
+                            <td>Specify existing field type when changing a field type.&#160; Only field types C, N, U, and I are supported.&#160; The field type is only required when changing from the existing field type to a new type.</td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap"><code>NEWFLDNAM$[10]</code>
+                            </td>
+                            <td>When changing the field name, specify the new field name here.</td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap"><code>NEWFLDTYP$[10]</code>
+                            </td>
+                            <td>When changing the field type, specify the new field type here.&#160; Only field types C, N, U, and I are supported.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table2">
+            <tr>
+                <td>Example - rename field <code>CUST_NUM</code> to <code>CUSTNO</code> in file <code>DSCM01</code></td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS189",S189$,"YY"</code>
+                    <p><code>LET S189.FILNAM$="DSCM01",S189.FLDNAM$[1]="CUST_NUM",S189.NEWFLDNAM$[1]="CUSTNO"<br />
+CALL "CDS189",Y$,S189$</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table3">
+            <tr>
+                <td>Example - change field type of field <code>VOUCHERNO</code> from <code>C(3)</code> to <code>U(3)</code> in file <code>DSAP12</code></td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS189",S189$,"YY"</code>
+                    <p><code>LET S189.FILNAM$="DSAP12",S189.FLDNAM$[1]="VOUCHERNO",S189.FLDTYP$[1]="C",S189.NEWFLDTYP$[1]="U"<br />
+CALL "CDS189",Y$,S189$</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example" id="table4">
+            <tr>
+                <td>Example - change field type of fields <code>PMTNO</code> and <code>OTHPMTNO</code> from <code>C(3)</code> to <code>U(3)</code> in file <code>DSAP22</code></td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS189",S189$,"YY"</code>
+                    <p><code>LET S189.FILNAM$="DSAP22"<br />
+LET S189.FLDNAM$[1]="PMTNO",S189.FLDTYP$[1]="C",S189.NEWFLDTYP$[1]="U"<br />
+LET S189.FLDNAM$[2]="OTHPMTNO",S189.FLDTYP$[2]="C",S189.NEWFLDTYP$[2]="U"<br />
+CALL "CDS189",Y$,S189$</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS189 - Change template field name or type</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+</html>

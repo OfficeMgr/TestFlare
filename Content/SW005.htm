@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="986" MadCap:lastWidth="1030">
+    <head>
+        <style type="text/css">
+.none
+{
+	border: 1;
+}
+
+</style>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW005 - Return Module Parameter Record</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW005</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return Module Parameter Record</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW005">Last Revised: 01/31/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to return a parameter record from a parameter file or from global memory.</p>
+        <p>Parameter files are files named XXMM00 where XX is the company code, and MM is the module code.&#160; Parameter files contain a single templated record with a key of MM.&#160; They contain fields that can control application program execution, enabling different options as needed for different installations.&#160; They permit the same program to exhibit different behavior based on the values of the parameter fields.</p>
+        <p>Because many programs need to access the parameter record, the SW005 program can be used to read the parameter record from the disc, and store it in global memory for use by subsequent calls to SW005.&#160; The global variable is named XXMM00 and its template is named XXMM00.tpl.&#160; Note that if a parameter record is changed, then applications need to logoff, or change company codes, or enter XX at the menu to flush the global memory fields so that the next call to SW005 will access the disc file with the revised records.&#160; 
+	There is also a parameter you can pass to SW005 to ignore any global 
+	template or data variables if present.</p>
+        <p>Operator will receive prompt: "Please run MM Parameter Maintenance before this option" if parameter file or record does not exist.</p>
+        <p><code>CALL "SW005", ERR=XXXX, Y$, MODULE$, XX00$, {DISC, MSG$}</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">SW005</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">In/Out</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>XXXX</code>
+                </td>
+                <td align="center">&#160;</td>
+                <td>Branch to line XXXX if unable to open module file or parameter record does not exist.</td>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Pass the standard task control variable or a two letter company code to be used as the starting characters of the parameter file.&#160; Can also be passed as null to use the standard task control variable.</td>
+            </tr>
+            <tr>
+                <td><code>MODULE$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Two letter module code (MM).</td>
+            </tr>
+            <tr>
+                <td><code>XX00$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>The templated module record as retrieved from the disc or global memory.</td>
+            </tr>
+            <tr>
+                <td><code>DISC</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optional parameter.&#160; Remove from call list or pass as 0 to use 
+		global memory variables to improve performance.&#160; Pass as 1 to retrieve 
+		template and data from disc and ignore global values when the template 
+		or data was recently changed.&#160; The template and data globals will 
+		be reset so subsequent calls to SW005 will not need the DISC parameter 
+		unless the template or data is changed again.</td>
+            </tr>
+            <tr>
+                <td><code>MSG$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Optional prompt message to operator if module record is not on file. </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table6" class="example">
+            <tr>
+                <td>Example - Retrieve the <code>GL00$</code> parameter record, used with General Ledger applications.&#160; Branch to EOJERR if parameter file or record does not exist.</td>
+            </tr>
+            <tr>
+                <td><code>0130 CALL "SW005",ERR=EOJERR,Y$,"GL",GL00$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table7" class="example">
+            <tr>
+                <td>Example - Retrieve the <code>AP00$</code> parameter record, used with Accounts Payable applications.&#160; Branch to EOJ if parameter file or record does not exist.</td>
+            </tr>
+            <tr>
+                <td><code>0160 CALL "SW005",ERR=EOJ,Y$,"AP",AP00$</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table8" class="example">
+            <tr>
+                <td>Example - Retrieve the <code>SO00$</code> parameter record and 
+		template from disc and not global 
+		memory, used with Sales Order Processing.&#160; Branch to EOJ if parameter file or record does not exist.</td>
+            </tr>
+            <tr>
+                <td><code>0160 CALL "SW005",ERR=EOJ,Y$,"SO",SO00$,1</code>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table9" class="example">
+            <tr>
+                <td>Example - Retrieve the <code>DD00$</code> parameter record, which contains company 
+		name, address, deprecated menu specific dates, prefix list, etc.&#160; 
+		The data in <code>DD00$</code> is maintained used Company Information Maintenance (SMC).</td>
+            </tr>
+            <tr>
+                <td><code>0160 CALL "SW005",Y$,"DD",DD00$</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

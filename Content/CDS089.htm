@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS089 - Enter Terminal ID / IP Address / PC Name</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS089" />CDS089</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="ip" />Enter Terminal ID / IP Address / PC Name</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS089">Last Revised: 11/11/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used for entries of a normalized Terminal 
+ID, IP Address, or PC Name.</p>
+        <p>CDS089 is a C type external routine that can be used with file maintenance, 
+or called by an application.</p>
+        <p><code>CALL "CDS089", MINVAL, Z2, Z5, Z6, Z0$, Z, Z$, Y, Z8$</code>
+        </p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber1">
+            <tr>
+                <td align="center"><code>MINVAL</code>
+                </td>
+                <td>Minimum entry, typically 1 for Terminal ID's, 7 for IP addresses, and 1 
+ for PC Names.</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z2</code>
+                </td>
+                <td>Maximum value: 4 for Terminal ID's, 15 for IP Addresses &amp; PC Names</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z5</code>
+                </td>
+                <td>Entry Column</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z6</code>
+                </td>
+                <td>Entry Row</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z0$</code>
+                </td>
+                <td>Prompt</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z</code>
+                </td>
+                <td>will be passed to calling routine as length of normalized entry</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z$</code>
+                </td>
+                <td>value</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Y</code>
+                </td>
+                <td>will be passed as CTL value</td>
+            </tr>
+            <tr>
+                <td align="center"><code>Z8$</code>
+                </td>
+                <td>P - prompt mode<br />
+    Q - inquiry mode<p>other CDS069 string or file validation containing { and }</p></td>
+            </tr>
+        </table>
+        <p>In normal format, the terminal ID is four characters long. The first 
+character is a 'T' and the last three are numeric characters, zero filled. See 
+examples. </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS089</th>
+            </tr>
+            <tr>
+                <th>Operator Enters</th>
+                <th style="text-align: center;">Displayed In Normal Format</th>
+            </tr>
+            <tr>
+                <td nowrap="" align="center"><code>T0</code>
+                </td>
+                <td align="center">T000 </td>
+            </tr>
+            <tr>
+                <td nowrap="" align="center"><code>1</code>
+                </td>
+                <td align="center">T001 </td>
+            </tr>
+            <tr>
+                <td nowrap="" align="center"><code>T10 </code>
+                </td>
+                <td align="center">T010 </td>
+            </tr>
+            <tr>
+                <td nowrap="" align="center"><code>TA </code>
+                </td>
+                <td align="center">T010 </td>
+            </tr>
+            <tr>
+                <td nowrap="" align="center"><code>17 </code>
+                </td>
+                <td align="center">T017 </td>
+            </tr>
+        </table>
+        <p>For networked terminals, the terminal ID varies with each login, and so is 
+not suitable for information linked to a particular device. Instead, the IP 
+address should be used. The IP address is most often fixed for local devices, 
+but also can vary with devices connected via the internet. </p>
+        <p>To enable CDS089 to permit entry of an IP address, set the maximum length to 
+15. The operator will be able to enter either a terminal ID or an IP address.
+</p>
+        <p>To require an IP address, but disallow terminal ID's, pass a minimum value to 
+7. </p>
+        <p>There are some circumstances where a blank field is permitted, in addition to 
+any normalized ID. To tell this routine that a blank field is also permitted, 
+simply specify the minimum value of the variable data dictionary to 0. Any other 
+value indicates to the routine that only a valid normalized terminal ID is 
+permitted.</p>
+    </body>
+</html>

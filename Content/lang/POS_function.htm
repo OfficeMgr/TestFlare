@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>POS Function</title>
+        <link rel="stylesheet" type="text/css" href="../Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">BBx Language</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">POS() Function</p>
+                </td>
+                <td align="right">Last Revised: 11/23/12</td>
+            </tr>
+        </table>
+        <p class="SectionTitle">Scan a String</p>
+        <p class="SectionDesc">This function scans for character(s) within a string variable.&#160; It can be used to return:</p>
+        <ul>
+            <li>
+                <p class="SectionDesc">The position of a scan string within a string variable</p>
+            </li>
+            <li>
+                <p class="SectionDesc">The Nth occurrence of a specified scan string within a string variable</p>
+            </li>
+            <li>
+                <p class="SectionDesc">The number of times a scan string occurs</p>
+            </li>
+        </ul>
+        <p class="SectionDesc">Format:</p>
+        <p class="SectionDesc"><span class="Code">POS(scanstring relation string {, intA, intB})</span>
+        </p>
+        <table>
+            <tr>
+                <th>
+Argument</th>
+                <th>
+Description</th>
+            </tr>
+            <tr>
+                <td><span class="Code">scanstring</span>
+                </td>
+                <td>POS will scan for this string</td>
+            </tr>
+            <tr>
+                <td><span class="Code">relation</span>
+                </td>
+                <td>&gt;, &lt;, =, &gt;=, &lt;=, &lt;&gt;<br />
+Note that in bbx, but not bbj, the relation can be entered as a comma which is 
+converted to =</td>
+            </tr>
+            <tr>
+                <td><span class="Code">string</span>
+                </td>
+                <td>String variable to be scanned</td>
+            </tr>
+            <tr>
+                <td><span class="Code">intA</span>
+                </td>
+                <td>Specifies the search interval.&#160; For example, a value of 2 would scan 
+each pair of characters, i.e, characters 1+2, and 3+4, but not 2+3.&#160; The value of <i>intA</i> is 1 
+if not included in argument list.&#160; The value of <i>intA</i> cannot be 0.&#160; A positive value for <i>intA</i> causes the string to be scanned from left to right, while a negative value causes the string to be scanned from right to left.</td>
+            </tr>
+            <tr>
+                <td><span class="Code">intB</span>
+                </td>
+                <td>Specifies the occurrence of the desired substring.&#160; For example, to find the second occurrence of a substring within a specified string variable, this value would be 2.&#160; If <i>intB</i> is 0, the total number of occurrences is returned.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th nowrap="" colspan="3">
+Examples</th>
+            </tr>
+            <tr>
+                <th>
+Statement</th>
+                <th style="text-align: center;">Result</th>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td><code>LET A$="ABCDEFABCD"</code>
+                </td>
+                <td align="center">&#160;</td>
+                <td>Set initial value for this example</td>
+            </tr>
+            <tr>
+                <td><code>?POS("D"=A$)</code>
+                </td>
+                <td align="center"><code>4</code>
+                </td>
+                <td>Returns position of the first <code>"D"</code> within the string <code>A$</code>, scanning from left to right.</td>
+            </tr>
+            <tr>
+                <td><code>?POS("CD"=A$,2)</code>
+                </td>
+                <td align="center"><code>3</code>
+                </td>
+                <td>Returns position of the first <code>"CD"</code> within the string <code>A$</code>, scanning in groups of 2 from left to right</td>
+            </tr>
+            <tr>
+                <td><code>?POS("BC"=A$,2)</code>
+                </td>
+                <td align="center"><code>0</code>
+                </td>
+                <td>There is no <code>"BC"</code> when <code>A$</code> is processed in groups of 
+2 characters</td>
+            </tr>
+            <tr>
+                <td><code>?POS("A"=A$,-1)</code>
+                </td>
+                <td align="center"><code>7</code>
+                </td>
+                <td>Returns position of the first <code>"A"</code> within the string <code>A$</code>, scanning from right to left</td>
+            </tr>
+            <tr>
+                <td height="30"><code>?POS("AB"=A$,-2)</code>
+                </td>
+                <td height="30" align="center"><code>7</code>
+                </td>
+                <td height="30">Returns position of the first <code>"AB"</code> within the string 
+<code>A$</code> scanning in groups of 2 from right to left</td>
+            </tr>
+            <tr>
+                <td><code>?POS("A"=A$,1,0)</code>
+                </td>
+                <td align="center"><code>2</code>
+                </td>
+                <td>Returns how many occurrences of <code>"A"</code> exist within the string 
+<code>A$</code></td>
+            </tr>
+            <tr>
+                <td><code>?POS("AB"=A$,2,0)</code>
+                </td>
+                <td align="center"><code>2</code>
+                </td>
+                <td>Returns the number of occurrences of <code>"AB"</code> in string <code>A$</code> 
+when processed in groups of 2.</td>
+            </tr>
+            <tr>
+                <td><code>?POS("C"=A$,1,3)</code>
+                </td>
+                <td align="center"><code>0</code>
+                </td>
+                <td>Returns position of the 3rd occurrence of <code>"C"</code> within the string 
+<code>A$</code>, scanning from left to right.</td>
+            </tr>
+            <tr>
+                <td><code>?POS(" "&lt;&gt;A$)</code>
+                </td>
+                <td align="center"><code>1</code>
+                </td>
+                <td>Returns the position of the first non-blank character within the string 
+<code>A$</code>.&#160; A value of <code>0</code> would indicate a string contains no non-blank characters.</td>
+            </tr>
+            <tr>
+                <td><code>?POS(" "&lt;&gt;FILL(20))</code>
+                </td>
+                <td align="center"><code>0</code>
+                </td>
+                <td><code>FILL(20)</code> represents 20 blanks, so there are no non-blank 
+characters in that string</td>
+            </tr>
+            <tr>
+                <td><code>?POS("C"&lt;A$)</code>
+                </td>
+                <td align="center"><code>4</code>
+                </td>
+                <td>Return the first position in <code>A$</code> that is greater than <code>"C"</code></td>
+            </tr>
+            <tr>
+                <td><code>?POS("EF"&gt;=A$)</code>
+                </td>
+                <td align="center"><code>1</code>
+                </td>
+                <td>Return the first position in <code>A$</code> that is less than or equal to
+<code>"EF"</code></td>
+            </tr>
+            <tr>
+                <td><code>?POS("EF"&lt;=A$)</code>
+                </td>
+                <td align="center"><code>5</code>
+                </td>
+                <td>Return the first position in <code>A$</code> that is greater than or equal 
+to <code>"EF"</code></td>
+            </tr>
+            <tr>
+                <td><code>?POS("A"&lt;&gt;A$)</code>
+                </td>
+                <td align="center"><code>2</code>
+                </td>
+                <td>Return the first position in <code>A$</code> that is not an <code>"A"</code></td>
+            </tr>
+            <tr>
+                <td><code>?POS("A"&lt;&gt;A$,-1)</code>
+                </td>
+                <td align="center"><code>10</code>
+                </td>
+                <td>Return the last position in <code>A$</code> that is not an <code>"A"</code></td>
+            </tr>
+        </table>
+    </body>
+</html>

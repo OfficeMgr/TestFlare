@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="1392" MadCap:lastWidth="1012">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW001 - Read Record from File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW001</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Read  Record from File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW001">Last Revised: 10/23/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is can be used to read a specific record from a keyed data file, and return status information. It is useful within a called routine where there is only one file operation on a specific file. </p>
+        <p><code>CALL "SW001", FILENAME$, KNO, KEY$, REC$, SW001$ or</code>
+        </p>
+        <p><code>CALL "SW001", ERR=XXXX, FILENAME$, KNO, KEY$, REC$</code>
+        </p>
+        <p>Use the first method (include <code>SW001$</code> on the <code>CALL</code> list) when you do not want SW001 to <code>EXIT ERR</code>.&#160; No <code>ERR=</code> branch is required.&#160; This is useful when used on an <code>IF</code> statement or other compound line.</p>
+        <p>Use the second method (with <code>ERR=</code> branch and <code>SW001$</code> not included on the <code>CALL</code> list) when you want SW001 to <code>EXIT ERR</code> if unable to open the data file, or read the desired record.</p>
+        <p>Note that SW001 does not prompt the operator when an error occurs.&#160; Error information is returned in <code>SW001$</code>.</p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tr>
+                <th colspan="3">SW001</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">To/From</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode">FILENAME$</td>
+                <td align="center">To</td>
+                <td>The name of the data file to be read.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">KNO</td>
+                <td align="center">To</td>
+                <td>The <code>KNUM</code> to be used to read the record.&#160; Ignored on SKY and DIR file types.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">KEY$</td>
+                <td align="center">To</td>
+                <td>The key value passed to SW001.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">REC$</td>
+                <td align="center">From</td>
+                <td>
+        The data record passed back to the calling program.&#160; For templated data file, <code>REC$</code> will contain the templated data structure.&#160; For non-templated data files, <code>REC$</code> will contain a generic template using the repeating field name <code>FIELD</code>, i.e., <code>REC.FIELD$[1], REC.FIELD$[2], REC.FIELD$[3],....</code> All fields are returned as strings.&#160; Use <code>NUM(REC.FIELD$[N])</code> to obtain numeric value.
+
+        <p><code>REC$</code> will contain the dimensioned templated string if an error occurs reading the record from a templated data file.</p></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">SW001$</td>
+                <td align="center">To/From</td>
+                <td>
+                    <p>
+        Does not need to be pre-dimensioned by calling program or even passed to SW001 unless the Private Channel option is required or if you do not want SW001 to exit ERR.</p>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td class="nowrapcode">SW001.PRIVATE$</td>
+                                <td>Pass as <code>"P"</code> to have SW001 OPEN&#160;the <code>FILENAME$</code> with a private channel number, and CLOSE upon exit. Otherwise SW001 will open the data file using the CDS095 <code>"U"</code> option which uses an existing channel if the data file is already open.</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode">SW001.ONFILE</td>
+                                <td>Returned as 0 if record desired is not-on-file, or 1 if on file</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode">SW001.ERROR</td>
+                                <td>Returned with error number</td>
+                            </tr>
+                            <tr>
+                                <td class="nowrapcode">SW001.MSG$</td>
+                                <td>Returned with error description</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <th style="text-align: center;"><code>SW001.ERROR</code>
+                                </th>
+                                <th><code>SW001.MSG$</code>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td align="center">0</td>
+                                <td>Record is locked</td>
+                            </tr>
+                            <tr>
+                                <td align="center">0</td>
+                                <td>File is locked</td>
+                            </tr>
+                            <tr>
+                                <td align="center">11</td>
+                                <td>Record not on file</td>
+                            </tr>
+                            <tr>
+                                <td align="center">12</td>
+                                <td>File not found</td>
+                            </tr>
+                            <tr>
+                                <td align="center">18</td>
+                                <td>You are not authorized to open file</td>
+                            </tr>
+                            <tr>
+                                <td align="center">n</td>
+                                <td>Error n opening file</td>
+                            </tr>
+                            <tr>
+                                <td align="center">n</td>
+                                <td>Error n reading record from file</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example - This program passes <code>WHS$</code> to SW001 to read the Warehouse Information Record <code>CW12$</code> from file XXCW12.&#160; Note that no <code>ERR=</code> branch will be taken when <code>SW001$</code> is included when calling. <code>SW001$</code> can be null or pre-dimensioned. The application typically will test SW001.ONFILE when logic is dependent on whether or not the record is on file.</td>
+            </tr>
+            <tr>
+                <td><code>1340 CALL "SW001","XXCW12",0,WHS$,CW12$,SW001$<br />1350 IF&#160;SW001.ONFILE THEN&#160;GOSUB&#160;PROCESS_RECORD</code>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example - This program passes <code>PO40.SHPCARRIER$</code> to SW001 to read the Carrier Information Record <code>CW20$</code> from the XXCW20 file.&#160; If the record is on file, the Shippers Account# CW20.SHPACCTNO$ is mapped to PO40&gt;SHPACCTNO$.</td>
+            </tr>
+            <tr>
+                <td><code>1210 IF PO40.SHPBILLCD$="R" THEN CALL "SW001",ERR=1220,"XXCW20",0,PO40.SHPCARRIER$,CW20$; LET PO40.SHPACCTNO$=CW20.SHPACCTNO$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Same as above, but using <code>SW001$</code> to check if record is on file.</td>
+            </tr>
+            <tr>
+                <td><code>1210 IF PO40.SHPBILLCD$="R" THEN CALL "SW001","XXCW20",0,PO40.SHPCARRIER$,CW20$,SW001$; IF SW001.ONFILE THEN LET PO40.SHPACCTNO$=CW20.SHPACCTNO$</code>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Example using a private data channel.</td>
+                </tr>
+                <tr>
+                    <td><code>1010 CALL&#160;"CDS041","SW001",SW001$,"YY"</code>
+                        <br /><code>1020 SW001.PRIVATE$="P"</code>
+                        <br style="mc-tag-and-class: code;" /><code>1030 CALL&#160;"SW001","CDSM01",0,PAD("cdi",10),SM01$,SW001$</code>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

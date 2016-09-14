@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="394" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS035 - Return File Restriction Indicator</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS035" />CDS035</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Return File Restriction Indicator" />Return File Restriction Indicator</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS035">Last Revised: 08/04/95</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used in conjunction with
+Inter-System Communication to determine if a particular file is transmitted to
+this system, and therefore controlled by another system.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS035", Y$, FILNAM$, STS, IS00$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS035</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>the normal task control variable</td>
+            </tr>
+            <tr>
+                <td><code>FILNAM$</code>
+                </td>
+                <td>the file name to be checked. If the file name is only four characters
+ long, or if the first two characters are XX, FILNAM$ will be modified to
+ include the company code</td>
+            </tr>
+            <tr>
+                <td><code>STS</code>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>0</td>
+                            <td>FILNAM$ is controlled by another system and the file is sent to your
+ system.&#160; Applications should not modify this file since its
+ contents may be overwritten by the controlling system.</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>FILNAM$ is controlled locally, and writes and removes are permitted.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><code>IS00$</code>
+                </td>
+                <td>optional, and will include the XXIS00 record for the requested file if
+ present</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="XXSI00" />If the Inter-System files to log control file XXSI00 is missing, or does not
+contain a record for FILNAM$, or the file name is not 6 characters long, then
+STS will be returned as 1.</p>
+    </body>
+</html>

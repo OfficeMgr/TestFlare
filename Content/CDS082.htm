@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS082 - Display Text</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS082" />CDS082</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Display Text" />Display Text</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS082">Last Revised: 02/25/05</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is called when text from a documentation text file is to be displayed on the terminal.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS082", ERR=XXXX, Y$, T$, F$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS082</th>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the terminal control variable, may be passed as null if not available. Used to determine if the terminal has lower case capability.</td>
+            </tr>
+            <tr>
+                <td>T$</td>
+                <td>
+                    <MadCap:keyword term="XXSD56" />the Text ID of the text to be displayed in the format: CCPPPPVP when using documentation text from file XXSD56 where CC is company code PPPP is program name V is VDT suffix P is pass parameter CCTTTTTT when using text from any other file such as XXED80 where CC is company code TTTTTT is text ID</td>
+            </tr>
+            <tr>
+                <td>F$</td>
+                <td>is only required when not using the documentation file XXSD56 and should contain the four character file ID such as "ED80"</td>
+            </tr>
+        </table>
+        <p>The most likely error with this routine is an error 31 due to insufficient memory to read the text file. Since the characters per record of the text file is large (1920 characters), there must be more than twice that amount of available memory or approximately 4000 characters of DSZ to read the record. Should an error 31 occur, CDS082 will display a message that there is insufficient memory.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

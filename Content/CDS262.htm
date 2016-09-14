@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="433" MadCap:lastWidth="954">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS262 - Compute Font PCL Dots or Display Pixels</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS262" />CDS262</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="PCL" />
+                        <MadCap:keyword term="Compute PCL Dots" />
+                        <MadCap:keyword term="Dots" />Compute Font PCL&#160;Dots or Display Pixels</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS262">Last Revised: 07/21/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to compute the number of dots or pixels required to print or display text.&#160; For PCL&#160;printers, a dot is defined as 1/300th of an inch, even if the printer's resolution is different.</p>
+        <p>This program may be run or called. If run, then it is interactive and prompts the operator for the typeface, point size, and text, then computes and displays the number of dots required.</p>
+        <p>Calling format:</p>
+        <p><code>CALL "CDS262",TYPEFACE,POINT,TEXT$,DOTS</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS262</th>
+            </tr>
+            <tr>
+                <td><code>TYPEFACE</code>
+                </td>
+                <td align="center">To</td>
+                <td>
+                    <p>
+                        <MadCap:keyword term="SM80" />the numeric value of the typeface.&#160; Each typeface has a numeric value assigned to it.&#160; 
+		The character table information is stored in file CDSM80.&#160; You can see what typeface numbers are available by using the file utility to display this file. The <code>TYPEFACE</code> field name in the CDSM80 Font Metrics file is called <code>STYLE</code>.</p>
+                    <p>The most popular PCL&#160;TYPEFACE/STYLE is number 4148 for the Univers font.<br />The most popular display TYPEFACE/STYLE is number 65000 for the default Windows font used in GUI&#160;applications.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>POINT</code>
+                </td>
+                <td align="center">To</td>
+                <td>the point size of the text.&#160; Normal text is 10 point</td>
+            </tr>
+            <tr>
+                <td><code>TEXT$</code>
+                </td>
+                <td align="center">To</td>
+                <td>the text used to determine the dots required</td>
+            </tr>
+            <tr>
+                <td><code>DOTS</code>
+                </td>
+                <td align="center">From</td>
+                <td>the number of display pixels or PCL&#160;dots required for the <code>TEXT$</code> provided</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

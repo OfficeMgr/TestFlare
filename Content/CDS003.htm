@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="696" MadCap:lastWidth="1479">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS003 - Driver Entries</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS003" />CDS003</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Driver" />Driver Entries</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS003">Last Revised: 07/30/05</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program may be called to display standard file 
+sequence and range options when sort files are used.&#160; This program is 
+obsolete and has been replaced by <a href="CDS553.htm">CDS553</a>.&#160; However, CDS003 can still be used 
+when the old data dictionary (SD51/SD52) files are present.</p>
+        <p>
+            <MadCap:keyword term="Menu Maintenance" />
+            <MadCap:keyword term="Menu Processor" />It can also be called by the Menu Processor prior to running an application 
+by specifying the Menu Selection Type as "D" for Driver using Menu Maintenance (SMU).</p>
+        <p><code>CALL "CDS003",ERR=NNNN,Y$, Y0$, Y1$, Y2$, Y4$, Y9$, Y0, Y1</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDS003</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td align="center">In</td>
+                <td>
+                    <MadCap:keyword term="File Data Dictionary" />
+                    <MadCap:keyword term="Standard Task Control Variable" />Standard Task Control Variable. CDS003 gets the File Data Dictionary 
+ based on <code>Y.APPID$</code> and <code>Y.VDTSFX$</code>, so these must be set by the calling program 
+ when not called by the Menu Processor</td>
+            </tr>
+            <tr>
+                <td><code>Y0$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Starting key of sequence driver (File 3)</td>
+            </tr>
+            <tr>
+                <td><code>Y1$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Ending key of sequence driver (File 3)</td>
+            </tr>
+            <tr>
+                <td><code>Y2$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>File name of sequence driver (6 character)</td>
+            </tr>
+            <tr>
+                <td><code>Y4$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Long description of first segment of the sequence driver</td>
+            </tr>
+            <tr>
+                <td><code>Y9$</code>
+                </td>
+                <td align="center">Out</td>
+                <td>File name of sequence master file, if any</td>
+            </tr>
+            <tr>
+                <td><code>Y0</code>
+                </td>
+                <td align="center">Out</td>
+                <td>Position in the key of sequence driver (File 3) where the key to the 
+ master file (File 1) is located.&#160; For multi-keyed files this variable 
+ returns the KNUM of the master file</td>
+            </tr>
+            <tr>
+                <td><code>Y1</code>
+                </td>
+                <td align="center">Out</td>
+                <td>
+                    <MadCap:keyword term="Multi-segmented key" />Only used when sequence driver (File 3) has a multi-segmented key, and 
+ the first segment is a required key to another file</td>
+            </tr>
+        </table>
+        <h5>
+            <MadCap:keyword term="SKY" />
+            <MadCap:keyword term="Direct" />Direct (DIR) &amp; Single Keyed (SKY) Files</h5>
+        <p>
+            <MadCap:keyword term="FMS" />
+            <MadCap:keyword term="Direct file" />These files must be defined in the File Data Dictionary (FMS) old version, 
+with auxiliary sort files.&#160; The operator will be presented a sequence 
+option for the direct file and for each sort file.&#160; Then they will be 
+presented with range options.&#160; Use of this routine enables developers to 
+add, change, or delete sort files without having to change each application 
+program.</p>
+        <p>
+            <MadCap:keyword term="Direct &amp; Sort" />Direct &amp; Sort files are not typically used for new application anymore, and 
+the Multikeyed files provide significant benefits not available with Direct and 
+Sort files.</p>
+        <p>The driver uses specific channel numbers.</p>
+        <table>
+            <tr>
+                <th><b>Channel #</b>
+                </th>
+                <th><b>File Usage</b>
+                </th>
+            </tr>
+            <tr>
+                <td align="center">1</td>
+                <td>The primary data file, opened by the Menu Processor or calling program.&#160; 
+ Can be DIR or SKY</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td>The sequence driver, opened by CDS003 as either one of the sort files, 
+ or the same as file 1</td>
+            </tr>
+            <tr>
+                <td align="center">5</td>
+                <td>Sequence master file, opened by CDS003 when applicable. This is a DIR, 
+ SKY, or MKY file whose key is the first segment of the key of the sequence 
+ driver file</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="CDX010" />Assuming the Menu Processor is used to call the driver, then following code 
+can be used as a template for applications that use the driver.&#160; You can 
+copy and paste this code into an application program.&#160; You can also merge 
+lines from this code which is stored as example program CDX010.&#160; Refer to 
+the documentation for CDX010 in the Examples section for additional details.</p>
+        <p>Warning:&#160; CDS003 assumes that each key in the main file and sort files 
+are each of the same length.&#160; You will encounter an error if there is a 
+null or short key at the beginning of the file.</p>
+        <h5>MultiKeyed (MKY) Files</h5>
+        <p>MKY files are supported using <a href="CDS553.htm">CDS553</a> with the new data dictionary.&#160; 
+There is also limited support for MKY files using the old data dictionary by 
+manually editing program CDLIST33/CDS003.</p>
+    </body>
+</html>

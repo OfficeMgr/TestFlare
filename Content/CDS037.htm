@@ -1,0 +1,799 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="13" MadCap:lastHeight="12734" MadCap:lastWidth="1076">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS037 - Display/Select Records</title>
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS037" />CDS037</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Display/Select Records" />
+                        <MadCap:keyword term="Select" />Display/Select Records</p>
+                </td>
+                <td>
+                    <p align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS037">Last Revised: 	10/07/15</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program can be called to display records from a data file.&#160; Each record is displayed on one row.&#160; The display can include data from the main file, from one or more related files, and from other called programs.&#160; The records are displayed in a grid with graphical lines separating columns.&#160; The user can move up, down, left, right, to the first and last rows, and in some cases, jump to a position within the file.&#160; 
+	CDS037 can also be used to return an operator selected record from the list 
+	of records displayed, or to call an external program to process the selected 
+	record, then return to the record selection display.</p>
+        <p>The records are displayed in a window which is created and popped by CDS037.&#160; You can specify a fixed window size and position, or allow CDS037 to assume defaults.</p>
+        <p>
+            <MadCap:keyword term="System Management Software" />CDS037 is called in several places by various Dynamo Tool components and applications:</p>
+        <ul>
+            <li>
+                <MadCap:keyword term="Display Software Versions" />Display Software Versions (V menu option)</li>
+            <li>
+                <MadCap:keyword term="Display Terminal Status" />Display Terminal Status (T menu option)</li>
+            <li>
+                <MadCap:keyword term="SMU menu" />File Utility (SMU menu) - Display/Maintain/Print Data Option (Display 
+	option)</li>
+        </ul>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS037",<a href="#FILENAME$">FILENAME$</a> {,<a href="#KNO">KNO</a>, <a href="#KEYPFX$">KEYPFX$</a>, <a href="#DISP$"><MadCap:keyword term="DISP$" />DISP$</a>, <a href="#WINX">WINX</a>, <a href="#WINY">WINY</a>, <a href="#WINROWS">WINROWS</a>, <a href="#WINCOLS">WINCOLS</a>, <a href="#WINTITLE$"><MadCap:keyword term="Title" />WINTITLE$</a>, <a href="#COLORS$"><MadCap:keyword term="Colors" />COLORS$</a>, <a href="#SELRTN$"><MadCap:keyword term="SELRTN" />SELRTN$</a>, <a href="#WHERE$"><MadCap:keyword term="WHERE" />WHERE$</a>, <a href="#SORTBY$">SORTBY$</a>, 
+	<a href="#S037$">S037$</a>, <a href="#LIMITVAL"><MadCap:keyword term="LIMIT" />LIMITVAL</a>, <a href="#SELREC$"><MadCap:keyword term="SELREC" />SELREC$</a>}</code>
+        </p>
+        <p>CDS037 uses either the <code>KNO</code> and <code>KEYPFX$</code> with an 
+	<code>OPEN ()</code> or <code>WHERE$, SORTBY$, MODE$,</code> and <code>LIMIT</code> with 
+	<code>SELECT()</code>.&#160; If none of the <code>SELECT</code> arguments are specified then the
+	<code>KNO</code> and <code>KEYPFX$</code> will be used.&#160; Otherwise they are ignored.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS037 Arguments</th>
+            </tr>
+            <tr>
+                <td><code><a name="FILENAME$"></a>FILENAME$</code>
+                </td>
+                <td>the only required parameter and is the primary file to be displayed.&#160; <a href="#Example%201">See Example 1.</a><MadCap:keyword term="MKY" /><MadCap:keyword term="SKY" />&#160; A template must exist for this file.&#160; The file may be MKY, SKY, or DIR.&#160; It may also be IND if used with the 
+		<code>WHERE$, SORTBY$, MODE$</code>, or <code>LIMIT</code> options.</td>
+            </tr>
+            <tr>
+                <td><a name="KNO"></a><code>KNO</code>
+                </td>
+                <td>applies to MKY files only and controls the sequence that the data will be displayed when 
+		<code>WHERE$, SORTBY$,</code> and <code>MODE$</code> are null, and <code>LIMITVAL</code> is zero.&#160; If not passed to CDS037, then 
+		<code>KNO</code> 
+		zero will be assumed.&#160; <a href="#Example%204">See Example 4.</a></td>
+            </tr>
+            <tr>
+                <td><a name="KEYPFX$"></a><code>KEYPFX$</code>
+                </td>
+                <td>may be null or indicate the starting characters of the keys to be displayed.&#160; If 
+		<code>KEYPFX$</code> is passed to CDS037, only keys that begin with the
+		<code>KEYPFX$</code> characters will be displayed.</td>
+            </tr>
+            <tr>
+                <td><code>DISP$</code>
+                </td>
+                <td><a name="DISP$"></a><code>DISP$</code>
+                    <MadCap:keyword term="FIELD" /> may be used to indicate the columns to be displayed.&#160; If not passed to CDS037, or passed as null, then all fields in the template for 
+		<code>FILENAME$</code> will be displayed in the same order as contained in the template.
+
+        <p>If <code>DISP$</code> is passed to CDS037, it contains the field names and optional formatting details.&#160; In the most basic form
+		<code>DISP$</code> contains the field names to be displayed separated by the pipe (|) character.&#160; The trailing pipe is optional.</p><p><code>"CUSTNO|NAME|ADDRESS|CITY|STATE|ZIP"</code> would be a valid
+		<code>DISP$</code>.&#160;<a href="#Example%202">See Example 2.</a></p><p>Following each field name, you may specify additional positional arguments separated by back slash (\).&#160; The complete format for each field is: 
+		<code>FILPGM.FIELD[INDEX]\Title\Mask</code>.</p><table class="lev2"><tr><th colspan="2"><p>DISP$ Options</p></th></tr><tr><td><code>FILPGM.</code></td><td>If present, <code>FILPGM</code> indicates the file name for a related field, or a program name to call.&#160; When specified, separate from the FIELD with a period.&#160; If the first two characters are XX, they will be replaced with 
+			<code>Y.COMPCODE$</code>.&#160; See <a href="#Using%20Related%20Files">Using Related Files</a> and <a href="#Using%20Called%20Routines">Using Called Routines</a> for additional details.&#160; <a href="#Example%203">See Example 3.</a></td></tr><tr><td><code>FIELD</code></td><td><MadCap:keyword term="Templated" />Templated field name.&#160; Not case-sensitive.&#160; Only 
+			segment of <code>DISP$</code> that is required.&#160; Can also be * indicating all fields in
+			<code>FILPGM.</code><p>
+			FIELD can also contain any of the following special names:</p><table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="lev3"><tr><td><code>_CHG%(TOCOL,FROMCOL)</code></td><td>Used to compute percent change between two values.&#160; 
+					<code>TOCOL</code> is the sequential field# in <code>DISP$</code> representing the 
+					final value with 1 being the first field in <code>DISP$</code>.&#160;
+					<code>FROMCOL</code> is the sequential field# in DISP$ representing the 
+					original value.&#160; You can also omit the <code>(TOCOL,FROMCOL)</code> 
+					in which case the last two columns will be used.&#160; 
+					Default values will be assigned to <code>TITLE</code> and 
+					<code>MASK</code> if not 
+					specified.</td></tr><tr><td><code>_GM(SALES,COST)</code></td><td>Used to compute gross margin, i.e., sales minus cost.&#160; 
+					If <code>SALES</code> and <code>COST</code> are specified, they refer to the 
+					sequential column number in <code>DISP$</code> for the sales and cost.&#160; 
+					If not specified, then it is assumed that the two columns to 
+					the left contain the sales and cost.&#160; Default values 
+					will be assigned to <code>TITLE</code> and <code>MASK</code> if not specified.</td></tr><tr><td><code>_GM%(SALES,COST)</code></td><td>Used to compute gross margin percentage.&#160; If <code>SALES</code> 
+					and <code>COST</code> are specified, they refer to the sequential column 
+					number in <code>DISP$</code> for the sales and cost.&#160; If not 
+					specified, then it is assumed that the two columns to the 
+					left contain the sales and cost.&#160; Default values will 
+					be assigned to <code>TITLE</code> and <code>MASK</code> if not specified.</td></tr><tr><td><code>_FILL(SIZE,CHAR)</code></td><td>Used to fill a field with <code>SIZE</code> number of 
+					<code>CHAR</code> 
+					characters.&#160; <code>FILL(10,*)</code> will show 10 *'s in the field.</td></tr></table></td></tr><tr><td><code>[INDEX]</code></td><td>Applies to repeating fields only.&#160; If not specified, or if 
+			<code>[ALL]</code> is specified, then each element of the field will be displayed.</td></tr><tr><td><code>Title</code></td><td><p>The <code>Title</code><MadCap:keyword term="Data Dictionary" /> is used as the column heading.&#160; The 
+				best practice is to specify the title in the Data Dictionary and 
+				not specify a <code>Title</code> in <code>DISP$</code>.&#160; 
+				This is so that if changed, all programs that display the field 
+				will use the exact same column title.&#160; When it is required 
+				to specify a different title than that stored in the Data 
+				Dictionary, then it can be specified in this position in <code>
+				DISP$</code>.</p><p>If <code>FILPGM</code> is a data file and not a 
+				program, CDS037 obtains the column title from the <code>title=</code><MadCap:keyword term="Date" /> 
+				user defined field contained within the template itself.&#160;&#160; 
+				This means that if the title is changed in the Data Dictionary 
+				for a data file, then you must use the File Utility Compare to 
+				Data Dictionary option to update the .tpl file on the disc.</p><p>If neither <code>DISP$</code> nor the template specify a title, then the 
+				title will be derived from the field name.&#160; Regardless of the method used to obtain the Title, all underscore characters are replaced with blanks.&#160; To specify no column title, use a 
+				single blank character.</p><p>If 
+				<code>FIELD</code> is a repeating field with 12 elements, then specifying a Title of 
+				<code>Month</code> or <code>Mth</code> will generate long or short month names as titles.&#160; <a href="#Example%205">See Example 5.</a></p></td></tr><tr><td><code>Mask</code></td><td><p>The best practice is to specify the output mask for 
+				numeric fields in the Data Dictionary and not to specify <code>
+				Mask</code> in <code>DISP$</code>.&#160; This is so that if 
+				changed, all programs that display the field will use the exact 
+				same output mask.&#160; When it is required to override the 
+				output mask specified in the Data Dictionary, then the mask can be specified 
+				in this position in <code>DISP$</code>.</p><p>If <code>FILPGM</code> is a data file and not a 
+				program, CDS037 obtains the output mask from the <code>omask=</code> 
+				user defined field contained within the template itself.&#160;&#160; 
+				This means that if the mask is changed in the Data Dictionary 
+				for a data file, then you must use the File Utility Compare to 
+				Data Dictionary option to update the .tpl file on the disc.</p><p>If a mask is not provided in
+				<code>DISP$</code> nor in the template, then CDS037 will assume a default mask based on the field name, template field type, and size.&#160; <a href="#Example%206">See Example 6.</a></p><table class="lev3"><tr><td>Numerics</td><td>Both traditional masks (<code>###,###.00CR</code>) and floating decimal masks (<code>N7.2</code>) may be used.</td></tr><tr><td><MadCap:keyword term="STR" />Strings</td><td><MadCap:keyword term="BBx" /><MadCap:keyword term="BBx masking" />
+                    String fields may also be masked using the standard BBx masking characters.&#160; For example to format a general ledger account number you could specify a mask of XXX-XX for a C(9) field.&#160; Unlike the BBx 
+					<code>STR()</code><MadCap:keyword term="CDS038" /> function, CDS037 
+					and CDS038 will not cause an error if there are more characters in the data field than in the mask.&#160; Processing is done left to right and any characters that do not fit it the mask are ignored and not printed.&#160; This permits the insignificant trailing characters of the account number to be suppressed. This feature also provides a mechanism to truncate strings.&#160; For example, if you only have room to display the first 5 characters of a field, set the mask to XXXXX.<p>
+					Instead of a mask, a substring expression may also be used.&#160; 
+					For example, the mask segment could contain <code>(1,10)</code> 
+					or <code>(5,10)</code> or <code>(5)</code>.</p></td></tr><tr><td>Dates</td><td>
+                    Use any of the masking characters used by the BBx <code>DATE()</code> function.&#160; This permits displaying dates formatted as in 01/05/95 or Jan 1, 1995, Sat Sep 24, 1993, etc.&#160; 
+					Since BBx does not have a template type field reserved for 
+					dates, you inform CDS037 that a numeric field is a date by 
+					specifying a mask that contains <code>%M</code> or <code>%D</code> or 
+					<code>%Y</code> or by setting 
+					the mask field to the letter <code>"d"</code>.&#160; If a mask is 
+					not specified, 
+					and not passed as <code>"d"</code>, then a mask of 
+					<code>"%Mz/%Dz/%Yz"</code> will be used if CDS037 assumes the field is a date.&#160; It makes this assumption for the following template fields that contain the word DATE in the field name 
+					(DATE, LASTDATE, DATESHIPPED, etc):<ul><li>U(3) -julian</li><li>I(3) - julian</li><li>N(7) - julian</li><li>C(5) or N(5) or N(6) - Microsoft format</li><li>N(6) or C(6) - YYMMDD</li><li>C(8) - MM/DD/YY or YYYYMMDD</li></ul><p>Note that CDS037 can easily mis-identify a field as a date when in fact it should not, i.e., 
+					<code>YTDATE_SALES:N(7)</code>.&#160; To prevent this, provide a mask, or make the field N(8).</p></td></tr><tr><td>Time</td><td>Times stored in the same format as the BBx <code>TIM</code> system variable, typically in a B type template field, can also be masked using any of the standard BBx 
+					<code>DATE()</code> function formatting options for time.&#160; If not specified, a mask of 
+					<code>"%hz:%mz %p"</code> mask is used.&#160; 
+					If no mask is specified, CDS037 will assume that a B type 
+					numeric field is a TIME if the word TIME is contained in the 
+					field name.&#160; To prevent CDS037 from thinking a field 
+					name such as <code>TIMES_SOLD</code> is not a <code>TIM</code> field, then either 
+					specify a mask, or do not use a B type field.</td></tr></table></td></tr><tr><td><code>Options</code></td><td>
+              The options field can be used to create a multi-line display or to 
+				override the default column width.&#160; Data is always left 
+				justified in the column when the B or W option is used.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table3" class="lev3"><tr><td align="center"><code>B</code></td><td>Indicates that this data field should display below the 
+					previous one, instead of in a separate column to the right 
+					of the previous one.&#160; Note that the column width and 
+					title of any field using the B option are ignored.&#160; The 
+					column width and title are derived from the top most field 
+					of the column.</td></tr><tr><td align="center"><code>Wn</code></td><td>Indicates that instead of using he default column width, 
+					set the column width to n characters, where n can be from 1 
+					to 253.&#160; Cannot be used on the same field as the B 
+					option.&#160; This option can be used to narrow or widen a 
+					field from the default column width.&#160; The W option can 
+					only be used on the first field in the 
+					column.&#160; Any characters in the title or data that 
+					exceed the column width will be truncated.&#160; See
+					<a href="#Multi-Line_example_using_B_option">example</a> 
+					below.</td></tr></table></td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="WINX"></a><code>WINX</code>
+                </td>
+                <td>can be set to the column where the upper left corner of the window border should be displayed. If not specified, 
+		<code>WINX</code> will be assumed to be zero.</td>
+            </tr>
+            <tr>
+                <td><a name="WINY"></a><code>WINY</code>
+                </td>
+                <td>
+                    <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" width="100%" id="AutoNumber1" class="lev2">
+                        <tr>
+                            <td>Positive</td>
+                            <td>Display window will be placed at column <code>WINX</code>, no higher than row 
+			<code>WINY</code>.&#160; The actual row will be computed based on the number of records that are needed to be displayed, and the
+			<code>WINROWS</code> parameter.</td>
+                        </tr>
+                        <tr>
+                            <td>Negative</td>
+                            <td>Display window will always be placed at column <code>WINX</code> at row 
+			<code>-WINY</code>.&#160; This allows you to place the display window at a position you control.</td>
+                        </tr>
+                        <tr>
+                            <td>Zero</td>
+                            <td>
+                                <MadCap:keyword term="Company Name" />Value of 2 is assumed so that the company name and current 
+ selection title, normally displayed on the top two lines, remain 
+ visible on the display.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="WINROWS"></a><code>WINROWS</code>
+                </td>
+                <td>can be set to the number of vertical print positions for the window.&#160; If not specified, 
+		<code>WINROWS</code> will be computed to the bottom of the display less two lines for the prompt.</td>
+            </tr>
+            <tr>
+                <td><a name="WINCOLS"></a><code>WINCOLS</code>
+                </td>
+                <td>
+                    <p>can be set to the number of horizontal print positions for the window, 
+		including the window border.&#160; If not specified, 
+		<code>WINCOLS</code> will be computed based on the number of positions required to display the data.&#160; If the window width exceeds the physical display, then the display will be shifted into 132 column mode if supported by that display.&#160; If the window width still exceeds the physical display, then 
+		<code>WINCOLS</code> will be set to the physical display, either 80 or 132 columns.</p>
+                    <p>By setting 
+		<code>WINCOLS</code> to 80, you can force the screen to stay in 80 
+		column mode, even when more than 80 columns are required to display all 
+		data.</p>
+                    <p>By setting <code>WINCOLS</code> to 132, you can force the screen 
+		to use 132 column mode, even when the data will display in 80 columns or 
+		less.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="WINTITLE$"></a><code>WINTITLE$</code>
+                </td>
+                <td>can be set to display on the window border.&#160; If not set, then no window title is used.</td>
+            </tr>
+            <tr>
+                <td><a name="COLORS$"></a><code>COLORS$</code>
+                </td>
+                <td>
+                    <p>can be used on color terminals to override the default colors.&#160; By default, the colors used are those specified in Operator Preference Maintenance for Display (F2).&#160; If different colors are preferred, then 
+		<code>COLORS$</code> should contain the zero filled, three 3-digit color numbers corresponding to the window border, window text, and highlighted selected text respectively.&#160; It may also contain a 4th color number which will be used for the column headings and grid lines.&#160; Refer to Operator Preference Maintenance (SMS) for the specific color numbers to use or <a target="_blank" href="COLORS.htm">click here</a>.&#160; <a href="#Example%207">See Example 7.</a></p>
+                    <p>The chart below lists several <code>COLORS$</code> values that 
+		produce good, high-contrast, displays.&#160; See
+		<a href="#ColorsExample">example</a> to view many more <code>COLORS$</code> 
+		values.</p>
+                    <table border="1" id="table6" class="lev2">
+                        <tr>
+                            <th style="text-align: center;"><code><span style="color: #8B0000;"><span style="font-size: 8pt;"><b>COLORS$</b></span></span></code>
+                            </th>
+                            <th style="text-align: center;">Background Color</th>
+                            <th style="text-align: center;">Text Color</th>
+                        </tr>
+                        <tr>
+                            <td><code>005005069</code>
+                            </td>
+                            <td align="center">Black</td>
+                            <td align="center">Green</td>
+                        </tr>
+                        <tr>
+                            <td><code>007007071</code>
+                            </td>
+                            <td align="center">Black</td>
+                            <td align="center">Cyan</td>
+                        </tr>
+                        <tr>
+                            <td><code>013013077</code>
+                            </td>
+                            <td align="center">Black</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>015015079</code>
+                            </td>
+                            <td align="center">Black</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>021021069</code>
+                            </td>
+                            <td align="center">Blue</td>
+                            <td align="center">Green</td>
+                        </tr>
+                        <tr>
+                            <td><code>023023071</code>
+                            </td>
+                            <td align="center">Blue</td>
+                            <td align="center">Cyan</td>
+                        </tr>
+                        <tr>
+                            <td><code>029029077</code>
+                            </td>
+                            <td align="center">Blue</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>031031079</code>
+                            </td>
+                            <td align="center">Blue</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>039039071</code>
+                            </td>
+                            <td align="center">Green</td>
+                            <td align="center">Cyan</td>
+                        </tr>
+                        <tr>
+                            <td><code>045045077</code>
+                            </td>
+                            <td align="center">Green</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>047047079</code>
+                            </td>
+                            <td align="center">Green</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>061061077</code>
+                            </td>
+                            <td align="center">Cyan</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>063063079</code>
+                            </td>
+                            <td align="center">Cyan</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>071071007</code>
+                            </td>
+                            <td align="center">Red</td>
+                            <td align="center">Cyan</td>
+                        </tr>
+                        <tr>
+                            <td><code>077077013</code>
+                            </td>
+                            <td align="center">Red</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>079079015</code>
+                            </td>
+                            <td align="center">Red</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>087087071</code>
+                            </td>
+                            <td align="center">Magenta</td>
+                            <td align="center">Cyan</td>
+                        </tr>
+                        <tr>
+                            <td><code>093093077</code>
+                            </td>
+                            <td align="center">Magenta</td>
+                            <td align="center">Yellow</td>
+                        </tr>
+                        <tr>
+                            <td><code>095095079</code>
+                            </td>
+                            <td align="center">Magenta</td>
+                            <td align="center">White</td>
+                        </tr>
+                        <tr>
+                            <td><code>111111079</code>
+                            </td>
+                            <td align="center">Yellow</td>
+                            <td align="center">White</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="SELRTN$"></a><code>SELRTN$</code>
+                </td>
+                <td>
+        In some cases, it is desirable to allow the operator to select a record, call an external routine, and then exit back to CDS037 to allow selection of other records.&#160; You invoke this feature by specifying 
+		<code>SELRTN$</code> 
+		as the program name to call when a record is selected.&#160; When this option is used, CDS037 will 
+		<code>CALL SELRTN$</code> with <code>Y$,SELREC$,L</code> 
+		as parameters.&#160; You may access the current window if desired.&#160; 
+		The selected record is at line <code>L</code>.<p>Alternatively you may print another window, then <code>'POP'</code> it before exiting back to CDS037.&#160; 
+		Effective with versions dated 11/24/04, the default colors are changed 
+		to the primary display color once a record is selected.&#160; These 
+		colors are typically different than the colors used within CDS037 during 
+		record selection.</p><p>Note: the <code>'SP'</code> mnemonic is used to place the display back to 80 column mode, for those cases where CDS037 has displayed in 132 column mode (<code><MadCap:keyword term="CP" />'CP'</code>).&#160; At the end of the routine, you only need to 
+		<code>'POP'</code> the window.&#160; CDS037 will convert the display back to 132 column mode 
+		and restore the colors if required.</p><p>You may modify <code>SELREC$</code><MadCap:keyword term="CDX090" /> within the selection routine and write the modified record back to the disc.&#160; If you do modify the record, CDS037 will re-display the record. See example programs CDX090 and 091.</p><p>If you do not change the record, but want CDS037 to redisplay the record, because of related file display, or external programs referenced in 
+		<code>DISP$</code>, then return <code>L</code> as <code>0</code> to CDS037.</p><p>In some cases, you may need to modify more than one record in the 
+		file, or even add records to the primary data file.&#160; In this case 
+		return <code>L</code> as a negative number to signal CDS037 to re-display all records 
+		shown in the display window.</p><p><code>SELRTN$</code> can also remove records from the primary data file.&#160; If 
+		so, then <code>DIM SELREC$:FATTR(SELREC$)</code> before exiting.&#160; This is 
+		required in order to keep any temporary work file created by CDS037 to 
+		remain synchronized with the primary data file.</p><p>CDS037 creates a work file whenever it needs to use <code>SELECT</code> instead of 
+		<code>OPEN</code> on the primary data file.&#160; CDS037 will use <code>SELECT</code> instead of 
+		<code>OPEN</code> when you pass a non-blank <code>WHERE$, SORTBY$,</code> or 
+		<code>MODE$.</code>&#160; If <code>SELRTN$</code> modifies or deletes a record in the primary data files, then 
+		CDS037 will modify or remove the record in the work file.&#160; However 
+		it does not add records to the work file that are added by the <code>SELRTN$</code> 
+		nor can it change more than one record.&#160; This means that you should 
+		only modify or delete a single record at a time when using <code>WHERE$, SORTBY$,</code> or 
+		<code>MODE$.</code></p><p>In most cases, you can do what is necessary within the record selection routine.&#160; There is another option of CDS037 that actually exits CDS037, passing you the 
+		<code>SELREC$</code>, but does not pop the display window.&#160; This option is invoked by passing
+		<code>SELRTN$</code> as <code>"*exit*"</code>.&#160; The calling program 
+		may modify the selected record and CDS037 will display the revised 
+		record if CDS037 is called again.&#160; After processing is completed outside of CDS037, then by calling CDS037 again, the 
+		list of records will re-display, the highlighted record will be moved 
+		down to the next record.&#160; 
+		Note that this option does not offer a method of informing CDS037 that 
+		records other than the selected record was changed, nor if any records were added or deleted.</p><p>You can also pass <code>SELRTN$</code> as <code>"CDS279"</code> which will display the selected 
+		record with one field per row in a separate window.</p><p>When <code>SELRTN$</code> is not used, and CDS037 is called with a 
+		complete <code>ENTER</code> list including <code>SELREC$</code>, then 
+		when the user highlights a record and touches the Enter key, CDS037 
+		exits and returns the selected record to the calling program.&#160; It 
+		is possible to enable that option even when using <code>SELRTN$</code>.&#160; 
+		In that case the user has two options: Touching Enter will exit CDS037 
+		and return the selected record to the calling program, and touching F2 
+		will call the <code>SELRTN$</code> program.&#160; To enable this option, 
+		append a colon (:) and F2 prompt text to <code>SELRTN$</code>.&#160; For 
+		example, if <code>SELRTN$="PO150:Display PO Line Items"</code>, then the 
+		CDS037 prompt will include: <code><u>Enter</u>=select record, <u>F2</u>=Display 
+		PO Line Items, <u>F3</u>=Help, <u>F4</u>=End</code>.&#160; If the user 
+		touches the Enter key, then CDS037 will exit and the highlighted record 
+		will be returned to the calling program.&#160; If the user touches F2, 
+		program PO150 will be called, and when it exits, the CDS037 window will 
+		be re-displayed, the highlighted row moves down to the next record, just 
+		like when SELRTN is used.&#160; Note that because of the use of a colon 
+		as the separator between the program name and the F2 prompt text, you 
+		cannot include a colon in the program name.</p></td>
+            </tr>
+            <tr>
+                <td><a name="WHERE$"></a><code>WHERE$</code>
+                </td>
+                <td>
+                    <p>The following four parameters <code>WHERE$, SORTBY$, MODE$,</code> and 
+		<code>LIMIT</code> are used when instructing CDS037 to use a <code>SELECT</code> verb.&#160; When any of these parameters are specified, the
+		<code>KNO</code> and <code>KEYPFX$</code> parameters are ignored.&#160; When one of these 
+		<code>SELECT</code> parameters is specified, CDS037 will create a temporary file in the tmp/ subdirectory, however, on Unix systems, this file will not appear in a disc directory and will be automatically erased when the display is completed or if the process is killed or otherwise aborted.</p>
+                    <p>If there is a <code>KNUM</code> of the data file that can be used to limit the records to be displayed, use the 
+		<code>KNO</code> and <code>KEYPFX$</code> parameters instead of <code>WHERE$</code>.&#160; This will result in faster operation and eliminate the need for the temporary work file.</p>
+                    <p><code>WHERE$</code> may be used when only selected records are to be displayed.&#160; The format of 
+		<code>WHERE$</code> is that used for the <code>SELECT</code> verb.&#160; 
+		You can refer to the record template string as <code>REC.</code>, the file name, i.e, 
+		<code>CM01.</code>, or leave off the string.&#160; All of the following are 
+		equivalent:<br /><code>POS(REC.STATE$="OHPAWV",2)<br />		POS(CM01.STATE$="OHPAWV",2)<br />		POS(STATE$="OHPAVW",2)</code></p>
+                    <p>If the <code>WHERE$</code> parameters is not specified, but one of the other 
+		<code>SELECT</code> parameters are specified, then all records in the file will be displayed.&#160;</p>
+                    <p>Note that the <code>WHERE$</code> cannot include any fields derived from related files or called routines.&#160; Only fields located in the primary file can be used.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><a name="SORTBY$"></a><code>SORTBY$</code>
+                </td>
+                <td>
+                    <p>is used when special sorting sequence is desired.&#160; You may use 
+		<code>REC.</code>, the string based on the file name, i.e., <code>CM01.</code> or leave off the 
+		string as explained above for <code>WHERE$</code>.&#160; Unlike the 
+		<code>WHERE$</code> clause, <code>SORTBY$</code> can 
+		contain fields from related files or other called routines.</p>
+                    <p>When sorting by a numeric field, use the functions listed below: For U type fields, use the string version of the field name as in 
+		<code>REC.VALUE$</code>.&#160; For all other numeric fields, use <code><MadCap:keyword term="ADJN" />ADJN(REC.AMOUNT).</code></p>
+                    <p>When a segment of a sortby key must be descending, add the <code>NOT()</code> function as shown below.&#160; For string fields, use
+		<code>NOT(REC.FIELD$)</code>.&#160; For U type numeric fields, use the string version of the field name as in
+		<code>NOT(REC.VALUE$)</code>.&#160; For all other numeric fields, use
+		<code>NOT(ADJN(REC.VALUE)).</code></p>
+                </td>
+            </tr>
+            <tr>
+                <td><code><a name="S037$"></a>S037$</code>
+                </td>
+                <td>Prior to 4/13/2010, this field only contained <code>MODE$</code>.&#160; 
+		Programs passing only <code>MODE$</code> to CDS037 will continue to work 
+		the same.&#160; Use the CDS037 template to pass any of the new 
+		parameters to CDS037.<table border="1" id="table8"><tr><td><code>S037.MODE$</code></td><td>This optional argument is passed as the <code>MODE=</code> 
+			string on the <code>SELECT</code> verb.&#160; The most popular use is for creating a log file describing the optimization logic used by 
+		<code>SELECT</code>.&#160; To enable this option, pass <code>MODE$</code> as 
+		<code>"debug=tmp/CDS037.txt"</code>, and a text file will be created with optimization data.&#160; 
+		You can review the optimization data to determine how BBx chooses the 
+		bests <code>KNUM</code> to use.&#160; You have some options to override the default 
+		behavior of BBx by passing <code>"opt=nowhere", "opt=nosort",</code> or 
+		<code>"opt=none".</code>&#160; 
+		Refer to the BBx documentation for the <code>SELECT</code> verb for additional 
+		details.</td></tr><tr><td><code>S037.COUNT$</code></td><td>Pass as <code>"Y"</code> to cause the record count to display in 
+			the window title to the right of <code>WINTITLE$</code> if present.&#160; 
+			This is useful when using <code>WHERE$</code> to show the number of 
+			matching records.</td></tr><tr><td><code>S037.F5$</code></td><td><p>Pass a non-blank phrase to indicate that the prompt should 
+			include <code>F5=[S037.F5$ value]</code>.&#160; If the user touches 
+			F5, CDS037 will exit to the calling program with <code>CTL=5</code>.&#160; 
+			This enables the calling program to do one thing if the user touches 
+			enter to select the record, and something else if the user touches 
+			F5.</p><p>You can also present multiple options using function keys F5, F6, F7, and F8 by including Fx= in <code>S037.F5$</code>, i.e., <code>S037.F5$="Enter search value, F6=Clear, F7=Lookup"</code>. Note that there is limited display space for this prompt, so keep this value as short as possible.</p></td></tr><tr><td class="nowrapcode">S037.JUMP$</td><td>Pass as <code>"N"</code> to disable option to touch a key to advance to a position in the file. Especially useful when CDS037 is used to select record for entry of data within grid itself.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="LIMITVAL"></a><code>LIMITVAL</code>
+                </td>
+                <td>is passed to the <code>SELECT</code> verb to limit the number of records displayed.&#160; If not passed to CDS037, or passed as zero, all records meeting the conditions specified in the 
+		<code>WHERE$</code> parameter will be displayed.&#160; 
+		It can be set to a number during testing to reduce the time to process 
+		all matching records.</td>
+            </tr>
+            <tr>
+                <td><a name="SELREC$"></a><code>SELREC$</code>
+                </td>
+                <td>
+                    <p>Set by CDS037 as the primary file record selected by the operator.&#160; 
+		<code>SELREC$</code> does not need to contain anything when passed to CDS037, but will contain the template based selected record unless the operator touches F4 to exit.&#160; 
+		You can disable the message at the bottom of the display that prompts 
+		the operator to highlight and select a record by excluding <code>SELREC$</code> from 
+		the variables passed to CDS037.&#160; <code>SELREC$</code> is typically passed as the 
+		actual file name variable as in <code>CM01$, IM01$</code>, etc.</p>
+                    <p>Note that when <code>SELREC$</code> is passed to CDS037, in addition to setting 
+		<code>CTL=4</code> 
+		if the operator touches F4 instead of selecting a record, CDS037 will 
+		also set <code>CTL=4</code> if the file specified in <code>FILENAME$</code> cannot be opened, or 
+		if there are no eligible records to display.&#160; The calling program 
+		should not also perform such tests unless it is desirable not to inform 
+		the operator.</p>
+                </td>
+            </tr>
+        </table>
+        <h5><a name="Using Related Files"></a>Using Related Files</h5>
+        <p>There is no limit to the number of related files that can be used.&#160; No error occurs if CDS037 is unable to locate a record in a related file. These fields will be blank or zero.</p>
+        <p>With <code>DISP$="ORDERNO|CUSTNO|XXUM10.NAME"</code>, the field <code>NAME</code> will be displayed from file 
+	<code>XXUM10</code>.</p>
+        <p>The following assumptions are made about the relationship between the main file and the related files.</p>
+        <ul>
+            <li>The key to the related file must be a single field that has the same name as that in the main file template.&#160; In this example 
+	<code>KNUM=0</code> of file <code>XXUM10</code> is <code>CUSTNO.</code></li>
+            <li>The key to the related file must be the first field of the related file.</li>
+            <li>If the related file is MKY, then the key for <code>KNUM 0</code> is used.</li>
+        </ul>
+        <h6>Note: CDS037 can use fields in related files to access other related files.&#160; For example, consider the files and fields:</h6>
+        <table>
+            <tr>
+                <th>File Name</th>
+                <th>Field Names</th>
+            </tr>
+            <tr>
+                <td><code>SO01</code> - Sales Orders</td>
+                <td><code>ORDERNO, CUSTNO</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>CM01</code> - Customers</td>
+                <td><code>CUSTNO, NAME</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>SM01</code> - Salesmen</td>
+                <td><code>SLSNO, NAME</code>
+                </td>
+            </tr>
+        </table>
+        <p><code>DISP$</code> set to <code>"ORDERNO|CUSTNO|XXCM01.NAME|XXCM01.SLSNO|XXSM01.NAME"
+	</code>will display the salesman name from the salesman file even though the salesman number is not on the order file.&#160; There is no internal limit to the number of files that can be accessed.&#160; In effect, for every related file that is accessed, all fields in that file can be used as keys to access other files.</p>
+        <h5><a name="Using Called Routines"></a>Using Called Routines</h5>
+        <p>There are many situations where special formatting or access to other files requires a called routine.&#160; CDS037 can call an unlimited number of routines for each record to be displayed.&#160; These routines return a populated string template to CDS037 containing one or more data elements.&#160; The 
+	<code>ENTER</code> statement in the called routine should be:</p>
+        <p><code>ENTER Y$,REC$,PROG$</code>
+        </p>
+        <table>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Standard task control variable</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>Templated record associated with main file: <a href="#FILENAME$"><code>FILENAME$</code></a><code>.</code>&#160; Usually named with last four characters of file name, i.e.,
+		<code>VM60$</code></td>
+            </tr>
+            <tr>
+                <td><code>PROG$</code>
+                </td>
+                <td>Templated record associated with this called program.&#160; Usually named the same as the program name, i.e., 
+		<code>VM601$</code>.</td>
+            </tr>
+        </table>
+        <p>The called program must have a template associated with it.&#160; However, CDS037 can access the template from the Data Dictionary: A template file on the disc is not required.&#160; Refer to 
+	<a href="CDS041.htm"><MadCap:keyword term="CDS041" />CDS041</a> for template search logic.&#160; CDS037 will retrieve the template for the called routine and pass it in 
+	<code>PROG$</code>.&#160; The called routine does not need to initialize the template.</p>
+        <h6>Note: CDS037 will only call each routine once, even if it is referenced in DISP$ multiple times.</h6>
+        <p>In some cases the called routine needs data not specifically contained within 
+	<code>REC$</code>.&#160; When operator entries are needed by the called routine, they can be stored in global variables for access within the called routine.</p>
+        <p><a href="#Example%205">Example 5</a> uses a called routine to add up each of the 12 months and have CDS037 display the total.</p>
+        <h6>Note: CDS037 cannot compute totals and sub-totals like 
+	<a href="CDS038.htm">CDS038</a> does.&#160; However, you can write a program that does all the computations, stores the data in a file, then calls CDS037 to display the data, including the sub-totals and totals contained within the file.</h6>
+        <hr />
+        <table class="example">
+            <tr>
+                <th><a name="Example 1"></a>Example 1</th>
+            </tr>
+            <tr>
+                <th><code>CALL "CDS037","SM91"</code>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        <img border="0" src="images/CDS0372.jpg" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 2"></a>Example 2</th>
+            </tr>
+            <tr>
+                <td><code><MadCap:keyword term="SM90" />CALL "CDS037","SM90",0,"","REQID|FAXNO|OPERID"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>
+                        <img border="0" src="images/CDS0373.jpg" />
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+        &#160;</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 3"></a>Example 3</th>
+            </tr>
+            <tr>
+                <td>This example demonstrates how to display data from a related file.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS037","SM91",0,"","REQID\Req#|ATTEMPT|SM90.FAXNO\Fax#|SM90.OPERID\Operator ID"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0374.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 4"></a>Example 4</th>
+            </tr>
+            <tr>
+                <td>This example demonstrates use of a key prefix and a display string indicating the fields to be displayed.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS037","SM90",1,BIN(JUL(2007,7,18),3),"QDATE|QTIME|REQID|OPERID"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0375.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 5"></a>Example 5</th>
+            </tr>
+            <tr>
+                <td>Demonstrates the use of an external program to compute totals in columns.<p>
+		The Data Dictionary for VM113 includes fields named <code>RCVTOT, RETTOT, 
+		INVTOT,</code> and <code>PMTTOT</code>, all template type B.</p></td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS037","XXVM60",0,"","VENDNO|YEAR|INVAMT\Mth\-###,##0|VM113.INVTOT\Total"
+		</code>
+                    <p><code>&#160;</code>
+                    </p>
+                    <p><code>0100 REM "VM113 - 10/25/07 Vendor Inquiry - History Totals<br />		0110 SETERR 8000; SETESC 8000<br />		0120 ENTER Y$,VM60$,VM113$<br />		0130 CALL "CDS041","VM113",VM113$<br />		0200 FOR I=1 TO 12<br />		0202 LET VM113.RCVTOT=VM113.RCVTOT+VM60.RCVAMT[I]<br />		0204 LET VM113.RETTOT=VM113.RETTOT+VM60.RETAMT[I]<br />		0210 LET VM113.INVTOT=VM113.INVTOT+VM60.INVAMT[I]<br />		0220 LET VM113.PMTTOT=VM113.PMTTOT+VM60.PMTAMT[I]<br />		0290 NEXT I<br />		0500 EXIT<br /><br />		8000 REM "Call Error/Escape Routine<br />		8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />		8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />		8030 SETERR 0<br />		8040 RETRY<br />		8050 RETURN<br />		8060 RETRY</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0376.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 6"></a>Example 6</th>
+            </tr>
+            <tr>
+                <td>This example demonstrates use of date and time masks.</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS037","SM90",0,"","QDATE\Date\%Ds %Ms %Dz|QTIME\Time\%Hz:%Mz|REQID\Req#\####|OPERID\Opr\XXX"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0377.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <th><a name="Example 7"></a>Example 7</th>
+            </tr>
+            <tr>
+                <td>This example demonstrates the use of overriding the default position and size of the window, and the colors of the border, heading row text, regular text, and highlighted row text.</td>
+            </tr>
+            <tr>
+                <td><code>0110 LET FILENAME$="SM90"<br />		0120 LET WINX=10,WINY=4,WINCOLS=58<br /><MadCap:keyword term="Fax Log" />
+		0130 LET WINTITLE$="Fax Log"<br />		0140 LET COLORS$="015029077023"<br />		0150 CALL "CDS037",FILENAME$,KNO,KEYPFX$,DISP$,WINX,WINY,WINROWS,WINCOLS,WINTITLE$, 
+		COLORS$,SELRTN$,WHERE$,SORTBY$,MODE$,LIMITVAL,SELREC$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0378.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table4" class="example">
+            <tr>
+                <td><a name="Multi-Line_example_using_B_option"></a>Multi-Line example 
+			using B option</td>
+            </tr>
+            <tr>
+                <td><code>CALL 
+			"CDS037","EXIM01",0,"","ITEMNO|DESC1\Description|DESC2\\\B|PCL"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0379.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table5" class="example">
+            <tr>
+                <td>Multi-line example using W option</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS037","EXIM01",0,"","ITEMNO\\\W35|DESC1\\\B|DESC2\\\B|PCL"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS03710.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" width="100%" id="table7" class="example">
+            <tr>
+                <td><a name="ColorsExample"></a>Example that cycles through many
+			<code>COLORS$</code> values</td>
+            </tr>
+            <tr>
+                <td><code>0120 FOR COL=1 TO 128<br />			0130 LET BASE=INT((COL-1)/16)<br />			0140 LET TEXT=MOD(COL-1,16)<br />			0150 IF COL=16*BASE+2*(BASE+1) THEN CONTINUE<br />			0160 IF BASE&lt;&gt;4 THEN LET HIGH=4 ELSE LET HIGH=0<br />			0170 LET COLORS$=STR(COL:"000")+STR(COL:"000")+STR(16*HIGH+TEXT+1:"000")<br />			0180 CALL "CDS037","CDDD10",0,"","FILNAM|DESC|TYPE",0,0,0,0,"Colors:"+COLORS$,COLORS$<br />			0190 NEXT COL</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS03711.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS03712.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS03713.jpg" />
+                </td>
+            </tr>
+        </table>
+        <table border="1" id="table9" class="example">
+            <tr>
+                <td>Example using the F5 option</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS041","CDS037",S037$,"YY"</code>
+                    <p><code>
+			S037.F5$="Sort by VP#"<br />			CALL "CDS037", FILENAME$, KNO, KEYPFX$, DISP$, WINX, WINY, WINROWS, 
+			WINCOLS, WINTITLE$, COLORS$, SELRTN$, WHERE$, SORTBY$, S037$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="CDS0377.jpg" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

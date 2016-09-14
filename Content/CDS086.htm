@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS086 - Obtain Field Lengths</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS086" />CDS086</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Obtain Field Lengths" />Obtain Field Lengths</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS086">Last Revised: 05/16/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to obtain the lengths of all fields for a record that file maintenance has been generated for. Note that file maintenance must be generated for the desired file and suffix.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS086", F$, F1$, FLD$[ALL]</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS086</th>
+            </tr>
+            <tr>
+                <td>F$</td>
+                <td>you pass to the routine F$ as the company code, the last four characters of the file name plus the suffix code indicating the specific record in the file desired.</td>
+            </tr>
+            <tr>
+                <td>F1$</td>
+                <td>the routine returns back F1$ as a string of composed of three bytes for each field in the file. The length of field 1, would be the NUM(F1$(1,3)), field 2 would be NUM(F1$(4,3)), etc. If a field has a variable length, then F1$ will contain zero for that field.</td>
+            </tr>
+            <tr>
+                <td>FLD$[ALL]</td>
+                <td>would be dimensioned to the number of fields in the file. The array element for each field that is a fixed length is filled to the proper length for that field. This array may be used to read the file contained in F$ after it is returned to the calling program. The first field is FLD$[1].</td>
+            </tr>
+            <tr>
+                <td>ERR</td>
+                <td>
+                    <MadCap:keyword term="XXSD55" />branch is taken if a) the file maintenance file XXSD55 is not found for the company specified. A File missing message will be displayed. b) the record requested is not on file. No error message is displayed. The ERR system variable will be 11.</td>
+            </tr>
+        </table>
+        <h5>Example</h5>
+        <p><code>CALL "CDS086", ERR=EOJ, Y.COMPCODE$+"CM01A", F1$, FLD$[ALL]</code>
+        </p>
+        <p><code>F1$</code> will contain field information for the customer master file <code>Y.COMPCODE$+"CM01"</code> suffix A.</p>
+        <p><code>FLD$[ALL]</code> will be dimensioned to the number of fields in file <code>Y.COMPCODE$+"CM01"</code>.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

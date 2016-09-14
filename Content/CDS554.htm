@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="5824" MadCap:lastWidth="739">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS554 - Automated PCL Grid</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS554</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Automated PCL Grid</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS554">Last Revised: 
+07/25/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used to print to a PCL compatible printer, the detail section of a sales order, invoice, statement, purchase order, transfer order, or any other document.&#160; Using this routine will significantly reduce the code required to produce very clear and readable documents.</p>
+        <p>CDS554 will:</p>
+        <ol>
+            <li>automatically suppress columns that are all blank in each non-heading row,</li>
+            <li>automatically determine the width of each column, expanding or reducing width based on document contents,</li>
+            <li>shrink the point size of the text to fit within the column,</li>
+            <li>automatically determine the height of each row, based on the number of lines of text printed in the row,</li>
+            <li>automatically split the document over multiple pages if required.</li>
+        </ol>
+        <p>CDS554 can:</p>
+        <ol>
+            <li>optionally print document name, document reference heading, document 
+reference number, and overlay for logo, etc.</li>
+            <li>have text span multiple columns,</li>
+            <li>print using proportional or fixed-width characters,</li>
+            <li>print using regular or bold weight font,</li>
+            <li>align text to be left justified, centered, or right justified,</li>
+            <li>keep rows together to prevent the total section from being split over 
+multiple pages,</li>
+            <li>print notepad text.</li>
+        </ol>
+        <p>See also <a href="CDS254.htm">CDS254</a>, <a href="CDS354.htm">CDS354</a>, <a href="CDS454.htm">CDS454</a>.</p>
+        <p>CDS554 is called 4 different ways.</p>
+        <table border="1" id="table1">
+            <tr>
+                <th>Call Type</th>
+                <th>Call Frequency</th>
+                <th>Calling Arguments</th>
+            </tr>
+            <tr>
+                <td>Initialization</td>
+                <td>one time</td>
+                <td><code>CALL "CDS554::SETUP", S554$, COLS$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Cell Line</td>
+                <td>once for each line of text in cell</td>
+                <td><code>CALL "CDS554", S554$, COL {, TXT$, CELLOPTS$ }</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Row</td>
+                <td>once at the end of each row</td>
+                <td><code>CALL "CDS554::ENDROW", S554$ {, ROWOPTS$ }</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Print</td>
+                <td>once at the end of all rows</td>
+                <td><code>CALL "CDS554::PRINT", S554$, Y6$</code>
+                </td>
+            </tr>
+        </table>
+        <p>Call CDS554 for each non-spanned cell, even if there is no text to be printed in order to print the cell grid lines.</p>
+        <p>If you are using CDS554 to print multiple sections within the same document, 
+then after calling CDS554::PRINT, you must call CDS554::SETUP again to start the 
+next section, even if the columns are the same as the previous section.</p>
+        <table>
+            <tr>
+                <th colspan="4">CDS554 Arguments</th>
+            </tr>
+            <tr>
+                <th>Call Type</th>
+                <td class="nowrapcode">Argument</td>
+                <th style="text-align: center;">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" rowspan="2">Initialization</td>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">From</td>
+                <td>Used to store parameters and data until printed.&#160; Note: Do not CALL 
+"CDS041" to obtain the template for CDS554 before calling CDS554 the first time.&#160; 
+The template is built by CDS554 dynamically during the initialization CALL.</td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>COLS$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Used to indicate the number of columns and horizontal alignment of each column. i.e., if <code>COL$="LLCR"</code> the grid will contain 4 columns, columns 1 and 2 left justified, column 3 centered, and column 4 right justified.
+<table border="1" id="table2"><tr><td><code>L</code></td><td>Left justify text in column</td></tr><tr><td><code>C</code></td><td>Center text in column</td></tr><tr><td><code>R</code></td><td>Right justify text in column</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" rowspan="4">Cell Line</td>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Used to store parameters and data until printed</td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>COL</code>
+                </td>
+                <td align="center">To</td>
+                <td>Column number where text will be printed, first column is 1.</td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>TXT$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Line of text to be printed.&#160; <code>TXT$</code> can contain line feed characters (<code>$0A$</code>) to include multiple lines of text in the same cell.&#160; You can also CALL CDS554 with the same <code>COL</code> multiple times in order to print each <code>TXT$</code> on separate lines within the same cell.&#160; See example below.&#160; 
+Trailing <code>$0A$</code> are removed from <code>TXT$</code>.&#160; <code>TXT$</code> can contain any character except <code>$01$</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>CELLOPTS$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Optional parameter that can contain in any order:
+<table border="1" id="table3"><tr><td align="center" class="nowrapcode"><code>Sn</code></td><td>Span n columns indicator.&#160; "n" can be a 1, 2, or 3 digit number.&#160; If <code>COL=2</code> and <code>CELLOPTS$</code> contains <code>S3</code> then the text will 
+span 3 columns (Columns 2, 3 and 4).&#160; Note: you should not call CDS554 to 
+print text in the spanned columns (<code>COL=3</code> and <code>COL=4</code>).</td></tr><tr><td align="center" class="nowrapcode"><code>L</code></td><td>Left justify text in cell (overriding column alignment in <code>COLS$</code>)</td></tr><tr><td align="center" class="nowrapcode"><code>C</code></td><td>Center text in cell (overriding column alignment in <code>COLS$</code>)</td></tr><tr><td align="center" class="nowrapcode"><code>R</code></td><td>Right justify text in cell (overriding column alignment in <code>COLS$</code>)</td></tr><tr><td align="center" class="nowrapcode"><code>H</code></td><td>Treat cell like a heading row with 9 point bold text on a shaded background.&#160; 
+Only necessary when entire row is not a heading row.</td></tr><tr><td align="center" class="nowrapcode"><code>Vn</code></td><td>Print text n dots lower on the page than normal.&#160; Useful when 
+overriding the row height and text prints too high in cell.&#160; A row that is 
+120 dots high that has two lines of text in the cell looks centered vertically 
+with V43 included in <code>CELLOPTS$</code>.</td></tr><tr><td align="center" class="nowrapcode"><code>F</code></td><td>CDS554 prints all text using the Univers proportional font.&#160; In some cases it is desirable to print with a fixed width font.&#160; Include F in <code>CELLOPTS$</code> to cause this cell to print using a fixed width font.</td></tr><tr><td align="center" class="nowrapcode"><code>{NotepadFile,TextID}</code></td><td>Indicates that the Notepad Text from NotepadFile with TextID should print in 
+the cell below <code>TXT$</code> if present.&#160; Note: Include the <code>{}</code> 
+characters in <code>CELLOPTS$</code>.&#160; No error will be reported if the 
+Notepad File or Text does not exist.&#160; Only one notepad per cell is 
+supported.</td></tr><tr><td align="center" class="nowrapcode"><code>(color)</code></td><td>Indicates that the entire cell contents should print in the color specified.&#160; 
+Include the parentheses and specify the color using a color name, such as "red", RGB values such as FFA500, or decimal values such as 255,64,32.&#160; Refer to
+<a href="http://www.excellware.com/docs/tools/CDS254.htm#Printing_in_Color">
+CDS254</a> for additional information about printing in color.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" rowspan="2">Row</td>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Used to store parameters and data until printed</td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>ROWOPTS$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Optional row options parameter that can contain in any order:
+<table border="1" id="table4"><tr><td class="nowrapcode"><code>H</code></td><td>Row is a heading row.&#160; Text will be printed 9 point bold on a shaded background.&#160; 
+The last heading row encountered, is automatically re-printed at the top of the 
+grid on the next page.</td></tr><tr><td class="nowrapcode"><code>B</code></td><td>Print text in 10 point bold font on a shaded background.</td></tr><tr><td class="nowrapcode"><code>T</code></td><td>Print the current rows and all rows that follow together on the same page.&#160; Typically set on the first total line so that all total rows appear on the same page.&#160; 
+Note that printing of a blank row, i.e., <code>ROWOPTS$</code> contains "b", or 
+discontinuing printing of heading row "D", will also signal the end of the 
+Totals group.</td></tr><tr><td class="nowrapcode"><code>Tn</code></td><td>Keep the current row and the <code>n</code> rows that follow, on the same page.&#160; "<code>n</code>" 
+can be a 1, 2, or 3 digit number.</td></tr><tr><td class="nowrapcode"><code>b</code></td><td>Print blank row, 30 dots high, with no text or cell borders.&#160; It can be used to 
+separate sections such as a notepad from the detail section of the document.&#160; 
+If the current row has any cell text to be printed, then the blank row will 
+follow the text row.&#160; If the current row has no text to print, then only 
+the blank row will be printed.</td></tr><tr><td class="nowrapcode"><code>P</code></td><td>Print blank row, similar to the lower case b option, with no text or cell 
+borders.&#160; The height of the blank row will be such that the next row will 
+print at the bottom of the page.&#160; This is typically done to cause a row 
+containing notepad text to print at the bottom of the page.</td></tr><tr><td class="nowrapcode"><code>D</code></td><td>After the current row has been printed, discontinue printing of last heading row as first row on each page.&#160; 
+This option could be used when the main portion of the grid has been completed, 
+but there are additional rows that only contain notepad text.&#160; If the 
+column headings used at the start of the grid do not apply to the notepad rows, 
+and there are no additional non-notepad rows to follow, include <code>D</code> 
+in <code>ROWOPTS$</code> to disable printing the heading row on new pages that 
+might be required for multi-page notepad text.</td></tr><tr><td class="nowrapcode"><code>N</code></td><td>Start a new page before printing this row.&#160; Cannot be used on the same 
+row with the T or Tn option.</td></tr><tr><td class="nowrapcode"><code>hn</code></td><td>This option can be used to set the minimum row height.&#160; "<code>n</code>" 
+represents dots (300/inch) and can be a 1, 2, or 3 digit number.&#160; By 
+design, CDS554 will not print rows that do not include any text.&#160; In order 
+to print such a row use this <code>hn</code> row option.&#160; A typical row 
+contains 48 dots per line of text in the cell plus 10 dots of margin.&#160; To 
+create a row that is the same height as a row containing 1 line of text, include
+<code>h58</code> in <code>ROWOPTS$</code>.&#160; To create a row that is the 
+same height as a row containing 2 lines of text, include <code>h106</code> in
+<code>ROWOPTS$</code>.&#160; This option can be used to set the row height 
+larger to provide room for hand-written text on the document.&#160; The row 
+height option cannot be used with the <code>b</code> or <code>P</code> row 
+options. </td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" rowspan="4">Print</td>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">To</td>
+                <td>
+                    <table border="1" id="table5">
+                        <tr>
+                            <td class="nowrapcode"><code>MINCOL[COL]</code>
+                            </td>
+                            <td>Use to override the minimum column width in dots (300/inch) of any column or 
+to disable column resizing.&#160; Typically only needed when a column that is all blank should print as might be needed when the column is used for a hand-written value.&#160; 
+Set to -1 to disable column resizing as might be desired a price or amount 
+column.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>WIDTH</code>
+                            </td>
+                            <td>Use to override the overall width of the grid.&#160; Defaults to 2400 for portrait orientation, and 3150 for landscape.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>BOTTOM</code>
+                            </td>
+                            <td>Use to override the last row that can be printed on the page.&#160; Defaults to 3150 for portrait orientation, and 2400 for landscape.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>PAGE1ROW</code>
+                            </td>
+                            <td>Set to the dot row of top line of the grid on page 1.&#160; There are 300 dots per inch, with a 1/4" page margin, so a value of 450 will print 1 3/4 inches from the top of the page.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>PAGE2ROW</code>
+                            </td>
+                            <td>Use to override the dot row of the top line of the page number grid that prints at the top right of all pages except page 1.&#160; Default value is 
+100.&#160; When printing an overlay such as a logo on the top of each page, you 
+may need to set <code>PAGE2ROW</code> to a higher value to insure the main grid 
+does not overprint the overlay.</td>
+                        </tr>
+                        <tr>
+                            <td height="23" class="nowrapcode"><code>CONAME$</code>
+                            </td>
+                            <td height="23">If non-blank <code>CONAME$</code> will print centered using bold 
+14 point type at the top of each page.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>DOCNAME$</code>
+                            </td>
+                            <td>If non-blank, <code>DOCNAME$</code> will print right justified using bold 14 
+point at the top right of each page.&#160; Use to print the document name such as SALES ORDER, INVOICE, PURCHASE ORDER, 
+etc.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>OVERLAY$</code>
+                            </td>
+                            <td>Optional overlay file name containing overlay file to be printed on each 
+page.&#160; The overlay file typically contains a company logo, name, address, 
+etc. that typically prints at the top left of each page, although can print 
+anywhere on the page, including as a watermark.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>PAGENO$</code>
+                            </td>
+                            <td>Pass as "N" to disable printing page number on subsequent pages.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>PAGE2REFHEAD$</code>
+                            </td>
+                            <td>Use to print a document reference number heading such as Sales Order#, Invoice#, Purchase Order#, etc. in a row above the page#.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>PAGE2REFNO$</code>
+                            </td>
+                            <td>Use to print a document reference number to the right of the heading described above.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>SIZE</code>
+                            </td>
+                            <td>Pass as 1 for portrait, or 2 for landscape orientation when it is necessary 
+to mix portrait and landscape pages on the same printer channel.&#160; Leave as 
+0 when the entire document should print in the same orientation as when the 
+printer was opened using CDS084.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>NEWPAGE$</code>
+                            </td>
+                            <td>Pass as "Y" to cause CDS554 to perform a new page routine before printing 
+page 1.&#160; This includes the call to CDS094 and printing of the <code>
+PAGE2REFHEAD$, PAGE2REFNO$</code>, and Page number fields on page 1, that 
+otherwise would only print on pages 2 and following.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">From</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td class="nowrapcode"><code>LASTROW</code>
+                            </td>
+                            <td>Set by CDS554 as the last dot row of the grid.&#160; Useful when additional printing needs to be done below the grid.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>S554$</code>
+                </td>
+                <td align="center">N/A</td>
+                <td>The following fields are reserved for use by CDS554 and should not be altered by the application.
+<table><tr><td><code>ACTROW$[COLS]</code></td></tr><tr><td><code>CELLOPT$[COLS]</code></td></tr><tr><td><code>COLS</code></td></tr><tr><td><code>ROWS</code></td></tr><tr><td><code>LCR$[COLS]</code></td></tr><tr><td><code>ROWDATA$</code></td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" class="nowrapcode"><code>Y6$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Printer Control data from printer selection routine <a href="CDS084.htm">CDS084</a>.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example - Copy and paste to console mode to execute example</td>
+            </tr>
+            <tr>
+                <td><code>2700 TEST:<br />2710 BEGIN</code>
+                    <p><code>2720 CALL "CDS041","CDS084",S084$,"YY"<br />2730 LET S084.MODE$="E",S084.NAME$="APDF"<br />2740 CALL "CDS084",ERR=9996,Y$,Y5$,U0,S084$,Y6,Y6$<br />2750 CALL "CDS094",Y6$; <span style="color: #FFFF00;">REM "New page</span><br />2760 CALL "CDS554::SETUP",S554$,"LLRRCR"; <span style="color: #FFFF00;">REM "Initialize 6 columns</span><br />2770 LET COL=COL+1; CALL "CDS554",S554$,COL,"Item#"<br />2780 LET COL=COL+1; CALL "CDS554",S554$,COL,"Description"<br />2790 LET COL=COL+1; CALL "CDS554",S554$,COL,"Quantity"<br />2800 LET COL=COL+1; CALL "CDS554",S554$,COL,"Price"<br />2810 LET COL=COL+1; CALL "CDS554",S554$,COL,"U"; <span style="color: #FFFF00;">REM "Example of a column with no data</span><br />2820 LET COL=COL+1; CALL "CDS554",S554$,COL,"Total"<br />2830 CALL "CDS554::ENDROW",S554$,"H"; <span style="color: #FFFF00;">REM "Heading row<br /></span> 2840 FOR I=1 TO 8; <span style="color: #FFFF00;">REM "Print detail several times to demonstrate page 2 info<br /></span> 2850 LET COL=0<br />2860 LET COL=COL+1; CALL "CDS554",S554$,COL,"12345"<br />2870 LET COL=COL+1; CALL "CDS554",S554$,COL,"Black USB Mouse"<br />2880 CALL "CDS554",S554$,COL,"Optical"; <span style="color: #FFFF00;">REM "Example of multi-line text using multiple CDS554 calls<br /></span> 2890 LET COL=COL+1; CALL "CDS554",S554$,COL,"12"<br />2900 LET COL=COL+1; CALL "CDS554",S554$,COL,"10.00"<br />2910 LET COL=COL+1; CALL "CDS554",S554$,COL,""<br />2920 LET COL=COL+1; CALL "CDS554",S554$,COL,"120.00"<br />2930 CALL "CDS554::ENDROW",S554$<br />2940 LET COL=0<br />2950 LET COL=COL+1; CALL "CDS554",S554$,COL,"4744-ABX"<br />2960 LET COL=COL+1; CALL "CDS554",S554$,COL,"IBM Personal Computer"<br />2970 CALL "CDS554",S554$,COL,"Intel Core 2 Duo 3.5GHz Processor"<br />2980 LET COL=COL+1; CALL "CDS554",S554$,COL,"1"<br />2990 LET COL=COL+1; CALL "CDS554",S554$,COL,"500.00"<br />3000 LET COL=COL+1; CALL "CDS554",S554$,COL,""<br />3010 LET COL=COL+1; CALL "CDS554",S554$,COL,"500.00"<br />3020 CALL "CDS554::ENDROW",S554$<br />3030 CALL "CDS554",S554$,1,""<br />3040 CALL "CDS554",S554$,2,"Includes:"+$0A$+"2Gb memory"+$0A$+"300 Gb Disc Drive"+$0A$+"Wireless b/g/n","S4"; <span style="color: #FFFF00;">REM "Example of multi-line text using a single CALL to CDS554</span><br />3050 CALL "CDS554",S554$,6,""<br />3060 CALL "CDS554::ENDROW",S554$<br />3070 NEXT I<br />3080 CALL "CDS554",S554$,1,"Subtotal","S5R"; <span style="color: #FFFF00;">REM "Span 5 columns, right align text</span><br />3090 CALL "CDS554",S554$,6,"620.00"<br />3100 CALL "CDS554::ENDROW",S554$,"T"; <span style="color: #FFFF00;">REM "Keep the following lines together on the same page</span><br />3110 CALL "CDS554",S554$,1,"Shipping","S5R"<br />3120 CALL "CDS554",S554$,6,"30.00"<br />3130 CALL "CDS554::ENDROW",S554$<br />3140 CALL "CDS554",S554$,1,"7.75% Sales Tax","S5R"<br />3150 CALL "CDS554",S554$,6,"50.38"<br />3160 CALL "CDS554::ENDROW",S554$<br />3170 CALL "CDS554",S554$,1,"Total","S5R"<br />3180 CALL "CDS554",S554$,6,"700.38"<br />3190 CALL "CDS554::ENDROW",S554$,"B"; <span style="color: #FFFF00;">REM "Print total row bold</span><br />3200 LET S554.PAGE1ROW=600,S554.DOCNAME$="INVOICE"<br />3205 LET S554.PAGE2REFHEAD$="Invoice#",S554.PAGE2REFNO$="987654321"<br />3210 CALL "CDS554::PRINT",S554$,Y6$<br />3220 CALL "CDS094",Y6$,"E"; <span style="color: #FFFF00;">REM "Close printer</span><br />3230 PRINT S554.LASTROW</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Click <a target="_blank" href="reports/CDS554ex1.pdf">here</a> to view output</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

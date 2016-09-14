@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="635" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS018 - Compute/Log User Counts</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <meta name="Microsoft Border" content="none" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS018" />CDS018</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Compute / Log User Counts</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS018">Last Revised: 01/29/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="BBx" />
+            <MadCap:keyword term="SM09" />This program is used to compute and log user count statistics 
+	including operating system users, bbx/bbj users, and dynamo users.&#160; 
+	These statistics are written to file CDSM09 and are displayed using User Count 
+	Statistics on the SMS menu.&#160; This routine is called by the Dynamo Tools 
+	menu processor and is not typically called by application programs.</p>
+        <p>Calling Format#1 - compute and log all users</p>
+        <p><code>CALL "CDS018", <a href="#Y$">Y$</a>, <a href="#USERS[1]">USERS[ALL]</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS018 - compute and log all users</th>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>session control record</td>
+            </tr>
+            <tr>
+                <td><a name="USERS[1]"></a><code>USERS[1]</code>
+                </td>
+                <td>number of active operating system users, Unix systems only.&#160; Determined using '<code>who | wc -l</code>'.&#160; 
+		Note that this may not match exactly the definition of a licensed user 
+		for some operating systems.</td>
+            </tr>
+            <tr>
+                <td><code>USERS[2]</code>
+                </td>
+                <td>number of active BBx/bbj users, determined using <code>INFO()</code></td>
+            </tr>
+            <tr>
+                <td><code>USERS[3]</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="PCname" />
+                    <MadCap:keyword term="SM08" />
+                    <MadCap:keyword term="IP Address" />number of active Dynamo users, determined using CDSM08.&#160; Note that the definition of a Dynamo user does not count multiple sessions open on the 
+		server console, multiple connections from a single PC running FacetWin, Dynaweb or background tasks, hotkey sessions, nor sessions with the same IP Address or PCNAME 
+		if Dynamo Tools can determine these values.</td>
+            </tr>
+        </table>
+        <p>CDS018 also automatically purges daily transaction records that are more than one year old.&#160; It does not purge monthly records.&#160; See Display User Count Statistics on SMS menu for additional information.</p>
+        <p>&#160;</p>
+        <p>Calling Format#2 - compute dynamo users for one company</p>
+        <p><code>CALL "CDS018::CC", <a href="#CC$">CC$</a>, <a href="#USERS">USERS</a></code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS018 - compute dynamo users for one company</th>
+            </tr>
+            <tr>
+                <td><code><a name="CC$"></a>CC$</code>
+                </td>
+                <td>two character company code, passed to CDS018</td>
+            </tr>
+            <tr>
+                <td><code><a name="USERS"></a>USERS</code>
+                </td>
+                <td>number of active Dynamo users for company code provided</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

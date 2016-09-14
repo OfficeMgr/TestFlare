@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <title>CDC950 - Prepare Files For Transmission</title>
+    </head>
+    <body>
+        <p class="SectionName">cdc950</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Transmission" />ISC - Prepare Files for Transmission</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDC950">Last Revised: 05/20/01</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="CDS036" />This program is used in conjunction with CDS036 to prepare a file for transmission to another system.</p>
+        <p>CDS036<MadCap:keyword term="ISC System Information Maintenance" /> logs records written and removed by writing records to file XXIS01. CDC950 reads XXIS01 and writes serial files named ISC/XXIS10.SSS where SSS is the system number specified in ISC System Information Maintenance. The XXIS10.SSS files are the ones that are then transmitted to the remote or headquarters system, although the file name is changed to ISC/XXIS20.SSS on the receiving system. This is done to identify files to be transmitted as XXIS10 and files received to be XXIS20.</p>
+        <p>CDC950 can be run or called with no arguments. It does not display any progress data so that it can be run in the background. CDC950 removes records from XXIS01 as they are processed.</p>
+    </body>
+</html>

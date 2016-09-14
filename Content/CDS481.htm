@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS481 - Elapsed Time Entry HH:MM format (T Type)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS481</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Elapsed Time Entry HH:MM format (T Type)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS481">Last Revised: 05/19/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This T type called routine can be used for entry of elapsed time stored in a numeric variable in the bbx TIM format, i.e., hours and fractions of an hour.&#160; CDS481 is typically specified as the program name to call for time entries in the Data Dictionary.&#160; The time can be from zero to 23 hours and 59 minutes.</p>
+        <p>It is strongly recommended to use a B type template field to store the 
+	data.&#160; This will insure sufficient number of digits to the right of the 
+	decimal to convert all minutes to fractional hours.&#160; If using an <code>
+	IOLIST</code> where you cannot use a B type template field, then use N(12*).</p>
+        <p>The routine is flexible and allows many different entries such as:<br />
+  10 (minutes not entered)<br />
+  115 (no colon or period entered)<br />
+  1:15<br />
+  1.15 (use period instead of colon)<br />
+  01:15 (leading zero entered)</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS481", S039$, REC$, X100$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS481</th>
+            </tr>
+            <tr>
+                <td><code>S039$</code>
+                </td>
+                <td>Templated parameters for entry</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>The data structure containing the numeric time field, i.e., <code>NFIELD(REC$,S039.FLDNAM$,S039.INDEX)</code></td>
+            </tr>
+            <tr>
+                <td><code>X100$</code>
+                </td>
+                <td>Standard T type routine parameters including <code>X100.ACTION$</code></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>1010 BEGIN<br />
+      1020 PRINT 'CS',<br />
+      1030 CALL "CDS276","Elapsed Time",COL<br />
+      1040 DIM REC$:"ELAPSED:B"<br />
+      1050 CALL "CDS041","CDS039",S039$,"YY"<br />
+      1060 LET S039.FLDNAM$="ELAPSED",S039.INDEX=1,S039.COL=COL,S039.ROW=2<br />
+      1070 CALL "CDS041","CDX100",X100$,"YY"<br />
+      1080 CALL "CDS481",S039$,REC$,X100$<br />
+      1090 CALL "CDS279",REC$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS4813.jpg" alt="" width="648" height="374" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

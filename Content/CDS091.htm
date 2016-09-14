@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="1016" MadCap:lastWidth="1099">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS091 - Obtain Session Control Variables</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS091" />CDS091</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Obtain/Set Session Control Variables</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS091">Last Revised: 03/07/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine should be used whenever it is necessary to retrieve the 
+	session control variables.&#160; It can also be called to set or change the 
+	operator ID, Application Job Title, and Terminal Alias for installations that do not use the Dynamo Tools menu system exclusively, or for applications such as portable computers that do not use the 
+	default Dynamo Tools login profile.</p>
+        <p><code><MadCap:keyword term="SM08" />SM08$</code> contains the complete session control variable.&#160; The fields within 
+	<code>Y$</code> and <code>Y5$</code> are also contained within <code>SM08$</code>, but are presented as separate variables for compatibility with older applications.</p>
+        <p>The session control information is kept in global memory, so CDS091 
+	executes very quickly without disc access.</p>
+        <p>
+            <MadCap:keyword term="Menu Processor" />CDS091 is frequently called within another called program in order to retrieve the Dynamo Tools session control variable, <code>Y$</code>. </p>
+        <p>&#160;</p>
+        <p>Calling Format:<br /><code>CALL&#160;"CDS091", ERR=XXXX, Y$ {, Y5$, SM08$, NEWOPERID$, NEWY5$, NEWALIAS$ }</code></p>
+        <p>&#160;</p>
+        <p>Examples:</p>
+        <ul>
+            <li>To retrieve only the limited session control variable Y$:<br /><code>CALL&#160;"CDS091",Y$<br /><br /></code></li>
+            <li>To retrieve all of the session control variables:<br /><code>CALL "CDS091", Y$, Y5$, SM08$<br /><br /></code></li>
+            <li>To set or change the Operator ID:<br /><code>CALL&#160;"CDS091", Y$, Y5$, SM08$; REM&#160;"Retrieve Current Values<br />NEWOPERID$="janet"<br />CALL&#160;"CDS091", Y$, Y5$, SM08$, NEWOPERID$</code><br /><br /></li>
+            <li>To set or change the Current Job Description:<br /><code>CALL&#160;"CDS091", Y$, Y5$, SM08$; REM&#160;"Retrieve Current Values<br />NEWY5$="My New Job Description"<br />CALL&#160;"CDS091", Y$, Y5$, SM08$, "", NEWY5$<br /><br /></code></li>
+            <li>To set or change the Current Terminal Alias:<br /><code>CALL&#160;"CDS091", Y$, Y5$, SM08$; REM&#160;"Retrieve Current Values<br />NEWALIAS$="Z5"<br />CALL&#160;"CDS091", Y$, Y5$, SM08$, "", "", NEWALIAS$<br /><br /></code></li>
+            <li>To set or change the Operator ID, Job Description, and Terminal Alias:<br /><code>CALL&#160;"CDS091", Y$, Y5$, SM08$; REM&#160;"Retrieve Current Values<br />NEWOPERID$="johnk"<br />NEWY5$="My New Job Description"<br />NEWALIAS$="T123"<br />CALL&#160;"CDS091", Y$, Y5$, SM08$, NEWOPERID, NEWY5$, NEWALIAS$</code></li>
+        </ul>
+        <p>&#160;</p>
+        <p>All three variables, <code>Y$</code>, <code>Y5$</code>, and <code>SM08$</code> are output only.&#160; Any values 
+	passed to CDS091 in these three arguments are ignored.</p>
+        <p>
+            <MadCap:keyword term="Templated" />Refer to the SM08 File Data Dictionary in company CD for specific templated field names and sizes.</p>
+        <p>Click <a href="environment.htm#Y$">here</a> for additional documentation 
+	for the session control variable <code>Y$</code>.</p>
+        <h5><a name="Changing_the_Operator_ID"></a>
+        </h5>
+        <p>When calling CDS091 to change the operator ID, job description or terminal alias, pass non-null values in one or more of the <code>NEWOPERID$, NEWY5$,</code> and <code>NEWALIAS$</code> fields. </p>
+        <p>The changed values will be returned in subsequent calls to CDS091 to retrieve this data, as well as the Display Session Status application.</p>
+        <p>The error branch would be taken for the following reasons:</p>
+        <ol>
+            <li><code>NEWOPERID$</code> is all blank, or longer than 10 characters.</li>
+            <li><code>NEWOPERID$</code> is not on the Operator File (CDSM01).</li>
+            <li><code>NEWOPERID$</code> is disabled in Operator Information Maintenance (SMC).</li>
+            <li><code>NEWOPERID$</code> is a Security Administrator.&#160; For security 
+	reasons you cannot change the operator ID to a user that is a Security Administrator.</li>
+            <li>The CDSM01 record has corrupted security data.</li>
+            <li>The <code>NEWOPERID$</code> had a password specified in Operator Information 
+	Maintenance, and the user did not specify the correct password.</li>
+            <li>The NEWALIAS$ argument is longer than 4 characters. Note that any 4 characters can be used, even aliases that are invalid in BBx, such as those that do not begin with the letter "T" as used in some other Business Basic implementations.</li>
+        </ol>
+    </body>
+</html>

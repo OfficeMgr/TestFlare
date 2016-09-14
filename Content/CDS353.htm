@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="964" MadCap:lastWidth="770">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <title>CDS353 - Convert text to/from base64</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS353</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert text to/from base64</p>
+                </td>
+                <td align="right">
+                    <a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS353">Last Revised: 06/16/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS353 can be called to convert text to base64 format, or convert base64 text to regular text format.&#160; It is used by CDS184 when emailing attachments, and can be used by application programs that might need to store text in base64 format, as is sometimes done when storing a PDF or graphic file within an xml data structure, or whenever data that might contain binary or non-displayable characters needs to be represented in displayable ASCII characters only.</p>
+        <p>Calling Format:</p>
+        <p>
+            <code>CALL "CDS353", TXTIN$, TXTOUT$ {, MODE$ }</code>
+        </p>
+        <p>Note: CDS353 performs no disc operations, so if the input text is very large and you are not using bbj, you may run out of memory if you try to convert large amounts of data with a single call to CDS353.&#160; </p>
+        <p>
+            <b>Typical Performance</b>
+        </p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th>Environment</th>
+                    <th style="text-align: center;">Encode (characters/second)</th>
+                    <th style="text-align: center;">Decode (characters/second)</th>
+                </tr>
+                <tr>
+                    <td>BBj</td>
+                    <td style="text-align: center;">40,000,000</td>
+                    <td style="text-align: center;">20,000,000</td>
+                </tr>
+                <tr>
+                    <td>pro5 - linux<br />Vpro5 with linux data server</td>
+                    <td style="text-align: center;">2,000,000</td>
+                    <td style="text-align: center;">200,000</td>
+                </tr>
+                <tr>
+                    <td>pro5 - non-linux<br />Vpro5</td>
+                    <td style="text-align: center;">200,000</td>
+                    <td style="text-align: center;">200,000</td>
+                </tr>
+            </tbody>
+        </table>
+        <p> <![CDATA[ ]]></p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS353 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">
+                    <code>TXTIN$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Input text</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">
+                    <code>TXTOUT$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Output text</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">
+                    <code>MODE$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Indicates the type of conversion
+<table border="1" id="table1"><col /><col /><tr><td align="center">E, null, or not passed</td><td>Convert <code>TXTIN$</code> to base64 and return the base64 text in <code>TXTOUT$</code></td></tr><tr><td align="center">D</td><td>Convert <code>TXTIN$</code> which is in base64 format, to regular text in <code>TXTOUT$</code></td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>)CALL "CDS353","This is a test",B64$<br />)?B64$<br />VGhpcyBpcyBhIHRlc3T=<br /><br />)CALL "CDS353",B64$,TXT$,"D"<br />)?TXT$<br />This is a test</code>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

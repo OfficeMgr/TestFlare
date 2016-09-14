@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS395 - .dbf File Open and Setup</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS395" />CDS395</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="dbf" />.dbf File Open and Setup</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS395">Last Revised: 02/26/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Dbase" />This program can be used to open a string data file in the standard .dbf format. This format is used by some data base programs such as Dbase.</p>
+        <p>In addition to opening the file, CDS395 will return a template that you can use when reading the file.</p>
+        <p><code>CALL "CDS395", ERR=XXXX, CHAN, FILNAM$, PAR$, REC$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS395</th>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td>a channel that the file will be opened to. It may be passed as zero, in which case an unused channel will be used and returned for use by the calling program.</td>
+            </tr>
+            <tr>
+                <td><code>FILNAM$</code>
+                </td>
+                <td>the name of the .dbf file to be opened.</td>
+            </tr>
+            <tr>
+                <td><code>PAR$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CDS095" />currently only has one character, which is passed to CDS095 as the parameter that indicates whether a message should be displayed if the file cannot be opened</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Templated" />the templated variable to be used when reading the file</td>
+            </tr>
+        </table>
+        <p><code>READRECORD (CHAN,SIZ=LEN(REC$), END=XXXX)REC$<br />
+  IF REC$=$1A$ GOTO EOJ; REM "</code>dbf files may have trailing <code>$1A$</code> at end of file</p>
+        <p>The basic format of a dbf file includes:</p>
+        <ul>
+            <li>header information</li>
+            <li>field information</li>
+            <li>optional information</li>
+            <li>data records</li>
+        </ul>
+        <p>After calling CDS395, the file will be positioned at the start of the optional information. If there is any optional information, then you will have to experiment to determine its length in order to position the file at the first data record.</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="6" MadCap:lastHeight="2498" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS063 - Error Routine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS063" />CDS063</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Error Routine" />Error Routine</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS063">Last Revised: 10/07/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">Purpose: To process any error encountered by a program as 
+well as interrupt key processing. This routine is called by all Dynamo Tools, and 
+should be called by all application software to consistently process errors and 
+interrupt keys.</p>
+        <p>CDS063 provides the following functions:</p>
+        <ol>
+            <li>Prints a window equal to the physical size of the screen to preserve the 
+ display in the state when the error occurred.</li>
+            <li>
+                <MadCap:keyword term="System Error Log" />Logs the details about the error as well as the error resolution option 
+ selected by the operator to the error log. The error log is printed using the 
+ System Error Log option on the SMC menu.</li>
+            <li>Sends a comprehensive Program Error Report by email.&#160;
+	<a href="examples/CDS063ex1.htm">Example</a>.</li>
+            <li>Display options for the operator including:
+  <ul><li><MadCap:keyword term="Continue Program Execution" />Continue Program Execution - retry, appropriate response after error 0, 
+	error 5, etc.</li><li>Display Additional Information about the error such as display of line of 
+ code, last host error code, etc.</li><li>Display possible causes of the error and corrective action</li><li>Display variables</li><li>Enter console (programming) mode to alter the program (after entry of daily 
+	password)</li><li>Abort the job and return to the menu</li><li>Set a program trace and continue program execution</li><li>Turn off escape handling and continue program execution so that next 
+ interrupt will not invoke error routine.</li><li>Display information about opened files.</li></ul></li>
+        </ol>
+        <p>The lines of code necessary to call the error routine are created 
+automatically if you define a program using the File Utility (SMU menu).&#160; 
+These lines can also be added to 
+a program by using the <code>ERROR</code><MadCap:keyword term="Program Editor" /><MadCap:keyword term="Program Utility" /> command within the program editor.&#160; They can also 
+be updated using the Program Utility.&#160; The calling procedure is the same 
+whether the application program is RUN or CALLed.</p>
+        <p>&#160;</p>
+        <p>Calling format for programs with line numbers:</p>
+        <p>First line of code after Remark typically at line 0100 (Line 0110 in this 
+example)</p>
+        <p><code>0110 SETERR DT_ERR; SETESC DT_ERR</code>
+        </p>
+        <p>Near bottom of program:</p>
+        <p><code>8000 DT_ERR:<br />8010 CALL "CDS063",STR(TCB(5+3*(ERR=127))),Y$,PGM(-2)<br />8020 IF Y.ERRSTS=0 THEN SETERR 0 ELSE IF Y.ERRSTS=2 RETURN<br />8030 RETRY</code>
+        </p>
+        <p>&#160;</p>
+        <p>Traditional format when not using a line label:</p>
+        <p><code>0110 SETESC 8000; SETERR 8000</code>
+        </p>
+        <p>&#160;</p>
+        <p><code>8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5+3*(ERR=127))),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY</code>
+        </p>
+        <p>&#160;</p>
+        <p>Calling Format for bbj programs without line numbers:</p>
+        <p>First line of code after Remark</p>
+        <p><code>SETERR DT_ERR; SETESC DT_ERR</code>
+        </p>
+        <p>Near bottom of program:</p>
+        <p><code>DT_ERR:<br />CALL "CDS063",STR(TCB(5+3*(ERR=127))),Y$,PGM(-2)<br />IF Y.ERRSTS=0 THEN SETERR 0 ELSE IF Y.ERRSTS=2 RETURN<br />RETRY</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS063</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>STR(TCB(5+3*(ERR=127)))</code>
+                </td>
+                <td>the line number of the last error or line being executed when program execution was interrupted</td>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>
+                    <p>the Dynamo Tools session control variable.&#160; If passed to the error routine as null, 
+ which might be done in the case of a called routine, the error routine will 
+ retrieve <code>Y$</code>.</p>
+                    <p>For programs that do not use <code>Y$</code> as the Dynamo Tools session variable, replace <code>Y$</code> with some unused variable such as <code>DT_Y$</code> and replace <code>Y.ERRSTS</code> with <code>DT_Y.ERRSTS</code>.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>PGM(-2)</code>
+                </td>
+                <td>the name of the calling program</td>
+            </tr>
+        </table>
+        <p>CDS063 sets the <code>Y.ERRSTS</code> variable to control execution of the selected action 
+once control is returned to the calling program.</p>
+        <table>
+            <tr>
+                <th colspan="2">Y.ERRSTS Resultant action</th>
+            </tr>
+            <tr>
+                <td style="text-align: center;">0</td>
+                <td>Used to shut off error routine and retry in order to enter console 
+ (program) mode to manually alter program.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">1</td>
+                <td>Used to retry and continue program execution.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">2</td>
+                <td>Used to continue program execution after an interrupt.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">3</td>
+                <td>Used to continue program execution after a printer error. Special forms 
+ alignment logic or other restart logic might be required before executing 
+ the RETRY statement. Note that line 8060 would be altered in that case.</td>
+            </tr>
+        </table>
+        <table border="1" id="table3">
+            <tr>
+                <th colspan="2">Global Variables</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>SMS_CDS063.CCEMAIL</code>
+                </td>
+                <td>Set this global variable to an email address that should be copied 
+		on the error email.&#160; This is useful for software developers whose 
+		address is not included in the Software Support Email broadcast.&#160; 
+		Multiple email addresses can be included if separated by commas.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>WMS_DUMPLINK</code>
+                </td>
+                <td>Set this global variable to any value to enable a link to the DUMP 
+		report to appear on the Dynaweb error page should the application 
+		encounter an error.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>SMS_CDS063.DF</code>
+                </td>
+                <td>
+                    <p>This global variable can be used to specify an alternative 
+		dump file, and to cause CDS063 to exit to calling application instead of 
+		terminating background tasks.&#160; The global should be set to the path 
+		where the dump files should be stored.&#160; It is recommended that the 
+		global end with <code>",htm"</code> so that <a href="CDS064.htm"><MadCap:keyword term="CDS064" />CDS064</a> 
+		will define a unique file with a <code>.htm</code> extension in the 
+		desired folder.&#160; For example: <code>TMP$=STBL("SMS_CDS063.DF","/var/log/dynamo/dump,htm")</code>.&#160; 
+		This will create dump files in the <code>/var/log/dynamo</code> folder 
+		with a file name of <code>dump-nnn.htm</code> where <code>nnn</code> 
+		will be numbers to make the file name unique.</p>
+                    <p>CDS063 will pass the unique dump file name back to the calling 
+		program using the same global.</p>
+                    <p>If running as a background task, whether bbx or bbj, including stored 
+		procedures and triggers, CDS063 will <code>EXIT</code> and return 
+		control back to the calling program instead of terminating the process.&#160; 
+		This allows for local processing, especially with stored procedures, so 
+		the stored procedure can return an error message to the calling 
+		application. Note that using this option will only <code>EXIT</code> and not abort the running application when the workspace program calls CDS063. &#160;For example, if the workspace program calls CDS095, and CDS095 calls CDS069 with a prompt, then the background task will still abort, as there is no current method to exit all called programs to return control to the workspace program.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">SMS_CDS063.STATUS</td>
+                <td>Set this global to a program name that CDS063 will call to log error status information within your application. This is useful for dashboards that monitor background task status. The <code>ENTER</code>&#160;list should be <code>Y$,STATUS$</code>. &#160;<code>STATUS$</code>&#160;will be set by CDS063 and passed to this called program with information such as <code>"Error NNN, program XXXXXX, line NNN"</code> or <code>"Background Task Prompt:&#160;XXXXXXXXXXXXXXXXXXX"</code>. Note that you can also include a line label after the program name in the standard format:&#160;<code>BKGTASK::LOG</code>.</td>
+            </tr>
+        </table>
+        <h5>Note</h5>
+        <p>When the operator selects the option to abort and return to the selector, 
+control is not passed to the calling routine.&#160; 
+This permits aborting a job multiple levels deep within called routines without 
+all of the logic necessary to back out of each program.</p>
+        <h5>Background Tasks</h5>
+        <p>Background tasks including Dynaweb applications, bbj stored procedures and 
+triggers, should also use CDS063.&#160; CDS063 will log the error and send the 
+email error report.&#160; In most cases, the error cannot be recovered, so CDS063 will call CDS081 to terminate the process.&#160; See Global 
+Variable <code>SMS_CDS063.DF</code> above to cause CDS063 to <code>EXIT</code> 
+to calling program for background tasks.</p>
+        <p>However, if the background task encounters an error 0 when reading (or 
+EXTRACTing) a record in a disk file, instead of aborting the application, CDS063 
+waits one minute, then returns to the calling application so that the 
+application can RETRY.&#160; Note that this process will repeat until the record 
+becomes available.&#160; The log file will include an entry each time CDS063 is 
+called.</p>
+        <h5>Background Task Log File</h5>
+        <p>When CDS063 is called from a background task, it will print (to the standard 
+out channel), a text message.&#160; If the background task was started by the 
+Dynamo Tool background script using the default log file name, then the log file is named <code>log/bkg</code>.&#160; 
+When running bbj, CDS063 sends the text message to the bbj standard error file 
+which can be easily viewed using the Basis Enterprise Manager.&#160;
+<a href="CDS186.htm">CDS186</a> is used to deliver the message.&#160; Note that 
+the System Error Log (SMC) also includes summary information about the error.</p>
+        <h5>Dynaweb</h5>
+        <p>When using CDS063 with web applications such as Dynaweb, the error routine 
+will send a descriptive message to the browser.&#160; If the BBx global variable
+<code>"WMS_DUMPLINK"</code> file is set (to any value), the browser message will 
+include "Dynamo Tools - Program Error Report" with a hyperlink to the report file created 
+to assist resolving the error.&#160; The error report file is created regardless of this 
+global, but the link can be removed for security purposes.&#160; The error 
+report file 
+is created in the <code>$SMSDIR/tmp</code> directory with a unique name.&#160; Use cron to 
+schedule the cleartmp script to run each evening to remove all files in the tmp 
+directory that are more than 1 day old.</p>
+        <h5>Emailed Program Error Report</h5>
+        <p>In order to email the Dynamo Tool - Program Error Report, the server, or data server, must 
+first be configured to send email.</p>
+        <p>Email will be sent to the Software Support Email address as specified using 
+Dynamo Configuration Maintenance on SMC menu.&#160; This address can be a 'role' 
+address which forwards the email to multiple addresses.</p>
+        <p>Email can also be sent to the user logged in.&#160; To enable this option, 
+use Operator Information Maintenance (SMC) and specify the email address and set the 
+Email Program Errors option to Y.</p>
+        <p>Email will also be copied to an email address specified using global variable 
+as described above.</p>
+        <p>If a Dynamo Tool program encounters an error, the Program Error Report will 
+include:</p>
+        <ul>
+            <li>The date and time of the installed version of the program</li>
+            <li>The date and time of the current version of the program, after a Dynamo 
+	Tools upgrade.</li>
+            <li>Any program revision notes made since the installed version date.</li>
+            <li>A hyperlink to the Dynamo Tools documentation for any called program</li>
+            <li>The line of code (from the current program version) that encountered the 
+	error, or that was being executed when the program was interrupted</li>
+        </ul>
+        <p>To minimize the time the operator has to wait for the Program Error Report to be created, portions of the report, including the email delivery is run as either a separate process. In the case of Windows using a data server, the separate process will be run on the data server.</p>
+        <p>Note that for Background Tasks including Dynaweb, running on Unix, (linux, AIX, SCO&#160;Unix, etc.), you can send a kill -4 signal to the running pro5 process to generate the Program Error Report. &#160;This is helpful when diagnosing a long running process, or one that might be caught in an infinite loop. You will need to issue the kill signal as root or the user that is running Dynaweb, i.e., </p>
+        <p><code>sudo kill -4 &lt;pro5 process id&gt;</code>
+        </p>
+        <p>&#160;</p>
+        <p><a href="examples/CDS063ex1.htm">Example</a> emailed Program Error Report.</p>
+    </body>
+</html>

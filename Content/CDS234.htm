@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS234 - Copy common template fields</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS234</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Copy common template fields</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS234">Last Revised: 
+01/23/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to copy fields with the same name from one string template to another.&#160; It is used by CDS034 and can also be used in custom data conversion programs, Dynaweb applications to map fields from <code>CGI$</code> to another templated string, or other application programs.</p>
+        <p>CDS234 also supports changes in template field type including conversion from C to any numeric template type, and from a numeric template type to C, 
+from one numeric template type to another, and from MM/DD/YY dates to julian.&#160; See field conversion notes below.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS234", ERR=XXXX, RECIN$, RECOUT$ {, S234$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS234 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:<ul><li>there is no template associated with <code>RECIN$</code> or <code>RECOUT$</code>.&#160; 
+	Operator will be prompted in this case regardless of <code>S234.ERRMSG$</code> 
+	value.</li><li><code>S234.ERRMSG$&lt;&gt;"N"</code> and a field mapping error occurred, and 
+	operator selected option A to Abort application</li></ul></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>RECIN$</code>
+                </td>
+                <td align="center" nowrap="nowrap">to</td>
+                <td>Input templated string</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>RECOUT$</code>
+                </td>
+                <td align="center" nowrap="nowrap">to</td>
+                <td>Output templated string.&#160; Note that that <code>RECOUT$</code> is not initialized by CDS234, so any fields with data will not be changed unless the same field name is found in <code>RECIN$</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S234$</code>
+                </td>
+                <td align="center" nowrap="nowrap">to/from</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td><code>ERRMSG$</code>
+                            </td>
+                            <td>Pass to CDS234 as "N" to ignore all field mapping errors.&#160; No operator 
+prompt will occur.<p>Any other value will prompt user with field mapping error 
+message.&#160; If field mapping error does occur, and user selected option "I" 
+to Ignore error messages, then CDS234 will change <code>ERRMSG$</code> to "N" so 
+that subsequent field mapping problems are ignored.</p></td>
+                        </tr>
+                        <tr>
+                            <td><code>ERRCNT</code>
+                            </td>
+                            <td>Set by CDS234 to the number of field mapping errors encountered.&#160; <code>
+ERRCNT</code> is updated regardless of <code>ERRMSG$</code> value.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <p>CDS234 will display an Error Message unless <code>S234.ERRMSG$="N"</code>.&#160; 
+The operator can touch F5 to display the input and output data, I to ignore 
+subsequent error messages, and A to abort which will cause CDS234 to EXIT 99.</p>
+        <p>Fields contained in <code>RECIN$</code> but not <code>RECOUT$</code> are 
+ignored without an error message.</p>
+        <table>
+            <tr>
+                <th colspan="2">Error Messages</th>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>RECIN$</code> must be templated</td>
+                <td>The <code>RECIN$</code> argument requires a template.</td>
+            </tr>
+            <tr>
+                <td><code>RECOUT$</code> must be templated</td>
+                <td>The <code>RECOUT$</code> argument requires a template.</td>
+            </tr>
+            <tr>
+                <td>Data does not match template at Field Name XXXX</td>
+                <td>The program is encountering an error 47 at the Field Name specified.&#160; This indicates that the template does not accurately describe the data in <code>RECIN$</code>.&#160; Correct the data or template.</td>
+            </tr>
+            <tr>
+                <td>Input field contains non-printable character(s) at Field Name XXXX</td>
+                <td>The input field contains a non-printable character, typically a line feed field terminator.&#160; This usually indicates that the template does not accurately describe the data in <code>RECIN$</code>.&#160; Correct the data or template.</td>
+            </tr>
+            <tr>
+                <td>Non-numeric data of XXXX at Field Name XXXX</td>
+                <td>The program is encountering an error 26 at the Field Name specified.&#160; 
+This indicates that numeric field in <code>RECIN$</code> contains non-numeric 
+characters.&#160; The field value is displayed in 'string' or $hexadecimal$ format.&#160; Correct the data or template.</td>
+            </tr>
+            <tr>
+                <td>Field Name with value of 'XXXX' changed to 'XXXXX'</td>
+                <td>This usually indicates that the field size in <code>RECOUT$</code> is not large enough to hold the value from <code>RECIN$</code>.</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th colspan="2">Field Conversion Notes</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;">Rule#</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center">1</td>
+                <td>When converting a C(8) field to a numeric field and the data contains a "/" in the 3rd and 6th position, the C(8) field is assumed to be a date, and stored in julian format in the numeric field, typically a U(3) or N(7) field.&#160; This enables conversion of dates in MM/DD/YY format to julian without needing to write custom code.</td>
+            </tr>
+            <tr>
+                <td align="center">2</td>
+                <td>When converting from C(x) to U(y) where x=y is the same, i.e., C(3) to U(3), it is assumed that the C(x) field contains binary data and simple string conversion takes place, i.e., <code>RECOUT.FLD$=RECIN.FLD$</code>.&#160; This enables conversion of ID fields such as <code>AP12.VOUCHERNO$</code> from C(3) to U(3).</td>
+            </tr>
+            <tr>
+                <td align="center">3</td>
+                <td>When converting from C(x) to U(y) where x &lt;&gt; y, or from C() to I() or B, then the numeric value of the string will be used, i.e., <code>RECOUT.FLD=NUM(RECIN.FLD$)</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">4</td>
+                <td>When converting to an N() type field and an output mask is provided, and the mask does not contain a comma, a % (date &amp; time masks), nor an R (CR/DR), then the data will be stored using the mask provided, i.e., <code>RECOUT.FLD$=STR(VAL:OMASK$)</code>.&#160; This is consistent with how CDS039 stores masked N type fields which is useful when a numeric field is used as a key segment.</td>
+            </tr>
+            <tr>
+                <td align="center">5</td>
+                <td>When converting from N(x) to C(y), or C(x) to N(y), or N(x) to N(y) and x=y, then simple string assignment is used, i.e., <code>RECOUT.FLD$=RECIN.FLD$</code>.&#160; This will retain any leading zero's when a mask is not provided.</td>
+            </tr>
+            <tr>
+                <td align="center">6</td>
+                <td>When converting from N(x) to C(y), or C(x) to N(y), or N(x) to N(y) and x&lt;&gt;y, and the output field is a fixed length, then the data will be right justified to retain any numerical sorting sequence.&#160; This is useful when the field is used as a key segment.</td>
+            </tr>
+            <tr>
+                <td align="center">7</td>
+                <td>In all other cases where a numeric field is converted to a string field, the <code>STR()</code> function is used, i.e., <code>RECOUT.FLD$=STR(VAL)</code>.</td>
+            </tr>
+            <tr>
+                <td align="center">8</td>
+                <td>Repeating fields are supported.&#160; Input, Output or both can be repeating 
+fields.&#160; No error message is created when the maximum repeat of the output 
+field is less than the input field.&#160; For example if the input data includes 
+SALES[12] and the output includes SALES[10], SALES[1] through SALES[10] will be 
+copied to the output, and SALES[11] and [12] will be ignored.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example (Copy and paste code to execute test)</td>
+            </tr>
+            <tr>
+                <td><code>2000 TEST:<br />
+2010 DIM RECIN$:"STR1:C(1),STR2:C(2),STR3:C(1*),STR4:C(1*),STR5:C(1),STR6:C(2),NUM1:N(1),NUM2:N(2),NUM3:N(1*),NUM4:N(1*),NUM5:N(1),NUM6:N(2),SN1:C(1),SN2:C(2),SN3:C(1*),SN4:C(1*),SN5:C(1),SN6:C(2),SN7:C(3),NS1:N(5),NS2:N(3),IDNO1:C(3),DATE1:C(8)"<br />
+2020 LET RECIN.STR1$="X",RECIN.STR2$="XX",RECIN.STR3$="X",RECIN.STR4$="XX",RECIN.STR5$="X",RECIN.STR6$="XX"<br />
+2030 LET RECIN.NUM1=1,RECIN.NUM2=12,RECIN.NUM3=1,RECIN.NUM4=12,RECIN.NUM5=1,RECIN.NUM6=12<br />
+2040 LET RECIN.SN1$="1",RECIN.SN2$="12",RECIN.SN3$="1",RECIN.SN4$="12",RECIN.SN5$="1",RECIN.SN6$="12",RECIN.SN7$="012"<br />
+2050 LET RECIN.NS1$="00123",RECIN.NS2$="012",RECIN.IDNO1$=BIN(12345678,3),RECIN.DATE1$=DATE(0)<br />
+2060 DIM RECOUT$:"STR1:C(2),STR2:C(1),STR3:C(1),STR4:C(1),STR5:C(1*),STR6:C(1*),NUM1:N(2),NUM2:N(1),NUM3:N(1),NUM4:N(1),NUM5:N(1*),NUM6:N(1*),SN1:N(2),SN2:N(1),SN3:N(1),SN4:N(1),SN5:N(1*),SN6:N(1*),SN7:N(5):omask=00000:,NS1:C(5),NS2:C(5),IDNO1:U(3),DATE1:U(3)"<br />
+2070 CALL "CDS234",RECIN$,RECOUT$<br />
+2080 CALL "CDS279",RECOUT$,"","DOutput Data"</code>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

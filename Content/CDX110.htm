@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="856" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDX110 - Example of a File Maintenance Add/Write/Delete Routine</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDX110</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Example of File Maintenance Add/Write/Delete Routine</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDX110">Last Revised: 02/25/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">File Maintenance applications sometimes require special processing before adding a new record, when writing a record, or deleting a record.&#160; When this is required, a Add/Write/Delete program can be specified using the File Maintenance Option withing Data Dictionary Maintenance (FMS).&#160; CDX110 is a non-functioning example of such a routine that could be copied to another program to be used as a shell when an Add/Write/Delete routine is needed.</p>
+        <p>The Add/Write/Delete routine has the ability to accept or veto the action.</p>
+        <p>For example, if the routine determines that a new record cannot be added, then it should inform the operator, then exit with an error using EXIT 99.</p>
+        <p>When writing a record, the routine might determine that changes to the record are required before writing the record.&#160; If this is the case, then the routine should inform the operator, and EXIT 99 back to file maintenance, where the user can make whatever changes are required.</p>
+        <p>When deleting a record, the routine might also determine that other data depends on this record, and the delete should not be permitted.&#160; The routine should inform the operator, and EXIT 99 back to file maintenance, which will veto the delete and return to maintenance mode.</p>
+        <p>This program is called by File Maintenance, and not typically called by an application program.</p>
+        <p><code>CALL "CDX110", Y$, REC$, RECOLD$, MODE</code>
+        </p>
+        <table>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Standard Session Control Variable</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>Record as modified</td>
+            </tr>
+            <tr>
+                <td><code>RECOLD$</code>
+                </td>
+                <td>Record prior to any modifications</td>
+            </tr>
+            <tr>
+                <td><code>MODE</code>
+                </td>
+                <td>
+                    <table border="1" id="table1" class="lev2">
+                        <tr>
+                            <td>0</td>
+                            <td>Add</td>
+                            <td>REC$ and RECOLD$ will be an empty template with only key fields populated.&#160; Routine may populate other fields in REC$ with default values, or EXIT 99 to veto record add.</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Write</td>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Delete</td>
+                            <td>&#160;</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example to observe when and how the Add/Write/Delete routine is called</td>
+            </tr>
+            <tr>
+                <td>0100 REM "CDX110 - 05/18/07 Example of File Maintenance Add/Write/Delete Routine<br />      0110 SETESC 8000; SETERR 8000<br />      0120 ENTER Y$,REC$,RECOLD$,MODE<br />      0130 CALL "CDS279",REC$,RECOLD$," File Maintenance Add/Write/Delete Routine called with MODE="+STR(MODE)<br />      0140 GOTO EOJ</td>
+            </tr>
+        </table>
+    </body>
+</html>

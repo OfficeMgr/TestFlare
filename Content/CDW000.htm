@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW000 - HTML Table Functions</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW000" />CDW000</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="HTML" />Build HTML Table</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW000">Last Revised: 05/30/11</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used to create an HTML table.&#160; An 
+HTML table is a representation of data in a grid with rows and columns.</p>
+        <p><code>CALL "CDW000", HTML$, OPT$, TRD$, { CHAN }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">CDW000</th>
+            </tr>
+            <tr>
+                <td><code>HTML$</code>
+                </td>
+                <td align="center">To/From</td>
+                <td>CDW000 appends data to <code>HTML$</code> as the table is built.</td>
+            </tr>
+            <tr>
+                <td><a href="#Attribute"><code>OPT$</code></a>
+                </td>
+                <td align="center">To</td>
+                <td>pass <code>OPT$</code> to CDW000 with tag and attribute values (see 
+	table below)</td>
+            </tr>
+            <tr>
+                <td><code>TRD$</code>
+                </td>
+                <td align="center">To</td>
+                <td>pass <code>TRD$</code><MadCap:keyword term="Cell" /> to CDW000 with the current table, row, or cell contents to be added to 
+	<code>HTML$</code>.&#160;
+ It will be cleared by CDW000, so the calling routine does not have to, 
+ except for table data (cell) type calls.&#160; See examples.</td>
+            </tr>
+            <tr>
+                <td><code>CHAN</code>
+                </td>
+                <td align="center">To</td>
+                <td>optionally passed to CDW000 as a channel number for a string file used 
+	to store the resultant html.&#160; If a non-zero value is passed to CDW000, 
+	then the html text will be written to the <code>CHAN</code> at the end of a row when the 
+	table reaches 10,000 characters.&#160; Note that when passing <code>CHAN</code>, the 
+	calling application must call CDW000 at the start of a table using the 't'
+	<code>OPT$</code> and at the end of the table using the 'c' <code>OPT$</code>.&#160; 
+	When not passing <code>CHAN</code>, the application must call CDW00 at the end of the 
+	table using the 't' <code>OPT$</code>.</td>
+            </tr>
+        </table>
+        <p>The first character of <code>OPT$</code> indicates the tag to be created:</p>
+        <table>
+            <tr>
+                <td><code>t</code>
+                </td>
+                <td>table (either open or close depending on if <code>CHAN</code> is passed)</td>
+            </tr>
+            <tr>
+                <td><code>c</code>
+                </td>
+                <td>table close only, when <code>CHAN</code> is passed</td>
+            </tr>
+            <tr>
+                <td><code>r</code>
+                </td>
+                <td>table row</td>
+            </tr>
+            <tr>
+                <td><code>d</code>
+                </td>
+                <td>table data (cell)</td>
+            </tr>
+            <tr>
+                <td><code>h</code>
+                </td>
+                <td>table data (header cell)</td>
+            </tr>
+            <tr>
+                <td><code>f</code>
+                </td>
+                <td>font</td>
+            </tr>
+        </table>
+        <p>The following characters of <code>OPT$</code> indicate the attributes of the tag. The 
+table below lists which attributes are valid for each tag.</p>
+        <table>
+            <tr>
+                <th><a name="Attribute"></a>Attribute</th>
+                <th>Description</th>
+                <th style="text-align: center;">Table</th>
+                <th style="text-align: center;">Row</th>
+                <th style="text-align: center;">Data</th>
+                <th style="text-align: center;">Font</th>
+                <th>Note</th>
+            </tr>
+            <tr>
+                <td><code>b</code>
+                </td>
+                <td>bold</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>b means bold for table data,</td>
+            </tr>
+            <tr>
+                <td><code>bxx</code>
+                </td>
+                <td>border</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td>borders for the table tag
+    <p>Note, a b with no following number assumes a value of 1</p></td>
+            </tr>
+            <tr>
+                <td><code>u</code>
+                </td>
+                <td>underline</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>&#160;</td>
+            </tr>
+            <tr>
+                <td><code>i</code>
+                </td>
+                <td>italic</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>&#160;</td>
+            </tr>
+            <tr>
+                <td><code>l</code>
+                </td>
+                <td>left</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td rowspan="3">alignment of text within cells, or table within page</td>
+            </tr>
+            <tr>
+                <td><code>c</code>
+                </td>
+                <td>center</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+            </tr>
+            <tr>
+                <td><code>r</code>
+                </td>
+                <td>right</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+            </tr>
+            <tr>
+                <td><code>t</code>
+                </td>
+                <td>top</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td rowspan="3">vertical alignment of text within cells</td>
+            </tr>
+            <tr>
+                <td><code>m</code>
+                </td>
+                <td>middle</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+            </tr>
+            <tr>
+                <td><code>o</code>
+                </td>
+                <td>bottom</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+            </tr>
+            <tr>
+                <td><code>hx</code>
+                </td>
+                <td>heading</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>x can be 1 - 6</td>
+            </tr>
+            <tr>
+                <td><code>gxxxxxx</code>
+                </td>
+                <td>background color</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td rowspan="2">
+                    <MadCap:keyword term="RGB" />xxxxxx is the RGB pairs</td>
+            </tr>
+            <tr>
+                <td><code>fxxxxxx</code>
+                </td>
+                <td>text color</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+            </tr>
+            <tr>
+                <td><code>n</code>
+                </td>
+                <td>no wrap</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>prevents the text from wrapping to multiple rows except when <code>&lt;br&gt;</code> 
+	is used</td>
+            </tr>
+            <tr>
+                <td><code>wxxx</code>
+                </td>
+                <td>width</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>xxx can be pixels as in 50 or percentage as in 100%</td>
+            </tr>
+            <tr>
+                <td><code>sxx</code>
+                </td>
+                <td>columns to span</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>
+                    <MadCap:keyword term="Colspan" />s means colspan for table data</td>
+            </tr>
+            <tr>
+                <td>&#160;</td>
+                <td>cell spacing</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td>cell spacing for table tag
+    <p>Note that an s with no number following assumes a value of 1</p></td>
+            </tr>
+            <tr>
+                <td><code>pxx</code>
+                </td>
+                <td>cell padding</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td>p without a following number assumes a value of 3</td>
+            </tr>
+            <tr>
+                <td><code>zxx</code>
+                </td>
+                <td>font size</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td>xx can be 1 thru 6,<br />
+    +1 thru +6,<br />
+    -1 thru -6</td>
+            </tr>
+            <tr>
+                <td><code>a</code>
+                </td>
+                <td>Header cell</td>
+                <td align="center">N</td>
+                <td align="center">N</td>
+                <td align="center">Y</td>
+                <td align="center">N</td>
+                <td>uses &lt;th&gt; tag instead of &lt;td&gt; to inherit stylesheet attributes</td>
+            </tr>
+            <tr>
+                <td><code>blank</code>
+                </td>
+                <td>custom</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td align="center">Y</td>
+                <td>adds custom attributes that follow the blank to the tag, i.e., "d 
+	class='sale'" or "r style='</td>
+            </tr>
+        </table>
+        <p>Note that CDW000 can be used with and without cascading style sheets.&#160; 
+It is always preferred to use a style sheet as opposed to hard coding the 
+colors, font and border styles, etc. in the bbx program, as a single change to 
+the style sheet can be easily made without changing each bbx program.</p>
+        <p>In order to create tables with rows of alternating background text colors, CDW000 
+will assign <code>class='rowodd'</code> to odd numbered rows, and <code>class='roweven'</code> to even 
+numbered rows in the table.&#160; You can disable this by setting global <code>
+"WMS_CDW000_RC"</code> to null once before calling CDW000 for the first time, 
+i.e., <code>TMP$=STBL("WMS_CDW000_RC","")</code>.</p>
+        <p>As of this writing, some email clients including Google Mail and Hotmail do 
+not support <code>&lt;style&gt;</code> tags within the email.&#160; They do, however, 
+support inline styles as attributes within a tag, such as <code>&lt;td 
+style='background-color:#eeeeee'&gt;</code>.&#160; Set the first character of 
+global <code>WMS_CDW000</code> to <code>"D"</code> indicating to create a Dynamo 
+Standard format using inline styles.&#160; This will make the table larger, but 
+will be supported by all email clients and web browsers.</p>
+        <table border="1" id="table3">
+            <tr>
+                <th colspan="2" align="center">
+                    <p style="text-align: center;">Dynamo Standard Table</p>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <p style="text-align: center;">tag</p>
+                </th>
+                <th>style will include</th>
+            </tr>
+            <tr>
+                <td><code>&lt;table&gt;</code>
+                </td>
+                <td><code>border-collapse:collapse</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&lt;td&gt;</code>
+                </td>
+                <td><code>border:1px solid #c0c0c0;padding:1px 3px 1px 3px</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&lt;th&gt;</code>
+                </td>
+                <td><code>border:1px solid #c0c0c0;padding:1px 3px 1px 
+		3px;font-weight:normal;text-align:left</code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>&lt;tr&gt;</code>
+                </td>
+                <td>
+                    <table border="1" id="table4">
+                        <tr>
+                            <td>heading row</td>
+                            <td><code>background-color:#ffff99; vertical-align:top</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>odd numbered row</td>
+                            <td><code>background-color:#ffffff; vertical-align:top</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>even numbered row</td>
+                            <td><code>background-color:#eeeeee; vertical-align:top</code>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <p>Click
+<a target="_blank" href="http://www.w3schools.com/HTML/html_colornames.asp">here</a> 
+for a good example of popular html colors by color# and name that are supported 
+by all browsers.</p>
+        <table class="example">
+            <tr>
+                <td>Example of a sub-routine to create HTML tables for a bill to address, 
+	ship to address, and invoice heading fields.</td>
+            </tr>
+            <tr>
+                <td><code>1000 EXAMPLE:<br />
+	1010 ROW$="",TAB$="",HTML$=""<br />
+	1020 CALL "CDW000", ROW$, "db", "Bill To"<br />
+	1030 CALL "CDW000", ROW$, "db", "Ship To"<br />
+	1040 CALL "CDW000", TAB$, "rgccffcc", ROW$ </code>
+                    <p><code><br />
+	1050 CALL "CDW000", ROW$, "dt", "Excellware, 
+	Inc&lt;br&gt;PO Box 33114&lt;br&gt;North Royalton, OH&#160; 44133"<br />
+	1060 CALL "CDW000", ROW$, "dt", "Excellware, 
+	Inc&lt;br&gt;Attn: Len Krause&lt;br&gt;8050 Corporate Cir STE 1&lt;br&gt;North 
+	Royalton, OH&#160; 44134"<br />
+	1070 CALL "CDW000", TAB$, "r", ROW$<br /><br />
+	1080 CALL "CDW000", HTML$, "tbp", TAB$</code>
+                    </p>
+                    <p><code>1085 HTML$=HTML$+"&lt;br&gt;"</code>
+                    </p>
+                    <p><code>1090 CALL "CDW000", ROW$, "dbc", "Your PO#"<br />
+	1100 CALL "CDW000", ROW$, "dbc", "Invoice#"<br />
+	1110 CALL "CDW000", ROW$, "dbc", "Invoice Date"<br />
+	1120 CALL "CDW000", ROW$, "dbc", "Terms of Sale"<br />
+	1130 CALL "CDW000", ROW$, "dbc", "Due Date"<br />
+	1140 CALL "CDW000", TAB$, "rgccffcc", ROW$</code>
+                    </p>
+                    <p><code>1150 CALL "CDW000", ROW$, "dc", "8812345"<br />
+	1160 CALL "CDW000", ROW$, "dc", "7045"<br />
+	1170 CALL "CDW000", ROW$, "dc", "03/04/07"<br />
+	1180 CALL "CDW000", ROW$, "dc", "Net 20 Days"<br />
+	1190 CALL "CDW000", ROW$, "dc", "03/24/07"<br />
+	1200 CALL "CDW000", TAB$, "r", ROW$</code>
+                    </p>
+                    <p><code>1210 CALL "CDW000", HTML$, "tbp", TAB$<br />
+	1220 RETURN</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="3">
+            <tr style="background-color: #ccffcc;" class="rowodd">
+                <td><b>Bill To</b>
+                </td>
+                <td><b>Ship To</b>
+                </td>
+            </tr>
+            <tr class="roweven">
+                <td>Excellware, Inc<br />PO Box 33114<br />North Royalton, OH 44133</td>
+                <td>Excellware, Inc<br />Attn: Len Krause<br />8050 Corporate Cir STE 1<br />North Royalton, OH 44134</td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="3">
+            <tr style="background-color: #ccffcc;" class="rowodd">
+                <td><b>Your PO#</b>
+                </td>
+                <td><b>Invoice#</b>
+                </td>
+                <td><b>Invoice Date</b>
+                </td>
+                <td><b>Terms of Sale</b>
+                </td>
+                <td><b>Due Date</b>
+                </td>
+            </tr>
+            <tr class="roweven">
+                <td style="text-align: center;">8812345</td>
+                <td style="text-align: center;">7045</td>
+                <td style="text-align: center;">03/04/07</td>
+                <td style="text-align: center;">Net 20 Days</td>
+                <td style="text-align: center;">03/24/07</td>
+            </tr>
+        </table>
+        <p>Note that since this document uses a cascading style sheet, the wider top 
+border, border style and color were determined by the style sheet and not by 
+CDW000.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="example">
+            <tr>
+                <td>Email Example</td>
+            </tr>
+            <tr>
+                <td>To email the above data, with no operator intervention, you would 
+		open the printer using CDS084 and print HTML$ to the printer channel.&#160; 
+		If operator intervention is required, to enter 'cover page text' for 
+		example, then omit S084.MODE$="E".</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "Example emailing CDW000 output<br />
+		0110 BEGIN<br />
+		0120 CALL "CDS091",Y$<br />
+		0130 GOSUB EXAMPLE<br />
+		0140 CALL "CDS041","CDS084",S084$<br />
+		0150 LET S084.NAME$="MAIL",S084.EMAILTYPE$="H",S084.MODE$="E"<br />
+		0160 LET S084.TOEMAIL$="len@excellware.com"<br />
+		0170 LET S084.TONAME$="Len Krause"<br />
+		0180 LET S084.TOCOMP$="Excellware, Inc."<br />
+		0190 CALL "CDS084",ERR=EOJ,Y$,Y5$,U0,S084$,Y6,Y6$<br />
+		0200 PRINT (Y6.CH)HTML$<br />
+		0210 GOTO EOJ</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

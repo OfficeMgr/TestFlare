@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="1661" MadCap:lastWidth="973">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS030 - Call BBj Program</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS030</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Call BBj program</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS030">Last Revised: 
+		06/16/16</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used on systems running pro5 or VPro5 to call a BBj program.&#160; It would be used when a particular feature is required that is available in BBj but not pro5, such as consuming a SOAP based web service or accessing a third party SQL database.&#160; 
+	Note that the bbj program is run as a background task and is 
+	non-interactive.&#160; It cannot prompt the user for data entry nor display 
+	anything.</p>
+        <p>If you want to launch an interactive bbj application from pro5, use
+	<a href="CDS188.htm">CDS188</a> to launch the web browser to use java web 
+	start to start the bbj thin client application on the local workstation.&#160; 
+	See example in <a href="CDS188.htm">CDS188</a> documentation for launching 
+	the Basis Enterprise Manager from a pro5 application.</p>
+        <p>Note:&#160;Effective with versions dated 06/16/16 or later, CDS030 will establish the Dynamo Tools environment based on the Company Code passed. This means that the prefix will be set based on the Company Information Maintenance as opposed to using the current prefix of the calling program. If a custom prefix is required, it can be set within bbj program.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS030", ERR=XXXX, Y$, BBJPROG$, SECS, TOBBJ$, FROMBBJ$ {, 
+	DEBUG, DS$&#160;}</code>
+        </p>
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th nowrap="" style="text-align: center;">To/From</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>ERR=XXXX</code>
+                </td>
+                <td nowrap="" align="center">N/A</td>
+                <td>CDS030 will exit with an error if any error is encountered starting bbj, calling <code>
+		BBJPROG$</code>, or if <code>BBJPROG$</code> does not reply within <code>SECS</code> seconds.</td>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td align="center">To</td>
+                <td>Session Control Data</td>
+            </tr>
+            <tr>
+                <td><code>BBJPROG$</code>
+                </td>
+                <td align="center">To</td>
+                <td>The BBj program to be called.&#160; It must have an <code>ENTER</code> list of
+		<code>Y$,TOBBJ$,FROMBBJ$</code>.&#160;</td>
+            </tr>
+            <tr>
+                <td><code>SECS</code>
+                </td>
+                <td align="center">To</td>
+                <td>The number of seconds that CDS030 should wait for a response from 
+		<code>BBJPROG$</code> before exiting with an error.<table><tr><td align="center">zero</td><td>Use default time of 30 seconds</td></tr><tr><td align="center">positive number</td><td>Use seconds specified and prompt user to retry if bbj does not 
+			respond in that time</td></tr><tr><td align="center">negative number</td><td>Use absolute value of seconds specified, but exit with an error 
+			without prompting the user to retry if bbj does not respond.&#160; 
+			Useful for application where you need to check to see if bbj is 
+			running.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>TOBBJ$</code>
+                </td>
+                <td align="center">To</td>
+                <td>An optional templated data structure with parameters to be passed to 
+		<code>BBJPROG$</code>.</td>
+            </tr>
+            <tr>
+                <td><code>FROMBBJ$</code>
+                </td>
+                <td align="center">From</td>
+                <td>An optional templated data structure created by <code>BBJPROG$</code>, passed back to CDS030, and then back to the pro5 calling program. <code>FROMBBJ$</code>&#160;can also be a non-templated error message if CDS030 encountered an unanticipated error.</td>
+            </tr>
+            <tr>
+                <td><code>DEBUG</code>
+                </td>
+                <td align="center">To</td>
+                <td>Pass as 1 to display information that is sent to and received from bbj 
+		session.</td>
+            </tr>
+            <tr>
+                <td><code>DS$</code>
+                </td>
+                <td align="center">To</td>
+                <td>If not provided, CDS030 will launch a bbj interpreter on the same server that pro5 is begin run on. In order to launch a bbj interpreter on a different server, specify the host name in data server format with an optional port, i.e., <code>"/&lt;bbjserver&gt;"</code> or <code>"/&lt;bbds,port=1111&gt;".</code> &#160;This enables CDS030 to be called from a VPro5 session where the bbj interpreter instance runs on a linux or similar server.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example: CDS030 is used to obtain the BBj revision, port#, build date, and JVM Release in the Dynamo Menu I option.&#160; In this example, CDS030 will exit 
+		without prompt, if no response is received in 10 seconds.&#160; No parameters are passed to CDS182 in this example.</td>
+            </tr>
+            <tr>
+                <td>Calling program</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>1010 CALL "CDS030",ERR=NOBBJ,Y$,"CDS182",-10,"",S182$<br />1020 LET&#160;LEVEL$="",LEVEL$=FIELD(S182$,"LEVEL",ERR=1030); <span style="color: #ffff00;">REM&#160;"No template means error in S182$</span><br />1030 IF&#160;LEN(LEVEL$)=0 THEN&#160;CALL&#160;"CDS069",0,0,0,0,"Unable to obtain BBj info:&#160;"+S182$+"-"; <span style="color: #ffff00;">REM&#160;"S182$ will contain error msg if not templated</span></code><code><br /></code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Called program: CDS182</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "CDS182 - 11/09/09 Return bbj info<br />0110 SETESC 8000; SETERR 8000<br />0120 ENTER Y$,TOBBJ$,FROMBBJ$<br />0130 DIM FROMBBJ$:"LEVEL:C(11*),REVISION:C(7*),PORTNO:C(4*),BUILD:C(23*),JVMRELEASE:C(8*),JVMPATH:C(25*)"<br />0140 LET FROMBBJ.LEVEL$=SYS<br />0150 LET FROMBBJ.REVISION$=REV<br />0160 LET FROMBBJ.PORTNO$=INFO(0,2)<br />0170 LET FROMBBJ.BUILD$=INFO(0,4)<br />0180 LET FROMBBJ.JVMRELEASE$=INFO(1,1)<br />0190 LET FROMBBJ.JVMPATH$=System.getProperty("java.home",err=200)<br />0200 EXIT<br /><br />8000 REM "Call Error/Escape Routine<br />8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />8030 SETERR 0<br />8040 RETRY<br />8050 RETURN<br />8060 RETRY</code>
+                    <p><code><br />9000 EOJ:<br />9010 IF TCB(13) THEN EXIT<br />9020 RUN "CDS001"</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

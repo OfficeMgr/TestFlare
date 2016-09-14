@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="575" MadCap:lastWidth="903">
+    <head>
+        <style type="text/css">
+.none
+{
+	border: 1;
+}
+
+</style>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW461 - Enter City/State/Zip/Country</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW461</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Enter City/State/Zip Code/Country</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW461">Last Revised: 11/26/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is a T Type external routine that can be used to maintain City, State, Zip Code, and Country fields of an address.&#160; It is similar to SW460, but used when there is a separate COUNTRY field in the record in addition to the STATE field.&#160; Specify SW461 as the T type external program for the field with a base name of CITY in the Data Dictionary.&#160; The State, Zip, and Country fields should be omitted from the view, as SW461 will include this fields automatically.</p>
+        <p>The fields must have a base field name of CITY, STATE, ZIP, and COUNTRY, with an optional prefix that is the same for each field, i.e., SHIP2CITY, SHIP2STATE, SHIP2ZIP, SHIP2COUNTRY. Any prefix can be used.</p>
+        <p>This program will prompt the user for the Zip/Postal code first.</p>
+        <p>If a 5 digit or 10 digit US Zip code is entered, then the zip code will be checked against the Dynamo Zip Code database file DYSW01.&#160; If only one record exists in the Zip Code database, then the CITY and STATE fields will be assigned and displayed.&#160; If multiple records exist, the user will be presented a list of the cities that include this zip code, and can select the desired city from the list.&#160; If no matching records exist for the zip code entered, then the operator will be informed that the zip code is not valid.&#160; The Zip Code database file is included in the Dynamo ZIP package.&#160; Use the V menu option to see the date of this package.&#160; The package is distributed quarterly to all systems that participate in the Excellware Priority Support Plan.</p>
+        <p>If a Canadian postal code is entered, in the format ANA NAN, then SW461 will automatically assign the Canadian Province code to the STATE field, and CA to the COUNTRY field.</p>
+        <p>If no zip/postal code is entered, then the operator may enter a city, state, and country codes.</p>
+        <p>See <a href="SW460.htm">SW460</a> when the record includes a STATE field, but not a COUNTRY field.</p>
+        <p>Also see <a href="SW022.htm">SW022</a> for complete address validation and correction.</p>
+        <p><code>CALL "SW461", S039$, CM01$, X100$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3">SW461</th>
+            </tr>
+            <tr>
+                <th>Argument</th>
+                <th style="text-align: center;">In/Out</th>
+                <th>Usage</th>
+            </tr>
+            <tr>
+                <td><code>S039$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Contains the field information for the CITY.</td>
+            </tr>
+            <tr>
+                <td><code>CM01$</code>
+                </td>
+                <td align="center">In</td>
+                <td>Record structure that includes fields with a base name of CITY, STATE, ZIP, and COUNTRY with an optional prefix.&#160; A field named FOREIGN is optional, and if present will be set to an "F" for addresses that do not contain a valid US zip code.</td>
+            </tr>
+            <tr>
+                <td><code>X100$</code>
+                </td>
+                <td align="center">In/Out</td>
+                <td>The standard T type external routine control variable.&#160; Refer to the documentation and example program CDX100 for additional details.</td>
+            </tr>
+        </table>
+    </body>
+</html>

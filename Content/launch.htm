@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="896" MadCap:lastWidth="1072">
+    <head><title>Launching Dynamo Tools</title>
+        <meta http_equiv="Content-Language" content="en-us" />
+    </head>
+    <body>
+        <p class="SectionName">Scripts &amp;&#160;special files</p>
+        <table class="revision">
+            <col />
+            <col />
+            <tr>
+                <td>
+                    <p class="SectionTitle">Launching Dynamo Tools</p>
+                </td>
+                <td align="right">Last Revised: 01/14/16</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">On Linux, AIX, and other Unix operating systems, you can launch the Dynamo Tools menu immediately upon login using the files described below.</p>
+        <p><b>Pointer File</b>
+        </p>
+        <p>Dynamo Tools uses a pointer file located in a fixed location on all systems at <code>/usr/cdi/.config</code>. This file is required and contains the following environment variables. You may also add any additional variables that you may require. The environment variables should also be 'exported' so that they are available to sub shells.</p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th style="text-align: center;">Variable Name</th>
+                    <th>Description</th>
+                    <th>Examples</th>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSDIR</td>
+                    <td>Base Dynamo Tools directory<br />Can include data server syntax when Dynamo Tools are installed on another server</td>
+                    <td class="nowrapcode">/u/CDI<br />/&lt;bbds&gt;/u/CDI</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">BBXDIR</td>
+                    <td>Directory where either the pro5 or bbj executable is located</td>
+                    <td class="nowrapcode">/u/basis/pro5<br />/u/basis/bbj/bin</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">TMPDIR</td>
+                    <td>Optional folder indicating where temporary files should be stored</td>
+                    <td class="nowrapcode">/u/CDI/tmp</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSTMP</td>
+                    <td>Required when <code>SMSDIR</code>&#160;includes data server, used to indicate directory for temporary files on local server</td>
+                    <td class="nowrapcode">/u/CDI/tmp</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSBIN</td>
+                    <td>Required when <code>SMSDIR</code>&#160;includes data server, used to indicate location of profile and related launch files on local server</td>
+                    <td class="nowrapcode">/u/CDI/bin</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSPGM</td>
+                    <td>Optional full path to program name required when using the standard Dynamo Tools profile to run a menu or other launch program other than CDS000.</td>
+                    <td class="nowrapcode">/usr0/PROG/START.MENU</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>&#160;</p>
+        <p><b>Profile File</b>
+        </p>
+        <p>On Unix like systems, commands in the profile file in the user's home directory are executed upon login. When using the bash shell, the profile file is named <code>.bash_profile</code> and <code>.profile</code> for most other shells. Dynamo Tools provides file <code>$SMSDIR/bin/profile</code> which is typically copied to the <code>.profile</code> and <code>.bash_profile</code> files in each user's home directory, both when creating a new user and when updating Dynamo Tools.</p>
+        <p>The Profile File will verify that the necessary environment variables have been set, and the required directories exist, then will pass control to another command file based on the login ID.</p>
+        <p>In most cases, you can use the profile file provided by Dynamo Tools without modification. There are also options built in to theses files to include execution of custom commands required for your installation. You can also disable the use of the Dynamo Tools profile files by setting the "Use Dynamo Profiles" parameter to "N" in Dynamo Configuration Maintenance (SMC). This will bypass copying the Dynamo Tools profile file to the user's home directories during a Dynamo Tools update.</p>
+        <p>If you are not using the Dynamo Tools profile file, but are using the Dynamo Tools profuser file, then your profile file must include setting the following environment variables.</p>
+        <table>
+            <col />
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <th style="text-align: center;">Variable</th>
+                    <th>Usage</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSDIR</td>
+                    <td>Base Dynamo Tools directory</td>
+                    <td class="nowrapcode">/u/CDI</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSBIN</td>
+                    <td>Directory containing other launch files including profuser, id, termset, termset.txt</td>
+                    <td class="nowrapcode">/u/CDI/bin</td>
+                </tr>
+                <tr>
+                    <td class="nowrapcode" style="text-align: center;">SMSTMP</td>
+                    <td>Directory where temporary files are to be stored</td>
+                    <td class="nowrapcode">/u/CDI/tmp</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>&#160;</p>
+        <p><b>Custom Launch Routine</b>
+        </p>
+        <p>The Dynamo Tools Profile File includes logic to execute a command file with your custom commands and logic. This file must be named <code>.altsmsprofile</code>. This file can either set variables and return control to the calling routine, or execute custom startup logic, and not return control to the calling routine.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

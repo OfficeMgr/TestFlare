@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW055 - Convert Entered Date</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDW055" />CDW055</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Date" />
+                        <MadCap:keyword term="Convert Entered Date" />Convert Entered Date</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW055">Last Revised: 10/20/03</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is used to validate and format a date field entered on a web form.</p>Calling Format:
+
+  <p><code>CALL "CDW055", <a href="#DIN$">DIN$</a>, <a href="#D$[%20]">D$[ALL]</a></code></p><p>You do not need to pre-dimension D$[ ] before calling.</p><table><tr><th colspan="2"><MadCap:keyword term="CDS055" />CDS055</th></tr><tr><td><a name="DIN$"></a>DIN$</td><td>
+        the input date to be converted, as entered by the user.<br />
+        Can be in any of the following formats:
+
+        <p>Slashes not entered:</p><p>2 characters: MD, assumes current year</p><p>3 characters: MDD, assumes current year</p><p>4 characters: MMDD, assumes current year</p><p>5 characters: MDDYY</p><p>6 characters: MMDDYY</p><p>8 characters: MMDDYYYY</p><p>Slashes, back-slashes, hyphens, or periods entered as separators:</p><p>M/D, assumes current year</p><p>MM/D, assumes current year</p><p>MM/DD, assumes current year</p><p>when two slashes are entered, any format that includes 1 or 2 digit month, 1 or two digit day, 2 or 4 digit year in m/d/y format.</p></td></tr><tr><td>D$[ ]</td><td>
+        Each element in the <a name="D$[ ]"></a>D$[ ] string array will be set to the date formatted as listed below.
+
+        <table class="lev2"><tr><td>D$[0]</td><td>MM/DD/YY</td></tr><tr><td>D$[1]</td><td>YYMMDD</td></tr><tr><td>D$[2]</td><td>Julian (7 digits)</td></tr><tr><td>D$[3]</td><td>Day of week - long: Monday</td></tr><tr><td>D$[4]</td><td>Day of week - short: Mon</td></tr><tr><td>D$[5]</td><td>Display format - long: May 3, 1990</td></tr><tr><td>D$[6]</td><td>MAS90 format which is a modified YYMMDD where YY is coded to permit years beyond 2000. 1996 for example is represented by "?,"</td></tr><tr><td>D$[7]</td><td>Microsoft serial number date masked with ###### where 1 is 1/1/1900</td></tr><tr><td>D$[8]</td><td>Safeguard format of YYYYMMDD packed into 4 characters using PCK()</td></tr><tr><td>D$[9]</td><td>NCDS format of YYYYMMDD</td></tr></table></td></tr></table><p>If the date entered is invalid, then each element of the D$[] array will be null.</p></body>
+</html>

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>SW010 - Return String of Fields from a File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">SW010</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return List of Fields or Records from a File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=SW010">Last Revised: 11/16/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used to return a list of one or more fields, or the entire record, from multiple records in a keyed data file.&#160; The records to be processed can be based on the starting characters of a key, or by use of a WHERE clause, or all records in the file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "SW010", FILENAME$, KNO, KEYPFX$, FLDS$, LIST$ {, FS$, RS$, WHERE$ }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">SW010 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>FILENAME$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Data File Name.&#160; Can begin with XX as company code.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>KNO</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td><code>KNUM</code> to be used</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>KEYPFX$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Starting characters of key for records to be included.&#160; Pass as null to include all records in file.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>FLDS$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>List of pipe separated fields to be returned in <code>LIST$</code>, i.e., <code>"WHS|TYPE"</code>.&#160; If passed as null, entire record will be returned in <code>LIST$</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>LIST$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Concatenated list of fields and records.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>FS$ or REC$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>Field Separator to be inserted between fields of record.&#160; Pass as null to have no field separator.&#160; When <code>FLDS$</code> is passed as null, <code>FS$</code> is returned as templated <code>REC$</code> to facilitate stepping through the list of records.&#160; See example below.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>RS$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Record Separator to be inserted between records.&#160; Pass as null to have no record separator.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>WHERE$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Pass <code>WHERE$</code> to open <code>FILENAME$</code> using <code>SELECT</code> instead of <span style="font-family: d;"><code>OPEN</code></span>.&#160; Use <code>REC.</code> before each field name.&#160; <code>KNO</code> and <code>KEYPFX$</code> are ignored when <code>WHERE$</code> is not null.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example - Return a list of warehouse codes and types<br />
+The WHS$ and TYPE$ fields are both 1 character long in this example<br />
+LIST$ contains each WHS$+TYPE$</td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW010","DSCW12",0,"","WHS|TYPE",LIST$</code>
+                    <p><code>?LIST$</code>
+                    </p>
+                    <p><code>BSCSDDMSQQcR</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example - Same above with a pipe symbol record separator</td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW010","DSCW12",0,"","WHS|TYPE",LIST$,"","|"</code>
+                    <p><code>?LIST$</code>
+                    </p>
+                    <p><code>BS|CS|DD|MS|QQ|cR|</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example - Using <code>WHERE$</code> to only include records where TYPE$="S"</td>
+            </tr>
+            <tr>
+                <td><code>CALL "SW010","DSCW12",0,"","WHS|TYPE",LIST$,"","|","REC.TYPE$=""S"""</code>
+                    <p><code>?LIST$</code>
+                    </p>
+                    <p><code>BS|CS|MS|</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example - Return entire record<br />
+CDS279 is used to display the record</td>
+            </tr>
+            <tr>
+                <td><code>0110 BEGIN</code>
+                    <p><code>0120 CALL "SW010","DSCW12",0,"","",LIST$,REC$</code>
+                    </p>
+                    <p><code>0130 IF LEN(LIST$) THEN FOR I=1 TO LEN(LIST$) STEP LEN(REC$); LET REC$=LIST$(I,LEN(REC$)); CALL "CDS279",REC$; NEXT I</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

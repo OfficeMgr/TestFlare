@@ -1,0 +1,88 @@
+﻿
+<!DOCTYPE HTML SYSTEM><html>
+<head>
+<title>Dynaweb Chart</title>
+<link rel=stylesheet type='text/css' href='http://www.excellware.com/docs/tools/tools.css'>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>google.load('visualization', '1', {packages:['corechart']});</script>
+<script>
+google.setOnLoadCallback(drawChart1);
+function drawChart1() {
+var data1 = google.visualization.arrayToDataTable([
+['Category','YTD Sales'],
+['Sales',220000],['Service',103000],['Rental',78000]
+]);
+var options1 = {
+'title':'Revenue by Source',
+'width':'450px',
+'height':'200px',
+'chartArea':{width:275}
+}
+var chart1 = new google.visualization.PieChart(document.getElementById('chart_div1'));
+chart1.draw(data1, options1);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart2);
+function drawChart2() {
+var data2 = google.visualization.arrayToDataTable([
+['Month','Sales','Cost'],
+['Jan',1000,700],['Feb',1100,750],['Mar',800,550],['Apr',1000,710],['May',1200,840],['Jun',1150,800],['Jul',1350,900],['Aug',1200,810],['Sep',1000,750],['Oct',1200,870],['Nov',1250,900],['Dec',1400,1000]
+]);
+var options2 = {
+'title':'Sales & Cost by Month',
+'width':'450px',
+'height':'200px',
+'chartArea':{width:275}
+}
+var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+chart2.draw(data2, options2);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart3);
+function drawChart3() {
+var data3 = google.visualization.arrayToDataTable([
+['Quarter','Azalea','Daffodil','Forsythia'],
+['Jan-Mar',10,20,30],['Apr-Jun',20,30,40],['Jul-Sep',15,40,60],['Oct-Dec',15,25,45]
+]);
+var options3 = {
+'title':'Flower Sales by Quarter',
+'width':'450px',
+'height':'200px',
+'chartArea':{width:275}
+}
+var chart3 = new google.visualization.BarChart(document.getElementById('chart_div3'));
+chart3.draw(data3, options3);
+}
+</script>
+<script>
+google.setOnLoadCallback(drawChart4);
+function drawChart4() {
+var data4 = google.visualization.arrayToDataTable([
+['Quarter','Azalea','Daffodil','Forsythia'],
+['Jan-Mar',10,20,30],['Apr-Jun',20,30,40],['Jul-Sep',15,40,60],['Oct-Dec',15,25,45]
+]);
+var options4 = {
+'title':'Flower Sales by Quarter',
+'width':'450px',
+'height':'200px',
+'chartArea':{width:275}
+}
+var chart4 = new google.visualization.ColumnChart(document.getElementById('chart_div4'));
+chart4.draw(data4, options4);
+}
+</script>
+</head>
+<body>
+<div align='center'>
+<img src='http://www.excellware.com/docs/tools/images/banner.gif' alt='logo' style='margin-bottom:10px'>
+<p style='font-size:14pt;font-weight:bold'>Dynamo Tools by Excellware, Inc.</p>
+<p style='font-size:14pt;'>Example Multi-chart Page</p>
+<table class='plain'>
+<tr><td><div id='chart_div1' style='width:450px;height:200px;'></div></td><td><div id='chart_div2' style='width:450px;height:200px;'></div></td></tr>
+<tr><td><div id='chart_div3' style='width:450px;height:200px;'></div></td><td><div id='chart_div4' style='width:450px;height:200px;'></div></td></tr>
+</table>
+</body>
+</html>
+

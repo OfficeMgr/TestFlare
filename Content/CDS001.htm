@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="328" MadCap:lastWidth="941">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS001 - Menu Processor</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+        <meta name="Microsoft Border" content="none" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS001" />CDS001</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Menu Processor</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS001">Last Revised: 10/11/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This is the program to RUN at the end of any job to re-display the menu.&#160; It will:</p>
+        <ul>
+            <li>Call <a href="CDS094.htm">CDS094</a> to complete any printing started by 
+	the application if <code>Y6$</code> is set upon return to CDS001.</li>
+            <li>Logout and release any background task that returns to the menu processor</li>
+            <li>Pop any windows present</li>
+            <li>Re-position the main window if necessary</li>
+            <li>Reset the memory pages back to that specified in Dynamo Configuration Maintenance (SMC).</li>
+            <li>Reset the <code>!TERMS</code> global variable in case it was changed by the application</li>
+            <li>Change back to the <code><MadCap:keyword term="SMSDIR" />SMSDIR</code> directory if changed by the application</li>
+            <li>Restore CD/ to the prefix list if no longer present</li>
+            <li>Erase any temporary files defined by the application using 
+	<a href="CDS064.htm"><MadCap:keyword term="CDS064" />CDS064</a>, <a href="CDS034.htm"><MadCap:keyword term="CDS034" />CDS034</a>, or 
+	<a href="CDS095.htm"><MadCap:keyword term="CDS095" />CDS095</a>.</li>
+            <li>
+                <MadCap:keyword term="Create System Activity Log" />Create System Activity Log entry if enabled</li>
+            <li>Clear printer in use information</li>
+            <li>
+                <MadCap:keyword term="Hotkey" />Return to previous program when returning to menu after hotkey to application</li>
+        </ul>
+        <p>Refer to End User documentation for a description of the menu user options.</p>
+        <p>See the <a href="environment.htm">Dynamo Tools Environment</a> 
+	for a list of the variable set by the menu processor, and passed to each 
+	application.</p>
+    </body>
+</html>

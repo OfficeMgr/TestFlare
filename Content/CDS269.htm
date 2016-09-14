@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS269 - Copy Data Dictionary Records</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS269" />CDS269</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Copy DD01 Data Dictionary Records</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS269">Last Revised: 08/20/04</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="XXDD01" />This program is used to copy one or more XXDD01 data 
+	dictionary records from one company to another.&#160; Note that the DD01 
+	data dictionary files are no longer used, but this program currently remains 
+	available for backward compatibility.&#160; Refer to <a href="CDS181.htm">
+	CDS181</a> to copy the current Data Dictionary Records.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS269",ERR=XXXX,Y$,FROMCO$,TOCO$,FILENAME$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS269</th>
+            </tr>
+            <tr>
+                <td>XXXX</td>
+                <td>is the line to branch to if:<br />
+      the data dictionary file does not exist for FROMCO$ or TOCO$ or<br />
+      if FROMCO$ and TOCO$ are the same.</td>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />is the terminal control variable</td>
+            </tr>
+            <tr>
+                <td>FROMCO$</td>
+                <td>is the company code where the copy is from.&#160;<br />
+      You may specify XX for the current company in Y$.</td>
+            </tr>
+            <tr>
+                <td>TOCO$</td>
+                <td>is the company code where the copy is to.&#160;<br />
+      You may specify XX for the current company in Y$.</td>
+            </tr>
+            <tr>
+                <td>FILENAME$</td>
+                <td>is the starting characters of the files to be copied.&#160; All 
+		matching records will be copied.</td>
+            </tr>
+        </table>
+        <p>Note: If no matching records exist, no error will be generated.&#160;<br />
+  Existing data dictionary records are overwritten.</p>
+        <h5>Examples</h5>
+        <p><code>CALL "CDS269",Y$,"DY","XX","AP10&#160;&#160;&#160;&#160;&#160; "</code>
+        </p>
+        <p>will copy data dictionary for file AP10 from company DY to the current company.</p>
+        <p><code>CALL "CDS269",Y$,"DY","XX","AP"</code>
+        </p>
+        <p>will copy all data dictionary entries from company DY to the current company that begin with AP.</p>
+    </body>
+</html>

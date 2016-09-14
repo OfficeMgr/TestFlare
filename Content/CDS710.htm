@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="1223" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS710 - Display Dynastore Document</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS710</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Display Dynastore Document</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS710">
+    Last Revised: 08/26/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This application can be used to display a Dynastore document that can be displayed using a browser, such as pdf, txt, xls, or htm file. It can also return a URL suitable for displaying the document at a later time.</p>
+        <p>Note: CDS710 requires the Dynastore ID and Key be specified in Company 
+Information Maintenance (SMC).&#160; Contact Excellware to obtain this 
+information. </p>
+        <p>CDS710 also requires openssl version 1.0.0 or newer be installed on the server, in order to create a valid signature for the URL.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS710", ERR=XXXX, Y$, S710$</code>
+        </p>
+        <table>
+            <tr>
+                <td colspan="3" nowrap="nowrap" class="nowrapcode">CDS710 Arguments</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap" class="nowrapcode">Argument</td>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>
+                    <p xmlns="http://www.w3.org/1999/xhtml">Error branch taken if:</p>
+                    <ul>
+                        <li xmlns="http://www.w3.org/1999/xhtml">Dynastore ID or Key not specified in Company Information Maintenance</li>
+                        <li xmlns="http://www.w3.org/1999/xhtml">Bucket not specified</li>
+                        <li xmlns="http://www.w3.org/1999/xhtml">Bucket contains an upper case letter</li>
+                        <li xmlns="http://www.w3.org/1999/xhtml">Stored File Name not specified<br xmlns="http://www.w3.org/1999/xhtml" /></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S710$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>This templated string used to pass variables to, and receive the resultant URL from CDS710.    <table border="1" id="table6" xmlns="http://www.w3.org/1999/xhtml"><tr><th>Field</th><th>Contents</th></tr><tr><td><code>S710.CC$</code></td><td>Optional company code, required when you want to use an alternate companies Dynastore ID and Key. <code>Y.COMPCODE$</code> used if not provided.</td></tr><tr><td><code>S710.DISPLAY$</code></td><td>Pass as "N" to prevent CDS710 from displaying the document. <code>S710.URL$</code> will be set for use by the calling program.</td></tr><tr><td><code>S710.EXPIRES</code></td><td>Number of seconds before URL&#160;expires and can no longer be used. &#160;Defaults to one hour if not passed. Minimum value is 1 second and the maximum value is 604,800 seconds or 7 days.</td></tr><tr><td><code>S710.ENDPOINT$</code></td><td>Optional URL&#160;endpoint only needed to override the default URL endpoint for the region provided, i.e., mydocuments.mydomain.com.</td></tr><tr><td><code xmlns="http://www.w3.org/1999/xhtml">S710.REGION$</code></td><td>Optional AWS region when the document to be displayed is not located in the US&#160;Standard Region. &#160;Refer to the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region" target="_blank" xmlns="http://www.w3.org/1999/xhtml">AWS Region values</a> for a complete list of supported Regions.</td></tr><tr><td><code>S710.BUCKET$</code></td><td>The top level folder where the document is located. Note that AWS does not support direct document display if <code>BUCKET$</code> contains an upper case letter.</td></tr><tr><td><code>S710.STOREDFILE$</code></td><td>The file name including any folders below the bucket. &#160;Note that spaces in the file name are not supported.</td></tr><tr><td><code>S710.URL$</code></td><td>The URL&#160;composed by CDS710 which can be used to access the document.</td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code xmlns="http://www.w3.org/1999/xhtml">1230 CALL "CDS041","CDS710",S710$,"YY"</code><code xmlns="http://www.w3.org/1999/xhtml"><br />1240 LET S710.BUCKET$="excellware-cd-example"</code><code xmlns="http://www.w3.org/1999/xhtml"><br />1250 LET S710.STOREDFILE$="00000059.pdf"</code><code xmlns="http://www.w3.org/1999/xhtml"><br />1260 CALL "CDS710",Y$,S710$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <CODE xmlns="http://www.w3.org/1999/xhtml"><code xmlns="http://www.w3.org/1999/xhtml"><CODE>?S710.URL$<br />https://excellware-cd-example.s3.amazonaws.com/00000059.pdf<br />?X-Amz-Algorithm=AWS</CODE></code>
+                    </CODE>
+                    <CODE xmlns="http://www.w3.org/1999/xhtml">-HMAC-SHA256<br />&amp;X-Amz-Credential=AKIAI523HPHEAPKPYYCA%2F20150826%2Fus-east-1%2Fs3%Faws4_request<br />&amp;X-Amz-Date=20150827T020310Z<br />&amp;X-Amz-Expires=3600<br />&amp;X-Amz-SignedHeader=host<br />&amp;X-Amz-Signature=2836a46e437200a25f10ce7bb252698d13f72cf72ddaedc10ce91999aa94890</CODE>
+                    <p xmlns="http://www.w3.org/1999/xhtml">&#160;</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

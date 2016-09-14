@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS562 - Export Group Files</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS562</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Export Group Files</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS562">Last Revised: 04/26/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This application can be run from the Export Data selection on the FMS menu, or be called from another program, as would be done to export data on a regular basis.&#160; It will export Dynamo data to tab delimited files or to a import the data local mysql database.</p>
+        <p>The files and fields to be exported in the export group, must first be defined using Export Data on the FMS menu.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS562", Y$, DD51$, S562$</code>
+        </p>
+        <table id="table1">
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS562 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>DD51$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>The calling program should set <code>DD51.GROUP$</code> to the group name to be exported</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S562$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table2" class="lev2">
+                        <tr>
+                            <th>Field Name</th>
+                            <th align="center">Required/Optional</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>S562.ACTION$</code>
+                            </td>
+                            <td align="center">Required</td>
+                            <td>
+                                <table border="1" id="table3" class="lev3">
+                                    <tr>
+                                        <td>C</td>
+                                        <td>Export to multiple csv files.&#160; The export file name will be the company code followed by the data dictionary file name with a .csv extension, i.e., <code>MEIM01.csv</code>.&#160; The first row of the exported file contains the field names.&#160; The field names and fields are separated with tab characters.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Z</td>
+                                        <td>Compress multiple csv files into a single .zip file.&#160; The zip file name consists of the company code, the export group, and a .zip extension, i.e., <code>MEMINE.zip</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>I</td>
+                                        <td>Import data into a local mysql database.&#160; Note that this option requires the database name be specified using Company Information Maintenance (SMC).</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>S562.FOLDER$</code>
+                            </td>
+                            <td align="center">Optional</td>
+                            <td>CDS562 exports data to the <code>export/XX/</code> folder if <code>S562.FOLDER$</code> is blank, where <code>XX</code> is the two character company code.</td>
+                        </tr>
+                        <tr>
+                            <td><code>S562.EMAIL$</code>
+                            </td>
+                            <td align="center">Optional</td>
+                            <td>Set <code>S562.EMAIL$</code> to an email address when it is desired to have CDS562 email the export start and stop time for verification that the export completed normally.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example exporting 3 export groups of files.&#160; The first two export groups are imported into the local mysql database.&#160; The PWDG export group places individual csv files in the user's home directory for access using ftp.</td>
+            </tr>
+            <tr>
+                <td><code>0100 REM "MEU999 - 06/05/09 Nightly Data Export<br />
+0110 SETESC 8000; SETERR 8000<br />
+0120 CALL "CDS041","CDS562",S562$,"YY"<br />
+0130 LET S562.ACTION$="I",S562.EMAIL$="len@excellware.com"<br />
+0140 CALL "CDS041","XXDD51",DD51$<br />
+0150 LET DD51.GROUP$="MINE"; CALL "CDS562",Y$,DD51$,S562$<br />
+0160 LET DD51.GROUP$="SOPB"; CALL "CDS562",Y$,DD51$,S562$<br />
+0170 LET DD51.GROUP$="PWDG",S562.ACTION$="C",S562.FOLDER$="/u/people/patwalsh/"<br />
+0180 CALL "CDS562",Y$,DD51$,S562$<br />
+0190 GOTO EOJ</code>
+                </td>
+            </tr>
+            <tr>
+                <td>This export application is launched using cron and the Dynamo <a target="_blank" href="background.htm">background</a> script.&#160; Example crontab entry to export Mon-Fri at 11:00PM shown below.</td>
+            </tr>
+            <tr>
+                <td><code>0 23 * * 1-5 /bin/sh /u/CDI/bin/background MEU999 ME Nightly_Data_Export</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

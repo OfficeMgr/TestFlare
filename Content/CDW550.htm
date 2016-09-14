@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="3978" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDW550 - Generate Dynaweb Entry Form</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDW550</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Create HTML View</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDW550">Last Revised: 
+ 06/10/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This Dynaweb application is used to create a web page used to enter parameters at the start of a Dynaweb 
+	application, or to convert a templated view of a data structure to html.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDW550", Y$, REC$, W550$, HTML$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Session Control</td>
+            </tr>
+            <tr>
+                <td><code>REC$</code>
+                </td>
+                <td>The templated data structure containing the entry fields and default values.&#160; Typically created by calling CDS041 and setting any default values.&#160; See example.</td>
+            </tr>
+            <tr>
+                <td><code>W550$</code>
+                </td>
+                <td>
+        Parameters to CDW550
+
+        <table border="1" width="100%" id="table1" class="lev2"><tr><td><code>CC$</code></td><td>Company Code - Required only if not <code>Y.COMPCODE$</code></td></tr><tr><td><code>FILNAM$</code></td><td>The data dictionary file name describing <code>REC$.</code>&#160; 
+			Define the data structure using Data Dictionary Maintenance on FML 
+			menu.</td></tr><tr><td><code>VIEW$</code></td><td>The view used to describe the data fields to be displayed.&#160; 
+			Define the View using the Views Option within Data Dictionary Maintenance on FMS menu.</td></tr><tr><td><code>SUBMITPROG$</code></td><td>If passed as non-blank, then this program will be run when the Submit button is clicked.</td></tr><tr><td><code>SUBMITTEXT$</code></td><td>If passed as non-blank, then this text will be used in place of 
+ 'Submit' on the Submit button.</td></tr><tr><td><code>INCCANCEL$</code></td><td>If passed as "Y" then a link to <code>[CANCEL]</code> will be 
+ included at the bottom of the table in a footer row.</td></tr><tr><td><code>INCBACK$</code></td><td>If not "N" then a link to <code>[BACK]</code> will be included 
+ at the bottom of the table in a footer row.</td></tr><tr><td><code>INCHOME$</code></td><td>If not "N" then a link to <code>[HOME]</code> will be included 
+ at the bottom of the table in a footer row.</td></tr><tr><td><code>INCCLOSE$</code></td><td>If not "N" then a link to <code>[CLOSE]</code> will be included 
+ at the bottom of the table in a footer row.</td></tr><tr><td><code>INCPIPE$</code></td><td>If not "N" then the pipe symbol | will be included between the 
+ links between the elements on the footer row.</td></tr><tr><td><code>INCTABLE$</code></td><td>If not "N" then the <code>HTML$</code> output will include the table tags.&#160; Pass as N to enable when it is necessary for the application to add more rows to the table before submitting.</td></tr><tr><td><code>INCCONAME$</code></td><td>If not "N" then the <code>HTML$</code> output will include the current company name in the top row of the html table.&#160; 
+ You can override the default company name by setting <code>
+            Y.COMPNAME$</code> to the preferred value before calling CDW550.</td></tr><tr><td><code>SINGLEFOOTERROW$</code></td><td>If "Y" then the Submit Button will appear in the same row with 
+ the other footer buttons</td></tr><tr><td><code>FILEVERIFYMAX</code></td><td>Smaller files can have all records included in the web page where the user can select from a list.&#160; It is not practical to do this on larger files.&#160; Set this parameter to exclude each record in the html output if the number of records in the verify file exceed <code>FILEVERIFYMAX</code>.</td></tr><tr><td><code>DEBUG</code></td><td>Can be set to a non-blank character to include <code>
+			"&amp;debug="+W550.DEBUG$</code> in URL to facilitate debugging the 
+			entry page.&#160; Requires that <code>SUBMITPROG$</code> be 
+			non-blank.</td></tr><tr><td><code>ENTRIES</code></td><td>If set to 1 then <code>HTML$</code> will be built based on the 
+			actual entries made, which is useful when including the operator 
+			entries on the bottom of the report being run.&#160; Note that you 
+ can also display individual fields, as opposed to entering them on 
+ the form, by setting the Maintenance option to "Q" for Display Only 
+ using View Maintenance.</td></tr><tr><td><code>HEADING$</code></td><td>CDW550 can also be used to render any data structure in html.&#160; 
+			Pass <code>ENTRIES=1</code> and heading text in <code>HEADING$</code> 
+			to replace the default table heading of 'Entered Values'.</td></tr><tr><td><code>EXTRAFOOT$</code></td><td>Text here will be included in the footer row between <code>
+            [HOME]</code> and <code>[CLOSE]</code>.</td></tr><tr><td><code>EXTRAROW$</code></td><td>Text here will be added to the bottom of the table after the 
+ footer row, before the closing table tags.</td></tr></table></td>
+            </tr>
+            <tr>
+                <th nowrap="" colspan="2">Output Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>HTML$</code>
+                </td>
+                <td>The output string containing the html web page.</td>
+            </tr>
+        </table>
+        <p>Note that the Data Dictionary 'Description' field is used to populate the left column of the data page.</p>
+        <p>Set that the View Field 'Type' Column to any of the non-blank values to have a file verified field include the option to select '*** All Records'.&#160; The application should check for all asterisks to determine if the user selected the '*** All Records' option.</p>
+        <p>Set the Maintenance option to "Q" for Display Only using View Maintenance 
+ for any field to be displayed as opposed to entered on the form.</p>
+        <p>If a data element in the Data Dictionary is a "T" type externally called 
+	program, then CDW550 will call the external program with X100.ACTION$="H" 
+	for entries of the field, and X100.ACTION$="W" for display of the field.&#160; 
+	The "T" type program must include routines to handle these action codes.</p>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>Data Dictionary:</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW5501.jpg" alt="" width="648" height="409" />
+                </td>
+            </tr>
+            <tr>
+                <td>View:</td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDW5502.jpg" alt="" width="648" height="409" />
+                </td>
+            </tr>
+            <tr>
+                <td>Code:</td>
+            </tr>
+            <tr>
+                <td><code>1300 SETUP:<br />      1310 IF LEN(SC030$)=0 THEN GOSUB DEFAULTS; REM "Set default values only on new entry<br />      1320 CALL "CDS041","CDW550",W550$,"YY"; REM "Obtain W550$ template<br />      1330 LET W550.FILNAM$="SC030"<br />      1340 LET W550.VIEW$="A"<br />      1350 LET W550.SUBMITPROG$="WSC030"<br />      1370 CALL "CDW550",Y$,SC030$,W550$,HTML$<br />      1380 LET HTML$=HTML$+"[MSG]"; REM "Add error message from validation logic<br />      1390 GOTO EOJ<br /><br />      1400 DEFAULTS:<br />      1410 CALL "CDS041","SC030",SC030$,"YY"<br />      1420 LET SC030.FSCD$=" 1",SC030.TSCD$="100"<br />      1430 LET SC030.FDATE$=DATE(Y.JDATE-10),SC030.TDATE$=DATE(Y.JDATE-1)<br />      1440 LET SC030.FDEL$=DATE(Y.JDATE-10),SC030.TDEL$=DATE(Y.JDATE-1)<br />      1445 LET SC030.TVAL=999999<br />      1450 LET SC030.TSHORT=999<br />      1460 LET SC030.TOVER=999<br />      1470 LET SC030.TDAM=999<br />      1480 RETURN</code>
+                </td>
+            </tr>
+        </table>
+        <p>Web Page:</p>
+        <form name="form1" method="POST" action="">
+            <table align="center">
+                <tr class="rowodd">
+                    <td colspan="2" style="text-align: center;">Excellware, Inc.</td>
+                </tr>
+                <tr class="roweven">
+                    <td colspan="2" style="text-align: center;">Dynaweb Service Code Search</td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Include Service Codes from</td>
+                    <td>
+                        <select name="FSCD" style="font-family: 'Lucida Console', 'Arial Monospaced', monospace;">
+                            <option value="1" />&#160;&#160;1 Appointment Required
+<option value="20" />&#160;20 Equipment Breakdown
+<option value="21" />&#160;21 Late Linehaul Arrival
+<option value="22" />&#160;22 Rail Delay or Contract Carrier Delay
+<option value="23" />&#160;23 Accident
+<option value="24" />&#160;24 Mis-Routed
+<option value="25" />&#160;25 Cross Pro
+<option value="30" />&#160;30 Haz Mat (compatibility or paperwork)
+<option value="40" />&#160;40 No Freight
+<option value="41" />&#160;41 Damaged, Held Dock, After Delivery
+<option value="42" />&#160;42 Reconsigned, No Delivery Attempted
+<option value="43" />&#160;43 Overage
+<option value="44" />&#160;44 Short
+<option value="45" />&#160;45 Damaged
+<option value="46" />&#160;46 Held Doc, No Delivery, Cust to Pick up
+<option value="47" />&#160;47 No Freight Prior To Delivery
+<option value="50" />&#160;50 Cancelled Order or did not order, Dup
+<option value="51" />&#160;51 Freight Terms Incorrect
+<option value="52" />&#160;52 Invalid PO# or Missing PO#
+<option value="53" />&#160;53 No Packing List
+<option value="54" />&#160;54 No RTS Authorization
+<option value="55" />&#160;55 Shipped Too Soon
+<option value="56" />&#160;56 Delivery attempted-Returned-Cust Pick Up
+<option value="57" />&#160;57 No Way To Unload or Requires Special Eq
+<option value="58" />&#160;58 No Money Available&#160;&#160;at Delivery
+<option value="59" />&#160;59 Shipper Tendered Late
+<option value="60" />&#160;60 Receiving Closed-Returned
+<option value="61" />&#160;61 Driver-No time to make delivery or pulle
+<option value="62" />&#160;62 Reconsigned Returned
+<option value="63" />&#160;63 Excessive driver delay to deliver-Return
+<option value="64" />&#160;64 Cannot locate-Bad Address
+<option value="65" />&#160;65 Residential Not Home, Delivery Attempted
+<option value="66" />&#160;66 Subject to Inspection
+<option value="67" />&#160;67 Delay due to work stoppage beyond the
+<option value="70" />&#160;70 Protective Services
+<option value="80" />&#160;80 Held at Origin Due to Packing
+<option value="90" />&#160;90 Delayed due to Customs Inspection
+<option value="91" />&#160;91 Timely Customs Acceptance not provided
+<option value="92" />&#160;92 Inbound Ship't at Brokers/Importers Requ
+<option value="93" />&#160;93 Incomplete Paperwork-Missing Information
+<option value="100" />100 Weather Emergency or Disaster
+</select>
+                    </td>
+                </tr>
+                <tr class="roweven">
+                    <td>through</td>
+                    <td>
+                        <select name="TSCD" style="font-family: 'Lucida Console', 'Arial Monospaced', monospace;">
+                            <option value="1" />&#160;&#160;1 Appointment Required
+<option value="20" />&#160;20 Equipment Breakdown
+<option value="21" />&#160;21 Late Linehaul Arrival
+<option value="22" />&#160;22 Rail Delay or Contract Carrier Delay
+<option value="23" />&#160;23 Accident
+<option value="24" />&#160;24 Mis-Routed
+<option value="25" />&#160;25 Cross Pro
+<option value="30" />&#160;30 Haz Mat (compatibility or paperwork)
+<option value="40" />&#160;40 No Freight
+<option value="41" />&#160;41 Damaged, Held Dock, After Delivery
+<option value="42" />&#160;42 Reconsigned, No Delivery Attempted
+<option value="43" />&#160;43 Overage
+<option value="44" />&#160;44 Short
+<option value="45" />&#160;45 Damaged
+<option value="46" />&#160;46 Held Doc, No Delivery, Cust to Pick up
+<option value="47" />&#160;47 No Freight Prior To Delivery
+<option value="50" />&#160;50 Cancelled Order or did not order, Dup
+<option value="51" />&#160;51 Freight Terms Incorrect
+<option value="52" />&#160;52 Invalid PO# or Missing PO#
+<option value="53" />&#160;53 No Packing List
+<option value="54" />&#160;54 No RTS Authorization
+<option value="55" />&#160;55 Shipped Too Soon
+<option value="56" />&#160;56 Delivery attempted-Returned-Cust Pick Up
+<option value="57" />&#160;57 No Way To Unload or Requires Special Eq
+<option value="58" />&#160;58 No Money Available&#160;&#160;at Delivery
+<option value="59" />&#160;59 Shipper Tendered Late
+<option value="60" />&#160;60 Receiving Closed-Returned
+<option value="61" />&#160;61 Driver-No time to make delivery or pulle
+<option value="62" />&#160;62 Reconsigned Returned
+<option value="63" />&#160;63 Excessive driver delay to deliver-Return
+<option value="64" />&#160;64 Cannot locate-Bad Address
+<option value="65" />&#160;65 Residential Not Home, Delivery Attempted
+<option value="66" />&#160;66 Subject to Inspection
+<option value="67" />&#160;67 Delay due to work stoppage beyond the
+<option value="70" />&#160;70 Protective Services
+<option value="80" />&#160;80 Held at Origin Due to Packing
+<option value="90" />&#160;90 Delayed due to Customs Inspection
+<option value="91" />&#160;91 Timely Customs Acceptance not provided
+<option value="92" />&#160;92 Inbound Ship't at Brokers/Importers Requ
+<option value="93" />&#160;93 Incomplete Paperwork-Missing Information
+<option value="100" />100 Weather Emergency or Disaster
+</select>
+                    </td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Only Service Codes Entered by (Initials)</td>
+                    <td>
+                        <input type="text" name="WHO" size="5" maxlength="3" />
+                    </td>
+                </tr>
+                <tr class="roweven">
+                    <td>Include Service Codes Entered between</td>
+                    <td>
+                        <input type="text" name="FDATE" size="10" maxlength="8" value="02/16/08" />
+                        <img onclick="scwShow(scwID('FDATE'),event)" src="images/calendar.gif" width="22" height="17" />
+                        <input type="text" name="TDATE" size="10" maxlength="8" value="02/25/08" />
+                        <img onclick="scwShow(scwID('FDATE'),event)" src="images/calendar.gif" width="22" height="17" />
+                    </td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Include Deliveries Scheduled between</td>
+                    <td>
+                        <input type="text" name="FDEL" size="10" maxlength="8" value="02/16/08" />
+                        <img onclick="scwShow(scwID('FDATE'),event)" src="images/calendar.gif" width="22" height="17" />
+                        <input type="text" name="TDEL" size="10" maxlength="8" value="02/25/08" />
+                        <img onclick="scwShow(scwID('FDATE'),event)" src="images/calendar.gif" width="22" height="17" />
+                    </td>
+                </tr>
+                <tr class="roweven">
+                    <td>Origin Terminal</td>
+                    <td>
+                        <select name="OTERM" style="font-family: 'Lucida Console', 'Arial Monospaced', monospace;">
+                            <option value="***" />*** *** Include All ***
+<option value="ABL" />ABL ABILENE, TX
+<option value="ABQ" />ABQ ALBUQUERQUE, NM
+<option value="ADL" />ADL ADELANTO CA
+<option value="ALB" />ALB ALBANY, NY
+<option value="ALD" />ALD ALEXEANDRIA, LA
+<option value="ALE" />ALE ALEXANDRIA, IN
+<option value="AMA" />AMA AMARILLO, TX
+<option value="ATL" />ATL ATLANTA, GA
+<option value="BAL" />BAL BALTIMORE, MD
+<option value="BIR" />BIR BIRMINGHAM, AL
+<option value="BNO" />BNO BOSTON N MANCHESTER NH
+<option value="BOS" />BOS BOSTON, MA
+<option value="BRX" />BRX BRONX, NY
+<option value="BSD" />BSD BOISE, ID
+<option value="BTC" />BTC BATTLE CREEK, MI
+<option value="BUF" />BUF BUFFALO, NY
+<option value="CAL" />CAL CALGARY, AB
+<option value="CBB" />CBB CONLEY BREAK BULK TERM,GA
+<option value="CHI" />CHI CHICAGO, IL
+<option value="CMP" />CMP ST JOHN NB
+<option value="COL" />COL COLUMBIA, SC
+<option value="COR" />COR CORDELE, GA
+<option value="CTA" />CTA CHATTANOOGA, TN
+<option value="DCA" />DCA DECATUR, AL
+<option value="DDT" />DDT CLARK DETROIT DIESEL
+<option value="DEC" />DEC SPRINGFIELD, IL
+<option value="DET" />DET DETROIT, MI
+</select>
+                    </td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Destination Terminal</td>
+                    <td>
+                        <select name="DTERM" style="font-family: 'Lucida Console', 'Arial Monospaced', monospace;">
+                            <option value="ABL" />ABL ABILENE, TX
+<option value="ABQ" />ABQ ALBUQUERQUE, NM
+<option value="ADL" />ADL ADELANTO CA
+<option value="ALB" />ALB ALBANY, NY
+<option value="ALD" />ALD ALEXEANDRIA, LA
+<option value="ALE" />ALE ALEXANDRIA, IN
+<option value="AMA" />AMA AMARILLO, TX
+<option value="ATL" />ATL ATLANTA, GA
+<option value="BAL" />BAL BALTIMORE, MD
+<option value="BIR" />BIR BIRMINGHAM, AL
+<option value="BNO" />BNO BOSTON N MANCHESTER NH
+<option value="BOS" />BOS BOSTON, MA
+<option value="BRX" />BRX BRONX, NY
+<option value="BSD" />BSD BOISE, ID
+<option value="BTC" />BTC BATTLE CREEK, MI
+<option value="BUF" />BUF BUFFALO, NY
+<option value="CAL" />CAL CALGARY, AB
+<option value="CBB" />CBB CONLEY BREAK BULK TERM,GA
+<option value="CHI" />CHI CHICAGO, IL
+<option value="CMP" />CMP ST JOHN NB
+<option value="COL" />COL COLUMBIA, SC
+<option value="COR" />COR CORDELE, GA
+<option value="CTA" />CTA CHATTANOOGA, TN
+<option value="DCA" />DCA DECATUR, AL
+<option value="DDT" />DDT CLARK DETROIT DIESEL
+<option value="DEC" />DEC SPRINGFIELD, IL
+<option value="DET" />DET DETROIT, MI
+</select>
+                    </td>
+                </tr>
+                <tr class="roweven">
+                    <td>Estimated Value Range</td>
+                    <td>
+                        <input type="text" name="FVAL" size="8" maxlength="6" value="0" onBlur="numchk(FVAL,0,999999,0)" /> <input type="text" name="TVAL" size="8" maxlength="6" value="999999" onBlur="numchk(TVAL,0,999999,0)" /></td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Pieces Short Range</td>
+                    <td>
+                        <input type="text" name="FSHORT" size="5" maxlength="3" value="0" onBlur="numchk(FSHORT,0,999,0)" /> <input type="text" name="TSHORT" size="5" maxlength="3" value="999" onBlur="numchk(TSHORT,0,999,0)" /></td>
+                </tr>
+                <tr class="roweven">
+                    <td>Pieces Over Range</td>
+                    <td>
+                        <input type="text" name="FOVER" size="5" maxlength="3" value="0" onBlur="numchk(FOVER,0,999,0)" /> <input type="text" name="TOVER" size="5" maxlength="3" value="999" onBlur="numchk(TOVER,0,999,0)" /></td>
+                </tr>
+                <tr class="rowodd">
+                    <td>Pieces Damaged Range</td>
+                    <td>
+                        <input type="text" name="FDAM" size="5" maxlength="3" value="0" onBlur="numchk(FDAM,0,999,0)" /> <input type="text" name="TDAM" size="5" maxlength="3" value="999" onBlur="numchk(TDAM,0,999,0)" /></td>
+                </tr>
+                <tr class="roweven">
+                    <td colspan="2" style="text-align: center;">
+                        <input type="submit" value="Submit" class="submit" />
+                    </td>
+                </tr>
+                <tr class="rowodd">
+                    <td colspan="2" style="text-align: center;"><a href="#" onMouseOver="window.status='Back'; return true;">Back</a> | <a href="#" onMouseOver="window.status='Home'; return true;">Home</a></td>
+                </tr>
+            </table>
+        </form>
+        <table border="1" width="100%" id="table2" class="example">
+            <tr>
+                <td>Example using CDW550 to return HTML$ used to show operator entries 
+		at bottom of report.</td>
+            </tr>
+            <tr>
+                <td><code>2100 ENTHTML:<br />		2120 CALL "CDS041","CDW550",W550$,"YY"<br />		2130 LET W550.FILNAM$="SC030"<br />		2140 LET W550.VIEW$="A"<br />		2150 LET W550.ENTRIES=1<br />		2170 CALL "CDW550",Y$,SC030$,W550$,ENTHTML$<br />		2180 LET HTML$=HTML$+"&lt;br&gt;&lt;br&gt;"+ENTHTML$<br />		2190 RETURN</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Result<table align="center"><tr class="rowodd"><td colspan="2" style="text-align: center;">Entered Values</td></tr><tr class="roweven"><td>Include Service Codes from</td><td>43 Overage</td></tr><tr class="rowodd"><td>through</td><td>45 Damaged</td></tr><tr class="roweven"><td>Only Service Codes Entered by (Initials)</td><td>EDB</td></tr><tr class="rowodd"><td>Include Service Codes Entered between</td><td>05/29/08 06/07/08</td></tr><tr class="roweven"><td>Estimated Value Range</td><td>0 10000</td></tr><tr class="rowodd"><td>Pieces Range</td><td>0 999</td></tr></table></td>
+            </tr>
+        </table>
+    </body>
+</html>

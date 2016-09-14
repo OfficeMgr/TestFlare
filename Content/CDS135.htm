@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS135 - File Explorer</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS135</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">File Explorer</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS135">Last Revised: 
+		04/25/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine can be used to display files contained in a directory, and allow the user to select a file, and return the selected file name to the calling program.</p>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" id="table1">
+            <tr>
+                <th>Operator Selection Option</th>
+                <th>Result</th>
+            </tr>
+            <tr>
+                <td>.</td>
+                <td>Return current directory</td>
+            </tr>
+            <tr>
+                <td>..</td>
+                <td>Explore the parent directory</td>
+            </tr>
+            <tr>
+                <td>XXXX/</td>
+                <td>Explore the selected child directory (Directories are indicated using a trailing / in the file name)</td>
+            </tr>
+            <tr>
+                <td>any other file name</td>
+                <td>Return the selected file name to the calling program</td>
+            </tr>
+        </table>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS135", FILENAME$ {, TYPLST$, MAXNAME, PAR$ }</code>
+        </p>
+        <p>If user touches F4 and does not select a file, then <code>CTL</code> will be returned as 4 and
+	<code>FILENAME$</code> will be returned as null.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS135</th>
+            </tr>
+            <tr>
+                <td><code>FILENAME$</code>
+                </td>
+                <td>If passed as a file name including path, then the directory containing the file will be the directory being explored, and the file name passed will be initially highlighted.<br />
+      If passed as a directory, then the directory will be the directory being explored, and the "." entry will be highlighted.<br />
+      If passed as null, the Explorer will start in the current directory, typically /u/CDI.</td>
+            </tr>
+            <tr>
+                <td><code>TYPLST$</code>
+                </td>
+                <td>Optional list of 3 character file types which can be used to limit the display to files of selected type(s).&#160; For example if 
+		<code>TYPLST$</code> is passed as <code>"STR"</code> only String files will display in the Explorer list.&#160; If
+		<code>TYPLST$</code> is passed as <code>"MKYSKY"</code> then only MKY and SKY files will display.</td>
+            </tr>
+            <tr>
+                <td><code>MAXNAME</code>
+                </td>
+                <td>Optional maximum size of file name.&#160; CDS135 will exclude any file with a name (excluding path) longer than
+		<code>MAXNAME</code> characters.&#160; Zero means no limit.</td>
+            </tr>
+            <tr>
+                <td><code>S135$</code>
+                </td>
+                <td>Optional parameter<table border="1" id="table2" class="lev2"><tr><td><code>S135.DRYOPT$</code></td><td>Pass as <code>N</code> to limit the explorer to the current or 
+			passed directory.&#160; This excludes the . and .. and all 
+			sub-directories from the explorer list.<p>Pass as <code>S</code> to 
+			limit the explorer to the current or passed directory and any 
+			subdirectory.</p></td></tr><tr><td><code>S135.DRYSEL$</code></td><td>Pass as <code>N</code> to disable returning <code>FILENAME$</code> 
+			that is a directory.&#160; This excludes the directory itself (.) 
+			from the explorer list.</td></tr><tr><td><code>S135.DISPDATE$</code></td><td>Pass as <code>Y</code> to display the file date and time on the 
+			initial display</td></tr><tr><td><code>S135.DISPSIZE$</code></td><td>Pass as <code>Y</code> to display the file size on the initial 
+			display</td></tr><tr><td><code>S135.DISPOWNER$</code></td><td>Pass as <code>Y</code> to display the file owner on the initial 
+			display</td></tr><tr><td><code>S135.TYPE$</code></td><td>Pass as Y to display the file type on the initial display</td></tr><tr><td><code>S135.DESC$</code></td><td>Pass as Y to display the file description on the initial display</td></tr><tr><td><code>S135.SEQ$</code></td><td>Display Sequence.&#160; Most recent date &amp; time, and largest 
+			file sizes are displayed first.<table border="1" id="table3"><tr><td align="center"><code>F or blank</code></td><td>Filename</td></tr><tr><td align="center"><code>D</code></td><td>Date+Time+Filename</td></tr><tr><td align="center"><code>S</code></td><td>Size+Filename</td></tr><tr><td align="center"><code>f</code></td><td>Owner+Filename</td></tr><tr><td align="center"><code>d</code></td><td>Owner+Date+Time+Filename</td></tr><tr><td align="center"><code>s</code></td><td>Owner+Size+Filename</td></tr></table></td></tr><tr><td><code>S135.F5$</code></td><td>Pass as <code>Y</code> to enable the F5 option which permits the 
+			user to select the display fields and the sort sequence.</td></tr><tr><td><code>S135.OWNER$</code></td><td>Pass as <code>Y</code> to limit display to files owned by user 
+			logged in</td></tr></table></td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>FILENAME$</code>
+                </td>
+                <td>The file name selected relative to the home directory (not the active directory).</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>
+                    <p><code>4000 LET FILENAME$="TEMP"<br />
+		4010 CALL "CDS135",FILENAME$<br />
+		4020 PRINT FILENAME$</code>
+                    </p>
+                    <p><code>TEMP/SCN01</code>
+                    </p>
+                    <p>
+                        <img border="0" src="images/CDS1351.jpg" />
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

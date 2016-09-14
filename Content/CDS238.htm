@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="4897" MadCap:lastWidth="1057">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS238 - Convert JSON String to Templated String</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS238</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Convert JSON String to Templated String</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS238">Last Revised: 01/14/16</a>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p class="SectionDesc">This routine can be called to convert a JSON&#160;string to a templated string.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS238", ERR=XXXX, JSON$, S238$ {, RESULT$, MSG$, CNV }</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS238 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if an error occurs. This is typically due to an invalid or malformed JSON string or of the JSON&#160;string includes more that 32,767 keys. &#160;The <code>MSG$</code> argument below will provide additional details.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>JSON$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <p>JSON&#160;string. Must contain at least one <code>"{"</code>&#160;and one <code>"}"</code>. CDS238 will exit without error when <code>JSON$</code> is passed as a null or all blank string.</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S238.KEYS</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Indicates the repeat size of the <code>TYPE, KEY</code> and <code>VAL</code> fields below. &#160;Note that due to limitations within the bbx/bbj language, the maximum number of KEYS supported in 32,767. Should <code>JSON$</code>&#160;contain more than the maximum supported, then the user will be prompted with a message, and CDS238 will exit with an error.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">S238.TYPE$[]</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <p>Indicates the type of each json element. Since bbx does not have a Boolean and Null template types, <code>TYPE$</code> can be used to determine the original JSON element type.</p>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">S</td>
+                                <td>String</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">N</td>
+                                <td>Numeric</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">D</td>
+                                <td>Date - Note that JSON dates in SQL format YYYY-MM-DD, are converted to a julian date. JSON dates that contain "0001-01-01" or "0000-00-00" are considered an empty date and are returned as zero.</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">B</td>
+                                <td>Boolean (true/false)</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">E</td>
+                                <td>Empty (null)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S238.KEY$[]</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>The field name such as <code>quantity</code>. Nested fields will contain period as separator, i.e., <code>lineitem.quantity</code>. Repeating fields will include index inside square brackets, i.e., <code>price[1]</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">S238.VAL$[]</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <p>The value of each field. JSON&#160;dates in SQL&#160;format, i.e., YYYY-MM-DD or YYYY-MM-DDThh:mm:ss with optional fractional seconds, are returned as a bbx julian number. The time portion of any JSON&#160;date/time field is currently ignored. JSON dates <code>0001-01-01</code> and <code>0000-00-00</code> are considered empty dates and are passed back as zero.</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">RESULT$</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <p>Instead of iterating over the <code>S238.KEY</code> array to locate a desired field, you can access a field directly from <code>RESULT$</code>. <code>RESULT$</code> is populated when either:</p>
+                    <ol>
+                        <li>The JSON string has no nested objects <i>or</i> the JSON&#160;string contains a nested object named <code>"result"</code>, and the result object contains no nested objects.</li>
+                        <li> the JSON&#160;string or result object contains one or more repeating sections with each section containing the same fields, and</li>
+                        <li>the result object has no nested objects, and</li>
+                        <li>the JSON&#160;field name are all valid bbx field names, and</li>
+                        <li>the JSON&#160;field names are all within the maximum number of characters supported by bbx,</li>
+                    </ol>
+                    <p>then <code>RESULT$</code> is returned as a flattened version of <code>S238$</code>. This is typical when the JSON string was built from multiple rows from a database table, or other simple data structure.</p>
+                    <p>If these conditions are not met, then <code>RESULTS$</code> will be null and the calling application must use the other <code>S238</code> fields described above to process the JSON&#160;keys and values.</p>
+                    <p>When <code>RESULT$</code>&#160;is returned, it will also include a field named <code>RPT</code> which represents the repeat count, i.e., the highest index for each field in <code>RESULT$</code>.</p>
+                    <p>When the JSON&#160;string does not include a result object then <code>RESULT.RPT</code> will be zero.</p>
+                    <p>When the JSON string does include a result object, then each field in <code>RESULT$</code> will be a repeating field, with index values of 1 to <code>RESULT.RPT</code>. See example.<br /></p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">MSG$</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>Will contain any error message describing problem encountered while parsing the JSON string. This typically indicates that the JSON string is invalid. Refer to <a href="http://www.json.org/" target="_blank">www.json.org</a> for specification.<br /><table><col /><tbody><tr><td>No input provided (this option does a normal EXIT and not an EXIT 99)</td></tr><tr><td>Input not in JSON&#160;format</td></tr><tr><td>Premature end of JSON string</td></tr><tr><td>Missing or Unmatched braces</td></tr><tr><td>Unexpected data following final closing brace</td></tr><tr><td>Unexpected character</td></tr><tr><td>Quoted field name expected</td></tr><tr><td>Un-terminated field name</td></tr><tr><td>Field name contains blank</td></tr><tr><td>Null field name</td></tr><tr><td>Expected ':'</td></tr><tr><td>Invalid value</td></tr><tr><td><code>JSON$</code> includes more than 32,767 fields</td></tr></tbody></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode">CNV</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <p>This optional argument can be used to control the format of JSON boolean and null field types which do not have an equivalent bbx template field type.</p>
+                    <table>
+                        <col />
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <th style="text-align: center;">CNV&#160;Value</th>
+                                <th>Boolean</th>
+                                <th>Null</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">0 or not passed</td>
+                                <td><code>"true"</code> or <code>"false"</code> strings</td>
+                                <td><code>"null"</code> string</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">1 or non-zero</td>
+                                <td>0 or 1 numbers</td>
+                                <td>empty, zero length string</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Simple non-repeating Example</td>
+            </tr>
+            <tr>
+                <td><code>1470 DEF FNO$(TXT$)=JSON$+TXT$+$0D0A$<br />1480 LET JSON$="",JSON$=FNO$("{")<br />1490 LET JSON$=FNO$("  ""cardholder_name"": ""Excellware, Inc."", ")<br />1500 LET JSON$=FNO$("  ""cc_number"": ""5454545454545454"", ")<br />1510 LET JSON$=FNO$("  ""cc_expiry"": ""0915"",")<br />1520 LET JSON$=FNO$("  ""transaction_type"": ""00"",")<br />1530 LET JSON$=FNO$("  ""amount"": 168.67,")<br />1540 LET JSON$=FNO$("  ""address"" : {")<br />1550 LET JSON$=FNO$("    ""address1"": ""8050 Corporate Cir Ste 1"",")<br />1560 LET JSON$=FNO$("    ""city"": ""Cleveland"",")<br />1570 LET JSON$=FNO$("    ""zip"": ""44133"",")<br />1580 LET JSON$=FNO$("    ""phone_number"": ""4408666893"",")<br />1590 LET JSON$=FNO$("    ""phone_type"": ""W""")<br />1600 LET JSON$=FNO$(" } ")<br />1610 LET JSON$=FNO$("  ""date"":""2014-05-22""")<br />1620 LET JSON$=FNO$("  ""datetime"":""2013-12-31T20:11:15.000Z""")<br />1630 LET JSON$=FNO$("  ""shipdate"":""0001-01-01""")<br />1640 LET JSON$=FNO$("  ""price"" : [ 8.50 , 10.22,100]")<br />1650 LET JSON$=FNO$("  ""itemno"" : [ ""14HN"",""1800GSX"",""14Z2234"" ,
+    ""abc#5"" ] ")<br />1660 LET JSON$=FNO$("  ""desc"" : null ")<br />1670 LET JSON$=FNO$("  ""desc2"" : ""12\"" Pliers""")<br />1680 LET JSON$=FNO$("  ""symbols"" : ""+,-,*,/,\\,%""")<br />1690 LET JSON$=FNO$("}")<br />1700 CALL "CDS238",JSON$,S238$<br />1710 FOR I=1 TO S238.KEYS; PRINT S238.KEY$[I],"=",S238.VAL$[I]; NEXT I<br /></code>
+                </td>
+            </tr>
+            <tr>
+                <td><code>cardholder_name=Excellware, Inc.<br />cc_number=5454545454545454<br />cc_expiry=0915<br />transaction_type=00<br />amount=168.67<br />address.address1=8050 Corporate Cir Ste 1<br />address.city=Cleveland<br />address.zip=44133<br />address.phone_number=4408666893<br />address.phone_type=W<br />date=2456800<br />datetime=2456658<br />shipdate=<br />price[1]=8.50<br />price[2]=10.22<br />price[3]=100<br />itemno[1]=14HN<br />itemno[2]=1800GSX<br />itemno[3]=14Z2234<br />itemno[4]=abc#5<br />desc=<br />desc2=12" Pliers<br />symbols=+,-,*,/,\,%</code>
+                </td>
+            </tr>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Repeating Example</td>
+                </tr>
+                <tr>
+                    <td><code>JSON String:<br />{ "jsonrpc":2.0,<br style="mc-tag-and-class: code;" />"result":[{"name":"Fred","amount":1.11},{"name":"Bill","amount":2.22},{"name":"Jim","amount":3.33}],"id":"xxx-xxx-xxx-xxx"}</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>S238$</code>
+                        <p>
+                            <img src="Resources/Images/cds238-1.png" />
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>RESULT$</code>
+                        <br />
+                        <img src="Resources/Images/cds238-2.png" />
+                        <br />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;" class="example">
+            <col />
+            <tbody>
+                <tr>
+                    <td>Example with all field types</td>
+                </tr>
+                <tr>
+                    <td><code>{<br />	"StringExample": "Excellware, Inc.",<br />	"NumericExample": -1234.56,<br />	"BooleanExample": true,<br />	"BooleanExample2": false,<br />	"DateExample": "2014-07-01",<br />	"DateTimeExample": "2014-09-30T17:05:30",<br />	"NullExample": null,<br />	"NullObject": {}<br />}</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/cds238-11.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/cds238-10.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/cds238-12.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/cds238-13.png" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

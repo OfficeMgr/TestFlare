@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS468 - Telephone Number Entry With Extension and Type</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS468" />CDS468</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Telephone Number Entry With Extension" />Telephone Number Entry with Extension and Type</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS468">Last Revised: 09/08/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS468 is a T type external routine that is used to 
+	maintain a telephone number, a telephone extension, and a type of phone, 
+	when there are separate fields in the record for each of these components.</p>
+        <p><code>CALL "CDS468", S039$, REC$, X100$</code>
+        </p>
+        <p>The telephone number can be any size.&#160; 12 digits is normal for domestic phone numbers, and 21 for foreign numbers.&#160; See <a href="CDS268.htm">CDS268</a> for additional information about the telephone number.</p>
+        <p>The extension is optional, and only is entered if present within <code>REC$</code> using the same prefix as PHONE.&#160; For example, if 
+	<code>S039.FLDNAM$="TOPHONE"</code> then if <code>REC.TOEXT$</code> exists, the extension will be entered and stored there.</p>
+        <p>Like the extension, the type is stored in field <code>TYPE</code>, or <code>TOTYPE</code>, 
+	<code>FROMTYPE</code>, etc. The list of valid types is hard-coded into the program. Please notify Excellware if you require an additional phone type.</p>
+        <table>
+            <tr>
+                <th style="text-align: center;">Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="center">blank</td>
+                <td>none</td>
+            </tr>
+            <tr>
+                <td align="center">F</td>
+                <td>Fax</td>
+            </tr>
+            <tr>
+                <td align="center">A</td>
+                <td>Alt</td>
+            </tr>
+            <tr>
+                <td align="center">H</td>
+                <td>Home</td>
+            </tr>
+            <tr>
+                <td align="center">W</td>
+                <td>Work</td>
+            </tr>
+            <tr>
+                <td align="center">D</td>
+                <td>Day</td>
+            </tr>
+            <tr>
+                <td align="center">N</td>
+                <td>Nite</td>
+            </tr>
+            <tr>
+                <td align="center">C</td>
+                <td>Car</td>
+            </tr>
+            <tr>
+                <td align="center">S</td>
+                <td>Cell</td>
+            </tr>
+            <tr>
+                <td align="center">M</td>
+                <td>Modem</td>
+            </tr>
+            <tr>
+                <td align="center">P</td>
+                <td>Page</td>
+            </tr>
+        </table>
+        <p>The PHONE, EXT, and TYPE may be repeating fields. The EXT does not have to repeat as high as PHONE and TYPE.</p>
+        <p>Use <a href="CDS469.htm">CDS469</a> to convert the PHONE, EXT, and TYPE fields to display/report format.</p>
+        <p>The example below uses uses CDS469 for maintaining the four contact 
+	telephone numbers.&#160; The template fields in the record include:</p>
+        <p><code>PHONE[4]:C(21)<br />
+	TYPE[4]:C(1)<br />
+	EXT:C(5)</code>
+        </p>
+        <p>
+            <img border="0" src="images/CDS4684.jpg" />
+        </p>
+        <p>Refer to <a href="CDS039.htm">CDS039</a> for the structure of <code>S039$</code>.&#160;
+	<code>REC$</code> contains the record to be maintained.&#160; Refer to
+	<a href="CDX100.htm">CDX100</a> for the structure of <code>X100$</code>.</p>
+        <p>An example to maintain a contact telephone#, extension, and type, has 
+	template fields:</p>
+        <p><code>CONPHONE:C(21)<br />
+	CONTYPE:C(1)<br />
+	CONEXT:C(5)</code>
+        </p>
+    </body>
+</html>

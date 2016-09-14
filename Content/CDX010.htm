@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDX010 - Driver Skeleton Program</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDX010" />CDX010</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Driver Skeleton Program</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDX010">Last Revised: 12/04/01</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">The driver program performs the following functions:</p>
+        <ul>
+            <li>Displays sequence options available.</li>
+            <li>Has operator select sequence option (when more than one are available).</li>
+            <li>Has operator enter starting &amp; ending key ranges.</li>
+            <li>
+                <MadCap:keyword term="Driver File" />Opens sequence driver file to device 3.</li>
+            <li>Opens sequence master file to device 5 (if any).</li>
+        </ul>
+        <p>It is used most frequently by reports, but also by some entry and update programs to specify first, the sequence some file is to be processed in, and second, what portion of the file is to be processed.</p>
+        <p>The driver is invoked by the selector when the program type is specified as 'D' during selector maintenance.</p>
+        <p>The benefits of using the driver over coding this logic in each individual program are:</p>
+        <ul>
+            <li>
+                <p>The application program is simpler.</p>
+            </li>
+            <li>
+                <p>The operator always sees the options in the same format independent of who wrote the application program.</p>
+            </li>
+            <li>
+                <p>The application program does not have to be changed if additional auxillary sort files are added, or the structure of one of the sort files is changed.</p>
+            </li>
+        </ul>
+        <h5>Example</h5>
+        <p>The master file is XXUD10 Customers. It has two auxillary sort files, one where the key is alpha sort plus customer number. The other has a key of salesman number plus alpha sort plus customer number.</p>
+        <table>
+            <tr>
+                <td>Driver File:</td>
+                <td>XXUD10</td>
+                <td>XXUS10</td>
+                <td>XXUS30</td>
+            </tr>
+            <tr>
+                <td>Key Segments:</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1st Segment:</td>
+                <td>(1,6) Customer Number</td>
+                <td>
+                    <MadCap:keyword term="Alpha Sort Name" />(1,8) Alpha Sort Name</td>
+                <td>(1,3) Salesman Number</td>
+            </tr>
+            <tr>
+                <td>2nd Segment:</td>
+                <td>None</td>
+                <td>(9,6) Customer Number</td>
+                <td>(3,8) Alpha Sort Name</td>
+            </tr>
+            <tr>
+                <td>3rd Segment:</td>
+                <td>None</td>
+                <td>None</td>
+                <td>(11,6) Customer Number</td>
+            </tr>
+        </table>
+        <p>
+            <br />
+  The driver routine passes certain variables to the actual program:</p>
+        <table>
+            <tr>
+                <th colspan="2">cdx10</th>
+            </tr>
+            <tr>
+                <td>Y0</td>
+                <td>
+        the position in the key of the sequence driver (file 3) where the key to the master file (file 1). In the examples above, the customer number (the key to file 1), begins in position 1 when run in customer number sequence, position 9 when run in alphabetical sequence, and position 11 when run in salesman sequence.
+
+        <p>In the example above, Y0 indicates where in the key the customer number begins.</p><table class="lev2"><tr><td>Option 1:</td><td>1</td></tr><tr><td>Option 2:</td><td>9</td></tr><tr><td>Option 3:</td><td>11</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>Y1</td>
+                <td>
+        is only used when the sequence driver (file 3) is a multi-segment key, and the first segment is a required key to another file.
+
+        <p>In the example above, only in option 3, salesman sequence, does this occur. The salesman number is a required key to the salesman masterfile. Therefore, Y1 is set to 3, the length of the first segment, and file 5 will be opened to the salesman file, (sequence master).</p><p>In the example above, Y1 will be zero except in salesman sequence, in which case it will be 3. The salesman number is the first 3 characters of the key.</p></td>
+            </tr>
+            <tr>
+                <td>Y0$</td>
+                <td>the starting key of the sequence driver (file 3)</td>
+            </tr>
+            <tr>
+                <td>Y1$</td>
+                <td>
+        the ending key of the sequence driver (file 3)
+
+        <p>If the entire file is to be processed, then Y0$ will be null, and Y1$ will be $FF$.</p><p>In the example above, if Option 1, Customer number sequence is selected, then Y0$ might be "123456" as the starting customer number entered by the operator, and "555555"+$FF$ as the ending customer number.</p><p>If Option 2 was selected, then Y0$ might be "A " and Y1$ might be "CZZZZZZZ"+$FF$ if the operator wanted the program to process all records with an alpha sort name of A through C.</p><p>If Option 3 was selected, then Y0$ might be "100A " and Y1$ might be "100CZZZZZZZ"+$FF$ if the operator wanted the program to process all records of salesman 100 with an alpha sort name of A through C.</p></td>
+            </tr>
+            <tr>
+                <td>Y2$</td>
+                <td>
+        the file name of the sequence driver (6 character)
+
+        <p>In the example above,</p><table class="lev2"><tr><td>Option 1</td><td>XXUD10</td></tr><tr><td>Option 2</td><td>XXUS10</td></tr><tr><td>Option 3</td><td>XXUS30</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>Y3$</td>
+                <td>
+                    <MadCap:keyword term="Variable Data Dictionary" />&#160;is set to the valid warehouse codes on the system, as specified in variable W$ in the Variable Data Dictionary</td>
+            </tr>
+            <tr>
+                <td>Y4$</td>
+                <td>
+        the long description of the first segment of the sequence driver
+
+        <p>In the example above,</p><table class="lev2"><tr><td>Option 1</td><td>CUSTOMER NUMBER</td></tr><tr><td>Option 2</td><td>ALPHA SORT NAME</td></tr><tr><td>Option 3</td><td>SALESMAN NUMBER</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>Y9$</td>
+                <td>
+        the file name of the sequence master file, if any
+
+        <p>In the example above Y9$ would be null except in Option 3, in which case it would be XXUD30, the salesman file.</p></td>
+            </tr>
+        </table>
+        <p>
+            <br />
+  Program CDX010 contains the logic normally required for a report being run through the driver.</p>
+        <table>
+            <tr>
+                <td>Line #</td>
+                <td>Explanation</td>
+            </tr>
+            <tr>
+                <td>Line 200</td>
+                <td>performs a positional read to the sequence driver. In many cases, Y0$ will be shorter than the key of the sequence driver. But in the case where the sequence driver file is the same as the master file, the key may in fact be on file. For this reason, an EXTRACT is used so that the pointer of the file is not advanced. Processing continues at line 240 whether or not the key is on file</td>
+            </tr>
+            <tr>
+                <td>Line 240</td>
+                <td>obtains the next key in the sequence driver</td>
+            </tr>
+            <tr>
+                <td>Line 250</td>
+                <td>checks to see if the key is less than the highest key to be processed.<br />
+      If it is, then processing continues with line 210.</td>
+            </tr>
+            <tr>
+                <td>Line 210</td>
+                <td>advances the pointer of the sequence driver</td>
+            </tr>
+            <tr>
+                <td>Line 220</td>
+                <td>
+        checks to see if there is a control break. A control break occurs when the sequence master is a sort file, and there is a sequence master file. If there is a control break, then there may be subtotals to be printed (line 1010).
+
+        <p>Next the sequence masterfile is read to obtain descriptive information such as the salesman name, product class description, vendor name, etc. Frequently a new page is required at a control break, so the line counter variable L is set to 0. The descriptive information is usually centered on the third line of the report (line 1040).</p></td>
+            </tr>
+            <tr>
+                <td>Line 230</td>
+                <td>
+        transfers control to the subroutine to process the master file record. Most frequently, the first function the subroutine performs is to access the master file record.
+
+        <p>Note the FIND statement at line 1110. It should be a FIND not a READ since you are not concerned about the next sequential record in the masterfile. It should always have a DOM= just in case the sequence driver has more records than the master file.</p></td>
+            </tr>
+        </table>
+        <p>
+            <br />
+  The driver routine may be invoked in two ways.</p>
+        <ol>
+            <li>The first way is to have the selector run the driver, then the driver runs the application program. This method is accomplished by setting the program type to 'D' when using selector maintenance.</li>
+            <li>
+                <MadCap:keyword term="CDS003" />The second way to invoke the driver is to CALL it from the application program. This method is required when certain operator entries must be made prior to the driver entries. Refer to the text for CDS003 for the CALL variable list.</li>
+        </ol>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS070 - Obtain Number of Records / Bytes Used</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS070" />CDS070</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Records" />
+                        <MadCap:keyword term="Obtain Number" />Obtain Number of Records / Bytes Used</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS070">Last Revised: 05/16/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS070 is a called program whose purpose is to determine the number of records used in a file.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS070", Z, Z2, Z$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS070</th>
+            </tr>
+            <tr>
+                <td>Z</td>
+                <td>device number of file currently open</td>
+            </tr>
+            <tr>
+                <td>Z2</td>
+                <td>returned as the number of records in use</td>
+            </tr>
+            <tr>
+                <td>Z$</td>
+                <td>
+                    <MadCap:keyword term="File Data Dictionary" />name of the file from File Data Dictionary</td>
+            </tr>
+        </table>
+        <h5>Example</h5>
+        <p>Determine the number of records in the file DSUD10.</p>
+        <p><code>OPEN (1)"DSUD10" CALL "CDS070",1,Z9</code>
+        </p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

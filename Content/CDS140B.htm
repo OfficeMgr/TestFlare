@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head><title>Program Editor - Code Completion Examples</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">Program Editor</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Code Completion</p>
+                </td>
+                <td align="right">Last Revised: 04/29/09</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">One of the benefits of using the Dynamo Program Editor is the ability to paste content sensitive code to the program being edited.&#160; The code completion capabilities include:</p>
+        <ul>
+            <li>Template Field names</li>
+            <li>Line Labels</li>
+            <li>Called Routine Library Programs</li>
+            <li>Called Routine Argument Lists</li>
+            <li>Defined Functions</li>
+            <li>Standard ENTER list for the various standard called routines</li>
+            <li>Merge code from another program</li>
+            <li>Line Drawing/Graphics Characters</li>
+        </ul>
+        <p>Code completion is always initiated using the F2 function key.&#160; The particular type of Code Completion generated is dependent on the cursor position within the program statement being edited.</p>
+        <p>Template Field Names - Enter a templated field name such as AP12 followed by a period, then touch F2.&#160; You will be presented with a list of all the field names, array dimensions, and template field characteristics of each field in the template.&#160; Note that the fields presented will be those defined in the data dictionary, even if the data file does not yet contain these fields.&#160; This allows you to paste field names that are being added to a data file, during the development phase prior to actual file conversion.&#160; Note also that this capability exists for all template based data structures, not just those associated with a data file.</p>
+        <p>
+            <img border="0" src="images/CDS1402.jpg" />
+        </p>
+        <p>Use the cursor movement keys to select the field desired, then touch Enter to paste the field name, including $ for string fields into the program statement being edited.&#160; When a repeating field is pasted, the maximum repeat is pasted within square brackets, i.e., SALES[12].&#160; Note the F5 option can be used to sort the fields alphabetically by name or by position within the record.</p>
+        <p>For any statement that requires a line label argument, such as END=, DOM=, GOTO, GOSUB, ON GOSUB, etc. touching the F2 key presents a list of all line labels present within the&#160; program.&#160; 
+	Line labels can also be selected for each branch of an ON XXX GOTO, or an ON 
+	XXX GOSUB routine.&#160; Touch F2 after the comma to select a line label 
+	within an ON GOSUB or GOTO statement.</p>
+        <p>You can also list code starting at a line label.&#160; Type S or L 
+	followed by a blank, then F2.</p>
+        <p>You can also search for all places a line label is used.&#160; Type T\ 
+	followed by a blank, then F2.</p>
+        <p>
+            <img border="0" src="images/CDS1403.jpg" />
+        </p>
+        <p>The program editor also has access to libraries of all callable routines.&#160; For example, if you would like to call the routine that counts the number of records in a data file that have a particular key prefix, you would enter CALL "CD where CD is the company code for the particular library to be accessed, then touch F2.&#160; Next, you would enter some search phrase, or just touch enter to display the descriptions of all called routines in the library.&#160; In this example, I entered the word "records".&#160;</p>
+        <p>
+            <img border="0" src="images/CDS1404.jpg" />
+        </p>
+        <p>Highlight the desired called routine, and touch Enter, to paste the arguments used to call the selected program:</p>
+        <p>
+            <img border="0" src="images/CDS1405.jpg" />
+        </p>
+        <p>Now you can edit the pasted text to use the appropriate variables or constants to pass as arguments to the called routine.</p>
+        <p>Full documentation on each called routine can also be displayed.&#160; If using a PC running the Facetwin terminal emulator, then the complete documentation for the called routine will be displayed in the web browser.&#160; Other devices will display a text-only version of the documentation.&#160; Note that the text-only version is somewhat older and less up-to-date than the html version.&#160; Although not specifically part of code completion, the ability to display the documentation for a called routine is repeated here for your convenience.&#160; While editing the statement with one or more CALL's, touch the F3 help key to display the list of help topics.</p>
+        <p>
+            <img border="0" src="images/CDS1406.jpg" />
+        </p>
+        <p>Highlight and select the help topic desired, and the appropriate help text document, or complete documentation for the called routine will be displayed in a web browser window.</p>
+        <p>The next code completion capability is for defined functions.&#160; After entering FN touch F2 to display all local user defined functions.</p>
+        <p>
+            <img border="0" src="images/CDS1407.jpg" />
+        </p>
+        <p>Then select the desired function and touch Enter to past the function and its arguments into your code.</p>
+        <p>
+            <img border="0" src="images/CDS1408.jpg" />
+        </p>
+        <p>Dynamo Tools supports several different standard callable routines.&#160; If you are writing a new callable routine, the program editor can paste a sample ENTER list into your program.&#160; Touch F2 after the ENTER statement to obtain the list of options.</p>
+        <p>
+            <img border="0" src="images/CDS1409.jpg" />
+        </p>
+        <p>Highlight and Enter to select.</p>
+        <p>
+            <img border="0" src="images/CDS14010.jpg" />
+        </p>
+        <p>When merging code from another program, the F2 key can also be used to present a list of all eligible programs in a directory.&#160; After a merge command has been partially entered, touch the F2 key to display the programs in the directory specified.</p>
+        <p>
+            <img border="0" src="images/CDS14011.jpg" />
+        </p>
+        <p>&#160;</p>
+        <p>Then highlight the desired program and touch enter.</p>
+        <p>Line drawing characters can also be pasted.&#160; This saves time over using the hexadecimal equivalent.&#160; If none of the other content specific code completion options apply, then you will be presented with a list of the single and double line graphics characters for pasting.</p>
+        <p>
+            <img border="0" src="images/CDS14012.jpg" />
+        </p>
+        <p>Highlight the character desired, and press Enter to Paste.&#160; Note that the particular character displayed is dependent on the code-page used by the terminal, terminal emulator, or thin client being used.</p>
+    </body>
+</html>

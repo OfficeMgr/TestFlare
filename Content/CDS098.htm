@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS098 - Hotkey / Help Interface</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS098" />CDS098</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Hotkey" />
+                        <MadCap:keyword term="Help Interface" />Hotkey / Help Interface</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS098">Last Revised: 04/26/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="CDS069" />This called routine is used to perform help text, hotkey, 
+	and screen print processing. It is called by the input routine CDS069 and other programs where entries are made. It can also be called in console mode (with no arguments) to invoke the hotkey menu.&#160; 
+	The hotkey menu is normally invoked by touching F1 at any entry.&#160; The 
+	selections on the hotkey menu are specified by company using Menu Control 
+	Maintenance (SMC).</p>
+        <p>The hotkey menu automatically includes the 'Other Menu Selection' option, 
+	which is assigned Hotkey 'Y', and the 'Print Screen' option, which is 
+	assigned Hotkey 'Z'.&#160; If these hotkeys are already assigned to another 
+	application, then a lower case hotkey letter will be assigned to these 
+	functions.</p>
+        <p>If the selected application is a 'Run' type menu selection, then a new 
+	bbx instance is used so that there are no conflicts with open file channels, 
+	variables in memory, etc.</p>
+        <p>Applications started by Hotkey will have the hotkey level shown on 
+	'Display System Status' (SMS).</p>
+        <table border="1" id="table1" class="example">
+            <tr>
+                <td>Example:</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS098"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images/CDS0981.jpg" />
+                </td>
+            </tr>
+        </table>
+        <p>Technical Notes regarding the various help text applications.</p>
+        <table border="1" id="table3">
+            <tr>
+                <th colspan="2">Definitions</th>
+            </tr>
+            <tr>
+                <td>Site Name</td>
+                <td>Help Text Site Name as specified in prompt in CDS039 or
+			<a href="CDS069.htm#Help_Text">CDS069</a>.</td>
+            </tr>
+            <tr>
+                <td><code>textid</code>
+                </td>
+                <td>Text ID as specified in prompt in CDS039 or
+			<a href="CDS069.htm#Help_Text">CDS069</a>.</td>
+            </tr>
+            <tr>
+                <td><code>XXX</code>
+                </td>
+                <td>Upper case menu code (substitute <code>"_"</code> for any <code>
+			"/"</code>)</td>
+            </tr>
+            <tr>
+                <td><code>xxx</code>
+                </td>
+                <td>lower case menu code (substitute <code>"_"</code> for any <code>
+			"/"</code>)</td>
+            </tr>
+            <tr>
+                <td><code>appid</code>
+                </td>
+                <td>Lower case version of Application ID as specified in Menu 
+			Maintenance (SMU)</td>
+            </tr>
+            <tr>
+                <td>Menu Help Text Site Name</td>
+                <td>Specified in Menu Maintenance (SMU) with the menu heading 
+			fields.&#160; Note the Menu Help Text Site Name should actually be 
+			lower case xx for customer specific help, and not the two character 
+			company code.</td>
+            </tr>
+            <tr>
+                <td><code>ProgName</code>
+                </td>
+                <td>Program Name, case of help text must match case of program name</td>
+            </tr>
+            <tr>
+                <td><code>HelpTextURL</code>
+                </td>
+                <td>Help Text URL as specified in Dynamo Configuration Maintenance</td>
+            </tr>
+        </table>
+        <table border="1" id="table2">
+            <tr>
+                <th>Application</th>
+                <th>Usage</th>
+                <th>Dynamo Tools</th>
+                <th>Dynamo</th>
+                <th>Customer</th>
+            </tr>
+            <tr>
+                <td>Called Routine Help</td>
+                <td>Help Text for software developer accessible from Program Editor</td>
+                <td>Program located in <code>$SMSDIR/CD</code> folder<br />
+			www.excellware.com/docs/tools/ProgName.htm</td>
+                <td>Program located in <code>$SMSDIR/DY</code> folder<br />
+			www.excellware.com/docs/dynamo/tech/ProgName.htm</td>
+                <td>All other<br />
+			HelpTextURL/ProgName.htm</td>
+            </tr>
+            <tr>
+                <td>Item Specific Help</td>
+                <td>Help Text associated with specific data entry field.&#160; See
+			<a href="CDS069.htm#Help_Text">CDS069</a>.</td>
+                <td>Site Name = <code>dt</code><br />
+			www.excellware.com/docs/tools/help/textid</td>
+                <td>Site Name = <code>dy</code><br />
+			www.excellware.com/docs/dynamo/help/textid</td>
+                <td>Site Name = <code>xx</code><br />
+			HelpTextURL/help/textid</td>
+            </tr>
+            <tr>
+                <td rowspan="3">Program Specific Help</td>
+                <td>Help Text associated with application linked to menu <code>XXX</code></td>
+                <td>Menu Help Text Site Name = <code>dt</code><br />
+			www.excellware.com/docs/dynamo/XXX/appid.htm</td>
+                <td>Menu Help Text Site Name = <code>dy</code><br />
+			www.excellware.com/docs/dynamo/XXX/appid.htm</td>
+                <td>Menu Help Text Site Name = <code>xx</code><br />
+			HelpTextURL/XXX/appid.htm</td>
+            </tr>
+            <tr>
+                <td>for specific field being entered</td>
+                <td>Bookmark on page with field name<br />
+			Above URL plus #FIELDNAME</td>
+                <td>Bookmark on page with field name<br />
+			Above URL plus #FIELDNAME</td>
+                <td>Bookmark on page with field name<br />
+			Above URL plus #FIELDNAME</td>
+            </tr>
+            <tr>
+                <td>for applications not run from Dynamo menu</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>HelpTextURL/ProgName.htm</td>
+            </tr>
+            <tr>
+                <td>Menu Specific Help</td>
+                <td>Help Text associated with menu</td>
+                <td>Menu Help Text Site Name = <code>dt</code><br />
+			www.excellware.com/docs/dynamo/XXX/xxx.htm</td>
+                <td>Menu Help Text Site Name = <code>dy</code><br />
+			www.excellware.com/docs/dynamo/XXX/xxx.htm</td>
+                <td>Menu Help Text Site Name = <code>xx</code><br />
+			HelpTextURL/XXX/xxx.htm</td>
+            </tr>
+            <tr>
+                <td>Release Notes</td>
+                <td>Software update notes</td>
+                <td>Dynamo Tools Release Notes<br />
+			www.excellware.com/docs/dynamo/releasenotes.htm</td>
+                <td>Dynamo Release Notes<br />
+			www.excellware.com/docs/dynamo/releasenotes.htm</td>
+                <td>Application Release Notes<br />
+			HelpTextURL/help/releasenotes.htm</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

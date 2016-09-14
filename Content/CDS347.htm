@@ -1,0 +1,668 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="8" MadCap:lastHeight="4931" MadCap:lastWidth="1117">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS347 - Process First Data e4 Gateway Transaction</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS347</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Process First Data e4 Gateway Transaction</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS347">Last Revised: 09/06/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This called routine is used to process a transaction using the First Data Global Gateway e4.</p>
+        <p>CDS347 is compatible with linux/unix/aix servers that have curl, openssl, xxd, and base64 commands installed.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS347", ERR=XXXX, Y$, S347$</code>
+        </p>
+        <table>
+            <col style="width: 68px;" />
+            <col />
+            <col />
+            <col style="width: 51px;" />
+            <col />
+            <tr>
+                <th colspan="5" nowrap="nowrap">CDS347 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed<br />To/From</th>
+                <th nowrap="nowrap">Variable</th>
+                <th style="text-align: center;">Length</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center">&#160;</td>
+                <td>Takes error branch if any of the 4 gateway arguments are not provided, or if the curl, openssl, or base64 commands are not found in the PATH, or if there is no reply from the processor within 30 seconds.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center">N/A</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code xmlns="http://www.w3.org/1999/xhtml">S347$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.GATEWAYID$</code>
+                </td>
+                <td align="center">9</td>
+                <td>Gateway ID. These 4 Gateway arguments can be obtained by logging in to the e4 gateway <a href="https://globalgatewaye4.firstdata.com/" target="_blank" xmlns="http://www.w3.org/1999/xhtml">https://globalgatewaye4.firstdata.com/</a></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.GATEWAYPWD$</code>
+                </td>
+                <td align="center">8</td>
+                <td>Gateway Password</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.KEYID</code>
+                </td>
+                <td align="center">6</td>
+                <td>Gateway KeyID</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.HMACKEYID$</code>
+                </td>
+                <td align="center">32</td>
+                <td>Gateway HMAC Key</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.MODE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">P</td>
+                                <td>Production Mode, connects to live site</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">T</td>
+                                <td>Testing only, connects to demo site</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code xmlns="http://www.w3.org/1999/xhtml">.SONO$</code>
+                </td>
+                <td align="center">20</td>
+                <td>Pass sales order# or invoice# to populate the gateway's reference number field.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.PMTNO</code>
+                </td>
+                <td align="center">8</td>
+                <td>Pass payment number or other reference to populate the gateway's customer reference number field.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TRANSTYPE$</code>
+                </td>
+                <td align="center">2</td>
+                <td>
+                    <table border="1" id="table2">
+                        <col />
+                        <col />
+                        <tr>
+                            <td style="text-align: center;">00</td>
+                            <td>Purchase</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">01</td>
+                            <td>Pre-Authorization</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">02</td>
+                            <td>Pre-Authorization Completion</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">03</td>
+                            <td>Forced Post</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">04</td>
+                            <td>Refund</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">05</td>
+                            <td>Pre-Authorization Only</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">07</td>
+                            <td>PayPal Order</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">13</td>
+                            <td>Void</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">32</td>
+                            <td>Tagged Pre-Authorization Completion</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">33</td>
+                            <td>Tagged Void</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">34</td>
+                            <td>Tagged Refund</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">60</td>
+                            <td>Secure Storage</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">CR</td>
+                            <td>Information Retrieval</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.AMT</code>
+                </td>
+                <td align="center">9</td>
+                <td>Transaction Amount, always positive, even for refunds</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TRACKDATA$</code>
+                </td>
+                <td align="center">75</td>
+                <td>Track 1 data returned by card swipe device, excluding sentinels</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCNO$</code>
+                </td>
+                <td align="center">16</td>
+                <td>Pass the credit card#, digits only, when <code>TRACKDATA</code> is not provided.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EXPDATE$</code>
+                </td>
+                <td align="center">4</td>
+                <td>Pass the card expiration date in MMYY format, when when <code xmlns="http://www.w3.org/1999/xhtml">TRACKDATA$</code> is not provided.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code xmlns="http://www.w3.org/1999/xhtml">.CVD$</code>
+                </td>
+                <td align="center">3-4</td>
+                <td>Card Security Code.&#160; 4 numeric digits for American Express Cards, 3 numeric digits for all other cards.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CVDREASON</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">0</td>
+                                <td>Not Supported</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td>CVD Code Provided</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">2</td>
+                                <td>CVD&#160;Illegible</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">9</td>
+                                <td>Cardholder states data is not available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCNAME$</code>
+                </td>
+                <td align="center">30</td>
+                <td>Pass the card holder's name.&#160; Not required with <code>TRACKDATA$</code> is passed.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code xmlns="http://www.w3.org/1999/xhtml">.CCADDR1$</code>
+                </td>
+                <td align="center">30</td>
+                <td>Pass the card holder's 1st line of billing address.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCADDR2$</code>
+                </td>
+                <td align="center">28</td>
+                <td>Pass the card holder's 2nd line of billing address if necessary.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCCITY$</code>
+                </td>
+                <td align="center">20</td>
+                <td>Pass the card holder's billing city.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCSTATE$</code>
+                </td>
+                <td align="center">2</td>
+                <td>Pass the card holder's billing 2 character state code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCZIP$</code>
+                </td>
+                <td align="center">10</td>
+                <td>Pass the card holder's billing zip code.&#160; Used when address verification is desired.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.CCCOUNTRY$</code>
+                </td>
+                <td align="center">2</td>
+                <td>Pass the card holder's billing <a href="https://firstdata.zendesk.com/entries/23105182-ISO-Country-Codes" target="_blank" xmlns="http://www.w3.org/1999/xhtml">ISO&#160;country code</a> when not in U.S.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.PHONENO$</code>
+                </td>
+                <td align="center">14</td>
+                <td>Pass the card holder's telephone number.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.PHONEYTPE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">H</td>
+                                <td>Home</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">W</td>
+                                <td>Work</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">D</td>
+                                <td>Day</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">N</td>
+                                <td>Night</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.EMAIL$</code>
+                </td>
+                <td align="center">30</td>
+                <td>Pass the cardholder's email address</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.PROCESSEDBY$</code>
+                </td>
+                <td align="center">30</td>
+                <td>Displayed on the gateway web site</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.ORIGIN$</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <p xmlns="">Ecommerce indicator. Click <a href="https://firstdata.zendesk.com/entries/21531261-ecommerce-flag-values" target="_blank" xmlns="http://www.w3.org/1999/xhtml">here</a> for additional information.</p>
+                    <table xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td>MOTO Single Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">2</td>
+                                <td>MOTO Recurring Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">3</td>
+                                <td>MOTO Installment Payment</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">4</td>
+                                <td>MOTO Deffered Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">5</td>
+                                <td>Secure Electronic Commerce Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">6</td>
+                                <td>Non-Authenticated Electronic Commerce Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">7</td>
+                                <td>Channel Encrypted Transaction (SSL, no authentication)</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">8</td>
+                                <td>Non-Secure Electronic Commerce Transaction</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">I</td>
+                                <td>Interactive Voice Response (IVR) - PINless Debit only</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">R</td>
+                                <td>Retail - cardholder present</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td align="left" nowrap="nowrap"><code>.TPP_ID$</code>
+                </td>
+                <td align="center">6</td>
+                <td>Optional third party partner ID</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.AUTHNO$</code>
+                </td>
+                <td align="center">8</td>
+                <td>Returned by card processor during an authorization transaction. Pass back to card processor when charging or voiding original authorization.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td align="left" nowrap="nowrap"><code>.ORDERID$</code>
+                </td>
+                <td align="center">10</td>
+                <td>Unique transaction number generated by card processor.&#160; It should be stored in your application instead of the credit card#, expiration date, and security code.&#160; Pass to CDS347 when voiding a prior authorization or charge transaction, when charging a prior authorization transaction, or when refunding a prior charge.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code xmlns="http://www.w3.org/1999/xhtml">.IPADDR$</code>
+                </td>
+                <td align="center">15</td>
+                <td>Useful for logging and fraud investigation</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.ERROR</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table style="width: 100%;" xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">0</td>
+                                <td>No Error</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td>Gateway Error such as missing or invalid fields provided</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">7</td>
+                                <td>Missing credentials</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">8</td>
+                                <td>Missing command (openssl, base64, curl)</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">9</td>
+                                <td>No response from card processor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.APPROVED</code>
+                </td>
+                <td align="center">1</td>
+                <td>
+                    <table xmlns="http://www.w3.org/1999/xhtml">
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>Not approved</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Approved</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.GWRESPCODE$</code>
+                </td>
+                <td align="center">2</td>
+                <td>Gateway Response Code. Click <a href="https://firstdata.zendesk.com/entries/451980-ecommerce-response-codes-etg-codes" target="_blank" xmlns="http://www.w3.org/1999/xhtml">here</a> for more information.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.GWRESPMSG$</code>
+                </td>
+                <td align="center">50</td>
+                <td>Gateway Response Message based on the <code>GWRESPCODE</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.BANKRESPCODE$</code>
+                </td>
+                <td align="center">3</td>
+                <td>Bank Response Code.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.BANKRESPMSG$</code>
+                </td>
+                <td align="center">80</td>
+                <td>Bank Response Message. May provide details when a transaction is declined.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.SEQNO$</code>
+                </td>
+                <td align="center">50</td>
+                <td>A number assigned by the Gateway for tracking and audit purposes</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.RETRIEVALREFNO$</code>
+                </td>
+                <td align="center">13</td>
+                <td>The reference number returned with an AVS Result.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.CARDTYPE$</code>
+                </td>
+                <td align="center">12+</td>
+                <td>Possible values include "American Express", "Visa", "Mastercard", "Discover", "Diners Club", "JCB", "Gift Card", "PayPal".</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.CVDRESPCODE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Code describing the accuracy of the card security code
+<table border="1" style="border-collapse: collapse;"><tr><td style="text-align: center;">M</td><td>Match</td></tr><tr><td style="text-align: center;">N</td><td>No Match</td></tr><tr><td style="text-align: center;">P</td><td>Not Processed</td></tr><tr><td style="text-align: center;">S</td><td>Should have been present</td></tr><tr><td style="text-align: center;">U</td><td>Issuer unable to process request</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.AVSRESPCODE$</code>
+                </td>
+                <td align="center">1</td>
+                <td>Codes that indicate if the Address and Zip Code provided match the bank's records for the cardholder.&#160; <table style="width: 100%;" xmlns="http://www.w3.org/1999/xhtml"><col /><col /><tbody><tr><td style="text-align: center;">X</td><td>exact match, 9 digit zip</td></tr><tr><td style="text-align: center;">Y</td><td>exact match 5 digit zip</td></tr><tr><td style="text-align: center;">A</td><td>address match only</td></tr><tr><td style="text-align: center;">W</td><td>9 digit zip match only</td></tr><tr><td style="text-align: center;">Z</td><td>5 digit zip match only</td></tr><tr><td style="text-align: center;">N</td><td>no address or zip match</td></tr><tr><td style="text-align: center;">U</td><td>address unavailable</td></tr><tr><td style="text-align: center;">G</td><td>non-North American issuer, does not participate</td></tr><tr><td style="text-align: center;">R</td><td>issuer system unavailable</td></tr><tr><td style="text-align: center;">E</td><td>not a Mail\Phone order</td></tr><tr><td style="text-align: center;">S</td><td>service not supported</td></tr><tr><td style="text-align: center;">Q</td><td>Bill to address did not pass edit checks</td></tr><tr><td style="text-align: center;">D</td><td>International street address and postal code match</td></tr><tr><td style="text-align: center;">B</td><td>International street address match, postal code not verified due to incompatible formats</td></tr><tr><td style="text-align: center;">C</td><td>International street address and postal code not verified due to incompatible formats</td></tr><tr><td style="text-align: center;">P</td><td>International postal code match, street address not verified due to incompatible format</td></tr><tr><td style="text-align: center;">1</td><td>Cardholder name matches</td></tr><tr><td style="text-align: center;">2</td><td>Cardholder name, billing address, and postal code match</td></tr><tr><td style="text-align: center;">3</td><td>Cardholder name and billing postal code match</td></tr><tr><td style="text-align: center;">4</td><td>Cardholder name and billing address match</td></tr><tr><td style="text-align: center;">5</td><td>Cardholder name incorrect, billing address and postal code match</td></tr><tr><td style="text-align: center;">6</td><td>Cardholder name incorrect, billing postal code matches</td></tr><tr><td style="text-align: center;">7</td><td>Cardholder name incorrect, billing address matches</td></tr><tr><td style="text-align: center;">8</td><td>Cardholder name, billing address, and postal code are all incorrect</td></tr></tbody></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.AVSRESPMSG$</code>
+                </td>
+                <td align="center">&#160;</td>
+                <td>Description of <code>AVSREPSCODE$</code> code</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.JSONTO$</code>
+                </td>
+                <td align="center">100+</td>
+                <td>JSON formatted text sent to the card processor. Useful only for debugging purposes.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">&#160;</td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td align="left" nowrap="nowrap"><code>.JSONFROM$</code>
+                </td>
+                <td align="center">100+</td>
+                <td>JSON formatted text received from the card processor. Useful only for debugging purposes.<br xmlns="http://www.w3.org/1999/xhtml" /></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td class="code">
+                    <p>1700 TEST:</p>
+                    <p>1710 BEGIN</p>
+                    <p>1720 CALL "CDS091",Y$</p>
+                    <p>1730 CALL "CDS041","CDS347",S347$,"YY"</p>
+                    <p>1740 LET&#160;S347.GATEWAYID$="AF8898-01",S347.GATEWAYPWD$="xxxxxxxx"</p>
+                    <p>1750 LET&#160;S347.KEYID=123564,S347.HMACKEY$="12345678901234567890123456789012"</p>
+                    <p>1760 LET S347.MODE$="T"; REM "Testing site</p>
+                    <p>1770 LET S347.SONO$="987654"</p>
+                    <p>1780 LET S347.PMTNO=888111</p>
+                    <p>1790 LET S347.TRANSTYPE$="00"; REM "Purchase</p>
+                    <p>1800 LET S347.AMT=1.23</p>
+                    <p>1810 LET S347.CCNO$="4111111111111111"</p>
+                    <p>1820 LET S347.EXPDATE$="0515"</p>
+                    <p>1830 LET S347.CVD$="123"</p>
+                    <p>1840 LET S347.CCNAME$="Test Visa Card"</p>
+                    <p>1850 LET S347.CCADDR1$="8050 Corporate Cir Ste 1"</p>
+                    <p>1860 LET S347.CCCITY$="North Royalton"</p>
+                    <p>1870 LET S347.CCSTATE$="OH"</p>
+                    <p>1880 LET S347.CCZIP$="44133"</p>
+                    <p>1890 LET S347.PHONENO$="4408666893"</p>
+                    <p>1900 LET S347.PHONETYPE$="W"</p>
+                    <p>1910 LET S347.PROCESSEDBY$="Len Krause"</p>
+                    <p>1920 CALL "CDS347",Y$,S347$</p>
+                    <p>1930 CALL "CDS279",S347$</p>
+                    <p>1940 PRINT 'CS',S347.JSONFROM$</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="code">Results</td>
+            </tr>
+            <tr>
+                <td class="code">
+                    <img src="Resources/Images/cds347-1.png" xmlns="http://www.w3.org/1999/xhtml" />
+                    <p xmlns="">
+                        <img src="Resources/Images/cds347-2.png" xmlns="http://www.w3.org/1999/xhtml" />
+                    </p>
+                    <p xmlns="">
+                        <img src="Resources/Images/cds347-3.png" xmlns="http://www.w3.org/1999/xhtml" />
+                    </p>
+                    <p xmlns="">&#160;</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

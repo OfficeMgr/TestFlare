@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS359 - Format N type numeric</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS359</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Format N type numeric</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS359">Last Revised: 11/20/07</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine should be used to format floating decimal (N type) numeric variables for display or printing.</p>
+        <p>This routine converts a numeric variable to a string of size specified.&#160; It will include commas when possible and display with a thousands indicator (M) when required.&#160; The last character of OUT$ will contain a "*" character when the numeric value does not fit it the size specified.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS359", SIZE, VAL, OUT$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>SIZE</code>
+                </td>
+                <td>The number of characters that OUT$ should contain.&#160; Can be passed with a fractional value such as 9.4 in which case the fractional part is ignored.&#160; 
+		Can also be passed as a negative value which causes OUT$ to be all blank 
+		instead of containing a zero when VAL is zero.</td>
+            </tr>
+            <tr>
+                <td><code>VAL</code>
+                </td>
+                <td>The value of the numeric to be formatted</td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>OUT$</code>
+                </td>
+                <td>The right justified string representation of VAL.</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td><code>&gt;CALL "CDS359",8,123456,OUT$<br />
+        &gt;?OUT$<br />
+        &#160;123,456<br />
+        &#160;</code>
+                    <p><code>&gt;CALL "CDS359",8,-123456,OUT$<br />
+        &gt;?OUT$<br />
+        -123,456<br />
+        &#160;</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",8,123456.5,OUT$<br />
+        &gt;?OUT$<br />
+        123456.5<br />
+        &#160;</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",9.4,123456.5,OUT$<br />
+        &gt;?OUT$<br />
+        123,456.5<br />
+        &#160;</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",9,-123456.5,OUT$<br />
+        &gt;?OUT$<br />
+        -123456.5<br />
+        &#160;</code>
+                    </p>
+                    <p><code>&gt;call "CDS359",8,123456000,out$<br />
+        &gt;?out$<br />
+        123,456M</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",8,-123456.5,OUT$<br />
+        &gt;?OUT$<br />
+        -123456*</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",4,0,OUT$<br />
+		&gt;?OUT$<br />
+&#160;&#160; 0</code>
+                    </p>
+                    <p><code>&gt;CALL "CDS359",-4,0,OUT$<br />
+		&gt;?OUT$<br />
+&#160;&#160;&#160; <br />
+&#160;</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="10" MadCap:lastHeight="5616" MadCap:lastWidth="949">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS700 - Dynastore Operations</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS700</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Dynastore Operations</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS700">
+    Last Revised: 06/14/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">Dynastore is a cloud based secure storage system accessible over 
+the internet.&#160; This routine performs Dynastore Operations including 
+storing, retrieving, and deleting files, creating and deleting buckets 
+(folders), and obtaining file information and directory listings.</p>
+        <p>Note: CDS700 requires the Dynastore ID and Key be specified in Company 
+Information Maintenance (SMC).&#160; Contact Excellware to obtain this 
+information.</p>
+        <p>Note: You can call CDS700 from a background task to upload files to Dynastore 
+in the background while the user can continue normal operations without waiting 
+for the upload to complete.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS700", ERR=XXXX, Y$, S700$, S236$, XML$</code>
+        </p>
+        <table>
+            <tr>
+                <td colspan="3" nowrap="nowrap" class="nowrapcode">CDS700 Arguments</td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap" class="nowrapcode">Argument</td>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S700$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To/From</td>
+                <td>
+                    <table border="1" id="table1">
+                        <tr>
+                            <td class="nowrapcode"><code>.ACTION$</code>
+                            </td>
+                            <td>
+                                <table border="1" id="table2">
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">G</td>
+                                        <td>Get File (from Dynastore)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">I</td>
+                                        <td>Get File Info</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">P</td>
+                                        <td>Put File (save in Dynastore) Replaces existing copy</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">D</td>
+                                        <td>Delete Dynastore File</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">L</td>
+                                        <td>Get Directory Listing</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">B</td>
+                                        <td>Create Bucket (folder)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="nowrapcode" style="text-align: center;">d</td>
+                                        <td>Delete Bucket (folder)</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.DISP$</code>
+                            </td>
+                            <td>
+                                <table border="1" id="table3">
+                                    <tr>
+                                        <td style="text-align: center;" class="nowrapcode">P</td>
+                                        <td>Show File transfer progress</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center;" class="nowrapcode">D</td>
+                                        <td>Show File transfer progress and prompt user when complete</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center;" class="nowrapcode">&#160;</td>
+                                        <td>Do not show</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.DATE</code>
+                            </td>
+                            <td>When <code xmlns="http://www.w3.org/1999/xhtml">ACTION$="I"</code>, this field will contain the date in 
+ julian format the file was saved in Dynastore.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.TIME</code>
+                            </td>
+                            <td>When <code xmlns="http://www.w3.org/1999/xhtml">ACTION$="I"</code>, this filed will contain the GMT time 
+ in <code xmlns="http://www.w3.org/1999/xhtml">TIM</code> format the file was saved in Dynastore.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.SIZE</code>
+                            </td>
+                            <td>When <code>ACTION$="I"</code>, this field will contain the file 
+ size.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.BUCKET$</code>
+                            </td>
+                            <td>The bucket name/file folder.&#160; Cannot include any blank 
+ characters.&#160; Do not include trailing slash.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.LOCALFILE$</code>
+                            </td>
+                            <td>The name of the local file including any folders.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.STOREDFILE$</code>
+                            </td>
+                            <td>The Dynastore file name.&#160; Cannot include any blanks or&#160; / 
+ characters.</td>
+                        </tr>
+                        <tr>
+                            <td class="nowrapcode"><code>.RESULT$</code>
+                            </td>
+                            <td>A one word result of the action.
+        <table border="1" id="table5"><tr><th style="text-align: center;">Action Code</th><th>Result</th><th>Note</th></tr><tr><td align="center" class="nowrapcode">G</td><td>OK</td><td>File copied, file size confirmed</td></tr><tr><td align="center" class="nowrapcode">G</td><td>NOF</td><td>Not found in Dynastore (Not on File)</td></tr><tr><td align="center" class="nowrapcode">G</td><td>SizeProblem</td><td>File Transfer Incomplete</td></tr><tr><td align="center" class="nowrapcode">G</td><td>NotTransferred</td><td>Unable to transfer file</td></tr><tr><td align="center" class="nowrapcode">I</td><td>NoInfo</td><td>Unable to obtain stored file info</td></tr><tr><td align="center" class="nowrapcode">I</td><td>NOF</td><td>File not found in Dynastore</td></tr><tr><td align="center" class="nowrapcode">I</td><td>OK</td><td>File information retrieved</td></tr><tr><td align="center" class="nowrapcode">P</td><td>NoSuchBucket</td><td>Bucket not found</td></tr><tr><td align="center" class="nowrapcode">P</td><td>OK</td><td>File Transferred</td></tr><tr><td align="center" class="nowrapcode">P</td><td>CantOpenLocal</td><td>Unable to open local file</td></tr><tr><td align="center" class="nowrapcode">P</td><td>SizeProblem</td><td>File Transfer Incomplete</td></tr><tr><td align="center" class="nowrapcode">P</td><td>NoInfo</td><td>Unable to obtain stored file info</td></tr><tr><td align="center" class="nowrapcode">D</td><td>NOF</td><td>File not found in Dynastore</td></tr><tr><td align="center" class="nowrapcode">D</td><td>CantDelete</td><td>Unable to delete</td></tr><tr><td align="center" class="nowrapcode">D</td><td>OK</td><td>File deleted</td></tr><tr><td align="center" class="nowrapcode">L</td><td>NoSuchBucket</td><td>Bucket not found</td></tr><tr><td align="center" class="nowrapcode">L</td><td>OK</td><td>Directory info returned in <code>XML$</code></td></tr><tr><td align="center" class="nowrapcode">B</td><td>&#160;</td><td>Null result whether bucket exists or not</td></tr><tr><td align="center" class="nowrapcode">d</td><td>&#160;</td><td>Null result whether bucket was deleted or not.&#160; Only empty 
+ buckets can be deleted.</td></tr></table></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>S236$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>This templated string variable contains the structure of the XML$ 
+ variable when using the List Directory, <code>ACTION$="L"</code> option.&#160; 
+ For more information see XML to Template Dynamo Tool <a href="CDS236.htm">
+    CDS236</a>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap" class="nowrapcode"><code>XML$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>This templated string variable contains the output of the List 
+ Directory, <code>ACTION$="L"</code> option.&#160; The significant fields are 
+ shown below.
+    <table border="1" id="table6"><tr><th>Field</th><th>Contents</th></tr><tr><td><code>S236.REPEAT[7]</code></td><td>Number of files</td></tr><tr><td><code>XML.KEY$[n]</code></td><td>File name</td></tr><tr><td><code>XML.LASTMODIFIED$[n]</code></td><td>Date &amp; time in format YYYY-MM-DDTHH:MM:SS.NNNZ</td></tr><tr><td><code>XML.SIZE[n]</code></td><td>File size in characters</td></tr><tr><td><code>XML.STORAGECLASS$[n]</code></td><td>STANDARD or REDUCED_REDUNDANCY</td></tr></table></td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example - File Upload (Put)</td>
+            </tr>
+            <tr>
+                <td><code>2250 CALL "CDS041","CDS700",S700$,"YY"</code>
+                    <p><code>2260 LET S700.ACTION$="P",S700.BUCKET$="excellware-CDrpt"</code>
+                    </p>
+                    <p><code>2270 LET S700.LOCALFILE$="tmp/XYZ-123.pdf",S700.STOREDFILE$="XYZ-123.pdf"</code>
+                    </p>
+                    <p><code>2280 CALL "CDS700",Y$,S700$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>Example - Directory List</td>
+            </tr>
+            <tr>
+                <td><code>2250 CALL "CDS041","CDS700",S700$,"YY"</code>
+                    <p><code>2260 LET S700.ACTION$="L",S700.BUCKET$="Excellware-CDrpt"</code>
+                    </p>
+                    <p><code>2280 CALL "CDS700",Y$,S700$,S236$,XML$</code>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>S236$</code> output<span><br /><code>FLDS&#160;&#160;&#160;&#160;&#160;&#160; |14</code></span><p><span><code>ROOT&#160;&#160;&#160;&#160;&#160;&#160; |ListBucketResult</code></span></p><p><span><code>TAG[1]&#160;&#160;&#160;&#160; |Name</code></span></p><p><span><code>TAG[2]&#160;&#160;&#160;&#160; |Prefix</code></span></p><p><span><code>TAG[3]&#160;&#160;&#160;&#160; |Marker</code></span></p><p><span><code>TAG[4]&#160;&#160;&#160;&#160; |MaxKeys</code></span></p><p><span><code>TAG[5]&#160;&#160;&#160;&#160; |IsTruncated</code></span></p><p><span><code>TAG[6]&#160;&#160;&#160;&#160; |Contents</code></span></p><p><span><code>TAG[7]&#160;&#160;&#160;&#160; |Contents.Key</code></span></p><p><span><code>TAG[8]&#160;&#160;&#160;&#160; |Contents.LastModified</code></span></p><p><span><code>TAG[9]&#160;&#160;&#160;&#160; |Contents.ETag</code></span></p><p><span><code>TAG[10]&#160;&#160;&#160; |Contents.Size</code></span></p><p><span><code>TAG[11]&#160;&#160;&#160; |Contents.Owner</code></span></p><p><span><code>TAG[12]&#160;&#160;&#160; |Contents.Owner.ID</code></span></p><p><span><code>TAG[13]&#160;&#160;&#160; |Contents.Owner.DisplayName</code></span></p><p><span><code>TAG[14]&#160;&#160;&#160; |Contents.StorageClass</code></span></p><p><span><code>FLDNAM[1]&#160; |Name</code></span></p><p><span><code>FLDNAM[2]&#160; |Prefix</code></span></p><p><span><code>FLDNAM[3]&#160; |Marker</code></span></p><p><span><code>FLDNAM[4]&#160; |MaxKeys</code></span></p><p><span><code>FLDNAM[5]&#160; |IsTruncated</code></span></p><p><span><code>FLDNAM[6]&#160; |Contents</code></span></p><p><span><code>FLDNAM[7]&#160; |Key</code></span></p><p><span><code>FLDNAM[8]&#160; |LastModified</code></span></p><p><span><code>FLDNAM[9]&#160; |ETag</code></span></p><p><span><code>FLDNAM[10] |Size</code></span></p><p><span><code>FLDNAM[11] |Owner</code></span></p><p><span><code>FLDNAM[12] |ID</code></span></p><p><span><code>FLDNAM[13] |DisplayName</code></span></p><p><span><code>FLDNAM[14] |StorageClass</code></span></p><p><span><code>REPEAT[1]&#160; |1</code></span></p><p><span><code>REPEAT[2]&#160; |1</code></span></p><p><span><code>REPEAT[3]&#160; |1</code></span></p><p><span><code>REPEAT[4]&#160; |1</code></span></p><p><span><code>REPEAT[5]&#160; |1</code></span></p><p><span><code>REPEAT[6]&#160; |3</code></span></p><p><span><code>REPEAT[7]&#160; |3</code></span></p><p><span><code>REPEAT[8]&#160; |3</code></span></p><p><span><code>REPEAT[9]&#160; |3</code></span></p><p><span><code>REPEAT[10] |3</code></span></p><p><span><code>REPEAT[11] |3</code></span></p><p><span><code>REPEAT[12] |3</code></span></p><p><span><code>REPEAT[13] |3</code></span></p><p><span><code>REPEAT[14] |3</code></span></p></td>
+            </tr>
+            <tr>
+                <td><code>XML$</code> output<br /><img border="0" src="images/cds7005.jpg" alt="" width="766" height="572" /></td>
+            </tr>
+        </table>
+        <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" width="100%" class="example">
+            <tr>
+                <td width="100%">Example program to upload files, obtain directory 
+ listing, and download selected file</td>
+            </tr>
+            <tr>
+                <td width="100%"><code xmlns="http://www.w3.org/1999/xhtml">0100 REM "EXAM01 - 03/06/12 Dynastore 
+ upload/retrieve examples<br />      0110 SETESC 8000; SETERR 8000<br />      0120 CALL "CDS041","CDS700",S700$,"YY"; REM "Get template used by CDS700<br />      0130 LET S700.BUCKET$="NCDS-test"; REM "Storage folder name<br />      0140 CALL "CDS069",1,1,0,0,"+option+","A{|,2,|,,,Y}UUpload|RRetrieve",0,OPT$<br />      0150 IF CTL&lt;&gt;4 THEN ON OPT$="R" GOSUB UPLOAD,RETRIEVE; GOTO 0140<br />      0160 GOTO EOJ<br /><br />      1000 UPLOAD:<br />      1010 LET FILS=0,DRY=UNT<br />      1020 OPEN (DRY)"test"<br />      1030 READ RECORD(DRY,END=1060)FIL$<br />      1040 IF POS("."&lt;&gt;FIL$) THEN GOSUB PUTFILE<br />      1050 GOTO 1030<br />      1060 CLOSE (DRY)<br />      1070 CALL "CDS069",0,0,0,0,STR(FILS)+" files uploaded-"<br />      1080 RETURN<br /><br />      1100 PUTFILE:<br />      1110 LET S700.ACTION$="P"; REM "Put file to storage<br />      1120 LET S700.DISP$="P"; REM "Display file upload progress, normally 
+ disabled<br />      1130 LET S700.LOCALFILE$="test/"+FIL$<br />      1140 LET S700.STOREDFILE$=FIL$<br />      1150 CALL "CDS700",Y$,S700$,S236$,XML$<br />      1160 IF S700.RESULT$="OK" THEN LET FILS=FILS+1 ELSE CALL 
+ "CDS069",0,0,0,0,"CDS700.RESULT$="+S700.RESULT$+"-"<br />      1170 RETURN<br /><br />      1200 RETRIEVE:<br />      1210 PRINT @(8,23),"Obtaining directory list...",<br />      1220 LET S700.ACTION$="L"; REM "Get directory list<br />      1230 CALL "CDS700",Y$,S700$,S236$,XML$<br />      1240 PRINT @(8,23),'CL',<br />      1250 IF S236.REPEAT[7]=0 THEN CALL "CDS069",0,0,0,0,"No Dynastore files 
+ found-"; RETURN<br />      1260 LET FILS$="",MAXL=0<br />      1270 FOR I=1 TO S236.REPEAT[7]<br />      1280 LET FILS$=FILS$+XML.KEY$[I]+"|"<br />      1290 LET MAXL=MAX(MAXL,LEN(XML.KEY$[I]))<br />      1300 NEXT I<br />      1310 LET FIL$=""; CALL "CDS069",1,MAXL,0,0,"+file name to 
+ retrieve+","A{|,,,,,Y}"+FILS$,0,FIL$<br />      1320 IF CTL&lt;&gt;4 THEN GOSUB GETFILE; GOTO 1310<br />      1330 RETURN<br /><br />      1400 GETFILE:<br />      1410 LET S700.ACTION$="G"<br />      1420 LET S700.STOREDFILE$=FIL$<br />      1430 LET S700.LOCALFILE$="tmp/"+FIL$<br />      1440 LET S700.DISP$="P"<br />      1450 CALL "CDS700",Y$,S700$,S236$,XML$; REM "Download selected file<br />      1460 CALL "CDS188",Y$,CMD$,"tmp/"+FIL$; REM "View downloaded file<br />      1470 RETURN<br /><br />      8000 REM "Call Error/Escape Routine<br />      8010 CALL "CDS063",STR(TCB(5)),Y$,PGM(-2)<br />      8020 ON Y.ERRSTS GOTO 8030,8040,8050,8060<br />      8030 SETERR 0<br />      8040 RETRY<br />      8050 RETURN<br />      8060 RETRY<br /><br />      9000 EOJ:<br />      9010 IF TCB(13) THEN EXIT<br />      9020 RUN "CDS001"<br /><br />      9996 REM EDITOR<br />      9997 SETERR 9999; SETESC 9998; CALL "CDS140",O$,O1$; SETERR 9997; EXECUTE 
+ O$<br />      9998 DIM O$(0); GOTO 9997<br />      9999 END</code>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

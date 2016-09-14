@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="1348" MadCap:lastWidth="1024">
+    <head><title>Program Editor - Command Summary</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="Program Editor" />Program Editor</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Command Summary</p>
+                </td>
+                <td align="right">Last Revised: 06/16/15</td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="BBx" />
+            <MadCap:keyword term="Running" />
+            <MadCap:keyword term="Program Editor Command" />The normal BBx prompt is the "greater than" symbol "&gt;". 
+&#160;The prompt used when running the Program Editor is the "right parenthesis" 
+symbol ")".&#160;At the ")" prompt, you can enter any valid BBx statement, or any 
+Program Editor Command. &#160;To do this you simply type the command the same as you 
+would a BBx statement.</p>
+        <p><code>PRINT 2+3</code>
+        </p>
+        <p><code>IF LEN(X$)&gt;20 PRINT X$</code>
+        </p>
+        <p>To add or replace a program statement, start with a line number, just like 
+you would in BBx.</p>
+        <p><code>0320 IF GL012.GLCODE$="FRT" THEN LET FRTGL$=GL012.GLACCTNO$</code>
+        </p>
+        <p>Program Editor Commands are not case-sensitive. &#160;Arguments within { } are 
+optional.</p>
+        <table>
+            <tr>
+                <th colspan="2">Program Editor Commands</th>
+            </tr>
+            <tr>
+                <td><code>'lineno or 'linelabel</code>
+                </td>
+                <td>Edit program statement at lineno or linelabel.&#160; </td>
+            </tr>
+            <tr>
+                <td><code>S{lineno} or S linelabel</code>
+                </td>
+                <td>Display one screen of formatted program statements beginning at lineno/linelabel 
+ (if specified).&#160; Note that a space is required after the "S" when using 
+	a line label.</td>
+            </tr>
+            <tr>
+                <td><code>L{lineno} or L linelabel</code>
+                </td>
+                <td>Similar to the S option except the program statements are not indented 
+	or formatted in any way.</td>
+            </tr>
+            <tr>
+                <td><code>T{xxxx{,yyyy}}\search_text</code>
+                </td>
+                <td>Search lines xxxx through yyyy (if specified) for search_text.&#160;&#160; 
+ Search_text is not case sensitive. &#160;Note you can also use a forward slash / separator which is useful when searching for back slashes \.</td>
+            </tr>
+            <tr>
+                <td><code>T{xxxx{,yyyy}}\search_text\replacement_text</code>
+                </td>
+                <td>Search and replace all occurrences.&#160;&#160; Search_text is case 
+ sensitive when replacing.  &#160;Note you can also use a forward slash / separators which is useful when replacing back slashes characters \.</td>
+            </tr>
+            <tr>
+                <td><code>T{xxxx{,yyyy}}\search_text\replacement_text\V</code>
+                </td>
+                <td>Same as above, but prompt operator for each replacement.</td>
+            </tr>
+            <tr>
+                <td><code>E{xxxx{,yyyy}}\search_text</code>
+                </td>
+                <td>Edit each line containing search_text. Forward slash can also be used as a separator.</td>
+            </tr>
+            <tr>
+                <td><code>Mxxxx{,yyyy}\pgm{\zzzz}</code>
+                </td>
+                <td>
+                    <p>Merge lines xxxx through yyyy from program "pgm".&#160;&#160; If zzzz is 
+ specified, the merged code will be renumbered so the first line merged is 
+ zzzz.&#160; Line numbers within merged statements will also be changed.&#160; 
+	Watch for line numbers that refer to lines outside of the merged section 
+	such as IOL= which may need to be edited manually.</p>
+                    <p>Note: When running bbj, reference to line numbers are not currently being changed automatically, and must be changed manually.</p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>Cxxxx,yyyy</code>
+                </td>
+                <td>Concatenate line yyyy onto line xxxx and separate with semicolon.</td>
+            </tr>
+            <tr>
+                <td><code>F</code>
+                </td>
+                <td>Searches program for invalid template fields.&#160; Positions cursor 
+	after period to allow F2 key to select and paste correct field name.</td>
+            </tr>
+            <tr>
+                <td><code>P</code>
+                </td>
+                <td>Display program information</td>
+            </tr>
+            <tr>
+                <td><code>SAVE</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Date" />The first statement of the program must be a remark.&#160;&#160; The 
+ SAVE command changes the date on this first statement to today, prompts the 
+ user to enter a revision note, and saves the program to the disk.</td>
+            </tr>
+            <tr>
+                <td><code>REV</code>
+                </td>
+                <td>Display/Edit program revision notes.</td>
+            </tr>
+            <tr>
+                <td><code>ERROR{StartingLine}</code>
+                </td>
+                <td>Merges the error routine interface and replaces any 
+ existing lines in that range. The default StartingLine of 8000 will be used if not specified.</td>
+            </tr>
+            <tr>
+                <td height="31"><code><MadCap:keyword term="ArrowUp" />ArrowUp</code>
+                </td>
+                <td height="31">Allows editing of previous command.</td>
+            </tr>
+            <tr>
+                <td><code>VDTxxxxCCpppps</code>
+                </td>
+                <td>Creates a PRINT statement at line xxxx based on a VDT format stored in 
+ company code CC, with name pppp and VDT suffix s.</td>
+            </tr>
+            <tr>
+                <td><code>prog+ArrowUp</code>
+                </td>
+                <td>Loads prog in program editor.&#160;&#160; Note is does not save the 
+ existing program first.</td>
+            </tr>
+            <tr>
+                <td><code>prog+ArrowDn</code>
+                </td>
+                <td>Runs prog.&#160;&#160; Does not save first.</td>
+            </tr>
+            <tr>
+                <td><code>F1</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Hotkey" />Hotkey - allows you to temporarily run another application and return to 
+	the program being edited.</td>
+            </tr>
+            <tr>
+                <td><code>F2</code>
+                </td>
+                <td>Insert context sensitive text (Code completion).<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" width="100%" id="table2" class="lev2"><tr><th>Text to be Inserted</th><th>Code to the left of the cursor</th></tr><tr><td>Line Label</td><td>GOSUB+blank, GOTO+blank, END=, DOM=, ERR=, IOL=, TBL=, 
+			SETERR+blank, SETESC+blank, ON xxx GOTO xxx, ON xxx GOSUB xxx, 
+			S+blank, T\+blank</td></tr><tr><td>Template Field Name</td><td>Templated variable followed by period such as XXXX. or Y.&#160; 
+			FIN. and FID. are also supported.</td></tr><tr><td>Called Routine Name (XX is company code, such as CD, DY, RL, 
+			etc.)</td><td>CALL "XX</td></tr><tr><td>Called Routine Arguments</td><td>CALL "XXXXXX"</td></tr><tr><td>Defined Functions &amp; Arguments</td><td>FN</td></tr><tr><td>Merge program name</td><td>Mxxx,yyy\</td></tr><tr><td>Call/Enter list for CDS037/CDS038, T, X, or C type external 
+			routines</td><td>ENTER+blank</td></tr><tr><td>Line drawing graphics character</td><td>all others</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code>F3</code>
+                </td>
+                <td>Displays Program Editor Help Text</td>
+            </tr>
+            <tr>
+                <td><code>F4</code>
+                </td>
+                <td>Returns to menu.&#160;&#160; Does not save first. &#160;Will warn if code change may have been made but not saved.</td>
+            </tr>
+        </table>
+    </body>
+</html>

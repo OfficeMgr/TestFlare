@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="8" MadCap:lastHeight="995" MadCap:lastWidth="941">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS081 - Start / Stop Background Task</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS081" />CDS081</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Start / Stop Background Task" />Start / Stop Background Task</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS081">Last Revised: 10/26/13</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="BBx" />This routine can be used to start a 
+	background task from within a bbx or bbj program on Linux, AIX, other Unix like systems. It can also used by the background task itself to release the session at the end of the job.</p>
+        <p>A background task is a task that runs on the server that is not attached to any display device. It can take no user input.</p>
+        <p>Background tasks must be written very carefully to avoid program errors, however should an error occur in a background task, a very helpful Error Report is generated and emailed when using the Dynamo Tools Error Routine <a href="CDS063.htm" target="_blank">CDS063</a>.</p>
+        <p>Background tasks do not normally <code>PRINT</code>&#160;without specifying a channel as when printing to the display. All information printed by a background task sent to the <code>$SMSDIR/log/bkg</code> file, so <code>PRINT</code>s are often added to assist debugging background tasks.</p>
+        <p>Unlike ghost tasks, you cannot connect to a typical background task to view printed output, enter information, or otherwise monitor its operation.</p>
+        <p>Calling Format to Start a Background task:</p>
+        <p><code>CALL "CDS081", ERR=ERRMSG, Y$, PAGES, PGM$, JOBTITLE$ {, USR$, MODE$, LOGFILE$, EMAIL$ }</code>
+        </p>
+        <p>A Background task can terminate itself at the end of the job, either by <code>RUN&#160;"CDS001"</code> or by</p><code>CALL&#160;"CDS081",Y$,-1</code>
+        <p>Do not terminate any task, foreground or background using <code>RELEASE</code>&#160;or <code>BYE</code>, as this will leave the Session Control Record in file CDSM08. </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS081</th>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>ERR=ERRMSG</code>
+                </td>
+                <td>The error branch is taken if the <code>PGM$</code> file cannot be opened, </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />Session control variable</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>PAGES</code>
+                </td>
+                <td>
+                    <table>
+                        <col />
+                        <col />
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>start background session using the default of 4000 memory pages (1Mb), applies to pro5 only, not bbj</td>
+                            </tr>
+                            <tr>
+                                <td>number greater than 4000</td>
+                                <td>start background session using specified number of memory pages</td>
+                            </tr>
+                            <tr>
+                                <td>-1</td>
+                                <td>stop background task currently running<br />Exit code will be zero</td>
+                            </tr>
+                            <tr>
+                                <td>-2 or less</td>
+                                <td>stop background task currently running<br />Exit code will be <code>-1-PAGES</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>PGM$</code>
+                </td>
+                <td>The program to run. The current directory will be the <code>SMSDIR</code>&#160;directory, and the <code>PREFIX</code> will be set based on the information in Company Information Maintenance. <code>PGM</code> can include path when it is not found using the current directory and prefix.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode"><code>JOBTITLE$</code>
+                </td>
+                <td>The job title of the program which displays in Display System Status.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">USR$</td>
+                <td>Optional string to be passed to the <code>PGM$</code> and referenced using <code>ARGV(4)</code>.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">MODE$</td>
+                <td>The mode is an optional argument that is used to specify the executable 
+ to use and file open method.						<table><tr><td>null or not passed</td><td>If active session is running in pro5, then the background task will also use pro5.<br />If active session is running in bbj, then the background task will also use bbj.</td></tr><tr><td>pro5</td><td>pro5</td></tr><tr><td>bbj</td><td>bbj and use bbj for file access</td></tr><tr><td>bbjds</td><td>bbj, but use the local pro5 dataserver on the 
+ default port for all file opens. (<span class="Code">/&lt;localhost,port=1100&gt;</span>)</td></tr><tr><td><code>/&lt;servername,port=portnumber&gt;</code></td><td>bbj to run <code>PGM</code>, but use a data server for file 
+ opens using the server name and port number specified.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">LOGFILE$</td>
+                <td>This optional argument is used to override the default log file of <code>$SMSDIR/log/bkg</code>.</td>
+            </tr>
+            <tr>
+                <td class="nowrapcode">EMAIL$</td>
+                <td>Should the background script encounter an error attempting to launch pro5 or bbj, an email is sent to advise an administrator. This optional argument is used to override the default email address of support@excellware.com.</td>
+            </tr>
+        </table>
+        <p>
+            <MadCap:keyword term="SM08" />
+            <MadCap:keyword term="Remove" />
+            <MadCap:keyword term="Bin/background" />
+        </p>
+        <p>You can view all running background tasks using Display System Status (SMS) using the Dynaweb and Background Tasks option. Authorized users may also kill a running background task.</p>
+        <p>See also the <a href="background.htm" target="_blank">background</a> script.</p>
+    </body>
+</html>

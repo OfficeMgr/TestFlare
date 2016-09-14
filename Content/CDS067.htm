@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS067 - Print File Expansion</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS067" />CDS067</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Print File Expansion</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS067">Last Revised: 03/10/99</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="CDS063" />This program is called by the error routine, CDS063, to
+expand any full data files. It will also create overflow files when a spool file
+fills.&#160; This routine is rarely required any more since most file are
+defined as dynamic and will expand to the limits of the disc drive or file
+system.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS067",D,D$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS067</th>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>is only passed to CDS067 when you know the device number of the full
+ file. If it is not passed to CDS067, or passed as zero, CDS067 will attempt
+ to determine the device number of the full file.</td>
+            </tr>
+            <tr>
+                <td>D$</td>
+                <td>is information used by the error routine, CDS063, to record the file
+ expansion details on the error log.</td>
+            </tr>
+        </table>
+        <p>Although this routine is usually only called by the error routine, it can be
+used to expand any full file. If a program does not have sufficient memory, or
+is not interfaced to the error routine, you may have sufficient memory to expand
+the file by typing in console mode: CALL "CDS067",X where X is the device number
+of the full file. Note that CDS067 can only expand files completely full.</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

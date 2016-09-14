@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="423" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS255 - Input Routine - Calendar</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS255" />CDS255</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Input Routine" />
+                        <MadCap:keyword term="Calendar" />Input Routine - Calendar</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS255">Last Revised: 01/22/08</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Date" />
+            <MadCap:keyword term="CDS069" />This is the routine called by CDS069 to display a calendar and prompt the operator to select a date. It can also be used by application programs.</p>
+        <p><code>CALL "CDS255",Y$,F4,JUL,COL$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">CDS255</th>
+            </tr>
+            <tr>
+                <td>Y$</td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the normal terminal control variable</td>
+            </tr>
+            <tr>
+                <td>F4</td>
+                <td>used to indicate if the F4 key may be used to exit. If F4 is non-zero then the F4 key will exit.</td>
+            </tr>
+            <tr>
+                <td>JUL</td>
+                <td>the default date for input, and will contain the selected date at output. If passed as 0, then the current system date will be the default.</td>
+            </tr>
+            <tr>
+                <td>COL$</td>
+                <td>
+                    <MadCap:keyword term="Operator Preference Maintenance" />a group of 3 or 4 color numbers. Each color number is 3 characters in length. The first color number indicates the window border, then second indicates the non-selected dates, the third indicates the selected or highlighted date. The 4th color number is optional. If passed it is used for the day of the week headings and prompt line. If not passed then a suitable color is selected by CDS255. If COL$ is passed as null, then the operator's F2 display colors as specified in Operator Preference Maintenance will be used.</td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+    </body>
+</html>

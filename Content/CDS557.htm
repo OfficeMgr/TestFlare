@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="887" MadCap:lastWidth="741">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS557 - Set View Field Maintenance Option</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS557</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Set View Field Maintenance Option</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS557">Last Revised: 02/25/14</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be called to change a View Field Maintenance Option for the active View being processed by CDS550.&#160; It is needed when you need to skip or not-skip a field when entering through all fields in the view.</p>
+        <p>It is preferred to call CDS557 to alter the View Field Maintenance Option as opposed to modifying the SMS_CDS550_MAINT global manually.&#160; The primary advantage is using CDS557 is that it will continue to work if the sequence of fields in the view are changed, since you pass the field name to CDS557 and not the field number of the field in the view.</p>
+        <p>This change applies to the current record only and will be reset to default values for the next record processed.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS557",FLDNAM$,VAL$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">CDS557 Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>FLDNAM$&#160;</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Termplated field name excluding $ but including optional index indicator in format <code>[IND]</code>.&#160; Examples: <code>CUSTNO, SALES, CODE[2]</code>.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>VAL$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Maintenance Option.&#160; The value is typically taken from the View Properties, unless changed using CDS557.
+<table border="1" id="table1"><tr><th align="center">Option</th><th>Description</th></tr><tr><td align="center">blank</td><td>Operator will be prompted to make entry at this field</td></tr><tr><td align="center">Q</td><td>Data value will be displayed only, no entry made</td></tr><tr><td align="center">S</td><td>When S550.MAINT=2 indicating to make entry at each field in view, fields with a Maintenance Option of S will be skipped.</td></tr><tr><td align="center">B</td><td>Same as S, but the field is skipped only if non-blank or non-zero.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap">Error Messages</td>
+                <td align="center" nowrap="nowrap">Displayed</td>
+                <td>
+                    <table border="1" id="table2">
+                        <tr>
+                            <td><code>FLDNAM$</code> passed is not part of active view</td>
+                            <td>No message or error.&#160; CDS557 quietly exits</td>
+                        </tr>
+                        <tr>
+                            <td>CDS557: Missing Global Variable Name SMS_S550.GVN</td>
+                            <td>This variable is set by CDS550 so you might get this message if calling CDS557 when there is no view currently active, or if the global was deleted.</td>
+                        </tr>
+                        <tr>
+                            <td>CDS557: Missing Global Variable Name SMS_CDS550_MAINT</td>
+                            <td>Same as above</td>
+                        </tr>
+                        <tr>
+                            <td>CDS557: Length of SMS_CDS550_MAINT global is nn but should be yy.</td>
+                            <td>Some application changed the length of the global.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>IF CM040.NEW=0 THEN CALL "CDS557","ADDR2","S"</code>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="5" MadCap:lastHeight="1127" MadCap:lastWidth="680">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS048 - Enter Telephone Number (File Maintenance)</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS048" />CDS048</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Enter Telephone Number" />Enter Telephone Number (X)</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS048">Last Revised: 11/10/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine is called for telephone number entries. It supports telephone numbers in these formats: AAA-EEE-NNNN 1-EEE-NNNN EEE-NNNN The telephone number is entered without any dashes, and the routine will return it formatted with dashes.&#160; Alpha characters in the telephone number such as 800-IBM-4AIX are not supported.&#160; 
+ A telephone type and extension are also supported.</p>
+        <p>See also <a href="CDS268.htm">CDS268</a> which supports longer foreign phone numbers and does allow alpha characters.</p>
+        <p>The data to be entered is dependent on the length of the data field <code>Z$</code>. If 
+  <code>Z$</code> is 12 characters long, then only the telephone number will be entered. If 13 characters long, the additional character is used for a telephone type code. If 17 characters long, the additional 4 characters is used as an extension.</p>
+        <p>This program performs validation checks on phone numbers.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS048", <a href="#Z1">Z1</a>, <a href="#Z2">Z2</a>, <a href="#Z5">Z5</a>, <a href="#Z6">Z6</a>, <a href="#Z0$">Z0$</a>, <a href="#Z7">Z7</a>, <a href="#Z$">Z$</a>, <a href="#Y">Y</a>, <a href="#Z8$">Z8$</a>,</code> <a href="#FMT$[ALL]"><code>FMT$[ALL]</code></a></p>
+        <table>
+            <tr>
+                <th colspan="2">CDS048</th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <MadCap:keyword term="Input Variables" />Input Variables</th>
+            </tr>
+            <tr>
+                <td><a name="Z1"></a><code>Z1</code>
+                </td>
+                <td>minimum length of data to be entered</td>
+            </tr>
+            <tr>
+                <td><a name="Z2"></a><code>Z2</code>
+                </td>
+                <td>maximum length of data to be entered</td>
+            </tr>
+            <tr>
+                <td><a name="Z5"></a><code>Z5</code>
+                </td>
+                <td>horizontal screen position</td>
+            </tr>
+            <tr>
+                <td><a name="Z6"></a><code>Z6</code>
+                </td>
+                <td>vertical screen position</td>
+            </tr>
+            <tr>
+                <td><a name="Z0$"></a><code>Z0$</code>
+                </td>
+                <td>operator message</td>
+            </tr>
+            <tr>
+                <td><a name="Z7"></a><code>Z7</code>
+                </td>
+                <td>passed as zero</td>
+            </tr>
+            <tr>
+                <td><a name="Y"></a><code>Y</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CTL" />passed as 0; set to CTL</td>
+            </tr>
+            <tr>
+                <td><a name="Z8$"></a><code>Z8$</code>
+                </td>
+                <td>action code<br /><code>DIS</code> - display without stripping spaces, as would be done for a column of phone numbers<br /><code>DISFMT</code> - display flush left, stripping area code if not present. Adding "Ext: " to extension if no phone#.<br /><code>FMT</code> - format only, no display. See <code>FMT$[ALL]</code> below<br /><code>DRV</code> - entry suitable for driver, no area code, type, or ext - all other used for entry of phone#.<br />      If first character is <code>P</code>, use prompt window.<br />      If 3 or more characters long, <code>Z8$(2,2)</code> is used to identify the state code which is used to allow unformatted phone numbers for foreign locations, i.e., no area code and xxx-xxxx format restrictions.</td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Variables</th>
+            </tr>
+            <tr>
+                <td><a name="Z$"></a><code>Z$</code>
+                </td>
+                <td>formatted telephone#</td>
+            </tr>
+            <tr>
+                <td><code>Z7</code>
+                </td>
+                <td>length of telephone number</td>
+            </tr>
+            <tr>
+                <td><a name="FMT$[ALL]"></a><code>FMT$[ALL]</code>
+                </td>
+                <td><code>[0]</code> - output without stripping leading spaces<br /><code>[1]</code> - leading spaces deleted</td>
+            </tr>
+        </table>
+        <p><b>Optional Telephone Type Codes</b>
+        </p>
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <td align="center"><code>blank</code>
+                </td>
+                <td>Any</td>
+            </tr>
+            <tr>
+                <td align="center"><code>W</code>
+                </td>
+                <td>Work</td>
+            </tr>
+            <tr>
+                <td align="center"><code>F</code>
+                </td>
+                <td>Fax</td>
+            </tr>
+            <tr>
+                <td align="center"><code>C</code>
+                </td>
+                <td>Car</td>
+            </tr>
+            <tr>
+                <td align="center"><code>S</code>
+                </td>
+                <td>Cell</td>
+            </tr>
+            <tr>
+                <td align="center"><code>H</code>
+                </td>
+                <td>Home</td>
+            </tr>
+            <tr>
+                <td align="center"><code>A</code>
+                </td>
+                <td>Alternate</td>
+            </tr>
+            <tr>
+                <td align="center"><code>D</code>
+                </td>
+                <td>Day</td>
+            </tr>
+            <tr>
+                <td align="center"><code>N</code>
+                </td>
+                <td>Night</td>
+            </tr>
+            <tr>
+                <td align="center"><code>M</code>
+                </td>
+                <td>Modem</td>
+            </tr>
+            <tr>
+                <td align="center"><code>P</code>
+                </td>
+                <td>Pager</td>
+            </tr>
+        </table>
+    </body>
+</html>

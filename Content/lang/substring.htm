@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Substring expressions</title>
+        <link rel="stylesheet" type="text/css" href="../Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">BBX Language</p>
+        <table border="1" width="100%" id="table1" class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Substring expressions</p>
+                </td>
+                <td align="right">Last Revised: 11/23/12</td>
+            </tr>
+        </table>
+        <dl>
+            <dd>
+                <div align="justify">
+                    <dl>
+                        <dt><span style="font-family: Verdana;color: #666666;">&#160;&#160;&#160; You can 
+reference any part of a string variable as a substring.&#160; A substring has a starting position and a length.&#160; These 
+parameters are enclosed in parentheses.</span>
+                        </dt>
+                    </dl>
+                </div>
+            </dd>
+        </dl>
+        <p>Substring Format:</p>
+        <p><code>A$(StartingPosition)<br />
+A$(StartingPosition,Length)</code><span style="color: #000080;"><br />
+A$(1,5)<br />
+A$(10)<br />
+A$(X,Y)</span>
+        </p>
+        <p>You can use one or two parameters to specify a substring.&#160; The first 
+parameter is one-based and determines the starting position within the string.&#160; The second 
+parameter is optional and indicates the number of characters in the substring.&#160; If you do not specify a second 
+parameter, bbx assumes that the length of the substring is the remainder of the string.&#160; 
+Note that unlike java and javascript, bbx uses one-based and not zero-based 
+starting positions and lengths.</p>
+        <p>&#160;</p>
+        <p>The following rules apply to substrings:</p>
+        <ul>
+            <li style="font-size: 10pt;">
+                <p class="Tip-Note-Text-Bulleted">Neither parameter can be negative.</p>
+            </li>
+            <li style="font-size: 10pt;">
+                <p class="Tip-Note-Text-Bulleted">The length of a substring can be zero, i.e,
+<code>A$(12,0)</code> is valid and will return a null string.</p>
+            </li>
+            <li style="font-size: 10pt;">
+                <p class="Tip-Note-Text-Bulleted">The referenced substring must exist or an 
+Error 47 will be thrown.&#160; It is difficult to trap these errors because 
+there is no <code>ERR=</code> option on a substring expression.</p>
+            </li>
+            <li style="font-size: 10pt;">
+                <p class="Tip-Note-Text-Bulleted">If a string is N bytes long, the first 
+parameter can be N+1 only if the length parameter is not provided.&#160; If
+<code>A$="123"</code> then <code>A$(4)</code> returns a null string and not an 
+error.</p>
+            </li>
+            <li style="font-size: 10pt;">
+                <p class="Tip-Note-Text-Bulleted">If both parameters are present and both are zero, 
+bbx returns a null string. For example, <code>A$(0,0)</code> is null.&#160; This is the only case in which the first 
+parameter can be zero.</p>
+            </li>
+        </ul>
+        <p class="Tip-Note-Text-Bulleted">&#160;</p>
+        <table style="border-collapse: collapse;" id="table8" class="example" border="1" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td>Examples</td>
+            </tr>
+            <tr>
+                <td><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">A$="ABCDEFG"</span></span>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">?A$(1,4)</span></span>
+                    <p><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">ABCD</span></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">?A$(3,5)</span></span>
+                    <p><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">CDEFG</span></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">?A$(2)</span></span>
+                    <p><span style="font-family: 'Lucida Console';"><span style="font-size: 14pt;">BCDEFG</span></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td><code>?LEN(A$)<br />
+7<br />
+?A$(7)<br />
+G<br />
+?LEN(A$(7))</code>
+                    <p><code>1</code>
+                    </p>
+                    <p><code>?A$(8)</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p><code>?LEN(A$(8))</code>
+                    </p>
+                    <p><code>0</code>
+                    </p>
+                    <p><code>?A$(9)<br />
+!ERROR=47 (Substring out of range)<br />
+?A$(8,2)</code>
+                    </p>
+                    <p><code>!ERROR=47 (Substring out of range)</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

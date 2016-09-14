@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" />
+        <title>CDS254 - Print PCL Text, Line, Box, Overlay</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS254" />CDS254</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Printing:PCL" />
+                        <MadCap:keyword term="Printing:Text" />
+                        <MadCap:keyword term="PCL" />
+                        <MadCap:keyword term="Box" />
+                        <MadCap:keyword term="Print PCL Text" />Print PCL Text, Line, Box, Overlay</p>
+                </td>
+                <td align="right">
+                    <a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS254">Last Revised: 
+		04/25/12</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">
+            <MadCap:keyword term="Printing:Boxes" />This called routine can be used with PCL 5 compatible devices, typically laser or ink-jet printers, to print text, lines, and boxes.&#160; 
+	Note that CDS254 does not work with PCL 6, nor with host-based printers, 
+	where the PC host is required for processing.</p>
+        <p>
+            <MadCap:keyword term="CDX080" />See example program CDX080 for sample code.</p>
+        <ul>
+            <li>
+                <a href="#Printing_Text">
+                    <MadCap:keyword term="Printing" />Printing_Text</a>
+            </li>
+            <li>
+                <a href="#Printing_Vertical_Lines">Printing_Vertical_Lines</a>
+            </li>
+            <li>
+                <a href="#Printing_Horizontal_Lines">Printing_Horizontal_Lines</a>
+            </li>
+            <li>
+                <a href="#Printing_Boxes">Printing_Boxes</a>
+            </li>
+            <li>
+                <a href="#Saving_the_Cursor_Position">Saving Cursor Position</a>
+            </li>
+            <li>
+                <a href="#Restoring_the_Cursor_Position_">Restoring Cursor Position</a>
+            </li>
+            <li>
+                <a href="#Printing_an_Overlay">Printing an Overlay</a>
+            </li>
+            <li>
+                <a href="#Printing_in_Color">Printing in Color</a>
+            </li>
+            <li>
+                <a href="#Printing_Notepad_Text">Printing Notepad Text</a>
+            </li>
+        </ul>
+        <h5>
+            <a name="Printing_Text">
+            </a>Printing Text</h5>
+        <p>
+            <code>CALL "CDS254", Y6$, "T <a href="#COL-T">COL</a>, <a href="#ROW-T">ROW</a>, <a href="#WEIGHT-T">WEIGHT</a>, <a href="#STYLE-T">STYLE</a>, <a href="#POINT-T">POINT</a>, <a href="#PITCH-T">PITCH</a>, <a href="#TYPEFACE-T">TYPEFACE</a>", <a href="#TEXT-T">TEXT$</a></code>
+        </p>
+        <p>See Also:<br /><a href="CDS354.htm">CDS354</a> - Print 2 Column PCL Box<br /><a href="CDS454.htm">CDS454</a> - Print PCL Grid<br /><a href="CDS554.htm">CDS554</a> - Advanced PCL Grid</p>
+        <p>The string parameters following the T for text is optional, and only the fields necessary must be specified.</p>
+        <table>
+            <tr>
+                <th colspan="2">CDS254</th>
+            </tr>
+            <tr>
+                <th colspan="2">Printing Text</th>
+            </tr>
+            <tr>
+                <td>
+                    <code>COL</code>
+                </td>
+                <td>
+                    <a name="COL-T">
+                    </a>The dot column where the text should be positioned. Dot columns are specified in 300 dot per inch, so 
+		<code>@(10)</code> would be the same as a <code>COL</code> of 300.&#160; In addition to specifying an absolute column such as 300, a column relative to the current cursor position can be specified by inserting a + or - before the number as in +300.
+
+        <p>If the <code>COL</code> is not specified, i.e., null, not zero, then the current cursor column will be used. A 
+		<code>COL</code> value of zero indicates the left most position.</p><p>You can also optionally specify a justification parameter <code>L</code>,
+		<code>R</code>, or <code>C</code> following the <code>COL</code><MadCap:keyword term="Centered" /> value for Left, Right, or Centered justification of the text.&#160; If not specified, then the text is left justified, i.e., it will print to the right of the COL specified as when using
+		<code>@()</code>.&#160; For quantities and prices however, the R suffix may be used.</p><p><MadCap:keyword term="SM80" />Note that this option currently only works for fixed spacing typefaces such as Courier, Line Printer, and Letter Gothic and Univers (a proportional typeface).&#160; Note that additional proportional typefaces are supported if their font metrics record is in file 
+		CDSM80.&#160; This file currently contains font metrics for typeface 4148 Univers at point sizes 8 through 14.&#160; Other point sizes may be used, but the spacing may not be exact due to estimated character widths.&#160; Please contact us to add font metrics for other typefaces or point sizes to the 
+		CDSM80 file.&#160; This file is replaced during an Dynamo Tools upgrade, so don't add records yourself otherwise they will be lost after an upgrade.</p><p>Normally CDS254 will print text at the current font size or the size passed. However, CDS254 can also reduce the font size to insure the text fits within the space provided on the form.&#160; You request this option by specifying the maximum dots the text may take following the 
+		<code>L</code>, <code>R</code>, or <code>C</code> character.</p><p>Note that the <code>COL</code> specified using the centering option varies depending on whether the maximum width parameter is provided.&#160; When centering data without a width parameter as in
+		<code>CALL "CDS254",Y6$,"T1200C","Company Name"</code>, the <code>1200</code> refers to the center point, i.e., half of the text will be to the left, and the other half to the right.&#160; When centering data within a fixed column width as in
+		<code>CALL "CDS254",Y6$,"T700C150","Center This"</code> the <code>700</code> represents the left edge of the cell of 150 dots, not the center point.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>ROW</code>
+                </td>
+                <td>
+                    <a name="ROW-T">
+                    </a>The dot row where printing will occur.&#160; This typically refers to the line at the bottom of the characters, as opposed to the top. Like 
+		<code>COL</code> the <code>ROW</code> parameter may be preceded by a + or - for relative positioning.
+
+        <p>If the <code>ROW</code> is not specified, i.e., null not zero, then the current cursor position will be used.&#160; A 
+		<code>ROW</code> value of zero indicates the top most print position.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>WEIGHT</code>
+                </td>
+                <td>
+                    <a name="WEIGHT-T">
+                    </a>
+                    <MadCap:keyword term="Bold" />The weight of text using a range from -7 of Ultra Thin, to 0 for normal, to 3 for Bold, and 7 for Ultra Black.&#160; Refer to Stroke Weight in a PCL reference for additional information.&#160; Note that if the 
+		<code>WEIGHT</code> is not specified, then the current weight will be used.&#160; Note this is a change from a previous version of CDS254 where the weight was always reset to 0 if not passed.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>STYLE</code>
+                </td>
+                <td>
+                    <a name="STYLE-T">
+                    </a>The style of type to use.&#160; Principally used for italics, but can also be used for other styles supported by the particular printer or device.&#160; The possible style values include:&#160;
+
+        <table class="lev2"><tr><td align="center">0</td><td>Upright, solid (normal)</td></tr><tr><td align="center">1</td><td>Italic</td></tr><tr><td align="center">4</td><td>Condensed</td></tr><tr><td align="center">5</td><td>Condensed Italic</td></tr><tr><td align="center">8</td><td>Compressed or extra condensed</td></tr><tr><td align="center">24</td><td>Expanded</td></tr><tr><td align="center">32</td><td>Outline</td></tr><tr><td align="center">64</td><td>Inline</td></tr><tr><td align="center">128</td><td>Shadowed</td></tr><tr><td align="center">160</td><td>Outline Shadowed</td></tr></table><p>If the <code>STYLE</code> is not specified, then 0 is assumed.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>POINT</code>
+                </td>
+                <td>
+                    <a name="POINT-T">
+                    </a>This parameter is used only in proportionally spaced fonts such as Univers, Arial, Helvetica, etc. and typically may be any value from .10 to 576.&#160; Normal type is usually within the range of 9 to 18 point. If not passed, the current point size will be used.
+
+        <p>Note that for the internal bit-map line printer font of most HP printers, the 
+		<code>POINT</code> size should be set to 8.5 even though this is not a proportionally spaced font.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>PITCH</code>
+                </td>
+                <td>
+                    <a name="PITCH-T">
+                    </a>This parameter is used for fixed space fonts such as Courier and Letter Gothic.&#160; It indicates the characters per inch. It should also be set to 16.67 when using the internal line printer font.&#160; If not passed, the current pitch will be used.&#160; The 
+		<code>PITCH</code> should not be specified for proportional spaced fonts.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>TYPEFACE</code>
+                </td>
+                <td>
+                    <a name="TYPEFACE-T">
+                    </a>This parameter indicates the typeface family to use.&#160; You can determine this parameters value by printing a PCL test font page on HP Laser printers, or referring to the HP technical documentation manuals.&#160; Some of the popular values are listed below.
+
+        <table class="lev2"><tr><td align="center">0</td><td>Line printer</td></tr><tr><td align="center">4099</td><td>Courier</td></tr><tr><td align="center">4101</td><td>CG Times</td></tr><tr><td align="center">4102</td><td>Letter Gothic</td></tr><tr><td align="center">4113</td><td>CG Omega</td></tr><tr><td align="center">4116</td><td>Coronet</td></tr><tr><td align="center">4140</td><td>Clarendon Condensed</td></tr><tr><td align="center">4148</td><td>Univers</td></tr><tr><td align="center">4168</td><td>Antique Olive</td></tr><tr><td align="center">4197</td><td>Garamond</td></tr><tr><td align="center">4297</td><td>Marigold</td></tr><tr><td align="center">4362</td><td>Albertus</td></tr><tr><td align="center">16602</td><td>Arial</td></tr><tr><td align="center">16901</td><td>Times New Roman</td></tr></table><p>If the <code>TYPEFACE</code> value is not passed, the current typeface is used.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>TEXT$</code>
+                </td>
+                <td>
+                    <a name="TEXT-T">
+                    </a>The text parameter is the text to be printed.&#160; You may optionally include a leading and/or trailing 
+		<code>+$0D0A$</code> to cause the cursor to be positioned automatically down to the next line.&#160; This is typically done on the last text field of each line so that the ROW value need not be passed to CDS254.&#160; This trailing 
+		<code>$0D0A$</code> will be taken into consideration for right and center justification.</td>
+            </tr>
+        </table>
+        <h5>
+            <a name="Printing_Vertical_Lines">
+            </a>
+            <MadCap:keyword term="Printing:Vertical Lines" />
+            <MadCap:keyword term="Vertical Lines" />Printing Vertical Lines</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"V <a href="#COL-PVL">COL</a>,<a href="#ROW-PVL">ROW</a>,<a href="#ROW2-PVL">ROW2</a>,<a href="#WIDTH-PVL">WIDTH</a>"</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Printing Vertical Lines</th>
+            </tr>
+            <tr>
+                <td>
+                    <a name="COL-PVL">
+                    </a>
+                    <code>COL</code>
+                </td>
+                <td>
+        Dot column for upper left corner of line as described above
+
+        <p>Note that the <code>COL</code> and <code>ROW</code> values are not optional for lines or boxes</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <a name="ROW-PVL">
+                    </a>
+                    <code>ROW</code>
+                </td>
+                <td>
+        Dot row for upper left corner of line as described above
+
+        <p>Note that the <code>COL</code> and <code>ROW</code> values are not optional for lines or boxes</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <a name="ROW2-PVL">
+                    </a>
+                    <code>ROW2</code>
+                </td>
+                <td>Dot row for lower left corner of line. If specified with a <code>+</code> prefix, then this indicates the relative length of the line in dots, as opposed to an absolute row number when the line should end.</td>
+            </tr>
+            <tr>
+                <td>
+                    <a name="WIDTH-PVL">
+                    </a>
+                    <code>WIDTH</code>
+                </td>
+                <td>The width of the line in dots.&#160; If not specified, one dot row will be used. Note that the width of the line extends to the right of the 
+		<code>COL</code> and <code>ROW</code> parameters specified.</td>
+            </tr>
+        </table>
+        <h5>
+            <a name="Printing_Horizontal_Lines">
+            </a>Printing Horizontal Lines</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"H <a href="#COL-PVL">COL</a>,<a href="#ROW-PVL">ROW</a>,<a href="#PHL-COL2">COL2</a>,<a href="#WIDTH-PVL">WIDTH</a>"</code>
+        </p>
+        <p>Same as for vertical lines except that <a name="PHL-COL2"></a><code>COL2</code> indicates either the column where the line ends, or the length of the line when using the 
+	<code>+</code> prefix.&#160; The line extends below the <code>COL</code> and
+	<code>ROW</code> specified for the dots specified in the optional <code>WIDTH</code> value.</p>
+        <h5>
+            <a name="Printing_Boxes">
+            </a>Printing Boxes</h5>
+        <p>
+            <code>CALL "CDS254","B <a href="#COL-B">COL</a>,<a href="#ROW-B">ROW</a>,<a href="#COL2-B">COL2</a>,<a href="#ROW2-B">ROW2</a>,<a href="#WIDTH-B">WIDTH</a>,<a href="#FILL-B">FILL</a>,<a href="#PATTERN-B">PATTERN</a>"</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Printing Boxes</th>
+            </tr>
+            <tr>
+                <td>
+                    <a name="COL-B">
+                    </a>
+                    <code>COL</code>
+                </td>
+                <td>Indicates the dot column for the upper left corner of the box.&#160; This value is required and the + or - prefix may not be used.</td>
+            </tr>
+            <tr>
+                <td>
+                    <a name="ROW-B">
+                    </a>
+                    <code>ROW</code>
+                </td>
+                <td>Indicates the dot row for the upper left corner of the box.&#160; This value is required and the + or - prefix may not be used.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>COL2</code>
+                </td>
+                <td>
+                    <a name="COL2-B">
+                    </a>Indicates the dot column for the lower right corner of the box.&#160; An absolute number for a specific dot column may be used, or if preceded by + then the 
+		<code>COL2</code> value represents the width of the box in dots.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>ROW2</code>
+                </td>
+                <td>
+                    <a name="ROW2-B">
+                    </a>Indicates the dot row for the lower right corner of the box.&#160; An absolute number for a specific dot row may be used, or if preceded by 
+		<code>+</code> then the <code>ROW2</code> value represents the height of the box in dots.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>WIDTH</code>
+                </td>
+                <td>
+                    <a name="WIDTH-B">
+                    </a>The width of the lines that make up the box.&#160; Note that the lines of the box always extend in toward the center of the box from all four sides.&#160; If not specified, a single dot width is assumed.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>FILL</code>
+                </td>
+                <td>
+                    <a name="FILL-B">
+                    </a>An optional parameter used to fill the box with some pattern.&#160; The value of the fill parameter depends upon the 
+		<code>PATTERN</code> value.&#160; If the <code>PATTERN</code> value is 2 then the
+		<code>FILL</code> value represents the percentage of shading from 1 to 100%.
+
+        <p>Note that there are actually only 8 shading patterns supported for most laser printers.&#160; Usually only the lightest shading is appropriate when printing text in the same box.</p><ul><li>1-2</li><li>3-10</li><li>11-20</li><li>21-35</li><li>36-55</li><li>56-80</li><li>81-99</li><li>100</li></ul><p>When the <code>PATTERN</code> value is 3 then cross hatch filling is done based on the value of 
+		<code>FILL</code>.</p><p>There are 6 patterns typically available.</p><table class="lev2"><tr><td>1</td><td>horizontal lines</td></tr><tr><td>2</td><td>vertical lines</td></tr><tr><td>3</td><td>positive slope lines like a slash /</td></tr><tr><td>4</td><td>negative slope lines like a backslash \</td></tr><tr><td>5</td><td>both horizontal and vertical lines</td></tr><tr><td>6</td><td>both positive and negative slope lines</td></tr></table></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>PATTERN</code>
+                </td>
+                <td>
+                    <a name="PATTERN-B">
+                    </a>The fill pattern to use.&#160;
+
+        <table class="lev2"><tr><td>0</td><td>solid black fill</td></tr><tr><td>1</td><td>erase (white) fill</td></tr><tr><td>2</td><td>shaded fill (requires <code>FILL</code> value above) Default value if not 
+			passed or passed as null.</td></tr><tr><td>3</td><td>cross-hatch fill (requires <code>FILL</code> value above)</td></tr><tr><td>4</td><td>last fill pattern specified</td></tr></table></td>
+            </tr>
+        </table>
+        <p>Note that when printing lines and boxes, the cursor position does not change.</p>
+        <h5>
+            <a name="Saving_the_Cursor_Position">
+            </a>Saving the Cursor Position</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"S"</code>
+        </p>
+        <p>This call may be required before printing text in one particular location on the page, when after printing you desire the cursor back in the same position that it was previously.</p>
+        <h5>
+            <a name="Restoring_the_Cursor_Position_">
+            </a>Restoring the Cursor Position</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"R"</code>
+        </p>
+        <p>This restores the cursor position saved previously.</p>
+        <h5>
+            <a name="Printing_an_Overlay">
+            </a>Printing an Overlay</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"O",OVERLAYFILENAME$</code>
+        </p>
+        <p>An overlay is a document that prints on each page.&#160; This command is used to define an overlay.&#160; The overlay will be automatically cancelled the next time the printer is reset, typically at the start and end of each print job.&#160; You may also call CDS254 with no overlay file name to cancel the overlay.&#160; 
+ Note that the overlay begins printing on the current page and since CDS084 
+ will print an overlay named XX/faxcover.prn on the fax coverpage, you should 
+ not call CDS254 to print an overlay until after the first call to CDS094 in 
+ the NEWPAGE routine of the application.&#160; Otherwise both overlays will 
+ print on the fax coverpage.</p>
+        <p>The easiest way to create an overlay file is to design your overlay using any word processor or design software, print it to paper to insure it looks the way you want, then choose the option to print the document to a file.&#160; Then you need to do some manual file manipulation.&#160; 
+ There is a program still under development named CV200 that will edit the 
+ output file and strip out the PCL commands that reset the printer, change 
+ orientation, and other paper source related commands.&#160; If you do not do 
+ this step, then the overlay will print on its own page and not 'overlay' the 
+ other printing.</p>
+        <p>
+            <code>CALL "CDS254",Y6$,"Ox",FILENAME$</code>
+        </p>
+        <p>
+            <MadCap:keyword term="CDS095" />The x is passed to CDS095 as the parameter indicating whether or not a message should be displayed if the file cannot be opened.&#160; Defaults to "N" if not passed.&#160; 
+	<code>FILENAME$</code> is the name of the overlay file.&#160; Pass <code>FILENAME$</code> as null to cancel the overlay prior to the end of the print job.&#160; You may change the overlay file by calling CDS254 again without the need to call it to cancel the initial overlay.</p>
+        <h5>Example:</h5>
+        <p>
+            <code>IF Y6.P=1 THEN CALL "CDS254",Y6$,"O","invoice.prn"</code>
+        </p>
+        <h5>
+            <a name="Printing_in_Color">
+            </a>Printing in Color</h5>
+        <p>
+            <code>CALL "CDS254",Y6$,"Ccolorcode"</code>
+        </p>
+        <p>CDS254 is compatible with most PCL 5c compatible color printers.&#160; 
+	Call CDS254 with the C command to change the color of subsequent operations.</p>
+        <table border="1" id="table2">
+            <tr>
+                <th>Mode</th>
+                <th>Calling Format</th>
+                <th>Color code</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>Simple Color Mode</td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "C[color]"</code>
+                </td>
+                <td>
+                    <table border="1" id="table3">
+                        <tr>
+                            <th colspan="2">Valid [color] options<br />
+                    Pass either the number or name</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>black</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>red</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>green</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>yellow</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>blue</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>magenta</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>cyan</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>white (not supported on all printers)</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "Cblack"</code>
+                    <p>&#160;</p>
+                    <p>
+                        <code>CALL "CDS254", Y6$, "Cred"</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p>
+                        <code>CALL "CDS254", Y6$, "C0"</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p>
+                        <code>CALL "CDS254", Y6$, "C1"</code>
+                    </p>
+                    <p>&#160;</p>
+                    <p>&#160;</p>
+                </td>
+            </tr>
+            <tr>
+                <td>RGB colors in hexadecimal</td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "C[RRGGBB]"</code>
+                </td>
+                <td>Replace <code>[RRGGBB]</code> with hexadecimal RGB value</td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "CFFA500"</code>
+                </td>
+            </tr>
+            <tr>
+                <td>RGB colors in decimal</td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "C[rrr,ggg,bbb]"</code>
+                </td>
+                <td>Replace <code>[rrr,ggg,bbb]</code> with decimal RGB values</td>
+                <td>
+                    <code>CALL "CDS254", Y6$, "C255,64,32"</code>
+                </td>
+            </tr>
+        </table>
+        <table id="table1" class="example">
+            <tr>
+                <th>Color Example</th>
+            </tr>
+            <tr>
+                <th>
+                    <code>7000 TEST:<br />
+		7010 BEGIN<br />
+		7020 CALL "CDS084",ERR=9996,Y$,Y5$,U0,S084$,Y6,Y6$<br />
+		7025 CALL "CDS254",Y6$,"T0,0,0,0,0,12,4099"<br />
+		7030 LET ABC$="ABCDEFGHIJKLMNOPQRSTUVWXYZ"<br />
+		7040 CALL "CDS254",Y6$,"Cblack"<br />
+		7050 PRINT (Y6.CH)ABC$<br />
+		7060 CALL "CDS254",Y6$,"Cred"<br />
+		7070 PRINT (Y6.CH)ABC$<br />
+		7080 CALL "CDS254",Y6$,"Cgreen"<br />
+		7090 PRINT (Y6.CH)ABC$<br />
+		7100 CALL "CDS254",Y6$,"Cyellow"<br />
+		7105 PRINT (Y6.CH)ABC$<br />
+		7110 CALL "CDS254",Y6$,"Cblue"<br />
+		7120 PRINT (Y6.CH)ABC$<br />
+		7130 CALL "CDS254",Y6$,"Cmagenta"<br />
+		7140 PRINT (Y6.CH)ABC$<br />
+		7150 CALL "CDS254",Y6$,"Ccyan"<br />
+		7160 PRINT (Y6.CH)ABC$<br />
+		7170 LET COL=0,ROW=400,CLR$="FFA500"; GOSUB TESTBOX<br />
+		7180 LET COL=300,ROW=400,CLR$="FFFF99"; GOSUB TESTBOX</code>
+                    <p>
+                        <code>
+		7190 LET COL=600,ROW=400,CLR$="FF3300"; GOSUB TESTBOX<br />
+		7200 LET COL=900,ROW=400,CLR$="00CC33"; GOSUB TESTBOX<br />
+		7210 LET COL=1200,ROW=400,CLR$="99FF99"; GOSUB TESTBOX<br />
+		7215 LET COL=1500,ROW=400,CLR$="CCFF99"; GOSUB TESTBOX<br />
+		7220 LET COL=1800,ROW=400,CLR$="6699FF"; GOSUB TESTBOX<br />
+		7230 LET COL=2100,ROW=400,CLR$="00CCFF"; GOSUB TESTBOX<br />
+		7290 CALL "CDS094",Y6$,"E"<br />
+		7300 GOTO 9996</code>
+                    </p>
+                    <p>
+                        <code>
+                            <br />
+		7900 TESTBOX:<br />
+		7910 CALL "CDS254",Y6$,"C"+CLR$<br />
+		7920 CALL "CDS254",Y6$,"B"+STR(COL)+","+STR(ROW)+","+STR(COL+300)+","+STR(ROW+300)+",2,100,0"<br />
+		7930 CALL "CDS254",Y6$,"Cblack"<br />
+		7940 CALL "CDS254",Y6$,"T"+STR(COL)+"C300,"+STR(ROW+175)+",3,0,14,,4148",CLR$<br />
+		7950 RETURN</code>
+                    </p>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <a href="examples/CDS254.pdf">Click to view result</a>
+                </th>
+            </tr>
+        </table>
+        <h5>
+            <a name="Printing_Notepad_Text">
+            </a>Printing Notepad Text</h5>
+        <p>CDS254 can be used to print Notepad (Window) Text that includes 
+	attributes including bold text, underlined text, and reverse text.&#160; 
+	Reverse text is printed in an italics font for printers that have the italic 
+	font setting specified in Printer Type Maintenance (PFM).</p>
+        <p>
+            <code>CALL "CDS254",Y6$,"N COL, ROW, COLSIZE, POINT, PITCH, 
+	TYPEFACE","NotepadFileChan,TextID{,FROMLINE,TOLINE}"</code>
+        </p>
+        <table border="1" id="table4">
+            <tr>
+                <td>
+                    <code>Y6$</code>
+                </td>
+                <td>Printer control data from CDS084</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>N</code>
+                </td>
+                <td>"N" indicates Notepad Text command</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>COL</code>
+                </td>
+                <td>Dot Column of first line of text</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>ROW</code>
+                </td>
+                <td>Dot Row of first row of text</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>COLSIZE</code>
+                </td>
+                <td>Optional dot columns that notepad text can be printed in</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>POINT</code>
+                </td>
+                <td>Optional point size (used for proportional fonts only).&#160; If 
+			not specified CDS254 will use 10 point.&#160; If the text will not 
+			fit in the space available, then the point size will be reduced.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>PITCH</code>
+                </td>
+                <td>Optional pitch (characters per inch - used for fixed width fonts 
+			only).&#160; If not specified CDS254 will use 10 cpi.&#160; If the 
+			text will not fit in the space available, then the pitch will be 
+			increased.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>TYPEFACE</code>
+                </td>
+                <td>Optional typeface.&#160; If not specified, notepad text that has 
+			no line drawing characters will be printed in typeface 4148 (Univers); 
+			notepad text that contains any line drawing characters will be 
+			printed in typeface 4099 (Courier).</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>NotepadFileChan</code>
+                </td>
+                <td>Required file name or channel number of notepad text file 
+			already open.</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>TextID</code>
+                </td>
+                <td>Required TextID of the notepad text</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>FROMLINE</code>
+                </td>
+                <td>Optional starting line# within the notepad text to begin 
+			printing at.&#160; If not provided, the entire notepad will be 
+			printed, and must fit on the page at the ROW indicated.&#160; If 
+			provided, this is the starting line# of the notepad text</td>
+            </tr>
+            <tr>
+                <td>
+                    <code>TOLINE</code>
+                </td>
+                <td>Optional ending line# within the notepad text.&#160; This would 
+			be the last line# printed.&#160; Will print to end of notepad if not 
+			provided.</td>
+            </tr>
+        </table>
+        <p>CDS254 will not report an error if unable to OPEN the NotepadFile nor if 
+	the TextID is not on file.</p>
+        <table border="1" id="table5" class="example">
+            <tr>
+                <td>Notepad Text Example<p>Notepad Text with TextID of "PROMOT" from 
+			Notepad Text File DCCW15 will print at dot column 0, dot row 100.</p></td>
+            </tr>
+            <tr>
+                <td>
+                    <code>4600 TEST:<br />
+			4610 BEGIN<br />
+			4620 CALL "CDS091",Y$<br />
+			4630 CALL "CDS041","CDS084",S084$<br />
+			4640 LET S084.RPTWIDTH$="N"<br />
+			4650 CALL "CDS084",Y$,Y5$,U0,S084$,Y6,Y6$<br />
+			4680 CALL "CDS254",Y6$,"N0,100","DCCW15,PROMOT"<br />
+			4690 CALL "CDS094",Y6$,"E"</code>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS200 - Copy .xls file to tab delimited format</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS200</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Copy .xls file to tab delimited format</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS200">Last Revised: 06/28/10</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This routine can be used either from bbx or bbj to convert a file in native Microsoft Excel (.xls) format, into a tab delimited file that can be easily read and processed.&#160; If the workbook contains multiple sheets, only the first sheet is converted.</p>
+        <p>Calling Format (from bbj):</p>
+        <p><code>CALL "CDS200", ERR=XXXX, Y$, S200$, S200A$</code>
+        </p>
+        <p>Calling Format (from bbx):</p>
+        <p><code>CALL "CDS030", ERR=XXXX, Y$, "CDS200", SECS, S200$, S200A$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="3" nowrap="nowrap">Arguments</th>
+            </tr>
+            <tr>
+                <th nowrap="nowrap">Argument</th>
+                <th style="text-align: center;" nowrap="nowrap">Passed To/From</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>ERR=XXXX</code>
+                </td>
+                <td align="center" nowrap="nowrap">N/A</td>
+                <td>Error branch taken if:
+<ul><li>xls file cannot be opened</li><li>output txt file cannot be defined or opened</li></ul></td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code><a href="http://www.excellware.com/docs/tools/environment.htm#Y$">Y$</a></code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Session Control Variable</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>SECS</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>Only used when calling CDS030.&#160; Typically passed as 0 to assume default value.&#160; Refer to <a target="_blank" href="CDS030.htm">CDS030</a> documentation.</td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S200$</code>
+                </td>
+                <td align="center" nowrap="nowrap">To</td>
+                <td>
+                    <table border="1" id="table1">
+                        <tr>
+                            <td><code>XLSFILE$</code>
+                            </td>
+                            <td>Path to input file name in native Excel format</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" nowrap="nowrap"><code>S200A$</code>
+                </td>
+                <td align="center" nowrap="nowrap">From</td>
+                <td>
+                    <table border="1" id="table2">
+                        <tr>
+                            <td><code>TXTFILE$</code>
+                            </td>
+                            <td>Path to output file name created by CDS200.&#160; <code>TXTFILE$</code> is defined in the same folder as <code>XLSFILE$</code>.&#160; In most cases the <code>TXTFILE$</code> name is the same as the <code>XLSFILE$</code> name with a .txt extension.&#160; If the <code>TXTFILE$</code> name already exists, it will be erased, and re-defined.</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>bbx example</td>
+            </tr>
+            <tr>
+                <td><code>1000 XLS:</code>
+                    <p><code>1010 CALL "CDS041","CDS200",S200$,"YY"<br />
+1020 S200.XLSFILE$="TEMP/MySpreadsheet.xls"<br />
+1030 CALL "CDS030",Y$,"CDS200",0,S200$,S200A$<br />
+1040 PRINT S200A.TXTFILE$<br />
+TEMP/MySpreadsheet.txt</code>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p>&#160;</p>
+    </body>
+</html>

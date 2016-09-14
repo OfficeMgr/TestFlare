@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="7" MadCap:lastHeight="2844" MadCap:lastWidth="999">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>CDS064 - Define File</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">
+            <MadCap:keyword term="CDS064" />CDS064</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">
+                        <MadCap:keyword term="Define File" />
+                        <MadCap:keyword term="Define" />Define File</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS064">Last Revised: 
+		10/30/15</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">CDS064 is used to define data files and folders.&#160; It is 
+typically only needed for string files, as <a href="CDS034.htm">CDS034</a> 
+should be used to define all data files, both permanent and temporary, that have 
+been described in the Dynamo Tools Data Dictionary.&#160; See
+<a href="CDS002.htm">CDS002</a> to erase and re-define an existing data file.</p>
+        <p>When passed certain characteristics about the file to be defined, the routine 
+will:</p>
+        <ol>
+            <li>Optionally determine the number of records to be in the file based on the 
+	number of records in some other file (not needed anymore now that most files 
+	are dynamic).</li>
+            <li>Optionally determine an unused name for the file.</li>
+            <li>Define the file.</li>
+            <li>Open the file.</li>
+        </ol>
+        <p>Note that files defined in a <code>tmp</code> directory (including <code>/tmp/</code>,
+<code>./tmp/</code>, and <code>tmp/</code>) will be erased upon return to 
+the menu.&#160; This is done so that temporary work files do not need to be erased by 
+the application program.&#160; You can disable the option to delete files 
+defined in tmp upon return to the menu by adding a <code>"p"</code> to the front 
+of the <code>TYPE$</code> field.&#160; If you have other "temporary" files that you do not 
+want automatically erased, then define them in the <code>TEMP/</code> directory.&#160; 
+We also typically run the <a href="overview-wms.htm">cleartmp</a> routine using 
+cron that deletes files in <code>tmp/</code> each night that are more than one 
+day old.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS064", ERR=<a href="#NNNN">NNNN</a>, <a href="#Y$">Y$</a>,
+<a href="#CHAN">CHAN</a>, <a href="#DISCNO">DISCNO</a>, <a href="#KEYSIZE">
+KEYSIZE</a>, <a href="#RECS">RECS</a>, <a href="#RECSIZE">RECSIZE</a>,
+<a href="#TYPE$">TYPE$</a>, <a href="#FILNAM$">FILNAM$</a>, <a href="#DISPMSG$">
+DISPMSG$</a>,</code> <code><a href="#AUXFIL$">AUXFIL</a></code><a href="#AUXFIL$"><code>$</code></a></p>
+        <table style="border-collapse: collapse;" bordercolor="#111111" cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2">CDS064</th>
+            </tr>
+            <tr>
+                <td><a name="NNNN"></a><code>NNNN</code>
+                </td>
+                <td>the line label/number to branch to if unable to define file.<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;" bordercolor="#111111" id="AutoNumber1" class="lev2"><tr><th colspan="2">Possible Errors</th></tr><tr><th style="text-align: center;">Error#</th><th>Description</th></tr><tr><td align="center">2 or 15</td><td>Insufficient disc space</td></tr><tr><td align="center">12</td><td>File name specified already exists, or unable to define folders</td></tr><tr><td align="center">17</td><td>Invalid <code>KEYSIZE, TYPE$, </code>or key structure</td></tr><tr><td align="center">18</td><td>User does not have write permissions in directory where file is to 
+ be defined</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><a name="Y$"></a><code>Y$</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="Terminal Control Variable" />the standard terminal control variable</td>
+            </tr>
+            <tr>
+                <td><code><a name="CHAN"></a>CHAN</code>
+                </td>
+                <td>
+                    <MadCap:keyword term="CDS088" />the channel number to which the file should be opened.&#160; If passed with a 
+ value of zero, then CDS064 will call CDS088 to obtain an available channel 
+ and return that channel number to the calling program.</td>
+            </tr>
+            <tr>
+                <td><code><a name="DISCNO"></a>DISCNO</code>
+                </td>
+                <td>Disc Number - obsolete, was used on Basic Four computers where disc 
+ drives were referred to by number and fileset.</td>
+            </tr>
+            <tr>
+                <td><code><a name="KEYSIZE"></a>KEYSIZE</code>
+                </td>
+                <td>Number of characters in key for files of type SKY, DIR, and SRT.</td>
+            </tr>
+            <tr>
+                <td><code><a name="RECS"></a>RECS</code>
+                </td>
+                <td>Number of records in file.&#160; Normally passed as zero to create file 
+ without limit.</td>
+            </tr>
+            <tr>
+                <td><code><a name="RECSIZE"></a>RECSIZE</code>
+                </td>
+                <td>Characters per record.&#160; Applies to files of type MKY, SKY, DIR, and 
+ IND.</td>
+            </tr>
+            <tr>
+                <td><code><a name="TYPE$"></a>TYPE$</code>
+                </td>
+                <td>The type of file to be defined.&#160; There are three components to
+	<code>TYPE$</code>.&#160; Note that all files defined by CDS064 are in the 
+	'highly recoverable' format.<table border="1" id="table3"><tr><th colspan="2"><code>TYPE$</code> Prefix (in any sequence)</th></tr><tr><td><code>p</code></td><td>Use a <code>TYPE$</code> Prefix of lower case <span style="font-family: d;"><code>"p"</code></span> to disable erasing of the temporary file 
+			upon return to the menu.&#160; Note that this option is implied for 
+			files defined in a tmp folder with an extension that begins with the 
+			characters PDF, htm, txt, xls, or xml.&#160; See example and 
+	note above regarding temporary files.</td></tr><tr><td><code>L</code></td><td>Use a <code>TYPE$</code> Prefix of upper case <code>"L"</code> 
+			to define a large file, i.e., a file that can expand in size to over 
+			2Gb.</td></tr></table><table class="lev2"><tr><th>Type</th><th>Obsolete single character type</th><th>File Type</th></tr><tr><td align="center">MKY</td><td align="center">M</td><td>Multi-Keyed Mkeyed file (followed by key definition parameters <code>	S187.KEYDEF$</code> or FIN().</td></tr><tr><td align="center">MKX</td><td align="center">&#160;</td><td>Multi-Keyed Xkeyed file (followed by key definition parameters 
+		<code>S187.KEYDEF$</code> or FIN() not XFIN().</td></tr><tr><td align="center">MKJ</td><td align="center">&#160;</td><td>Multi-Keyed Jkeyed file (followed by key definition parameters 
+		<code>S187.KEYDEF$</code> or FIN() not XFIN().</td></tr><tr><td align="center">MKV</td><td align="center">&#160;</td><td>Multi-Keyed Vkeyed file (followed by key definition parameters 
+		<code>S187.KEYDEF$</code> or FIN() not XFIN().</td></tr><tr><td align="center">SKY</td><td align="center">K</td><td>Single Keyed Mkeyed file (maximum file size 2Gb) </td></tr><tr><td align="center">SKX</td><td align="center">&#160;</td><td>Single Keyed Xkeyed file (bbj only)</td></tr><tr><td align="center">SKJ</td><td align="center">&#160;</td><td>Single Keyed Jkeyed file (bbj only)</td></tr><tr><td align="center">SKV</td><td align="center">&#160;</td><td>Single Keyed Vkeyed file (bbj only)</td></tr><tr><td align="center">DIR</td><td align="center">D</td><td><MadCap:keyword term="Direct file" />Direct file</td></tr><tr><td align="center">SRT</td><td align="center">S</td><td><MadCap:keyword term="Sort file" /><MadCap:keyword term="Define:Sort file" />Sort file</td></tr><tr><td align="center">IND</td><td align="center">I</td><td>Indexed file</td></tr><tr><td align="center">SER</td><td align="center">P</td><td>Serial (print) file</td></tr><tr><td align="center">PGM</td><td align="center">G</td><td>Program file</td></tr><tr><td align="center">STR</td><td align="center">T</td><td>String file</td></tr><tr><td align="center">DRY</td><td align="center">R</td><td>Directory</td></tr><tr><td align="center">FTS</td><td align="center">&#160;</td><td>Full Text Search (bbj only). Note that a Data Dictionary Entry is required to define a Full Text Search File. The primary key must be the first data element in the record.</td></tr></table><table border="1" id="table4"><tr><th><code>TYPE$</code> Suffix</th></tr><tr><td>The Suffix is required for all Multi-Keyed files, and contains 
+			the key definition information.&#160; For existing files, the key 
+			definition from <code>S187.KEYDEF$</code> can be used.&#160; To 
+			define a new file, use <a href="CDS034.htm">CDS034</a> instead of 
+			CDS064 which will create the key definition from the Dynamo Tools 
+			Data Dictionary.&#160; The key definition field is based on the
+			<code>FIN()</code> format for MKY files as well as bbj specific file 
+			types MKX, MKJ, and MKV.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="FILNAM$"></a>FILNAM$</code>
+                </td>
+                <td>The name of the file to be defined.&#160; <code>FILNAM$</code> can 
+	optionally include a data server prefix, a drive letter followed by a colon, folder, base file name, and extension.&#160; <code>
+	FILNAM$</code> will be returned to the calling program with the actual file 
+	name defined.&#160; Leading and trailing blanks are removed from <code>
+	FILNAM$</code>.&#160; Note that any of the following characters in <code>
+	FILNAM$</code>: blank, &lt;, &gt;, |, *, ? and non-printable characters are 
+	replaced with a hyphen.<table border="1" id="table1" class="lev2"><tr><th>Data Server Prefix</th></tr><tr><td>To define a file on another server, include the data server 
+			prefix in the format /&lt;servername, service &amp; options&gt;</td></tr><tr><th>Drive Letter</th></tr><tr><td>For Windows file systems, the drive letter followed by a colon 
+			cab be used.</td></tr><tr><th>Folder (Directory)</th></tr><tr><td>If one or more folders are included in <code>FILNAM$</code>, 
+			then the folders will be defined.</td></tr><tr><td>If no Folder is provided, and the file type is a program, and 
+			folder XX/PGM/ exists, where XX is the first two characters of the 
+			Base File Name, then the program will be defined in the XX/PGM/ 
+			folder.</td></tr><tr><td>If no Folder is provided, and the first two characters of the 
+			Base File Name exist as a folder, such as DS/, and then the file 
+			will be defined in the DS/ folder.</td></tr><tr><td>If no Folder is provided, or the Folder is <code>"./tmp/"</code> 
+			or <code>"tmp/"</code> then the file will be defined in the folder 
+			below SMSDIR, such as /u/CDI/tmp, /usr/CDI/tmp, etc. and not below 
+			the current directory.</td></tr><tr><th>Base File Name</th></tr><tr><td>If no Base File Name is provided, then one is derived using the 
+			active company code and application or program name, such as 
+			DS-SO480.</td></tr><tr><td>If the Base File Name begins with <code>XX</code> then <code>
+			XX</code> will be replaced by the current company code.</td></tr><tr><td>If the Base File Name&#160; does not contain a comma, period, nor 
+			slash, then if defining a program and folder <code>XX/PGM/</code> 
+			exists, the program will be defined in the <code>XX/PGM</code> 
+			folder, otherwise if the <code>XX/</code> folder exists, the file 
+			will be defined in the <code>XX/</code> folder.&#160; </td></tr><tr><td>If the Base File Name ends with a period, or contains a comma 
+			before the extension, then CDS064 will derive a unique file name and 
+			append a -NNN suffix to the Base File Name.&#160; If there are many 
+			files in the same folder with the same Base File Name, then the 
+			number of digits in the suffix will be increased as necessary to 
+			create a unique file.&#160; The suffix is randomly assigned to 
+			eliminate the need to sequentially check many file names before 
+			determining an unused file name.</td></tr><tr><th>Extension</th></tr><tr><td>A file name Extension is used if <code>FILNAM$</code> contains a 
+			period or a comma, followed by an Extension, i.e., SO230.pdf, or 
+			SO230,pdf.&#160; See <code>FILNAM$</code> examples below.</td></tr></table></td>
+            </tr>
+            <tr>
+                <td><code><a name="DISPMSG$"></a>DISPMSG$</code>
+                </td>
+                <td>This parameter is obsolete and is not used.&#160; On older systems where 
+ it took the system from several seconds to several minutes to define and 
+ initialize a large data file, this field was used to override the standard 
+ display message while the file was being defined.</td>
+            </tr>
+            <tr>
+                <td><code><a name="AUXFIL$"></a>AUXFIL$</code>
+                </td>
+                <td>This parameter is not needed much anymore with the advent of dynamic 
+ files.&#160; <code>AUXFIL$</code> is used when you want the define the file
+	<code>FILNAM$</code> based 
+ on the number of records that are in use in file <code>AUXFIL$</code>.&#160; When
+	<code>AUXFIL$</code> 
+    is used, the number of records defined in the new file will be the number of 
+ records in use in the <code>AUXFIL$</code> file, plus a percentage specified in 
+	<code>RECS</code>.&#160; 
+ For example, to define a file with 10% more records than are in use in <code>AUXFIL$</code>, pass
+	<code>RECS</code> as 10.</td>
+            </tr>
+        </table>
+        <h5>Examples</h5>
+        <ol>
+            <li>Define a single-keyed MKEYED file with a keysize of 14, with 180 records, and 64 bytes 
+ per record, using the file name DSFD32, and open the file to device 
+ 7.<br /><code>CALL "CDS064",Y$,7,0,14,180,64,"SKY","DSFD32"</code></li>
+            <li>Create the same file as above but instead of 180 records, define the file 
+ with the same number of records that are in file DSFD10.<br /><code>CALL "CDS064",Y$,7,0,14,0,64,"SKY","DSFD32","","DSFD10"</code></li>
+            <li>The previous example would define file DSFD32 to have the number of active 
+ records in file DSFD10 (assuming DSFD10 is a keyed file). This means that if 
+ file DSFD10 is defined to have 1000 records, but only 650 are currently in 
+ use, then file DSFD32 will be defined as only 650 records. To create a file 
+ with 10% more than the number of defined records pass the RECS parameter 
+ the percentage.<br /><code>CALL "CDS064",Y$,7,0,14,10,64,"SKY","DSFD32","","DSFD10"</code></li>
+            <li>Define a Sort file, which will be used to sort a customer file, DSUD10 
+ which requires a key size of 12. The number of records should be the same as 
+ the number of active records in the customer file.&#160; Let CDS064 determine 
+ the channel number and file name.<p><code>CALL 
+ "CDS064",Y$,WRK,0,12,0,0,"SRT",WRKFIL$,"","DSUD10"</code></p></li>
+            <li>Define a string file named TEST in the WORK directory.<p><code>CALL "CDS064",Y$,CHAN,0,0,0,0,"STR","WORK/TEST"</code></p></li>
+            <li>Define a string file named TEST in the tmp directory.&#160; File will be 
+	erased upon return to menu.<p><code>CALL "CDS064",Y$,CHAN,0,0,0,0,"STR","tmp/TEST"</code></p></li>
+            <li>Define a string file named TEST in the tmp directory.&#160; File will 
+	not be erased upon return to menu.<p><code>CALL "CDS064",Y$,CHAN,0,0,0,0,"pSTR","tmp/TEST"</code></p></li>
+            <li>Define a large Single Keyed file.<p><code>CALL 
+	"CDS064",Y$,CHAN,0,4,0,128,"LSKY","DS/DSQA01"</code></p></li>
+        </ol>
+        <table border="1" id="table2">
+            <tr>
+                <th colspan="2">Examples of <code>FILNAM$</code></th>
+            </tr>
+            <tr>
+                <th>Passed to CDS064</th>
+                <th>Example of returned Value</th>
+            </tr>
+            <tr>
+                <td><code>""</code>
+                </td>
+                <td>./tmp/DS-SO480<br />		/u/CDI/tmp/DS-SO480<br />		/&lt;server,port=1100&gt;/u/CDI/tmp/DS-SO480</td>
+            </tr>
+            <tr>
+                <td><code>",txt"</code>
+                </td>
+                <td>./tmp/DS-SO480-123.txt</td>
+            </tr>
+            <tr>
+                <td><code>",html"</code>
+                </td>
+                <td>./tmp/DS/SO480-123.htm</td>
+            </tr>
+            <tr>
+                <td><code>"DSSO40"</code>
+                </td>
+                <td>DS/DSSO40</td>
+            </tr>
+            <tr>
+                <td><code>"DSU010" </code>with<code> TYPE$="PGM"</code></td>
+                <td>DS/PGM/DSU010</td>
+            </tr>
+            <tr>
+                <td><code>"DS/DSSO40"</code>
+                </td>
+                <td>DS/DSSO40</td>
+            </tr>
+            <tr>
+                <td><code>"TEMP/,txt"</code>
+                </td>
+                <td>TEMP/DS-SO480-123.txt</td>
+            </tr>
+            <tr>
+                <td><code>"TEST."</code>
+                </td>
+                <td>./tmp/TEST-123</td>
+            </tr>
+            <tr>
+                <td><code>"PRT/"</code>
+                </td>
+                <td>PRT/DS-SO480</td>
+            </tr>
+            <tr>
+                <td><code>"PRT/."</code>
+                </td>
+                <td>PRT/DS-SO480-123</td>
+            </tr>
+            <tr>
+                <td><code>"PRT/.txt"</code>
+                </td>
+                <td>PRT/DS-SO480.txt</td>
+            </tr>
+            <tr>
+                <td><code>"DY/SO480"</code>
+                </td>
+                <td>DY/SO480</td>
+            </tr>
+        </table>
+    </body>
+</html>

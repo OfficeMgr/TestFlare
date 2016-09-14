@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:fileTags="RoboHelpCheckList.Ran Smart Index" MadCap:lastBlockDepth="10" MadCap:lastHeight="7528" MadCap:lastWidth="886">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title>Developing in Eclipse</title>
+        <link rel="stylesheet" type="text/css" href="Stylesheets/tools.css" />
+    </head>
+    <body style="text-align: left;">
+        <p class="SectionName">Developer Components</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Developing with Eclipse</p>
+                </td>
+                <td align="right">
+                    <p align="right"><a target="_blank" href="">Last Revised: 08/02/16</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">&#160;</p>
+        <p class="SectionDesc" style="text-align: justify;">The Eclipse Integrated Development Environment (IDE) is an open-source platform that allows developers to write code in a customizable workspace. Though the IDE is JAVA-based, the Eclipse community has created plug-ins for many programming languages that assist with automatic code-completion, debugging, syntax checks, and more. With customizable views—called <i>perspectives</i> in Eclipse—the developer also has great control over what can be seen at-a-glance.</p>
+        <p class="SectionDesc" style="text-align: justify;">Excellware has developed a Dynamo Tools plug-in for Eclipse. The purpose of the plug-in is to make BBx/BBj coding with Dynamo Tools and custom company libraries more efficient while providing the ability to work in a modern, feature-rich, and customizable development environment.</p>
+        <p class="SectionDesc" style="text-align: justify;">For those new to Eclipse, helpful tutorials can be found at <a href="http://www.tutorialspoint.com/eclipse/" target="_blank">tutorialspoint.com</a>, <a href="http://www.vogella.com/tutorials/Eclipse/article.html" target="_blank">vogella.com,</a> and, of course, the <a href="http://www.eclipse.org/community/" target="_blank">Eclipse community</a>.</p>
+        <p class="SectionDesc">&#160;</p>
+        <img src="images/EclipsePlugin-1.PNG" style="width: 701px;height: 367px;" title="The Eclipse workbench" />
+        <p style="text-align: left;">Eclipse perspective resulting from BDT and Dynamo Tools plug-ins</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <h5 style="text-align: left;">Installation</h5>
+        <p style="text-align: left;">Please perform the following steps in order. Click on a step for more information.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Install Java Development Kit (JDK)</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p style="text-align: left;"><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank">Get the latest version of JDK</a> from Oracle's website. For PC, be sure to select the version that matches your system (i.e 32-bit(x86) or 64-bit(x-64).</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot><b>Install BBj version 16</b><![CDATA[  ]]></MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p style="text-align: left;">Install the latest version of BBj 16 from Basis International's website for <a href="http://documentation.basis.com/BASISHelp/WebHelp/wininst/installing_bbj10x_windows.htm" target="_blank">Windows</a> or <a href="http://documentation.basis.com/BASISHelp/WebHelp/unixinstal/installing_bbj_5_x_unix.htm" target="_blank">UNIX/Mac</a>. (Barista and AddonSoftware do not need to be installed).</p>
+                <p style="text-align: left;">Note: A valid BASIS&#160;license is necessary or use of BBj will be confined to a 30-day trial. Licenses can be applied manually on a local machine by designating the hard drive location of a license file from Basis. Alternatively,  the Basis License Manager (BLM) can be installed to dispense licenses to users as needed. Use the BLM option to designate a local or remote server location. For help with locating the BLM&#160;server or obtaining an existing license during BBj installation, consult your company's overseer of BASIS products.  </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Install Eclipse IDE <u>version Mars 2</u> for Java EE&#160;Developers</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p style="text-align: left;">There are many previous versions of Eclipse but currently the plug-in only works with Mars 2. There also are many "flavors" of Eclipse to <a href="http://www.eclipse.org/ide/" target="_blank">compare</a>, but Eclipse for Java EE Developers is recommended in this case for its known compatibility and robust list of included features. </p>
+                <ul>
+                    <li style="text-align: left;">There are two ways in which Eclipse can be added to a machine. These methods are the same for Windows, Mac, and Linux.<ul><li style="text-align: left;"><a href="https://eclipse.org/downloads/packages/release/Mars/2" target="_blank">Download the latest version of&#160;Eclipse Mars 2</a> package for your OS from the Eclipse website. Extract the contents of the zip file to a hard drive location where you would like Eclipse to reside and run from. Run Eclipse by opening the Eclipse application file within the extracted folder. Note this option does not install Eclipse and removal of Eclipse involves only deletion of this extracted folder and the workspace folder that is designated upon first running the program.</li><li style="text-align: left;">Using the Eclipse installer will automate the installation of the latest version of Eclipse. However, the Dynamo Tools plug-in has currently only been tested with Mars 2, which is not the most current version. Therefore, the first method of adding Eclipse to your machine should be used.</li></ul></li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Install the Basis Developer Toolkit (BDT) plug-in version 16.xx for Eclipse</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <p style="text-align: left;">There are several different Basis plug-ins for Eclipse. You can visit the <a href="http://www.basis.com/eclipseplug-ins" target="_blank">Basis Eclipse Plug-Ins page</a> to peruse them. However, the only one that is required here is the <b>BDT CodeEditor plug-in</b>, the URL&#160;for which is already provided in step 3 below.</p>
+            <MadCap:dropDownBody>
+                <ol>
+                    <li style="text-align: left;">Launch Eclipse.</li>
+                    <li style="text-align: left;">In Eclipse’s main menu, select <b>Help &gt; Install New Software...</b></li>
+                    <li style="text-align: left;">At the top right, click <b>[Add...</b>] to open Eclipse’s Install window. This window needs two pieces of information: a Name of your choosing that identifies the plug-in, and the URL <b>http://plugins.basis.com/bdt/16xx</b>. Next <b>Click OK</b></li>
+                    <li style="text-align: left;">You should now have one collapsed entry in the list field of Eclipse’s Install window</li>
+                    <li>
+                        <p style="text-align: left;">Ensure that the “Contact all update sites during install to find required software” box is checked</p>
+                    </li>
+                    <li style="text-align: left;"><b>Check the box</b> next to the BDT entry in the Name field and click <b>[Next &gt;]</b></li>
+                    <li style="text-align: left;">Review the Install Details list shown and click<b> [Next &gt;]</b>.</li>
+                    <li style="text-align: left;">Follow the remaining instructions as appropriate based on the plug-in you are installing.</li>
+                    <li style="text-align: left;">Once the Install window completes successfully, you may be prompted to restart Eclipse. You are able to install the Dynamo Tools plug-in using the next steps before restarting.</li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Install the Dynamo Tools  Plug-in for Eclipse</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <ol>
+                    <li style="text-align: left;">Launch Eclipse</li>
+                    <li style="text-align: left;">In Eclipse’s main menu, select <b>Help&gt;Install New Software...</b></li>
+                    <li style="text-align: left;">At the top right, click <b>[Add...</b>] to open Eclipse’s Install window. This window needs two pieces of information: a Name of your choosing that identifies the plug-in, and the URL <b>http://dl.excellware.com/plugins/16/</b>. <b>Click OK</b></li>
+                    <li style="text-align: left;">You should now have one collapsed entry in the list field of Eclipse’s Install window</li>
+                    <li style="text-align: left;">Ensure that the “Contact all update sites during install to find required software” box is checked</li>
+                    <li style="text-align: left;"><b>Check the box</b> next to the Dynamo Tools entry in the Name field and click <b>[Next &gt;].</b>&#160;</li>
+                    <li style="text-align: left;">Review the items to be installed and click <b>[Next &gt;]</b>&#160;</li>
+                    <li style="text-align: left;">Follow the remaining instructions as appropriate based on the plug-in you are installing.</li>
+                    <li style="text-align: left;">Click OK when prompted to restart Eclipse. If not prompted, exit Eclipse manually and restart the application for changes to take effect</li>
+                    <li style="text-align: left;"><i>Dynamo Tools</i> will now appear as a menu option in Eclipse and the <i>Dynamo Tools Helper</i> pane will be visible on the right</li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <p style="text-align: left;">&#160;</p>
+        <h5 style="text-align: left;">Getting Started</h5>
+        <p style="text-align: left;">After installation steps are performed:</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Open the BDT&#160;perspective</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <ol>
+                    <li style="text-align: left;">Open the BDT plug-in perspective by clicking the <b>Open Perspective</b> icon in the top right of the application. If this icon can not be found, navigate to <b>Window&gt;Perspective&gt;Open Perspective&gt;Other...</b></li>
+                    <li style="text-align: left;">Select BDT and <b>Click OK</b></li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">"Export Data Dictionary to Eclipse" from within Dynamo</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p style="text-align: left;">For a company's custom data dictionaries and called routines to be made available in Eclipse, this option must be set to Y. This option is found in Dynamo under <b>SMC&gt;Company Information Maintenance&gt;Development Projects.</b>If you do not see Development Projects, press <i>F4</i> after entering <i>Company Information Maintenance</i></p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead style="text-align: left;">
+                <MadCap:dropDownHotspot style="font-weight: bold;">Add custom company libraries to Dynamo Tools Plug-in</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p style="text-align: left;">The two-lettered <b>Dynamo company code(s)</b> for your company should be added to customize the code-completion suggestions for custom data dictionaries and called routines. To do this,</p>
+                <ol>
+                    <li style="text-align: left;">In Eclipse, navigate to <b>Windows&gt;Preferences</b></li>
+                    <li style="text-align: left;">Choose <b>Dynamo Tools</b> in the column on the left</li>
+                    <li style="text-align: left;">By default, <i>CD</i> will be the only available code in the center pane. On the right, choose <b>Add</b>, <b>enter your Dynamo company code</b> (or codes if your company has more than one) and click <b>OK</b>.</li>
+                    <li style="text-align: left;">Click OK. Your company code should now appear below CD in list of Companies Libraries</li>
+                    <li style="text-align: left;"><b>Exit</b> the <i>Preferences</i> window</li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown style="text-align: left;">
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot style="font-weight: bold;">Enable or disable Y$ as a session control variable</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p>The use of <b>DT_Y$</b> is disabled by default for any given project. However, it can be enabled on a per-project basis. If your company uses Y$ as a session control variable, enabling this option can decrease the chance of conflict with existing company software.</p>
+                <ol>
+                    <li>After opening a BBj project, find it in the BDT Explorer view on the left of the Eclipse window. (click thumbnail below) </li>
+                    <li>Right-click and select <b>Properties</b></li>
+                    <li>In the resulting project <i>Properties</i> window, <b>select Dynamo Tools on the left</b></li>
+                    <li><b>Select your company code</b> from the drop-down list</li>
+                    <li>Check the box <b>Use DT_Y$ for the project</b></li>
+                    <li>Click <b>OK</b></li>
+                </ol>
+                <p>&#160;</p>
+                <p>
+                    <img src="images/EclipsePlugin-2.PNG" style="width: 838px;height: 485px;float: left;border-left-style: solid;border-left-width: 2px;border-left-color: ;border-right-style: solid;border-right-width: 2px;border-right-color: ;border-top-style: solid;border-top-width: 2px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 2px;border-bottom-color: ;mc-thumbnail-max-height: auto;mc-thumbnail: hover;" title="Enable use of DT_Y$ for a project in Eclipse." />
+                </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <p>&#160;</p>
+        <h5 style="text-align: left;">Coding Features</h5>
+        <p style="text-align: left;">The following is a list of keyboard shortcuts to use from the code editor. Note that the description of these shortcuts, as well as their corresponding key combinations, appear in the Eclipse <i>Dynamo Tools</i> menu.</p>
+        <table style="width: 100%;">
+            <col style="width: 157px;" />
+            <col />
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Description</td>
+                    <td style="font-weight: bold;">Usage</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Content Assist</p>
+                        <p><b>(Ctrl+Shift+Space)</b>
+                        </p>
+                    </td>
+                    <td style="text-align: left;">
+                        <p>Used for the suggestions and auto-fill features of the plug-in.  This feature is contextual so it will only make suggestions that work with what is already entered into the code editor at the cursor position. If nothing is entered on the editor line at the current cursor position—such as at a blank line—a list of all available entries will be presented with this keyboard shortcut. In either case, a search box is also presented to easily find what is needed. </p>
+                        <table style="width: 100%;">
+                            <col style="width: 250px;" />
+                            <col />
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: bold;">Pressing Ctrl+Shift+Space at:</td>
+                                    <td style="font-weight: bold;">produces: </td>
+                                </tr>
+                                <tr>
+                                    <td>a blank line in editor</td>
+                                    <td>
+                                        <p>a search box in the Dynamo Tools Helper section where you can search for all available data dictionaries and called routines. Searches can be by name or description.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>a partial <i>CD</i> entry in editor</td>
+                                    <td>
+                                        <p> a search box within the editor populated with suggestions. Here, typing the name of the called routines narrows the search results to the name of the function as well as a short description. You can also search by description/keyword of the function to narrow the list of called routines.</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>a partial <i>dd</i> entry in editor</td>
+                                    <td>
+                                        <p> a search box in the Dynamo Tools Helper section that is populated with suggestions for all available data dictionary entries. Searches can be made by name of data dictionary or description/keyword.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Go to Dynamo Tools Helper Window</p>
+                        <p><b>(Ctrl+Shift+Z)</b>
+                        </p>
+                    </td>
+                    <td style="text-align: left;">Instantly moves the cursor from the <i>Editor</i> to the <i>Helper</i> view to perform a quick search of all routines and data dictionaries. If what you were looking for does not appear here, make sure you have imported your company's routines and dictionaries as outlined in the Getting Started section above.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>Show Routine Help</p>
+                        <p><b>(Alt+F1)</b>
+                        </p>
+                    </td>
+                    <td style="text-align: left;">Placing the cursor on a called routine and using this shortcut to open <MadCap:variable name="Primary.CompanyName" /> a detailed documentation page for that routine in a browser.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>BBx Syntax</p>
+                        <p><b>(Alt+C)</b>
+                        </p>
+                    </td>
+                    <td style="text-align: left;">The plug-in will initiate a check for BBx syntax errors</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <MadCap:slideshow MadCap:ShowCaptions="True" MadCap:AdaptiveHeight="True" MadCap:InfiniteLoop="True" MadCap:AutoDirection="next" MadCap:Pause="4000" MadCap:Mode="horizontal" MadCap:Speed="500" MadCap:Navigation="Bullets" style="text-align: center;">
+            <MadCap:slide title="Pressing Ctrl+Shift+Space at a blank editor line yields a search box in the Dynamo Tools Helper section.">
+                <p>
+                    <img src="images/EclipsePlugin-3.PNG" />
+                </p>
+            </MadCap:slide>
+            <MadCap:slide title="Pressing Ctrl+Shift+Space at a partial CD entry brings up a search box populated with suggestions. Here, typing the name of the called function narrows the search results to the name of the function as well as a short description.">
+                <p>
+                    <img src="images/EclipsePlugin-4.PNG" />
+                </p>
+            </MadCap:slide>
+            <MadCap:slide title="Pressing Ctrl+Shift+Space at a partial CD entry brings up a search box prefilled with suggestions. Here searching description keywords has helped locate the desired function.">
+                <p>
+                    <img src="images/EclipsePlugin-5.PNG" />
+                </p>
+            </MadCap:slide>
+            <MadCap:slide title="Pressing Ctrl+Shift+Space at a partial dd entry brings up a search box in the Dynamo Tools Helper section that is populated with suggestions.">
+                <p>
+                    <img src="images/EclipsePlugin-6.PNG" />
+                </p>
+            </MadCap:slide>
+            <MadCap:slide title="Typing the period automatically triggers a search box">
+                <p>
+                    <img src="images/EclipsePlugin-7.PNG" />
+                </p>
+            </MadCap:slide>
+        </MadCap:slideshow>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <p>&#160;</p>
+        <h5>Screenshots</h5>
+        <p>&#160;</p>
+        <p>
+            <img src="images/EclipsePlugin-3.PNG" style="border-left-style: solid;border-left-width: 1px;border-left-color: ;border-right-style: solid;border-right-width: 1px;border-right-color: ;border-top-style: solid;border-top-width: 1px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: ;mc-thumbnail: none;">
+            </img>
+        </p>
+        <p><b>Fig. 1</b> Pressing Ctrl+Shift+Space at a blank editor line yields a search box in the Dynamo Tools Helper section.</p>
+        <p>&#160;</p>
+        <p>
+            <img src="images/EclipsePlugin-4.PNG" style="border-left-style: solid;border-left-width: 1px;border-left-color: ;border-right-style: solid;border-right-width: 1px;border-right-color: ;border-top-style: solid;border-top-width: 1px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: ;mc-thumbnail: none;">
+            </img>
+        </p>
+        <p><b>Fig. 2</b> Pressing Ctrl+Shift+Space at a partial CD entry brings up a search box prefilled with suggestions. Here, typing the name of the called function narrows the search results to the name of the function as well as a short description.</p>
+        <p>&#160;</p>
+        <p>
+            <img src="images/EclipsePlugin-5.PNG" style="border-left-style: solid;border-left-width: 1px;border-left-color: ;border-right-style: solid;border-right-width: 1px;border-right-color: ;border-top-style: solid;border-top-width: 1px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: ;padding-left: 0px;padding-right: 0px;padding-top: 0px;padding-bottom: 0px;margin-left: 5px;margin-right: 5px;margin-top: 0px;margin-bottom: 0px;border-top-left-radius: ;border-top-right-radius: ;border-bottom-right-radius: ;border-bottom-left-radius: ;mc-thumbnail: none;">
+            </img>
+        </p>
+        <p><b>Fig. 3</b> Pressing Ctrl+Shift+Space at a partial CD entry brings up a search box prefilled with suggestions. Here searching description keywords has helped locate the desired function.</p>
+        <p>&#160;</p>
+        <p>
+            <img src="images/EclipsePlugin-6.PNG" style="border-left-style: solid;border-left-width: 1px;border-left-color: ;border-right-style: solid;border-right-width: 1px;border-right-color: ;border-top-style: solid;border-top-width: 1px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: ;mc-thumbnail: none;">
+            </img>
+        </p>
+        <p><b>Fig. 4</b> Pressing Ctrl+Shift+Space at a partial dd entry brings up a search box in the Dynamo Tools Helper section that is prefilled with suggestions.</p>
+        <p>&#160;</p>
+        <p>
+            <img src="images/EclipsePlugin-7.PNG" style="border-left-style: solid;border-left-width: 1px;border-left-color: ;border-right-style: solid;border-right-width: 1px;border-right-color: ;border-top-style: solid;border-top-width: 1px;border-top-color: ;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: ;margin-left: 5px;margin-right: 5px;mc-thumbnail: none;">
+            </img>
+        </p>
+        <p><b>Fig 5</b> Here, typing the period automatically triggers a search box</p>
+    </body>
+</html>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd">
+    <head>
+        <meta http_equiv="Content-Language" content="en-us" /><title> CDS182 - Return BBj information</title>
+        <link rel="stylesheet" type="text/css" href="Resources/Stylesheets/tools.css" />
+    </head>
+    <body>
+        <p class="SectionName">CDS182</p>
+        <table class="revision">
+            <tr>
+                <td>
+                    <p class="SectionTitle">Return bbj info</p>
+                </td>
+                <td align="right"><a target="_blank" href="http://dynaweb.excellware.com/cgi-bin/tools.cgi?p=r&amp;pgm=CDS182">Last Revised: 
+		11/09/09</a>
+                </td>
+            </tr>
+        </table>
+        <p class="SectionDesc">This program is used by the Dynamo menu I (Information) option and called by CDS030 to return bbj information.</p>
+        <p>Calling Format:</p>
+        <p><code>CALL "CDS182", Y$, TOBBJ$, FROMBBJ$</code>
+        </p>
+        <table>
+            <tr>
+                <th colspan="2">Input Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>Y$</code>
+                </td>
+                <td>Session Control Data</td>
+            </tr>
+            <tr>
+                <td><code>TOBBJ$</code>
+                </td>
+                <td>Dummy placeholder argument as no parameters are needed to be passed to CDS182.</td>
+            </tr>
+            <tr>
+                <th colspan="2">Output Data Elements</th>
+            </tr>
+            <tr>
+                <td><code>FROMBBJ$</code>
+                </td>
+                <td>Templated data output from CDS182 including BBj Level, Revision, Port#, Build, JVM 
+		release, and JVM Path</td>
+            </tr>
+        </table>
+        <table class="example">
+            <tr>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td><code>CALL "CDS030",Y$,"CDS182",10,"",S182$<br />
+      CALL "CDS279",S182$</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img border="0" src="images\CDS182.jpg" width="540" height="174" />
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
